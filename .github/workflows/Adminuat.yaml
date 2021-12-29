@@ -1,7 +1,9 @@
 name: ADMIN UAT CI&CD setup
 
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - main
 
 jobs:
   build:

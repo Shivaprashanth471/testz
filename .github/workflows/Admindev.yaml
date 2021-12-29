@@ -3,7 +3,7 @@ name: ADMIN DEV CI&CD setup
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
