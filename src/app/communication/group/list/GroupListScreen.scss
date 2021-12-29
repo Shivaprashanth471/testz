@@ -1,0 +1,29 @@
+@import "src/assets/scss/common";
+
+
+.group-add{
+    .sms-blast-icon{
+        color: $accent-color;
+    }
+    .sms-blast{
+        color:$accent-color ;
+        margin-left: 10px;
+    }
+    .message-wrapper{
+        cursor: pointer;
+        border: 1px solid $accent-color;
+        border-radius: 10px;
+        width: 150px;
+        padding: 0.15rem 0;
+        justify-content: center;
+        align-items: center;
+        background-color: #F6FEFB;    
+    }
+    .MuiPaper-elevation1 {
+		box-shadow: none !important;
+	}
+   .filter-icon{
+       font-size: 2rem;
+       color:$light-black;
+   }
+}

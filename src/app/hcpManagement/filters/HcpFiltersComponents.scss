@@ -1,0 +1,33 @@
+$primary-color: #10c4d3;
+$accent-color: #0c80e3;
+
+
+.facility-filters {
+
+    .MuiFormLabel-root{
+        color: $accent-color !important;
+
+    }
+    .MuiDialogTitle-root{
+        padding: 16px 0px!important;
+    }
+
+    .hcp-chips{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        
+        .MuiChip-root{    
+            background: #E3FFF4;
+        }
+    
+        .MuiChip-label {
+            color: $accent-color !important;
+       }
+    
+       .MuiChip-deleteIcon{
+         color: $accent-color !important;
+       }
+    }
+}
+

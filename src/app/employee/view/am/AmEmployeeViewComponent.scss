@@ -1,0 +1,42 @@
+@import "src/assets/scss/common";
+
+.am_employee_view {
+	.employee_details {
+		width: 100%;
+		justify-content: space-between;
+	}
+    .employee_name_role{
+        h2{
+            color:$light-black !important;
+            margin-bottom: 0px;
+        }
+        p{
+            color:$text-light !important;
+            margin-top: 0px;
+            font-size: small;
+        }
+    }
+    .basic_details{
+        h3{
+            color:$light-black !important;
+            margin-top: 0px;
+        }
+        h4{
+            margin-top: 0px;
+            margin-bottom: 0px;
+            color: $text-light;
+        }
+        p{
+            color:$light-black !important;
+            margin-top: 10px;
+            font-size: small;
+        }
+    }
+    .d-flex{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .flex-1{
+        flex: 1px;
+    }
+}

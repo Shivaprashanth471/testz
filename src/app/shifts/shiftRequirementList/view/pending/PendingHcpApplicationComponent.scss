@@ -1,0 +1,13 @@
+.pending-hcps-list{
+    .text-right{
+        text-align: right !important;
+        padding-right: 40px !important;
+    }
+    .action-wrapper{
+        margin: auto;
+        .actions{
+            justify-content: end !important;
+            margin-right: 20px !important;
+        }
+    }
+}

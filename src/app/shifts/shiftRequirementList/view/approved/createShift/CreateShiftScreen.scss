@@ -1,0 +1,17 @@
+.create-shift {
+
+    .input-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .create-shift-actions{
+            display: flex;          
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+      }
+}

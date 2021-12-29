@@ -1,0 +1,22 @@
+.card{
+    color: #000;
+
+    .card-title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .card-header{
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+    .card-date,.card-content{
+        color: gray;
+    }
+
+    .card-content{
+        line-height:2;
+        width: 60%;
+    }
+}

@@ -1,0 +1,26 @@
+.education-add-container {
+.minor {
+width: 48.25%;
+}
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border: 1px solid #ffffff;
+    text-align: left;
+  }
+
+
+  .edu-add-action {
+    margin: 3rem 0;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,10 @@
+@import "src/assets/scss/common";
+
+.add-hcp-requirment{
+    .MuiIconButton-label{
+        color: $primary-color !important;
+    }
+    .MuiTypography-body1{
+        color: $light-black;
+    }
+}

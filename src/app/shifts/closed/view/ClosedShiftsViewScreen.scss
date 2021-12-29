@@ -1,0 +1,63 @@
+@import "src/assets/scss/common";
+
+.shift-closed-view{
+    .file-actions{
+        color: $primary-color !important;
+        margin-top: 0px;
+        text-decoration: underline;
+        margin-left: 30px;
+        cursor: pointer;
+    }
+    .file-icon{
+		font-size: 6rem;
+		color: #41d5c2;
+	}
+    .facility-details{
+        justify-content: space-between;
+        padding: 10px 20px;
+        .button{
+           text-align: end;
+        }
+    }
+    .actions-wrapper{
+        margin: auto;
+    }
+    .hcp-details{  
+        flex-wrap: wrap;
+
+        h4{
+            color:$text-light ;
+        }
+        p{
+            margin-bottom: 0px;
+            color:$light-black;
+        }
+    }
+    .shift-name-requested{
+        justify-content: space-between;
+        .requested-on-wrapper{
+         text-align: center;
+         p{
+             margin-top: 18px;
+         }
+        }
+    }
+    h2{
+        color:$light-black;
+    }
+    p{
+        color:$text-light;
+    }
+    h3{
+        color:$light-black;
+    }
+    .flex-1{
+        flex:1px;
+    }
+    .shift-details{
+        p{
+            font-size: 14px;
+            color:$light-black;
+        }
+    }
+}

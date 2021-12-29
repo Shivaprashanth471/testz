@@ -1,0 +1,62 @@
+@import "src/assets/scss/common";
+
+.login-screen {
+    margin-top: 90px;
+    .main-auth-wrapper {
+        @include sm() {
+            padding: 20px 40px;
+        }
+    }
+    .input-cursor {
+        caret-color: $primary-color;
+    }
+    .MuiIconButton-sizeSmall{
+        font-size: 1rem !important;
+    }
+    .login-button {
+        width: 300px;
+        padding: 10px;
+        margin: auto;
+        color: white;
+        background-color: $accent-color;
+    }
+    .auth-header {
+        margin: 0px 0 0;
+        font-size: 24px;
+        text-transform: capitalize;
+        color:#32E2AB;
+    }
+    .form-label{
+        color: $text-light;
+    }
+
+    .loginFormHolder {
+        margin: 20px;
+
+        .eye_btn_wrapper {
+            position: absolute;
+            top: 38px;
+            right: 10px;
+            z-index: 2;
+        }
+    }
+
+    .forgot-password-holder {
+        text-align: right;
+        margin-bottom: 20px;
+
+        .forgot-password-wrapper {
+            font-size: 15px;
+            color:$accent-color;
+            outline: none;
+            font-weight: 400;
+            cursor: pointer;
+            opacity: 0.9;
+            text-decoration: none;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+}

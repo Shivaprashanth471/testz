@@ -1,0 +1,16 @@
+@import "src/assets/scss/common";
+
+.closed-shifts {
+	margin: auto;
+	text-align: center;
+	.MuiTableRow-root {
+		width: 20px !important;
+    }
+	.filter-icon {
+		font-size: 2rem;
+		color: $light-black;
+	}
+    .MuiTableCell-body{
+        width: 20px !important;
+    }
+}

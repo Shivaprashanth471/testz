@@ -1,0 +1,15 @@
+@import "src/assets/scss/common";
+
+.facility-list {
+	.MuiPaper-elevation1 {
+		box-shadow: none !important;
+	}
+   .filter-icon{
+       font-size: 2rem;
+       color:$light-black;
+   }
+   .text-right{
+       text-align: right !important;
+       padding-right: 20px !important;
+   }
+}

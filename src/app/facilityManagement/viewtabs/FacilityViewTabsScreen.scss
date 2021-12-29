@@ -1,0 +1,62 @@
+@import "src/assets/scss/common";
+
+.facility_view_tabs_details {
+    .facility_details{
+        width: 100%;
+        justify-content: space-between;
+    }
+    .actions-wrapper{
+        margin: auto;
+       margin-right: 20px;
+    }
+	.facility_name {
+		padding: 20px;
+		border: 1px solid lightgray;
+		border-radius: 5px;
+        .location{
+            margin-top: -21px;
+        }
+        .location_icon{
+            font-size: 1rem !important;
+            color:$light-black;
+        }
+		.mrg-top-3 {
+			margin-top: 7px;
+		}
+        h2{
+            color:$light-black;
+            font-weight: 450;
+        }
+		.view_details {
+			margin-top: -10px;
+			margin-left: 3px;
+            color: grey;
+            font-size: small;
+		}
+	}
+    .location_name {
+        margin-top: 5px;
+        margin-left: 0px;
+        color: $text-light;
+    }
+	.facility_tabs {
+		padding: 20px 0px;
+		border-radius: 5px;
+        .hidden{
+            display: none;
+        }
+		.tabs_header {
+			align-items: center;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+		}
+        .MuiTab-fullWidth {
+            text-transform: none;
+        }        
+        .MuiTab-textColorPrimary.Mui-selected {
+            color:$primary-color;
+        }
+        .PrivateTabIndicator-colorPrimary-9 {
+            background-color:$light-black;
+        }
+	}
+}

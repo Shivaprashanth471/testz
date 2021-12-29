@@ -1,0 +1,19 @@
+$primary-color: #10c4d3;
+$accent-color: #0c80e3;
+
+
+
+.shift-filters{
+    .MuiFormLabel-root{
+        color: $accent-color !important;
+
+    }
+   
+}
+
+// .facility-filters .custom-input{
+//     ::placeholder {
+//         color: gray !important;
+//         font:inherit;
+//       }
+// }

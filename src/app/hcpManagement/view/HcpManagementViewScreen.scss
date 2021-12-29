@@ -1,0 +1,81 @@
+@import "src/assets/scss/common";
+
+.hcp_view_details {
+	.profile-status-wrapper{
+		justify-content: space-between;
+        h2{
+            color: $primary-color;
+            flex:1px;
+            font-weight: 400;
+        }
+        div{   
+            margin: auto;
+            margin-right: 10px;
+        }
+		.status{
+			margin-top: 0px;
+			margin-right: -30px;
+			text-transform: capitalize;
+		}
+    }
+	.hcp_basic_details {
+		border-radius: 5px;
+		h2 {
+			color:$light-black;
+            margin-top:9px;
+		}
+		.location {
+			margin-top: -21px;
+		}
+		.location_icon {
+			font-size: 1rem !important;
+			color:$light-black;
+		}
+		.mrg-top-3 {
+			margin-top: 7px;
+		}
+		.flex-1 {
+			flex: 1px;
+		}
+		.location_name {
+			margin-top: -1px;
+			margin-left: 5px;
+			color: $text-light;
+		}
+	}
+	.button-wrapper{
+		margin: auto;
+	}
+	.hcp_type{
+		position: absolute;
+		right: 20px;
+		top:10px;
+		color:$light-black;
+	}
+	.MuiPaper-elevation1{
+		box-shadow: none !important;
+	}
+	.MuiAccordionSummary-root{
+		padding: 0px !important;
+	}
+	// .custom-border{
+	// 	width: 78vw;
+	// }
+	.MuiAccordionDetails-root{
+		padding: 0px !important;
+	}
+	.MuiAccordionSummary-content{
+		p{
+			font-size: large;
+			font-weight: 600;
+			color:$light-black;
+		}
+	}
+	.flex-1 {
+		flex: 1px !important;
+	}
+	.file-icon{
+		font-size: 6rem;
+		color: #41d5c2;
+	  }
+}

@@ -1,0 +1,101 @@
+@import "src/assets/scss/common";
+
+.pending-shifts-view {
+
+    .summary {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        text-align: left;
+        max-width: calc(80vw - 100px);
+    }
+
+    .facility-details {
+        padding: 10px 20px;
+    }
+    .text-right{
+        text-align: right !important;
+        padding-right: 20px !important;
+    }
+
+    .shift-name-requested {
+        justify-content: space-between;
+
+        .requested-on-wrapper {
+            text-align: center;
+
+            p {
+                margin-top: 18px;
+            }
+        }
+    }
+
+    .status-header,
+    .status {
+        color: $primary-color;
+        font-size: 20px;
+        margin-bottom: 0;
+        margin-top: 0;
+
+        .status:first-letter {
+            text-transform: capitalize;
+        }
+    }
+
+
+
+    h2 {
+        color:$light-black;
+    }
+
+    p {
+        color: $text-light;
+    }
+
+    h3 {
+        color:$light-black;
+    }
+
+    .flex-1 {
+        flex: 1px;
+    }
+
+    .shift-details {
+        p {
+            font-size: 14px;
+            color:$light-black;
+        }
+    }
+
+    .add-icon {
+        fill: green;
+    }
+
+    .delete-icon {
+        fill: red;
+    }
+
+    .hcp_tabs {
+        padding: 20px 0px 0px 0px;
+
+        .tabs_header {
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .MuiTab-fullWidth {
+            text-transform: none;
+        }
+
+        .MuiTab-textColorPrimary.Mui-selected {
+            color: $primary-color;
+        }
+
+        .PrivateTabIndicator-colorPrimary-13 {
+            background-color: $primary-color !important;
+        }
+    }
+    .MuiInputBase-inputMultiline{
+		border: none !important;
+	}
+}

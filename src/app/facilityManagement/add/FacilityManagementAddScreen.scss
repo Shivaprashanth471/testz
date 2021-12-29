@@ -1,0 +1,133 @@
+@import "src/assets/scss/common";
+
+
+.facility-main {
+  padding: 0.5rem 3rem 3rem 3rem;
+   .delete-image{
+     margin-left: 10px;
+     color:$light-black;
+     text-decoration: underline;
+     margin-top: 0px;
+   }
+  .form-container {
+    position: relative;
+  }
+
+  .flex-1 {
+    flex: 1px;
+  }
+
+  .phone-number {
+    width: 75%;
+  }
+
+  .extension-number {
+    width: 25%;
+    margin-left: 0.5rem;
+
+    .MuiOutlinedInput-input {
+      padding: 13px !important;
+    }
+  }
+
+  .card-header {
+    color: #000;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .header {
+    color: $primary-color;
+    font-size: 22px;
+  }
+
+  .close-icon {
+    fill: red;
+  }
+
+  .add-icon {
+    fill: green;
+  }
+
+  .edit-icon {
+    fill: orange;
+  }
+
+  .delete-icon {
+    fill: red;
+  }
+
+  .custom-border {
+    padding: 0.8rem 3rem 2rem 2rem !important;
+    border-radius: 0.5rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+
+  .generic-add-multiple{
+		color: $primary-color;
+		text-decoration: underline;
+		margin: auto;
+		font-weight: 500;
+		cursor: pointer;
+		font-size: 18px;
+	  }
+
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .MuiTypography-root .MuiTypography-h5 {
+    color:$light-black;
+  }
+
+  .attachments_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    .attachments {
+      flex: 50%;
+      margin-top: 20px;
+    }
+  }
+
+  .facility-about {
+    margin: 2rem 0;
+  }
+
+  .facility-documents {
+    margin: 2rem 0;
+  }
+
+  .facility-special-consideration {
+    margin: 2rem 0;
+  }
+
+  .facility-actions {
+    padding-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+
+  label[data-shrink='false'] {
+    color: gray !important;
+  }
+
+  .image_actions{
+    p{
+      color: $primary-color;
+      margin-left: 0px;
+    }
+  }
+
+  .MuiInputBase-inputMultiline{
+    border: none !important;
+  }
+}

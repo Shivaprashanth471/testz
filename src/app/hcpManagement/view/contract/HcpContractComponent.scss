@@ -1,0 +1,19 @@
+@import "src/assets/scss/common";
+
+.hcp_contract_details {
+    .flex-1{
+        flex:1px !important;
+    }
+    h4{
+		color:$text-light;
+	}
+	h3{
+		color:$light-black;
+	}
+	p{
+		color:$light-black;
+	}
+	.preview-file{
+		margin-top: 14px;
+	}
+}

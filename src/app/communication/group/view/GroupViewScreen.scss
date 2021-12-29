@@ -1,0 +1,42 @@
+@import "src/assets/scss/common";
+
+.group-view{
+    .filter{
+        h2{
+            margin-top: 0px;
+            color:$light-black;
+        }
+        p{
+            margin-top: -15px;
+            color:$light-black;
+        }
+    }
+    .remove{
+        color: $accent-color;
+    }
+    .message-wrapper{
+        cursor: pointer;
+        border: 1px solid $accent-color;
+        border-radius: 10px;
+        width: 150px;
+        padding: 0.15rem 0;
+        justify-content: center;
+        align-items: center;
+        background-color: #F6FEFB;    
+    }
+    .remove-members-wrapper{
+        padding-bottom: 3rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+        .cancel{
+            margin: auto;
+        }
+        .actions{
+            margin-left: 20px;
+            color: white;
+            background-color:#CB1C2B;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+@import "src/assets/scss/common";
+
+.hcp_view_details {
+	.hcp_basic_details {
+		padding: 20px;
+		border: 1px solid lightgray;
+		border-radius: 5px;
+		h2 {
+			color:$light-black;
+            margin-top:9px;
+		}
+		.location {
+			margin-top: -21px;
+		}
+		.location_icon {
+			font-size: 1rem !important;
+			color:$light-black;
+		}
+		.mrg-top-3 {
+			margin-top: 7px;
+		}
+		.flex-1 {
+			flex: 1px;
+		}
+		.location_name {
+			margin-top: -1px;
+			margin-left: 5px;
+			color: $text-light;
+		}
+	}
+    .MuiAccordionSummary-root{
+        margin-top: 10px;
+        padding: 5px 20px;
+        background-color: white !important;
+        border-radius: 10px;
+        color:$light-black;
+    }
+    .accordion_button_wraper{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+	.hcp_type{
+		position: absolute;
+		right: 20px;
+		top:10px;
+		color:$light-black;
+	}
+
+	.hcp-view-btn-grp{
+		display: flex;
+		justify-content: center;
+		gap: 20px;
+	}
+}

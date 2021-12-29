@@ -1,0 +1,49 @@
+@import "src/assets/scss/common";
+
+
+.group-details-card {
+  padding: 0 0.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid lightgray;
+
+  .message-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    .group-details {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .avatar {
+    margin: auto;
+    margin-top: 15px;
+  }
+  .group-name {
+    color:$light-black !important;
+    margin-bottom: 0px !important;
+    margin-top: 10px;
+    padding-top: 0px;
+  }
+
+  .group-msg-status{
+    color: gray !important;
+  }
+  .message-status {
+    margin-top: 0px !important;
+    font-size: small;
+  }
+  .time-stamp {
+    font-size: smaller;
+    margin-top: 0px;
+    padding-top: 0px;
+  }
+}
+.active-group{
+  background-color: #E3FFF4;
+  .group-name{
+    color: $primary-color !important;
+  }
+}

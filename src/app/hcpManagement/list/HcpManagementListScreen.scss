@@ -1,0 +1,14 @@
+@import "src/assets/scss/common";
+
+.hcp-list {
+	.MuiPaper-elevation1 {
+		box-shadow: none !important;
+	}
+   .filter-icon{
+       font-size: 2rem;
+       color:$light-black;
+   }
+	.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+		padding: 2px !important;
+	}
+}

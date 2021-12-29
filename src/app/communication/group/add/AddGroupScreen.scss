@@ -1,0 +1,34 @@
+@import "src/assets/scss/common";
+
+.add-group{
+    .MuiFormControl-fullWidth {
+        width: 250px;
+    }
+    .group-title{
+        width: 100%;
+    }
+    .filter{
+        h2{
+            margin-top: 0px;
+            color:$light-black;
+        }
+        p{
+            margin-top: -15px;
+            color:$light-black;
+        }
+    }
+    .button-wrapper{
+        text-align: center;
+        margin-top: 30px;
+       .add-button{
+           margin: auto;
+       }
+    }
+    .message-wrapper{
+        border: 1px solid black;
+        border-radius: 10px;
+        justify-content: center;
+        width: 150px;
+
+    }
+}

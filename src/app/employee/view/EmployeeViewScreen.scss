@@ -1,0 +1,17 @@
+@import "src/assets/scss/common";
+
+.employee-view{
+    .edit-employee-wrapper{
+        justify-content: space-between;
+        h2{
+            color: $primary-color;
+            flex:1px;
+            font-weight: 400;
+        }
+        div{
+           
+            margin: auto;
+            margin-right: 10px;
+        }
+    }
+}

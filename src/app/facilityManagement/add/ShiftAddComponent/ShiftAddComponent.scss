@@ -1,0 +1,41 @@
+.shift-add-container {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border: 1px solid #ffffff;
+    text-align: left;
+  }
+
+  .shift-add-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+
+    .add-member-icon {
+      cursor: pointer;
+    }
+  }
+
+  .shift-add-btn-grp{
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;  
+    justify-content: center;
+  }
+
+  .shift-add-action {
+    margin: 3rem 0;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
