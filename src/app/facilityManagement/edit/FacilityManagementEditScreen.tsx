@@ -100,7 +100,7 @@ const facilityFormValidation = Yup.object({
   email: Yup.string()
     .typeError(" must be a text")
     .email("invalid"),
-  phone_number: Yup.number().typeError(" must be a number"),
+  phone_number: Yup.number().typeError(" must be a number").required('required'),
   extension_number: Yup.number().typeError(" must be a number"),
   website_url: Yup.string()
     .typeError(" must be a text")
@@ -108,7 +108,7 @@ const facilityFormValidation = Yup.object({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     ),
-  timezone: Yup.number().typeError(" must be a number"),
+  timezone: Yup.number().typeError(" must be a number").required(),
   about: Yup.string()
     .typeError(" must be a text")
     .trim("empty space not allowed"),
@@ -358,7 +358,6 @@ const FacilityManagementEditScreen = () => {
     })
   }
 
-  console.log(fileUpload)
 
   const onAddShift = useCallback((shift: any, facilityId: string) => {
     return new Promise((resolve, reject) => {
@@ -543,7 +542,7 @@ const FacilityManagementEditScreen = () => {
                   name="facility_name"
                   type={"text"}
                   component={TextField}
-                  label="Facility Name"
+                  label="Facility Name*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_facility_name'
@@ -553,7 +552,7 @@ const FacilityManagementEditScreen = () => {
                   name="business_name"
                   type={"text"}
                   component={TextField}
-                  label="Business Name"
+                  label="Business Name*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_business_name'
@@ -567,7 +566,7 @@ const FacilityManagementEditScreen = () => {
                   name="facility_uid"
                   type={"text"}
                   component={TextField}
-                  label="Facility Unique ID"
+                  label="Facility Unique ID*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_facility_uid'
@@ -578,7 +577,7 @@ const FacilityManagementEditScreen = () => {
                   name="facility_short_name"
                   type={"text"}
                   component={TextField}
-                  label="Facility Short Name"
+                  label="Facility Short Name*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_facility_short_name'
@@ -610,7 +609,7 @@ const FacilityManagementEditScreen = () => {
                   <div className="phone-number">
                     <Field name={'phone_number'} className="flex-1">
                       {(field: FieldProps) => {
-                        return <PhoneInputComponent field={field} placeholder={'Enter Phone number'} />
+                        return <PhoneInputComponent field={field} placeholder={'Enter Phone number*'} />
                       }}
                     </Field>
                   </div>
@@ -658,7 +657,7 @@ const FacilityManagementEditScreen = () => {
                   name="address.street"
                   type={"text"}
                   component={TextField}
-                  label="Street"
+                  label="Street*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_address_street'
@@ -669,7 +668,7 @@ const FacilityManagementEditScreen = () => {
                   name="address.city"
                   type={"text"}
                   component={TextField}
-                  label="City"
+                  label="City*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_address_city'
@@ -682,7 +681,7 @@ const FacilityManagementEditScreen = () => {
                   name="address.state"
                   type={"text"}
                   component={TextField}
-                  label="State"
+                  label="State*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_address_state'
@@ -692,7 +691,7 @@ const FacilityManagementEditScreen = () => {
                   name="address.country"
                   type={"text"}
                   component={TextField}
-                  label="Country"
+                  label="Country*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_address_country'
@@ -705,7 +704,7 @@ const FacilityManagementEditScreen = () => {
                   name="address.zip_code"
                   type={"text"}
                   component={TextField}
-                  label="Zip Code"
+                  label="Zip Code*"
                   autoComplete="off"
                   id='input_facility_edit_address_zip_code'
                 />
@@ -718,7 +717,7 @@ const FacilityManagementEditScreen = () => {
                   component={TextField}
                   select
                   SelectProps={showDropDownBelowField}
-                  label="Facility Timezone"
+                  label="Facility Timezone*"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_timezone'
@@ -740,7 +739,7 @@ const FacilityManagementEditScreen = () => {
                   name="location.coordinates.latitude"
                   type={"text"}
                   component={TextField}
-                  label="Latitude"
+                  label="Latitude*"
                   autoComplete="off"
                   id='input_facility_add_latitude'
                 />
@@ -750,7 +749,7 @@ const FacilityManagementEditScreen = () => {
                   name="location.coordinates.longitude"
                   type={"text"}
                   component={TextField}
-                  label="Longitude"
+                  label="Longitude*"
                   autoComplete="off"
                   id='input_facility_add_longitude'
                 />
@@ -777,7 +776,7 @@ const FacilityManagementEditScreen = () => {
                   name="hourly_base_rates.cna"
                   type={"text"}
                   component={TextField}
-                  label="CNA Rate (Usd)"
+                  label="CNA Rate ($/hr)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_hourly_base_rates_cna'
@@ -787,7 +786,7 @@ const FacilityManagementEditScreen = () => {
                   name="hourly_base_rates.lvn"
                   type={"text"}
                   component={TextField}
-                  label="LVN Rate (Usd)"
+                  label="LVN Rate ($/hr)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_hourly_base_rates_lvn'
@@ -799,7 +798,7 @@ const FacilityManagementEditScreen = () => {
                   name="hourly_base_rates.rn"
                   type={"text"}
                   component={TextField}
-                  label="RN Rate (Usd)"
+                  label="RN Rate ($/hr)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_hourly_base_rates_rn'
@@ -831,7 +830,7 @@ const FacilityManagementEditScreen = () => {
                   name="hourly_base_rates.holiday"
                   type={"text"}
                   component={TextField}
-                  label="Holiday Rate (Usd)"
+                  label="Holiday Rate ($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_hourly_base_rates_holiday'
@@ -843,7 +842,7 @@ const FacilityManagementEditScreen = () => {
                   name="diff_rates.noc"
                   type={"text"}
                   component={TextField}
-                  label="NOC Diff"
+                  label="NOC Diff ($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_diff_rates_noc'
@@ -853,7 +852,7 @@ const FacilityManagementEditScreen = () => {
                   name="hourly_base_rates.hazard"
                   type={"text"}
                   component={TextField}
-                  label="Hazard Rate (Usd)"
+                  label="Hazard Rate ($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_hourly_base_rates_hazard'
@@ -865,7 +864,7 @@ const FacilityManagementEditScreen = () => {
                   name="diff_rates.pm"
                   type={"text"}
                   component={TextField}
-                  label="PM Diff (Usd)"
+                  label="PM Diff ($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_diff_rates_pm'
@@ -875,7 +874,7 @@ const FacilityManagementEditScreen = () => {
                   name="diff_rates.weekend"
                   type={"text"}
                   component={TextField}
-                  label="Weekend Rate (Usd)"
+                  label="Weekend Rate ($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_diff_rates_weekend'
@@ -883,12 +882,13 @@ const FacilityManagementEditScreen = () => {
               </div>
               <div className="input-container">
                 <Field
+                  SelectProps={showDropDownBelowField}
                   variant="outlined"
                   name="conditional_rates.overtime.hours"
                   type={"text"}
                   component={TextField}
                   select
-                  label="OT Hours"
+                  label="OT Hours (hr/day)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_conditional_rates.overtime.hours'
@@ -906,7 +906,7 @@ const FacilityManagementEditScreen = () => {
                   name="conditional_rates.overtime.rate"
                   type={"text"}
                   component={TextField}
-                  label="OT Rate(Usd)"
+                  label="OT Rate($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_conditional_rates_overtime_rate'
@@ -931,7 +931,7 @@ const FacilityManagementEditScreen = () => {
                   name="conditional_rates.rush.rate"
                   type={"text"}
                   component={TextField}
-                  label="Rush Rate(Usd)"
+                  label="Rush Rate($)"
                   fullWidth
                   autoComplete="off"
                   id='input_facility_edit_conditional_rates_rush_rate'
