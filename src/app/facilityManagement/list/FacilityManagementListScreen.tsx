@@ -172,6 +172,7 @@ const FacilityManagementListScreen = () => {
     Communications.pageBackButtonSubject.next(null);
   }, [init, getRegions]);
 
+  
   return (
     <>
       <div className={"facility-list screen crud-layout pdd-30"}>
