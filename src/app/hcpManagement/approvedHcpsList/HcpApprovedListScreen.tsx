@@ -45,6 +45,15 @@ const HcpApprovedListScreen = () => {
     const value = useRef<any>(null)
     const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
 
+    const classesFunction = useCallback((type:any)=>{
+        if(type === "Actions"){
+          return "last-row"
+        }else if(type === 'Active/Inactive'){
+            return 'text-align'
+        }else if(type === "Created On"){
+          return 'pdd-left-20 first-row'
+        }
+    },[])
 
     const setStatusRef = (val: any) => {
         status.current = val
@@ -100,8 +109,8 @@ const HcpApprovedListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: role === "super_admin" ? ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Active/Inactive', 'Action'] : ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Status', 'Action'],
-            mobileMatColumns: role === "super_admin" ? ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Active/Inactive', 'Action'] : ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Status', 'Action'],
+            webMatColumns: role === "super_admin" ? ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Active/Inactive', 'Actions'] : ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Status', 'Actions'],
+            mobileMatColumns: role === "super_admin" ? ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Active/Inactive', 'Actions'] : ['Created On', 'Name', 'Contact Number', 'Email', 'HCP Type', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -208,7 +217,7 @@ const HcpApprovedListScreen = () => {
                                 <TableHead>
                                     <TableRow>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                            <TableCell className={(column === 'Active/Inactive') ? 'text-align' : ''}
+                                            <TableCell className={classesFunction(column)}
                                                 key={'header-col-' + columnIndex}
                                             >
                                                 {column}

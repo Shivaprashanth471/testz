@@ -42,13 +42,18 @@ const CancelledShiftsListScreen = () => {
     const [selectedFacilities, setSelectedFacilities] = useState<any>([])
     const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
-
-
-
     const facilityIdRef = useRef<any>('')
     const hcpTypeRef = useRef<any>('')
     const valueRef = useRef<any>(null)
     const timeTypeRef = useRef<any>('')
+
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'first-row'
+        }
+    },[])
 
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
@@ -131,8 +136,8 @@ const CancelledShiftsListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'HCP Name', 'Facility Name', 'Shift Date', 'Time Type', 'Type of HCP', 'Differential Amount', 'Action'],
-            mobileMatColumns: ['Title', 'HCP Name', 'Facility Name', 'Shift Date', 'Time Type', 'Type of HCP', 'Differential Amount', 'Action'],
+            webMatColumns: ['Title', 'HCP Name', 'Facility Name', 'Shift Date', 'Time Type', 'Type of HCP', 'Differential Amount', 'Actions'],
+            mobileMatColumns: ['Title', 'HCP Name', 'Facility Name', 'Shift Date', 'Time Type', 'Type of HCP', 'Differential Amount', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -252,7 +257,7 @@ const CancelledShiftsListScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                    <TableCell className={classesFunction(column)}
                                         key={'header-col-' + columnIndex}
                                     >
                                         {column}

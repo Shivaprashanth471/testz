@@ -35,6 +35,14 @@ const GroupListScreen = () => {
     const history = useHistory()
     const [list, setList] = React.useState<TsDataListState | null>(null);
 
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "text-right last-row"
+        }else if(type==="Created On"){
+          return 'pdd-left-20 first-row'
+        }
+      },[])
+
     if (list?.table?.data) {
         list?.table?.data?.sort((a: any, b: any) => {
             return Date.parse(b.created_at) - Date.parse(a.created_at)
@@ -117,7 +125,7 @@ const GroupListScreen = () => {
                                 <TableHead>
                                     <TableRow>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                            <TableCell 
+                                            <TableCell className={classesFunction(column)}
                                                 key={'header-col-' + columnIndex}
                                             >
                                                 {column}
@@ -146,7 +154,7 @@ const GroupListScreen = () => {
                                                         <QuestionAnswerIcon className={"sms-blast-icon"} /> &nbsp; <span className="sms-blast">SMS Blast</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell className='text-right'>
                                                     <Link to={'/group/view/' + row._id} className="info-link" id={"link_group_details_" + rowIndex} >
                                                         {('View Details')}
                                                     </Link>

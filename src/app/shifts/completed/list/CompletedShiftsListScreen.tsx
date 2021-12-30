@@ -49,6 +49,14 @@ const CompletedShiftsListScreen = () => {
     const valueRef = useRef<any>(null)
     const timeTypeRef = useRef<any>('')
 
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'first-row'
+        }
+    },[])
+
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
     }
@@ -128,8 +136,8 @@ const CompletedShiftsListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Action'],
-            mobileMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Action'],
+            webMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
+            mobileMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -229,26 +237,6 @@ const CompletedShiftsListScreen = () => {
                                 }
                             }}  className = "searchField"  variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Shift'} />
                         </div>
-                        {/* <div>
-                            <Autocomplete
-								options={applied_for}
-								getOptionLabel={(option:any) => option.name}
-								placeholder={"Applied For"}
-                                style={{ width: "200px",height:"35px" }}
-                                className="mrg-left-20"
-								onChange={(value:any) =>
-									setHcpType(value)
-				                }
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										id='select_dashboard_doctor'
-										variant='outlined'
-										placeholder={"Applied For"}
-									/>
-								)}
-                                />
-                            </div> */}
                     </div>
                 </div>
                 <div className="actions">
@@ -265,6 +253,7 @@ const CompletedShiftsListScreen = () => {
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
                                     <TableCell key={'header-col-' + columnIndex}
+                                    className={classesFunction(column)}
                                     >
                                         {column}
                                     </TableCell>

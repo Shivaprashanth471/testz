@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { ENV } from '../../../../constants';
 import { CommonService } from '../../../../helpers';
 import { useParams } from 'react-router';
@@ -12,6 +12,18 @@ import Checkbox from '@material-ui/core/Checkbox';
 import animationData from "../../../../animations/no_data.json";
 import './AddHcpToShiftScreen.scss';
 import Lottie from "react-lottie";
+import {  SearchRounded } from '@material-ui/icons';
+import {withStyles} from '@material-ui/core/styles';
+
+const CssTextField = withStyles({
+    root: {
+       '& .MuiOutlinedInput-root': {
+          '&:hover fieldset': {
+             borderColor: '#10c4d3',
+          },
+       },
+    },
+})(TextField);
 
 export interface AddHcpToShiftComponentProps {
     cancel: () => void,
@@ -53,7 +65,8 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     const classes = useStyles();
     const [hcpList, sethcpList] = React.useState<any>(null);
     const { user } = useSelector((state: StateParams) => state.auth);
-    const [isSubmitting, setSubmitting] = useState<boolean>(true)
+    const [isSubmitting, setSubmitting] = useState<boolean>(true);
+    const [searchHcp, setSearchHcp] = useState<string>('')
 
 
     const defaultOptions = {
@@ -61,13 +74,18 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     };
 
     const init = useCallback(() => {
+
+        let url=ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type
+        if(searchHcp!==''){
+            url=ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type+'&search='+searchHcp
+        }
         // config
-        CommonService._api.get(ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type).then((resp) => {
+        CommonService._api.get(url).then((resp) => {
             sethcpList(resp?.data);
         }).catch((err) => {
             console.log(err)
         })
-    }, [hcp_type])
+    }, [hcp_type,searchHcp])
 
     const addHcpToshift = useCallback((hcp_id) => {
         setSubmitting(false)
@@ -116,9 +134,18 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     return <div className='add-hcp-requirment'>
         <div className={classes.paper}>
             <h2 className={classes.title}>Add HCP to this Shift</h2>
-            {/* <TextField defaultValue={''} onChange={event => {}} variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Nurse Champion'} /> */}
             {hcpList && hcpList.length > 0 ? <div id='alert-dialog-title'>
                 <FormLabel component="legend" className="mrg-left-0">List Of HCP'S</FormLabel>
+                <div className='mrg-top-20'>
+                <div className="position-relative">
+                    <CssTextField defaultValue={''} onChange={event => { setSearchHcp(event?.target?.value) }}
+                        className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Hcp'}
+                    />
+                    <div style={{ position: 'absolute', top: '9px', left: "230px" }}>
+                        <SearchRounded className="search-icon" color='primary' />
+                    </div>
+                    </div>
+                </div>
                 <div className="mrg-top-20">
                     {
                         hcpList?.map((item: any) => {

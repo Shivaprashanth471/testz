@@ -50,6 +50,14 @@ const ShiftInprogressListScreen = () => {
     const valueRef = useRef<any>(null)
     const timeTypeRef = useRef<any>('')
 
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'first-row'
+        }
+    },[])
+
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
     }
@@ -128,8 +136,8 @@ const ShiftInprogressListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Required On', 'Facility Name', 'HCP Name', 'HCP Type', 'Time Type', 'Shift Hours', 'Differential Amount', 'Action'],
-            mobileMatColumns: ['Title', 'Required On', 'Facility Name', 'HCP Name', 'HCP Type', 'Time Type', 'Shift Hours', 'Differential Amount', 'Action'],
+            webMatColumns: ['Title', 'Required On', 'Facility Name', 'HCP Name', 'HCP Type', 'Time Type', 'Shift Hours', 'Differential Amount', 'Actions'],
+            mobileMatColumns: ['Title', 'Required On', 'Facility Name', 'HCP Name', 'HCP Type', 'Time Type', 'Shift Hours', 'Differential Amount', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
@@ -273,7 +281,7 @@ const ShiftInprogressListScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                    <TableCell className={classesFunction(column)}
                                         key={'header-col-' + columnIndex}
                                     >
                                         {column}

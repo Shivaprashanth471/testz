@@ -50,7 +50,13 @@ const ShiftsMasterListScreen = () => {
     const [selectedStatusTypes, setSelectedStatusTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
 
-
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'pdd-left-20 first-row'
+        }
+    },[])
 
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
@@ -134,8 +140,8 @@ const ShiftsMasterListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Facility Name', 'Shift Date', 'HCP Name', 'HCP Type', 'Time Type', 'Status', 'Action'],
-            mobileMatColumns: ['Title', 'Facility Name', 'Shift Date', 'HCP Name', 'HCP Type', 'Time Type', 'Status', 'Action'],
+            webMatColumns: ['Title', 'Facility Name', 'Shift Date', 'HCP Name', 'HCP Type', 'Time Type', 'Status', 'Actions'],
+            mobileMatColumns: ['Title', 'Facility Name', 'Shift Date', 'HCP Name', 'HCP Type', 'Time Type', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -248,52 +254,6 @@ const ShiftsMasterListScreen = () => {
                                     <SearchRounded className="search-icon" />
                                 </div>
                             </div>
-
-                            {/* <div>
-                            <Autocomplete
-                            PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-                                options={hcpTypes}
-                                getOptionLabel={(option: any) => option.label}
-                                placeholder={"Applied For"}
-                                style={{ width: "200px", height: "35px" }}
-                                className="mrg-left-20"
-                                onChange={(value: any) =>
-                                    setHcpType(value)
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        id='select_dashboard_doctor'
-                                        variant='outlined'
-                                        placeholder={"Hcp Type"}
-                                    />
-                                )}
-                            />
-                        </div> */}
-                            {/* <div>
-                            <Autocomplete
-                            PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-                                options={shiftType}
-                                getOptionLabel={(option: any) => option.label}
-                                placeholder={"Applied For"}
-                                style={{ width: "200px", height: "15px" }}
-                                className="mrg-left-20"
-                                onChange={(value: any) =>
-                                    setHcpType(value)
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        variant='outlined'
-                                        placeholder={"Time Type"}
-                                    />
-                                )}
-                            />
-                        </div> */}
                         </div>
                     </div>
                     <div className="actions">
@@ -306,7 +266,7 @@ const ShiftsMasterListScreen = () => {
                             <TableHead>
                                 <TableRow>
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                        <TableCell className={classesFunction(column)}
                                             key={'header-col-' + columnIndex}
                                         >
                                             {column}

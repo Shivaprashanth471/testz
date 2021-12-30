@@ -39,7 +39,6 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-
 const FacilityManagementListScreen = () => {
   const [list, setList] = useState<TsDataListState | null>(null);
   const [regionList, setRegionList] = useState<any | null>(null);
@@ -48,16 +47,16 @@ const FacilityManagementListScreen = () => {
   const region = useRef<any>("");
   const status = useRef<any>("");
   const value = useRef<any>(null);
+
   
   const classesFunction = useCallback((type:any)=>{
     if(type==="Actions"){
-      return "text-right"
+      return "text-right last-row"
     }else if(type==='Active / Inactive'){
       return 'text-align'
     }else if(type==="Created On"){
-      return 'pdd-left-20'
+      return 'pdd-left-20 first-row'
     }
-
   },[])
   const [selectedRegions, setSelectedRegions] = useState<any>([])
 

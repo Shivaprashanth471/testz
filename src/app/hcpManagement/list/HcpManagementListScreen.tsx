@@ -43,7 +43,15 @@ const HcpManagementListScreen = () => {
     const status = useRef<any>("")
     const value = useRef<any>(null)
     const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
-
+    
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Created On"){
+          return 'pdd-left-20 first-row'
+        }
+    },[])
+    
     const setStatusRef = (val: any) => {
         status.current = val
     }
@@ -90,8 +98,8 @@ const HcpManagementListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Action'],
-            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Action'],
+            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
+            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -139,7 +147,6 @@ const HcpManagementListScreen = () => {
                 </div>}
                 <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
                     <HcpFiltersComponent
-
                         resetFilters={resetFilters}
                         cancel={cancelopenFilters}
                         confirm={confirmopenFilters}
@@ -191,7 +198,7 @@ const HcpManagementListScreen = () => {
                                 <TableHead>
                                     <TableRow>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                            <TableCell 
+                                            <TableCell  className={classesFunction(column)}
                                                 key={'header-col-' + columnIndex}
                                             >
                                                 {column}

@@ -376,10 +376,12 @@ body {
 			font-size: 13px;
 			//color: $primary-color;
 			color: $light-black;
-			font-weight: 500;
+			background-color: #e7fcf6;
+			font-weight: 405;
 		}
 		.MuiTableCell-stickyHeader {
-			background-color: #e7fcf6;
+			border: 0px !important;
+		
 		}
 	}
 

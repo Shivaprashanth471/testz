@@ -17,6 +17,7 @@ import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
 import {withStyles} from '@material-ui/core/styles';
+import "./ShiftRequirementListScreen.scss";
 
 const CssTextField = withStyles({
   root: {
@@ -27,6 +28,7 @@ const CssTextField = withStyles({
      },
   },
 })(TextField);
+
 const ShiftRequirementListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
@@ -63,6 +65,14 @@ const ShiftRequirementListScreen = () => {
     const setTimeTypeRef = (val: any) => {
         timeTypeRef.current = val;
     }
+
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'pdd-left-20 first-row'
+        }
+    },[])
 
     const getHcpTypes = useCallback(() => {
         CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -132,8 +142,8 @@ const ShiftRequirementListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Facility Name', 'Shift Date', 'Type of HCP', 'No. of Hcps', 'Shift Hours', 'Time Type', 'Status', 'Action'],
-            mobileMatColumns: ['Title', 'Facility Name', 'Shift Date', 'Type of HCP', 'No. of Hcps', 'Shift Hours', 'Time Type', 'Status', 'Action'],
+            webMatColumns: ['Title', 'Facility Name', 'Shift Date', 'Type of HCP', 'No. of Hcps', 'Shift Hours', 'Time Type', 'Status', 'Actions'],
+            mobileMatColumns: ['Title', 'Facility Name', 'Shift Date', 'Type of HCP', 'No. of Hcps', 'Shift Hours', 'Time Type', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -180,7 +190,7 @@ const ShiftRequirementListScreen = () => {
         Communications.pageBackButtonSubject.next(null);
     }, [init, getHcpTypes, getRegions, getFacilityData])
     return <>
-        <div className={'shift-master screen crud-layout pdd-30'}>
+        <div className={'shift-requirment-list screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
                 <LinearProgress />
             </div>}
@@ -198,7 +208,6 @@ const ShiftRequirementListScreen = () => {
                     setSelectedFacilities={setSelectedFacilities}
                     statusType={statusType}
                     setStatusType={setStatusType}
-
                     noStatus={false}
                     resetFilters={resetFilters}
                     cancel={cancelopenFilters}
@@ -251,7 +260,7 @@ const ShiftRequirementListScreen = () => {
                             <TableHead>
                                 <TableRow>
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell 
+                                        <TableCell className={classesFunction(column)}
                                             key={'header-col-' + columnIndex}
                                         >
                                             {column}
@@ -291,7 +300,7 @@ const ShiftRequirementListScreen = () => {
                                             <TableCell>
                                                 {row['shift_type']}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className={row['status']}>
                                                 {row['status']}
                                             </TableCell>
                                             <TableCell >

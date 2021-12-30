@@ -47,6 +47,14 @@ const ClosedShiftsScreen = () => {
     const valueRef = useRef<any>(null)
     const timeTypeRef = useRef<any>('')
 
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'first-row'
+        }
+    },[])
+
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
     }
@@ -125,8 +133,8 @@ const ClosedShiftsScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Facility Name', 'HCP Name', 'Completed On', 'Type of hcp', 'Time Type', 'Differential Amount', 'Action'],
-            mobileMatColumns: ['Title', 'Facility Name', 'HCP Name', 'Completed On', 'Type of hcp', 'Time Type', 'Differential Amount', 'Action'],
+            webMatColumns: ['Title', 'Facility Name', 'HCP Name', 'Completed On', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
+            mobileMatColumns: ['Title', 'Facility Name', 'HCP Name', 'Completed On', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -269,7 +277,7 @@ const ClosedShiftsScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell
+                                    <TableCell className={classesFunction(column)}
                                         key={'header-col-' + columnIndex}
                                     >
                                         {column}

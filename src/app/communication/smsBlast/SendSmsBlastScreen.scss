@@ -1,3 +1,5 @@
+@import "src/assets/scss/common";
+
 .send-sms-blast {
 	.dialog-header {
 		display: flex;
@@ -15,7 +17,7 @@
 		align-items: baseline;
 		margin-left: 15px;
 		h3 {
-			color: #fe0000;
+			color: $light-black;
 		}
 	}
 

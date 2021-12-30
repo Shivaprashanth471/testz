@@ -48,6 +48,14 @@ const PendingShiftsListScreen = () => {
 
     const [regions, setRegions] = useState<any>([])
     const [selectedRegion, setSelectedRegion] = useState<string>('')
+   
+    const classesFunction = useCallback((type:any)=>{
+        if(type==="Actions"){
+          return "last-row"
+        }else if(type==="Title"){
+          return 'first-row'
+        }
+    },[])
 
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
@@ -127,8 +135,8 @@ const PendingShiftsListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Action'],
-            mobileMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Action'],
+            webMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
+            mobileMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -242,7 +250,7 @@ const PendingShiftsListScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell key={'header-col-' + columnIndex}
+                                    <TableCell key={'header-col-' + columnIndex} className={classesFunction(column)}
                                     >
                                         {column}
                                     </TableCell>

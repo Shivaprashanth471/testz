@@ -717,8 +717,6 @@ const FacilityManagementAddScreen = () => {
                     id='input_facility_add_about'
                   />
                 </div>
-              </div>
-              <div className="custom-border mrg-top-40">
                 <h3 className="card-header">Upload Facility Image</h3>
                 <div className="d-flex" style={{ gap: "50px" }}>
                   {
