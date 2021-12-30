@@ -1,8 +1,9 @@
 import {
   Button, CircularProgress, MenuItem,
-  TextField as NormalTextField,
+  Paper, TextField as NormalTextField
 } from "@material-ui/core";
 import { DateRangeOutlined } from "@material-ui/icons";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import moment from "moment";
@@ -16,8 +17,7 @@ import ScrollToTop from "react-scroll-to-top";
 import * as Yup from "yup";
 import { ENV } from "../../../constants";
 import {
-  calenderMode,
-  experience as number, warningZone
+  calenderMode, warningZone
 } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import "./AddShiftsScreen.scss";
@@ -129,15 +129,20 @@ const AddShiftsScreen = () => {
     shift_type: Yup.string().required('required'),
     hcp_type: Yup.string().required('required'),
     warning_type: Yup.string().required('required'),
-    hcp_count: Yup.string().required('required'),
+    hcp_count: Yup.number()
+      .typeError('must be a number')
+      .min(1, 'min limit 1.')
+      .max(25, 'max limit 25.').required('required'),
     shift_details: Yup.string().trim("empty space not allowed").required('required'),
     // shift_timings: 
   });
 
-  const handleFacilitySelect = (e: any) => {
-    setFacilityId(e.target.value)
-    getFacilityShiftTimings(e.target.value)
-    getFacilityOffset(e.target.value)
+  const handleFacilitySelect = (facility: any) => {
+    if (facility) {
+      setFacilityId(facility?._id)
+      getFacilityShiftTimings(facility?._id)
+      getFacilityOffset(facility?._id)
+    }
 
   }
 
@@ -282,6 +287,29 @@ const AddShiftsScreen = () => {
     getHcpTypes()
   }, [getFacilityData, getHcpTypes]);
 
+  const showDropDownBelowField: any = {
+    MenuProps: {
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "left"
+      },
+      getContentAnchorEl: null
+    }
+  }
+
+  const handleShowHideCalender = () => {
+    if (value) {
+      if (value instanceof Array) {
+        if (value.length === 0) { return { display: 'block' } } else {
+          return { display: 'none' }
+        }
+      }
+      return {
+        display: 'none'
+      }
+    }
+  }
+
 
   if (loading || shiftLoading || hcpTypesLoading) {
     return <div className="pdd-30 screen">
@@ -295,24 +323,28 @@ const AddShiftsScreen = () => {
   return (
     !loading && !shiftLoading && !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
-        <NormalTextField
-          id='select_facility'
-          variant='outlined'
-          select
-          label="Select Facility"
-          name="facility"
-          fullWidth
-          onChange={handleFacilitySelect}>
-          <MenuItem value="" >
-            Select Facility
-          </MenuItem>
-          {facilities.length > 0 &&
-            facilities.map((item: any, index: any) => (
-              <MenuItem id={item?.facility_name} value={item?._id} key={item?._id}>
-                {item?.facility_name}
-              </MenuItem>
-            ))}
-        </NormalTextField>
+        {facilities !== null && <Autocomplete
+          PaperComponent={({ children }) => (
+            <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+          )}
+          options={facilities}
+          getOptionLabel={(option: any) => option.facility_name}
+          getOptionSelected={(option: any, value) => option.facility_name === value?.facility_name}
+          placeholder={"Select Facility"}
+          id="input_select_facility"
+          onChange={($event, value) => {
+            handleFacilitySelect(value)
+          }
+          }
+          renderInput={(params) => (
+            <NormalTextField
+              {...params}
+              id='select_region'
+              variant='outlined'
+              placeholder={"Select (or) Search Facility"}
+            />
+          )}
+        />}
 
         <div className='shift-header-container mrg-top-10'>
           <p className='shift-header '>Shift Details</p>
@@ -327,7 +359,7 @@ const AddShiftsScreen = () => {
               onClick={() => setIsShifts(true)}
               className="add-shift-requirment-text"
             >
-             + Add a Shift Requirement
+              + Add a Shift Requirement
             </p>
           </div>
         ) : (
@@ -356,6 +388,7 @@ const AddShiftsScreen = () => {
 
                     <div className="shift-row mrg-top-30" >
                       <Field
+                        SelectProps={showDropDownBelowField}
                         id='input_shift_requirement_hcp_type'
                         variant='outlined'
                         select
@@ -373,6 +406,7 @@ const AddShiftsScreen = () => {
                       </Field>
 
                       <Field
+                        SelectProps={showDropDownBelowField}
                         id='input_shift_requirement_shift_timings'
                         variant='outlined'
                         select
@@ -402,8 +436,6 @@ const AddShiftsScreen = () => {
                           })}
                       </Field>
                     </div>
-
-
                     <div className='shift-second-row shift-row mrg-top-30'>
                       <div className="shift-mode">
                         <Field
@@ -430,6 +462,7 @@ const AddShiftsScreen = () => {
                       </div>
                       <div className='shift-calender'>
                         <Field
+
                           disabled={!mode ? true : false}
                           required
                           inputClass='custom-input'
@@ -451,12 +484,14 @@ const AddShiftsScreen = () => {
                           InputLabelProps={{ shrink: true }}
                           component={DatePickers}
                         />
-                        <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
+
+                        <DateRangeOutlined style={handleShowHideCalender()} className='date-icon' fontSize='large' color='action' />
                       </div>
 
                     </div>
                     <div className="shift-third-row shift-row mrg-top-30 ">
                       <Field
+                        SelectProps={showDropDownBelowField}
                         id='input_shift_requirement_warning_zone'
                         variant='outlined'
                         select
@@ -475,19 +510,12 @@ const AddShiftsScreen = () => {
                       <Field
                         id='input_shift_requirement_no_of_hcps'
                         variant='outlined'
-                        select
                         name="hcp_count"
                         component={TextField}
                         label="No of HCPs"
                         fullWidth
-                      >
-                        {number &&
-                          number.map((item: any, index) => (
-                            <MenuItem id={item.label} value={item.value} key={index}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                      </Field>
+                      />
+
                     </div>
 
                     <div className="shift-third-row mrg-top-30">
