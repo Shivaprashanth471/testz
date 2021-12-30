@@ -5,12 +5,13 @@ import React from "react";
 interface PhoneInputComponentProps {
     field: FieldProps,
     placeholder?: string,
-    international?: boolean
+    international?: boolean,
+    maxLength?: number
 }
 
 const PhoneInputComponent = (props: PhoneInputComponentProps) => {
     const { field, form } = props.field;
-    const { placeholder } = props;
+    const { placeholder, maxLength } = props;
     const international = props.international === undefined ? false : props.international;
     return (
         <div className={'position-relative'}><PhoneInput
@@ -19,6 +20,7 @@ const PhoneInputComponent = (props: PhoneInputComponentProps) => {
             defaultCountry="US"
             placeholder={placeholder}
             value={field.value}
+            maxLength={maxLength ? maxLength : 14}
             onBlur={
                 (event) => {
                     field.onBlur(event);
