@@ -986,9 +986,7 @@ const FacilityManagementEditScreen = () => {
 
                 />
               </div>
-            </div>
-            <div className="custom-border mrg-top-40">
-              <p className='card-header'>Facility Image</p>
+              <p className='card-header facility-image-header'>Facility Image</p>
               {facilityDetails?.image_url && !isImageRemoved ? <div className="attachments">
                 <div className="custom_file">
                   <div className="d-flex">

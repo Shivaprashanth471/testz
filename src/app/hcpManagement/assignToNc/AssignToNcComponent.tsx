@@ -8,11 +8,26 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import { withStyles } from '@material-ui/core/styles';
+import { TextField } from '@material-ui/core';
+import { SearchRounded } from '@material-ui/icons';
+import ClearIcon from '@material-ui/icons/Clear';
+import './AssignToNcComponent.scss';
 
 export interface AssignToNcComponentProps {
     cancel: () => void,
     confirm: () => void,
 }
+
+const CssTextField = withStyles({
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
+        },
+    },
+})(TextField);
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: "100px",
             textAlign: "center",
             justifyContent: "center"
-        }
+        },
+        title: {
+            fontWeight: 450
+        },
     }),
 );
 
@@ -42,19 +60,24 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
     const [selectedValue, setSelectedValue] = useState<string>('');
     const classes = useStyles();
     const [ncList, setNcList] = React.useState<any>(null);
-    const [isApproved,setIsApproved] = React.useState(false);
+    const [isApproved, setIsApproved] = React.useState(false);
+    const [searchNc, setSearchNc] = useState<string>('')
 
     const init = useCallback(() => {
+        let url = ENV.API_URL + 'user/lite?role=nurse_champion'
+        if (searchNc !== '') {
+            url = ENV.API_URL + 'user/lite?role=nurse_champion&search=' + searchNc
+        }
         // config
-        CommonService._api.get(ENV.API_URL + 'user?role=nurse_champion').then((resp) => {
-            setNcList(resp.data?.docs);
+        CommonService._api.get(url).then((resp) => {
+            setNcList(resp.data);
         }).catch((err) => {
             console.log(err)
         })
-    }, [])
+    }, [searchNc])
 
-    const ApproveHcp=useCallback(()=>{
-        CommonService._api.patch(ENV.API_URL + 'hcp/' + id+'/approve').then((resp) => {
+    const ApproveHcp = useCallback(() => {
+        CommonService._api.patch(ENV.API_URL + 'hcp/' + id + '/approve').then((resp) => {
             if (afterConfirm) {
                 afterConfirm();
                 setIsApproved(false)
@@ -65,12 +88,12 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
             setIsApproved(false)
             CommonService.showToast(err || 'Error', 'error');
         })
-    },[id,afterConfirm])
+    }, [id, afterConfirm])
 
     const assignToNc = useCallback(() => {
         setIsApproved(true)
         let payload = {
-            nurse_champion_id:selectedValue
+            nurse_champion_id: selectedValue
         }
         CommonService._api.put(ENV.API_URL + 'hcp/' + id, payload).then((resp) => {
             ApproveHcp()
@@ -78,13 +101,13 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
             console.log(err)
             setIsApproved(false)
         })
-    }, [selectedValue,id,ApproveHcp])
+    }, [selectedValue, id, ApproveHcp])
 
-    const handleChange = (event:any) => {
+    const handleChange = (event: any) => {
         setSelectedValue(event.target.value);
-      };
+    };
 
-      const cancel = (resetForm: any) => {
+    const cancel = (resetForm: any) => {
         if (afterCancel) {
             afterCancel();
         }
@@ -93,29 +116,41 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
     useEffect(() => {
         init()
     }, [init])
-
-    return <div>
+    return <div className='assign-nc'>
         <div className={classes.paper}>
-            <h2>Assign to NC</h2>
-            {/* <TextField defaultValue={''} onChange={event => {}} variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Nurse Champion'} /> */}
-
-            <FormLabel component="legend">List Of Nurse Champions</FormLabel>
+            <h2 className={classes.title}>Assign to NC</h2>
+            <FormLabel component="legend" className="mrg-left-0">List Of Nurse Champions</FormLabel>
+            <div className='mrg-top-20'>
+                <div>
+                    <div className="d-flex">
+                        <div className="d-flex position-relative">
+                            <CssTextField defaultValue={''} onChange={event => { setSearchNc(event?.target?.value) }}
+                                className="searchField"  variant={"outlined"} size={"small"} type={'text'} placeholder={'Search NC'} value={searchNc}
+                            />
+                            {searchNc === '' ?
+                                <div className={"search_icon"}>
+                                    <SearchRounded />
+                                </div> : <div className={"search_icon"}><ClearIcon onClick={event => setSearchNc('')} id="clear_group_search" /></div>}
+                        </div>
+                    </div>
+                </div>
+            </div>
             <RadioGroup
                 aria-label="gender"
                 defaultValue="female"
                 name="radio-buttons-group"
-                className="mrg-top-30"
+                className="mrg-top-10"
             >
                 {
                     ncList?.map((item: any) => {
-                        return (<FormControlLabel value={item?._id} control={<Radio />} onChange={(event)=>handleChange(event)} label={item?.first_name + " " + item?.last_name} />
+                        return (<FormControlLabel value={item?._id} control={<Radio />} onChange={(event) => handleChange(event)} label={item?.first_name + " " + item?.last_name} />
                         )
                     })
                 }
             </RadioGroup>
             <div className={classes.assignNcActions}>
-                 <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
-                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={'normal mrg-left-30'} disabled={selectedValue==='' || isApproved} onClick={()=>assignToNc()}>Save</Button>
+                <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
+                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={'normal mrg-left-30'} disabled={selectedValue === '' || isApproved} onClick={() => assignToNc()}>Save</Button>
             </div>
         </div>
     </div>;

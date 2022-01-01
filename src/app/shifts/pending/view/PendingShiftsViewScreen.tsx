@@ -82,10 +82,10 @@ const PendingShiftsScreen = () => {
                             <p>{basicDetails?.hcp_user?.hcp_type}</p>
                         </div>
                     </div>
-                    <div className="ratings">
+                    {/* <div className="ratings">
                         <h4>Average Rating</h4>
                         <p>4.42/5</p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
                     <div className="flex-1">
@@ -110,7 +110,7 @@ const PendingShiftsScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="d-flex facility-details mrg-top-25 custom-border">
+            <div className="d-flex facility-details mrg-top-10 custom-border">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -126,7 +126,7 @@ const PendingShiftsScreen = () => {
                     </Button></div>
                 </div>
             </div>
-            <div className="mrg-top-25 custom-border">
+            <div className="mrg-top-10 custom-border">
                 <div className="d-flex shift-name-requested pdd-top-10">
                     <h2>Shift Details</h2>
                     <div className="d-flex requested-on-wrapper">
@@ -172,7 +172,7 @@ const PendingShiftsScreen = () => {
                 </div>
             </div>
 
-            <div className="mrg-top-25 custom-border pdd-top-10">
+            <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="shift-name-requested">
                     <div className='d-flex'>
                         <h2 className='flex-1'>Shift Timings</h2>
@@ -192,7 +192,7 @@ const PendingShiftsScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-                {/* <div className="feedback-rating-wrapper mrg-top-25">
+                {/* <div className="feedback-rating-wrapper mrg-top-10">
                     <h3>Feedback:</h3>
                     <div className="d-flex">
                         {

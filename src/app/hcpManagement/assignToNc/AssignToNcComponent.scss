@@ -1,0 +1,16 @@
+@import "src/assets/scss/common";
+
+.assign-nc {
+    .MuiFormLabel-root{
+        color: $primary-color !important;
+    }
+	.MuiIconButton-label {
+		color: $primary-color !important;
+	}
+	.MuiTypography-body1 {
+		color: $light-black;
+	}
+	.MuiOutlinedInput-inputMarginDense {
+		width: 230px;
+	}
+}

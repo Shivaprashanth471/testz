@@ -239,7 +239,8 @@ const AddHcpComponent = () => {
     }),
     rate_per_hour: Yup.number().typeError("must be a number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.string().typeError("must be date").nullable(),
+    salary_credit_date: Yup.number().min(1, 'Must be greater than 0')
+    .max(31, 'Must be less than or equal to 31'),
 
     nc_details: Yup.object({
       dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
@@ -369,7 +370,7 @@ const AddHcpComponent = () => {
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = moment(hcp?.salary_credit_date).format('YYYY-MM-DD');
+    let salary_credit_date = hcp?.salary_credit_date<10?"0"+hcp?.salary_credit_date?.toString():hcp?.salary_credit_date?.toString();
     let payload: any = {}
     payload = hcp
 
@@ -1010,15 +1011,11 @@ const AddHcpComponent = () => {
                     label="Signed On"
                     name="signed_on"
                   />
-                  <Field
-                    variant="inline"
-                    orientation="landscape"
-                    openTo="date"
-                    format="MM/dd/yyyy"
-                    views={["year", "month", "date"]}
-                    inputVariant='outlined'
-                    component={DatePicker}
-                    placeholder="MM/DD/YYYY"
+                <Field
+                   variant='outlined'
+                   type={"number"}
+                    component={TextField}
+                    placeholder="Enter the date of salary credit"
                     fullWidth
                     autoComplete="off"
                     InputLabelProps={{ shrink: true }}

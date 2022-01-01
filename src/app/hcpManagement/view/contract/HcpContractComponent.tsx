@@ -26,7 +26,7 @@ const HcpContractComponent = () => {
     }, [init])
 
     return !isContractLoading ? <>
-        <div className="hcp_contract_details mrg-top-40">
+        <div className="hcp_contract_details mrg-top-10">
             {
                 contractDetails !== undefined ?
                     <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
@@ -44,7 +44,7 @@ const HcpContractComponent = () => {
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit</h4>
-                                <p>{moment(contractDetails?.salary_credit_date).format("MMMM Do YYYY")}</p>
+                                <p>{contractDetails?.salary_credit_date}</p>
                             </div>
                             <div className="flex-1">
 

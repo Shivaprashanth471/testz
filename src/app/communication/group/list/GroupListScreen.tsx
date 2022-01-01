@@ -19,29 +19,30 @@ import { SearchRounded } from "@material-ui/icons";
 import { TextField } from "@material-ui/core";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import moment from 'moment';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
-  root: {
-     '& .MuiOutlinedInput-root': {
-        '&:hover fieldset': {
-           borderColor: '#10c4d3',
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
         },
-     },
-  },
+    },
 })(TextField);
 
 const GroupListScreen = () => {
     const history = useHistory()
     const [list, setList] = React.useState<TsDataListState | null>(null);
 
-    const classesFunction = useCallback((type:any)=>{
-        if(type==="Actions"){
-          return "text-right last-row"
-        }else if(type==="Created On"){
-          return 'pdd-left-20 first-row'
+    const classesFunction = useCallback((type: any) => {
+        if (type === "Actions") {
+            return "text-right last-row"
+        } else if (type === "Created On") {
+            return 'pdd-left-20 first-row'
         }
-      },[])
+    }, [])
 
     if (list?.table?.data) {
         list?.table?.data?.sort((a: any, b: any) => {
@@ -94,19 +95,31 @@ const GroupListScreen = () => {
                 </div>}
                 <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0 mrg-top-20">
                     <div className="header">
-                        <div className="filter">
-                            <div className="position-relative">
-                                <div style={{ position: 'absolute', top: '9px', left: '220px' }}>
-                                    <SearchRounded className="search-icon" />
-                                </div>
-                                <div>
-                                    <CssTextField defaultValue={''} onChange={event => {
-                                        if (list && list.table) {
-                                            list.table.filter.search = event.target.value;
-                                            list.table.reload();
-                                            list?.table.pageEvent(0)
-                                        }
-                                    }} className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Group'} />
+                        <div className="mrg-left-5 filter">
+                            <div>
+                                <div className="d-flex">
+                                    <div className="d-flex position-relative">
+                                        {!list?.table.filter.search ?
+                                            <div className={"search_icon"}>
+                                                <SearchRounded />
+                                            </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                                                if (list && list.table) {
+                                                    list.table.filter.search = '';
+                                                    list.table.reload();
+                                                    list?.table.pageEvent(0)
+                                                }
+
+                                            }} id="clear_group_search" /></div>}
+                                        <div>
+                                            <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_group" onChange={event => {
+                                                if (list && list.table) {
+                                                    list.table.filter.search = event.target.value;
+                                                    list.table.reload();
+                                                    list?.table.pageEvent(0)
+                                                }
+                                            }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Group')} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

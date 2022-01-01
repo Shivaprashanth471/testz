@@ -1,6 +1,12 @@
+@import "src/assets/scss/common";
+
 .shift-requirment-list{
     .MuiPaper-elevation1 {
 		box-shadow: none !important;
+	}
+	.filter-icon{
+		font-size: 2rem;
+		color:$light-black;
 	}
     .cancelled{
         color: #f10000 !important;

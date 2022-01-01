@@ -19,16 +19,17 @@ import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
 import './ShiftInprogressListScreen.scss';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
-  root: {
-     '& .MuiOutlinedInput-root': {
-        '&:hover fieldset': {
-           borderColor: '#10c4d3',
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
         },
-     },
-  },
+    },
 })(TextField);
 
 const ShiftInprogressListScreen = () => {
@@ -50,13 +51,13 @@ const ShiftInprogressListScreen = () => {
     const valueRef = useRef<any>(null)
     const timeTypeRef = useRef<any>('')
 
-    const classesFunction = useCallback((type:any)=>{
-        if(type==="Actions"){
-          return "last-row"
-        }else if(type==="Title"){
-          return 'first-row'
+    const classesFunction = useCallback((type: any) => {
+        if (type === "Actions") {
+            return "last-row"
+        } else if (type === "Title") {
+            return 'first-row'
         }
-    },[])
+    }, [])
 
     const setFacilityIdRef = (val: any) => {
         facilityIdRef.current = val;
@@ -228,44 +229,33 @@ const ShiftInprogressListScreen = () => {
                 setTimeTypeRef={setTimeTypeRef} />
         </DialogComponent>
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
-            <div className="mrg-left-5 header">
-                <div className="filter">
-                    <div className="position-relative  d-flex">
-                        <div style={{ position: 'absolute', top: '9px', left: '220px' }}>
-                            <SearchRounded className="search-icon" />
+            <div className="header">
+                <div className="mrg-left-5 filter">
+                    <div>
+                        <div className="d-flex">
+                            <div className="d-flex position-relative">
+                                {!list?.table.filter.search ?
+                                    <div className={"search_icon"}>
+                                        <SearchRounded />
+                                    </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                                        if (list && list.table) {
+                                            list.table.filter.search = '';
+                                            list.table.reload();
+                                            list?.table.pageEvent(0)
+                                        }
+
+                                    }} id="clear_shift_search" /></div>}
+                                <div>
+                                    <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_shift" onChange={event => {
+                                        if (list && list.table) {
+                                            list.table.filter.search = event.target.value;
+                                            list.table.reload();
+                                            list?.table.pageEvent(0)
+                                        }
+                                    }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Shift')} />
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <CssTextField defaultValue={''} onChange={event => {
-                                if (list && list.table) {
-                                    list.table.filter.search = event.target.value;
-                                    list.table.reload();
-                                    list?.table.pageEvent(0)
-                                }
-                            }}  className = "searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Shift'} />
-                        </div>
-                        {/* <div>
-                            <Autocomplete
-                            PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-								options={applied_for}
-								getOptionLabel={(option:any) => option.name}
-								placeholder={"Applied For"}
-                                style={{ width: "200px",height:"35px" }}
-                                className="mrg-left-20"
-								onChange={(value:any) =>
-									setHcpType(value)
-				                }
-								renderInput={(params) => (
-									<TextField
-										{...params}
-										id='select_dashboard_doctor'
-										variant='outlined'
-										placeholder={"Applied For"}
-									/>
-								)}
-                                />
-                            </div> */}
                     </div>
                 </div>
                 <div className="actions">

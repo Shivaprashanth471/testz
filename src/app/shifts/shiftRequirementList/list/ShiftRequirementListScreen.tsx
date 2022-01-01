@@ -16,17 +16,18 @@ import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import "./ShiftRequirementListScreen.scss";
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
-  root: {
-     '& .MuiOutlinedInput-root': {
-        '&:hover fieldset': {
-           borderColor: '#10c4d3',
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
         },
-     },
-  },
+    },
 })(TextField);
 
 const ShiftRequirementListScreen = () => {
@@ -66,13 +67,13 @@ const ShiftRequirementListScreen = () => {
         timeTypeRef.current = val;
     }
 
-    const classesFunction = useCallback((type:any)=>{
-        if(type==="Actions"){
-          return "last-row"
-        }else if(type==="Title"){
-          return 'pdd-left-20 first-row'
+    const classesFunction = useCallback((type: any) => {
+        if (type === "Actions") {
+            return "last-row"
+        } else if (type === "Title") {
+            return 'pdd-left-20 first-row'
         }
-    },[])
+    }, [])
 
     const getHcpTypes = useCallback(() => {
         CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -226,19 +227,31 @@ const ShiftRequirementListScreen = () => {
                     setTimeTypeRef={setTimeTypeRef} />
             </DialogComponent>
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
-                <div className="mrg-left-5 header">
-                    <div className="filter">
-                        <div className="d-flex">
-                            <div className="position-relative">
-                                <CssTextField defaultValue={''} onChange={event => {
-                                    if (list && list.table) {
-                                        list.table.filter.search = event.target.value;
-                                        list.table.reload();
-                                        list?.table.pageEvent(0)
-                                    }
-                                }} className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Requirement'} />
-                                <div style={{ position: 'absolute', top: '9px', right: "7px" }}>
-                                    <SearchRounded className="search-icon" />
+                <div className="header">
+                    <div className="mrg-left-5 filter">
+                        <div>
+                            <div className="d-flex">
+                                <div className="d-flex position-relative">
+                                    {!list?.table.filter.search ?
+                                        <div className={"search_icon"}>
+                                            <SearchRounded />
+                                        </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                                            if (list && list.table) {
+                                                list.table.filter.search = '';
+                                                list.table.reload();
+                                                list?.table.pageEvent(0)
+                                            }
+
+                                        }} id="clear_requirment_search" /></div>}
+                                    <div>
+                                        <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_requirment" onChange={event => {
+                                            if (list && list.table) {
+                                                list.table.filter.search = event.target.value;
+                                                list.table.reload();
+                                                list?.table.pageEvent(0)
+                                            }
+                                        }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Requirement')} />
+                                    </div>
                                 </div>
                             </div>
                         </div>

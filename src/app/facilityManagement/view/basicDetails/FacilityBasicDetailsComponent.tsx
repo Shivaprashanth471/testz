@@ -132,7 +132,7 @@ const FacilityBasicDetailsComponent = (props: any) => {
                 </div>
             </div>
         </div>
-        <div className="custom-border mrg-top-40 pdd-top-10">
+        <div className="custom-border mrg-top-10 pdd-top-10">
             <h3 className="card-header">Facility Image</h3>
             <div className="d-flex" style={{ gap: "50px" }}>
                 {
@@ -143,7 +143,7 @@ const FacilityBasicDetailsComponent = (props: any) => {
 
             </div>
         </div>
-        <div className="basic_details custom-border mrg-top-40">
+        <div className="basic_details custom-border mrg-top-10">
             <h3>Other Details</h3>
             <div className="d-flex">
                 <div className="flex-1">

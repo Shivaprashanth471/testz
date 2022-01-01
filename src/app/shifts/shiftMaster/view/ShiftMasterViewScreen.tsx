@@ -248,7 +248,7 @@ const ShiftMasterViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="facility-details mrg-top-25 custom-border">
+            <div className="facility-details mrg-top-10 custom-border">
                 <div className="d-flex shift-name-requested">
                     <h2>Shift Details</h2>
                     <div className="d-flex requested-on-wrapper">
@@ -310,7 +310,7 @@ const ShiftMasterViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="header mrg-top-20 mrg-bottom-0">
+            <div className="header mrg-top-10 mrg-bottom-0">
                 <div className="filter"></div>
                 <div className="actions">
                     <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} >
@@ -324,7 +324,7 @@ const ShiftMasterViewScreen = () => {
                     </Button>
                 </div>
             </div>
-            <div className="mrg-top-25 custom-border pdd-top-10">
+            <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="shift-name-requested">
                     <div className='d-flex'>
                         <h2 className='flex-1'>Shift Timings</h2>
@@ -379,7 +379,7 @@ const ShiftMasterViewScreen = () => {
                     </div>
                 </div> */}
             </div>
-            <div className="mrg-top-25 custom-border pdd-top-10">
+            <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="mrg-top-20">
                     {attachmentsList?.length > 0 ? <>
                         <h3>Attachment:</h3>

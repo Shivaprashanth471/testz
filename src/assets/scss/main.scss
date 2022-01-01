@@ -34,8 +34,13 @@ body {
 .text-align {
 	text-align: center !important;
 }
-.search-icon {
+.search_icon {
 	color: #c4c4c4;
+	cursor: pointer;
+	position: absolute;
+    top: 8px;
+    z-index: 2;
+    right: 10px;
 }
 #alert-dialog-title {
 	h2 {
@@ -610,9 +615,9 @@ body {
 }
 
 .custom-card {
-	padding: 2rem 2rem 2rem 2rem;
+	padding: 0 3rem 2rem 2rem;
 	border-radius: 0.5rem;
-	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .tel-input-holder {

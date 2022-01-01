@@ -24,6 +24,7 @@ import { TextField } from "@material-ui/core";
 import DialogComponent from "../../../components/DialogComponent";
 import HcpFiltersComponent from "../filters/HcpFiltersComponent";
 import {withStyles} from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
   root: {
@@ -183,27 +184,33 @@ const HcpApprovedListScreen = () => {
                         hcpType={hcpType}
                         value={value} />
                 </DialogComponent>
-                <div className="header">
-                    <div className="filter"></div>
-                    <div className="action">
-
-                    </div>
-                </div>
-                <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
+                <div className="custom-border pdd-10  pdd-top-20 pdd-bottom-0">
                     <div className="header">
                         <div className="mrg-left-5 filter">
-                            <div className="position-relative  d-flex">
-                                <div style={{ position: 'absolute', top: '9px', left: '220px' }}>
-                                    <SearchRounded className="search-icon" />
-                                </div>
-                                <div>
-                                    <CssTextField defaultValue={''} onChange={event => {
-                                        if (list && list.table) {
-                                            list.table.filter.search = event.target.value;
-                                            list.table.reload();
-                                            list?.table.pageEvent(0)
-                                        }
-                                    }} className = "searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search HCP'} />
+                            <div>
+                                <div className="d-flex">
+                                    <div className="d-flex position-relative">
+                                        {!list?.table.filter.search ?
+                                            <div className={"search_icon"}>
+                                                <SearchRounded />
+                                            </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                                                if (list && list.table) {
+                                                    list.table.filter.search = '';
+                                                    list.table.reload();
+                                                    list?.table.pageEvent(0)
+                                                }
+
+                                            }} id="clear_hcp_search" /></div>}
+                                        <div>
+                                            <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_hcp" onChange={event => {
+                                                if (list && list.table) {
+                                                    list.table.filter.search = event.target.value;
+                                                    list.table.reload();
+                                                    list?.table.pageEvent(0)
+                                                }
+                                            }}  value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

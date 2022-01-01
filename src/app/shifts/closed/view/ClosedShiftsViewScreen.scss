@@ -5,7 +5,6 @@
         color: $primary-color !important;
         margin-top: 0px;
         text-decoration: underline;
-        margin-left: 30px;
         cursor: pointer;
     }
     .file-icon{
@@ -19,6 +18,16 @@
            text-align: end;
         }
     }
+    .hcp-name-type {
+		margin-left: 20px;
+		justify-content: center;
+		h2 {
+			margin-bottom: 0px;
+		}
+		p {
+			margin-top: 0px;
+		}
+	}
     .actions-wrapper{
         margin: auto;
     }
@@ -60,4 +69,21 @@
             color:$light-black;
         }
     }
+    .hcp-photo-details-wrapper {
+		margin: auto;
+		justify-content: space-between;
+		padding-bottom: 15px !important;
+		.ratings {
+			text-align: center;
+			h4 {
+				color: $text-light;
+				margin-bottom: 0px;
+			}
+			p {
+				color: $primary-color;
+				font-size: 20px;
+				margin-top: 0px;
+			}
+		}
+	}
 }

@@ -63,6 +63,19 @@ const ClosedShiftsViewScreen = () => {
     //     }
     // }, [rating])
 
+    const handleDownloadCdhp = useCallback(()=>{
+        if (attachmentsList[0]?.ContentType === "application/pdf") {
+            window.open(attachmentsList[0]?.url)
+        } else {
+            alert("pop")
+            const link = document.createElement('a');
+            link?.setAttribute('href', attachmentsList[0]?.url)
+            // link?.setAttribute("download","apple")
+            document.body.appendChild(link);
+            link.click();
+        }
+    },[attachmentsList])
+
     useEffect(() => {
         getShiftDetails()
         getShiftAttachments()
@@ -96,10 +109,10 @@ const ClosedShiftsViewScreen = () => {
                             <p>{basicDetails?.hcp_user?.hcp_type}</p>
                         </div>
                     </div>
-                    <div className="ratings">
+                    {/* <div className="ratings">
                         <h4>Average Rating</h4>
                         <p>4.42/5</p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{ gap: "20px" }}>
                     <div className="flex-1">
@@ -124,7 +137,7 @@ const ClosedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="facility-details d-flex custom-border mrg-top-40">
+            <div className="facility-details d-flex custom-border mrg-top-10">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -140,7 +153,7 @@ const ClosedShiftsViewScreen = () => {
                     </Button></div>
                 </div>
             </div>
-            <div className="facility-details mrg-top-40 custom-border">
+            <div className="facility-details mrg-top-10 custom-border">
                 <div className="d-flex shift-name-requested">
                     <h2>Shift Details</h2>
                     <div className="d-flex requested-on-wrapper">
@@ -186,7 +199,7 @@ const ClosedShiftsViewScreen = () => {
                 </div>
 
             </div>
-            <div className="mrg-top-40 custom-border pdd-top-10">
+            <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="d-flex shift-name-requested">
                     <h2>Shift Details</h2>
                     <div className="d-flex requested-on-wrapper">
@@ -218,7 +231,10 @@ const ClosedShiftsViewScreen = () => {
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             <div>
                                                 <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
-                                                <p onClick={() => previewFile(index)} className='file-actions'>View</p>
+                                                <div className='d-flex'>
+                                                <p onClick={handleDownloadCdhp} className='file-actions'>Download</p>
+                                                <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
+                                                </div>
                                             </div>
                                         </div>
                                     )
@@ -228,7 +244,7 @@ const ClosedShiftsViewScreen = () => {
                     </>}
                 </div>
             </div>
-            {/* <div className="feedback-rating-wrapper mrg-top-40">
+            {/* <div className="feedback-rating-wrapper mrg-top-10">
                     <h3>Feedback:</h3>
                     <div className="d-flex">
                         {

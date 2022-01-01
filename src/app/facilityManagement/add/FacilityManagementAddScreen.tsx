@@ -715,8 +715,8 @@ const FacilityManagementAddScreen = () => {
                     id='input_facility_add_about'
                   />
                 </div>
-                <h3 className="card-header">Upload Facility Image</h3>
-                <div className="d-flex" style={{ gap: "50px" }}>
+                <h3 className="card-header facility-image-header mrg-bottom-0">Upload Facility Image</h3>
+                <div className="d-flex mrg-top-10" style={{ gap: "50px" }}>
                   {
                     fileUpload?.wrapper && fileUpload?.wrapper?.map((item: any, index: any) => {
                       return (

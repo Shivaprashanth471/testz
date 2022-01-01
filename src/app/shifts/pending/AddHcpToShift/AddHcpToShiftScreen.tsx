@@ -12,16 +12,17 @@ import Checkbox from '@material-ui/core/Checkbox';
 import animationData from "../../../../animations/no_data.json";
 import './AddHcpToShiftScreen.scss';
 import Lottie from "react-lottie";
-import {  SearchRounded } from '@material-ui/icons';
-import {withStyles} from '@material-ui/core/styles';
+import { SearchRounded } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
     root: {
-       '& .MuiOutlinedInput-root': {
-          '&:hover fieldset': {
-             borderColor: '#10c4d3',
-          },
-       },
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
+        },
     },
 })(TextField);
 
@@ -75,9 +76,9 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
 
     const init = useCallback(() => {
 
-        let url=ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type
-        if(searchHcp!==''){
-            url=ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type+'&search='+searchHcp
+        let url = ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type
+        if (searchHcp !== '') {
+            url = ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type + '&search=' + searchHcp
         }
         // config
         CommonService._api.get(url).then((resp) => {
@@ -85,7 +86,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
         }).catch((err) => {
             console.log(err)
         })
-    }, [hcp_type,searchHcp])
+    }, [hcp_type, searchHcp])
 
     const addHcpToshift = useCallback((hcp_id) => {
         setSubmitting(false)
@@ -137,13 +138,18 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
             {hcpList && hcpList.length > 0 ? <div id='alert-dialog-title'>
                 <FormLabel component="legend" className="mrg-left-0">List Of HCP'S</FormLabel>
                 <div className='mrg-top-20'>
-                <div className="position-relative">
-                    <CssTextField defaultValue={''} onChange={event => { setSearchHcp(event?.target?.value) }}
-                        className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Hcp'}
-                    />
-                    <div style={{ position: 'absolute', top: '9px', left: "230px" }}>
-                        <SearchRounded className="search-icon" color='primary' />
-                    </div>
+                    <div>
+                        <div className="d-flex">
+                            <div className="d-flex position-relative">
+                                <CssTextField defaultValue={''} onChange={event => { setSearchHcp(event?.target?.value) }}
+                                    className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Hcp'} value={searchHcp}
+                                />
+                                {searchHcp === '' ?
+                                    <div className={"search_icon"}>
+                                        <SearchRounded />
+                                    </div> : <div className={"search_icon"}><ClearIcon onClick={event => setSearchHcp('')} id="clear_hcp_search" /></div>}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="mrg-top-20">
