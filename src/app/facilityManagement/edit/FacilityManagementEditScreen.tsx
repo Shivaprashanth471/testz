@@ -1070,6 +1070,7 @@ const FacilityManagementEditScreen = () => {
           type="submit"
           size="large"
           variant={"contained"}
+          className="pdd-left-30 pdd-right-30"
           color={"primary"}
         >
           Save

@@ -239,7 +239,7 @@ const AddHcpComponent = () => {
     }),
     rate_per_hour: Yup.number().typeError("must be a number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.number().min(1, 'Must be greater than 0')
+    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
     .max(31, 'Must be less than or equal to 31'),
 
     nc_details: Yup.object({

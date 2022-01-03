@@ -63,18 +63,17 @@ const ClosedShiftsViewScreen = () => {
     //     }
     // }, [rating])
 
-    const handleDownloadCdhp = useCallback(()=>{
-        if (attachmentsList[0]?.ContentType === "application/pdf") {
-            window.open(attachmentsList[0]?.url)
-        } else {
-            alert("pop")
-            const link = document.createElement('a');
-            link?.setAttribute('href', attachmentsList[0]?.url)
-            // link?.setAttribute("download","apple")
-            document.body.appendChild(link);
-            link.click();
-        }
-    },[attachmentsList])
+    // const handleDownloadCdhp = useCallback(()=>{
+    //     if (attachmentsList[0]?.ContentType === "application/pdf") {
+    //         window.open(attachmentsList[0]?.url)
+    //     } else {
+    //         const link = document.createElement('a');
+    //         link?.setAttribute('href', attachmentsList[0]?.url)
+    //         // link?.setAttribute("download","apple")
+    //         document.body.appendChild(link);
+    //         link.click();
+    //     }
+    // },[attachmentsList])
 
     useEffect(() => {
         getShiftDetails()
@@ -206,9 +205,6 @@ const ClosedShiftsViewScreen = () => {
                         <h4 className="hcp-rate">HCP Rate:<span className="mrg-left-10 ">{basicDetails?.hcp_user?.rate} $</span></h4>
                     </div>
                 </div>
-
-
-
                 <div className="d-flex shift-date-time">
                     <div className="d-flex flex-1">
                         <h3>Attended On:</h3>
@@ -232,7 +228,7 @@ const ClosedShiftsViewScreen = () => {
                                             <div>
                                                 <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
                                                 <div className='d-flex'>
-                                                <p onClick={handleDownloadCdhp} className='file-actions'>Download</p>
+                                                {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
                                                 <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
                                                 </div>
                                             </div>

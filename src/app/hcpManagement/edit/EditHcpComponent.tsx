@@ -103,6 +103,9 @@ const EditHcpComponent = () => {
   const [isAttachmentsLoading, setIsAttachmentsLoading] = useState<boolean>(true);
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [isDeleted,setIsDeleted] = useState<boolean>(false);
+  const [isContractDeleted,SetIsContractDeleted] = useState<boolean>(false);
+
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
     { attachment_type: "Physical Test", index: -1, id: 1 },
@@ -212,7 +215,7 @@ const EditHcpComponent = () => {
     }),
     rate_per_hour: Yup.number().typeError("must be number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.number().min(1, 'Must be greater than 0')
+    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
     .max(31, 'Must be less than or equal to 31'),
 
     nc_details: Yup.object({
@@ -328,6 +331,7 @@ const EditHcpComponent = () => {
   const getContractDetails = useCallback(() => {
     CommonService._api.get(ENV.API_URL + 'hcp/' + id + '/contract').then((resp) => {
       setContractDetails(resp.data[0])
+      SetIsContractDeleted(false)
     }).catch((err) => {
       console.log(err);
       //  CommonService.showToast(err?.errors || 'Error', 'error');
@@ -355,6 +359,7 @@ const EditHcpComponent = () => {
   }, [id])
 
   const deleteContractFileApi = useCallback(() => {
+    SetIsContractDeleted(true)
     let payload = {
       "file_key": contractDetails?.file_key
     }
@@ -362,6 +367,7 @@ const EditHcpComponent = () => {
       getContractDetails()
       CommonService.showToast(resp?.msg || "Hcp Contract Deleted", 'info');
     }).catch((err) => {
+      SetIsContractDeleted(false)
       console.log(err);
     });
   }, [id, contractDetails?.file_key, getContractDetails])
@@ -370,12 +376,10 @@ const EditHcpComponent = () => {
     let expArr = experiences.map((item: any) => CommonService.getYearsDiff(item.start_date, item.end_date))
     const sum = expArr.reduce((partial_sum, a) => partial_sum + a, 0);
     return Math.round(sum * 10) / 10
-
   }
 
-
-
   const deleteAttachment = useCallback((file: any) => {
+    setIsDeleted(true)
     let payload = {
       "file_key": file?.file_key
     }
@@ -383,8 +387,10 @@ const EditHcpComponent = () => {
       console.log(resp)
       getAttachmentsDetails()
       CommonService.showToast(resp?.msg || "Hcp Attachment Deleted", 'info');
+      setIsDeleted(false)
     }).catch((err) => {
-      console.log(err);
+      console.log(err)
+      setIsDeleted(false)
     });
   }, [id, getAttachmentsDetails])
 
@@ -480,10 +486,12 @@ const EditHcpComponent = () => {
   }, [hcpDetails?.hcp_type, handleHcpTypeChange])
 
   const deleteContractFile = (temp: any) => {
+    SetIsContractDeleted(true)
     let data = contractFile?.wrapper.filter((_: any, index: any) => index !== temp);
     setContractFile(prevState => {
       return { wrapper: [...data] };
     })
+    SetIsContractDeleted(false)
   }
 
   const onAddEducation = useCallback((education: any) => {
@@ -791,8 +799,8 @@ const EditHcpComponent = () => {
                     disabled={item?.attachment_type === "SSN Card"}
                   />
                   <div className="file_actions d-flex">
-                    <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
-                    <p style={{ cursor: "pointer", width: '50px' }} className="mrg-left-20" onClick={() => deleteLocalAttachment(index)}>Delete</p>
+                    <button style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-button mrg-top-15">View</button>
+                    <button style={{ cursor: "pointer", width: '50px' }} disabled={isDeleted} className="delete-button mrg-left-20 mrg-top-15" onClick={() => deleteLocalAttachment(index)}>Delete</button>
                   </div>
                 </div>
               </div>
@@ -835,7 +843,7 @@ const EditHcpComponent = () => {
                   value={item.expiry_date}
                 />
                 <div className="file_actions">
-                  <p style={{ cursor: "pointer", width: '50px' }} onClick={() => deleteAttachment(item)}>Delete</p>
+                  <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={() => deleteAttachment(item)}>Delete</button>
                 </div>
               </div>
             </div>
@@ -855,7 +863,7 @@ const EditHcpComponent = () => {
           </div>
         </div>
         <div className="contract_actions mrg-left-5 mrg-top-10 ">
-          <p style={{ cursor: "pointer", width: '50px' }} onClick={deleteContractFileApi}>Delete</p>
+          <button style={{ cursor: "pointer", width: '50px' }} disabled={isContractDeleted} onClick={deleteContractFileApi} className="delete-button mrg-left-10">Delete</button>
         </div>
       </div>
     </div> : <>
@@ -869,8 +877,8 @@ const EditHcpComponent = () => {
                 </div>
               </div>
               <div className="d-flex contract_actions mrg-left-5 mrg-top-10">
-                <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index, "contract")} className="delete-image">View</p>
-                <p style={{ cursor: 'pointer', width: '50px' }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>Delete</p>
+                <button style={{ cursor: 'pointer' }} onClick={() => previewFile(index, "contract")} className="delete-button">View</button>
+                <button style={{ cursor: 'pointer', width: '50px' }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>Delete</button>
               </div>
             </div>
           </div>
