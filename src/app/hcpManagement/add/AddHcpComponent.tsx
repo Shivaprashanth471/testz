@@ -997,6 +997,7 @@ const AddHcpComponent = () => {
                     fullWidth
                     autoComplete="off"
                     InputLabelProps={{ shrink: true }}
+                    required={contractFile?.wrapper[0]?.file}
                     label="Rate/hr"
                     name="rate_per_hour"
                   />
@@ -1008,6 +1009,7 @@ const AddHcpComponent = () => {
                     views={["year", "month", "date"]}
                     inputVariant='outlined'
                     component={DatePicker}
+                    required={contractFile?.wrapper[0]?.file}
                     placeholder="MM/DD/YYYY"
                     fullWidth
                     autoComplete="off"
@@ -1024,6 +1026,7 @@ const AddHcpComponent = () => {
                     autoComplete="off"
                     InputLabelProps={{ shrink: true }}
                     label="Salary Credit"
+                    required={contractFile?.wrapper[0]?.file}
                     name="salary_credit_date"
                   />
                 </div>

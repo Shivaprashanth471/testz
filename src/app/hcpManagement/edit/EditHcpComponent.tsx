@@ -904,6 +904,7 @@ const EditHcpComponent = () => {
           autoComplete="off"
           label="Rate / hr"
           name="rate_per_hour"
+          required={contractFile?.wrapper[0]?.file}
         />
         <Field
           orientation='landscape'
@@ -917,6 +918,7 @@ const EditHcpComponent = () => {
           fullWidth
           autoComplete="off"
           InputLabelProps={{ shrink: true }}
+          required={contractFile?.wrapper[0]?.file}
           label="Signed On"
           name="signed_on"
         />
@@ -929,6 +931,7 @@ const EditHcpComponent = () => {
           autoComplete="off"
           InputLabelProps={{ shrink: true }}
           label="Salary Credit"
+          required={contractFile?.wrapper[0]?.file}
           name="salary_credit_date"
         />
       </div>
