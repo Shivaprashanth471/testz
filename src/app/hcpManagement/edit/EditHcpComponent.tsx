@@ -217,7 +217,6 @@ const EditHcpComponent = () => {
     signed_on: Yup.string().typeError("must be date").nullable(),
     salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
     .max(31, 'Must be less than or equal to 31'),
-
     nc_details: Yup.object({
       dnr: Yup.string().trim().min(2, "invalid").typeError("must be valid text"),
       shift_type_preference: Yup.string().trim().typeError("must be valid text"),
