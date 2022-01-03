@@ -24,6 +24,7 @@ import VolunteerExperienceEditComponent from "./VolunteerExperienceEditComponent
 import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import { ScrollToError } from "../add/ScrollToError";
 
 interface HcpItemAddType {
   first_name: string;
@@ -192,7 +193,7 @@ const EditHcpComponent = () => {
     contact_number: Yup.number().typeError("must be a number").required(),
     hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    about: Yup.string().typeError(" must be a text").trim("empty space not allowed").required("required"),
+    about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
     address: Yup.object({
       street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
       city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
@@ -961,6 +962,7 @@ const EditHcpComponent = () => {
         >
           {({ isSubmitting, isValid, resetForm, setFieldValue }) => (
             <Form id="hcp-edit-form" className={"form-holder"}>
+              <ScrollToError />
               <div className="hcp-basic-details">
                 <div className="custom-border ">
                   <p className='card-header'>Basic Details</p>
@@ -1485,6 +1487,7 @@ const EditHcpComponent = () => {
                 <p className="card-header">Contract</p>
                 {RenderContractAttachments()}
               </div>
+
             </Form>
           )}
         </Formik>

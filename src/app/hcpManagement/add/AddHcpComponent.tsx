@@ -23,6 +23,7 @@ import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { ScrollToError } from "./ScrollToError";
 
 interface HcpItemAddType {
   first_name: string;
@@ -217,7 +218,7 @@ const AddHcpComponent = () => {
     contact_number: Yup.number().typeError(" must be a number").required("required"),
     hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    about: Yup.string().typeError(" must be a text").trim("empty space not allowed").required("required"),
+    about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
     address: Yup.object({
       street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
       city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
@@ -842,7 +843,7 @@ const AddHcpComponent = () => {
                 <div className="facility-about mrg-top-50">
                   <p className='card-header'>About the HCP</p>
                   <Field
-                    placeholder="About the Hcp*"
+                    placeholder="About the Hcp"
                     variant='outlined'
                     component={TextField}
                     type={"text"}
@@ -1304,8 +1305,11 @@ const AddHcpComponent = () => {
                 </div>
               </div>
             </div>
+            <ScrollToError />
           </Form>
+
         )}
+
       </Formik>
 
       <div className="mrg-top-40 custom-border">

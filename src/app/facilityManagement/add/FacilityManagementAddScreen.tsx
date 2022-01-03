@@ -18,6 +18,7 @@ import { pdfIcon } from "../../../constants/ImageConfig";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import ScrollToTop from "react-scroll-to-top";
+import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -484,6 +485,7 @@ const FacilityManagementAddScreen = () => {
         >
           {({ isSubmitting, isValid, resetForm }) => (
             <Form id="facility-add-form" className={"form-holder"}>
+              <ScrollToError />
               <div className="facility-basic-details custom-border">
                 <p className='card-header'>Basic Details</p>
                 <div className="input-container">

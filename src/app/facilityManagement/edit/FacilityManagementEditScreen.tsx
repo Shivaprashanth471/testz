@@ -18,6 +18,7 @@ import { pdfIcon } from "../../../constants/ImageConfig";
 import ScrollToTop from "react-scroll-to-top";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import DialogComponent from "../../../components/DialogComponent";
+import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -534,6 +535,7 @@ const FacilityManagementEditScreen = () => {
       <Formik initialValues={facilityInitialState} validateOnChange={true} validationSchema={facilityFormValidation} onSubmit={onAdd}>
         {({ isSubmitting, isValid, resetForm }) => (
           <Form id="facility-edit-form" className={"form-holder"}>
+            <ScrollToError />
             <div className="facility-basic-details custom-border">
               <p className='card-header'>Basic Details</p>
               <div className="input-container">
