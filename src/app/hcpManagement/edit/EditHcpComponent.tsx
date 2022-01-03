@@ -104,8 +104,8 @@ const EditHcpComponent = () => {
   const [isAttachmentsLoading, setIsAttachmentsLoading] = useState<boolean>(true);
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
-  const [isDeleted,setIsDeleted] = useState<boolean>(false);
-  const [isContractDeleted,SetIsContractDeleted] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [isContractDeleted, SetIsContractDeleted] = useState<boolean>(false);
 
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
@@ -217,7 +217,7 @@ const EditHcpComponent = () => {
     rate_per_hour: Yup.number().typeError("must be number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
     salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
-    .max(31, 'Must be less than or equal to 31'),
+      .max(31, 'Must be less than or equal to 31'),
     nc_details: Yup.object({
       dnr: Yup.string().trim().min(2, "invalid").typeError("must be valid text"),
       shift_type_preference: Yup.string().trim().typeError("must be valid text"),
@@ -706,7 +706,7 @@ const EditHcpComponent = () => {
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = hcp?.salary_credit_date<10?"0"+hcp?.salary_credit_date?.toString():hcp?.salary_credit_date?.toString();
+    let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = hcp
 
     delete payload[rate_per_hour]
@@ -1111,6 +1111,9 @@ const EditHcpComponent = () => {
                   </div>
                   <div className="input-container ">
                     <Field
+                      inputProps={{
+                        maxLength: 6
+                      }}
                       variant='outlined'
                       fullWidth
                       name="address.zip_code"

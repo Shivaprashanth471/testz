@@ -197,6 +197,7 @@ const FacilityMemberAddComponent = ({
                 <div className="facility-add-input">
                   <div className="number-container">
                     <Field
+                      inputProps={{ maxLength: 10 }}
                       className='phone_number'
                       variant="outlined"
                       name="phone_number"

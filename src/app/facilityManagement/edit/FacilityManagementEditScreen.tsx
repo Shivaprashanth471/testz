@@ -109,7 +109,7 @@ const facilityFormValidation = Yup.object({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     ),
-  timezone: Yup.number().typeError(" must be a number").required(),
+  timezone: Yup.number().typeError(" must be a number").required('required'),
   about: Yup.string()
     .typeError(" must be a text")
     .trim("empty space not allowed"),
@@ -702,6 +702,9 @@ const FacilityManagementEditScreen = () => {
 
               <div className="input-container mrg-top-40">
                 <Field
+                  inputProps={{
+                    maxLength: 6
+                  }}
                   variant="outlined"
                   name="address.zip_code"
                   type={"text"}

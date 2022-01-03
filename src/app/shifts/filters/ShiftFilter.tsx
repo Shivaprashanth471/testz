@@ -1,12 +1,13 @@
 import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
-import React, { PropsWithChildren } from 'react';
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import moment from 'moment';
+import React, { PropsWithChildren, useState } from 'react';
 import DatePickers from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import { AllShiftStatusList, SomeShiftStatusList, shiftType } from "../../../constants/data";
-import './ShiftFilter.scss'
-import moment from 'moment';
+import { AllShiftStatusList, shiftType, SomeShiftStatusList } from "../../../constants/data";
+import './ShiftFilter.scss';
+
 
 export interface ShiftFilterProps {
     cancel: () => void,
@@ -52,6 +53,8 @@ export interface ShiftFilterProps {
 }
 
 const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
+
+    const [isDropdownAndSelect, setIsDropdownAndSelect] = useState<boolean>(true)
     const afterConfirm = props?.confirm;
     const afterCancel = props?.cancel;
     const hcpTypes = props?.hcpTypes;
@@ -127,6 +130,11 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
         setSelectedTimeTypes(filterdChips)
     }
 
+
+    const handleRegionLabelAndIconToggle = () => {
+        setIsDropdownAndSelect(prevState => !prevState)
+    }
+
     return <div className="pdd-30 pdd-top-40 facility-filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
@@ -139,8 +147,10 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
         </div>
         <DialogContent>
             <div className="form-field">
-                <FormLabel className={'form-label'}>Select Region</FormLabel>
+                <FormLabel className={'form-label'}>{"Region"}</FormLabel>
                 {facilityList !== null ? <Autocomplete
+
+
                     PaperComponent={({ children }) => (
                         <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                     )}
@@ -162,11 +172,13 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                     }
                     renderInput={(params) => (
                         <TextField
+                            onClick={handleRegionLabelAndIconToggle}
                             {...params}
                             id='select_region'
                             variant='outlined'
-                            placeholder={"Select Region"}
+                            placeholder={isDropdownAndSelect ? "Search (or) Select Region" : "Select Region"}
                             value={selectedRegion}
+
                         />
                     )}
                 /> : <></>}
