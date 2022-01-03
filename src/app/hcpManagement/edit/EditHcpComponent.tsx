@@ -1539,7 +1539,7 @@ const EditHcpComponent = () => {
             size="large"
             onClick={() => hcpDetails?.is_approved === true ? history.push('/hcp/user/view/' + hcpDetails?.user_id) : history.push('/hcp/view/' + id)}
             variant={"outlined"}
-            color="secondary"
+            color="primary"
             id="btn_hcp_edit_cancel">Cancel</Button>
           <Button
             disabled={isHcpSubmitting}

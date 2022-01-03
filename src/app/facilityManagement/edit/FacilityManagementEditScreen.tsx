@@ -1060,6 +1060,7 @@ const FacilityManagementEditScreen = () => {
           variant={"outlined"}
           className={"normal"}
           component={Link}
+          color="primary"
           to={`/facility/view/${id}`}
         >
           Cancel
