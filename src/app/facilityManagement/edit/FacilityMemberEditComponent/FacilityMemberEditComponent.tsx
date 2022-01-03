@@ -52,6 +52,7 @@ const memberFormValidation = Yup.object({
     .typeError(" must be a number")
     .matches(/^[0-9]+$/, "must be number")
     .trim("empty space not allowed")
+    .min(10, 'min 10 digits')
     .max(10, 'max 10 digits')
     .required("required"),
   extension_number: Yup.number().typeError(" must be a number"),
