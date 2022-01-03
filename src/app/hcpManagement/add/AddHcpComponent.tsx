@@ -23,6 +23,7 @@ import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { ScrollToError } from "./ScrollToError";
 
 interface HcpItemAddType {
   first_name: string;
@@ -217,7 +218,7 @@ const AddHcpComponent = () => {
     contact_number: Yup.number().typeError(" must be a number").required("required"),
     hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    about: Yup.string().typeError(" must be a text").trim("empty space not allowed").required("required"),
+    about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
     address: Yup.object({
       street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
       city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
@@ -240,7 +241,7 @@ const AddHcpComponent = () => {
     rate_per_hour: Yup.number().typeError("must be a number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
     salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
-    .max(31, 'Must be less than or equal to 31'),
+      .max(31, 'Must be less than or equal to 31'),
 
     nc_details: Yup.object({
       dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
@@ -370,7 +371,7 @@ const AddHcpComponent = () => {
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = hcp?.salary_credit_date<10?"0"+hcp?.salary_credit_date?.toString():hcp?.salary_credit_date?.toString();
+    let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = {}
     payload = hcp
 
@@ -819,6 +820,9 @@ const AddHcpComponent = () => {
                 </div>
                 <div className="input-container">
                   <Field
+                    inputProps={{
+                      maxLength: 6
+                    }}
                     variant='outlined'
                     fullWidth
                     name="address.zip_code"
@@ -842,7 +846,7 @@ const AddHcpComponent = () => {
                 <div className="facility-about mrg-top-50">
                   <p className='card-header'>About the HCP</p>
                   <Field
-                    placeholder="About the Hcp*"
+                    placeholder="About the Hcp"
                     variant='outlined'
                     component={TextField}
                     type={"text"}
@@ -1011,9 +1015,9 @@ const AddHcpComponent = () => {
                     label="Signed On"
                     name="signed_on"
                   />
-                <Field
-                   variant='outlined'
-                   type={"number"}
+                  <Field
+                    variant='outlined'
+                    type={"number"}
                     component={TextField}
                     placeholder="Enter the date of salary credit"
                     fullWidth
@@ -1304,8 +1308,11 @@ const AddHcpComponent = () => {
                 </div>
               </div>
             </div>
+            <ScrollToError />
           </Form>
+
         )}
+
       </Formik>
 
       <div className="mrg-top-40 custom-border">

@@ -18,6 +18,7 @@ import { pdfIcon } from "../../../constants/ImageConfig";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import ScrollToTop from "react-scroll-to-top";
+import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -168,7 +169,7 @@ const facilityFormValidation = Yup.object({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     ),
-  timezone: Yup.number().typeError(" must be a number").required(),
+  timezone: Yup.number().typeError(" must be a number").required('required'),
   about: Yup.string()
     .typeError(" must be a text")
     .trim("empty space not allowed"),
@@ -484,6 +485,7 @@ const FacilityManagementAddScreen = () => {
         >
           {({ isSubmitting, isValid, resetForm }) => (
             <Form id="facility-add-form" className={"form-holder"}>
+              <ScrollToError />
               <div className="facility-basic-details custom-border">
                 <p className='card-header'>Basic Details</p>
                 <div className="input-container">
@@ -648,6 +650,10 @@ const FacilityManagementAddScreen = () => {
                 </div>
                 <div className="input-container ">
                   <Field
+                    input
+                    inputProps={{
+                      maxLength: 6
+                    }}
                     variant="outlined"
                     name="address.zip_code"
                     type={"text"}

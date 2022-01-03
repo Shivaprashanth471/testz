@@ -113,7 +113,7 @@ const ReferenceAddComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  },[getReferenceDetails,hcpId])
+  }, [getReferenceDetails, hcpId])
 
 
   const openAdd = useCallback((id: any) => {
@@ -151,7 +151,7 @@ const ReferenceAddComponent = ({
               <ReadOnlyRow
                 key={index}
                 reference={reference}
-               openAdd={openAdd}
+                openAdd={openAdd}
               />
 
             ))}
@@ -194,6 +194,7 @@ const ReferenceAddComponent = ({
 
                 <div className="input-container">
                   <Field
+                    inputProps={{ maxLength: 10 }}
                     variant='outlined'
                     component={TextField}
                     fullWidth
