@@ -1348,7 +1348,6 @@ const AddHcpComponent = () => {
           setReference={setReferences}
         />
       </div>
-
       <div className="add-hcp-actions mrg-top-80">
         <Button size="large" onClick={() => history.push('/hcp/list')} variant={"outlined"}    color="primary" id="btn_hcp_add_cancel">{"Cancel"}</Button>
         <Button
