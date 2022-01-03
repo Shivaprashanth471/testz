@@ -7,8 +7,7 @@ export function ScrollToError() {
 
     useEffect(() => {
         const el = document.querySelector('.Mui-error, [data-error]');
-        (el?.parentElement ?? el)?.scrollIntoView();
-
+        (el?.parentElement?.parentElement?.parentElement)?.scrollIntoView();
     }, [submitting]);
     return null;
 }
