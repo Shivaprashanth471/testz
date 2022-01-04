@@ -753,7 +753,7 @@ const FacilityManagementAddScreen = () => {
                   </div>
                 )}
               </div>
-              <div className="facility-other-details mrg-top-40 custom-border">
+              <div className="facility-other-details mrg-top-10 custom-border">
                 <p className='card-header'>Other Details</p>
 
                 <div className="input-container ">
@@ -909,7 +909,7 @@ const FacilityManagementAddScreen = () => {
                   />
                 </div>
 
-                <div className="input-container mrg-top-40">
+                <div className="input-container mrg-top-10">
                   <Field
                     variant="outlined"
                     name="conditional_rates.rush.hours"
@@ -956,7 +956,7 @@ const FacilityManagementAddScreen = () => {
                   />
                 </div>
 
-                <div className="input-container mrg-top-40">
+                <div className="input-container mrg-top-10">
                   <Field
                     variant="outlined"
                     name="conditional_rates.shift_early_completion.hours"
@@ -983,14 +983,14 @@ const FacilityManagementAddScreen = () => {
           )}
         </Formik>
 
-        <div className="facility-members mrg-top-40  custom-border">
+        <div className="facility-members mrg-top-10  custom-border">
           <p className='card-header'>Facility Members</p>
           <div className="facility-add-component-container">
             <FacilityAddComponent members={members} setMembers={setMembers} />
           </div>
         </div>
 
-        <div className="facility-shift-timings mrg-top-40  custom-border">
+        <div className="facility-shift-timings mrg-top-10  custom-border">
           <p className='card-header'>Shift Timings</p>
           <ShiftAddComponent
             setShiftTimings={setShiftTimings}
@@ -999,7 +999,7 @@ const FacilityManagementAddScreen = () => {
         </div>
       </div>
 
-      <div className="facility-actions mrg-top-40">
+      <div className="facility-actions mrg-top-10">
         <Button
           type="reset"
           size="large"

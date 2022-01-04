@@ -859,7 +859,7 @@ const AddHcpComponent = () => {
                   />
                 </div>
               </div>
-              <div className="hcp-profession-details  mrg-top-40 custom-border">
+              <div className="hcp-profession-details  mrg-top-10 custom-border">
                 <p className='card-header'>Professional Details (Based on Work Experience)</p>
                 <div className="input-container">
                   <Field
@@ -891,7 +891,7 @@ const AddHcpComponent = () => {
               </div>
 
               <div className="custom-border">
-                <div className="professional-summary mrg-top-40">
+                <div className="professional-summary mrg-top-10">
                   <p className='card-header'>Professional Summary</p>
                   <Field
                     variant='outlined'
@@ -907,7 +907,7 @@ const AddHcpComponent = () => {
                   />
                 </div>
               </div>
-              <div className="hcp-documents mrg-top-40 custom-border">
+              <div className="hcp-documents mrg-top-10 custom-border">
                 <h3 className="card-header">Documents/Attachments</h3>
                 <div className="attachments_wrapper">
                   {required_attachments?.map((item: any, index: any) => {
@@ -955,7 +955,7 @@ const AddHcpComponent = () => {
                   <></>
                 </div>
               </div>
-              <div className="custom-border mrg-top-40">
+              <div className="custom-border mrg-top-10">
                 <div className="attachments_wrapper  mrg-bottom-30">
                   {contractFile?.wrapper?.map((item: any, index: any) => {
                     return (
@@ -1032,7 +1032,7 @@ const AddHcpComponent = () => {
                 </div>
               </div>
 
-              <div className="nc-section custom-border mrg-top-40" >
+              <div className="nc-section custom-border mrg-top-10" >
                 <p className="card-header">NC Section</p>
                 <div className="input-container">
                   <Field
@@ -1318,14 +1318,14 @@ const AddHcpComponent = () => {
 
       </Formik>
 
-      <div className="mrg-top-40 custom-border">
+      <div className="mrg-top-0 custom-border">
         <p className='card-header'>Education</p>
         <EducationAddComponent
           educations={educations}
           setEducation={setEducations}
         />
       </div>
-      <div className="mrg-top-40 custom-border">
+      <div className="mrg-top-0 custom-border">
         <p className='card-header'>Work Experience</p>
         <ExperienceAddComponent
           handleCalcSpecialities={handleCalcSpecialities}
@@ -1337,14 +1337,14 @@ const AddHcpComponent = () => {
           setExperience={setExperiences}
         />
       </div>
-      <div className="mrg-top-40 custom-border">
+      <div className="mrg-top-0 custom-border">
         <p className='card-header'>Volunteer Experience</p>
         <VolunteerExperienceAddComponent
           experiences={volunteerExperiences}
           setExperience={setVolunteerExperiences}
         />
       </div>
-      <div className="mrg-top-40 custom-border">
+      <div className="mrg-top-0 custom-border">
         <p className='card-header'>References</p>
         <ReferenceAddComponent
           references={references}

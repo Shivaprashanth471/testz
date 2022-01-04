@@ -536,7 +536,7 @@ const FacilityManagementEditScreen = () => {
         {({ isSubmitting, isValid, resetForm }) => (
           <Form id="facility-edit-form" className={"form-holder"}>
             <ScrollToError />
-            <div className="facility-basic-details custom-border">
+            <div className="facility-basic-details mrg-top-40 custom-border">
               <p className='card-header'>Basic Details</p>
               <div className="input-container">
                 <Field
@@ -586,7 +586,7 @@ const FacilityManagementEditScreen = () => {
 
                 />
               </div>
-              <div className="input-container mrg-top-40">
+              <div className="input-container mrg-top-10">
                 <Field
                   SelectProps={showDropDownBelowField}
                   variant="outlined"
@@ -653,7 +653,7 @@ const FacilityManagementEditScreen = () => {
                 />
               </div>
 
-              <div className="input-container mrg-top-40">
+              <div className="input-container mrg-top-10">
                 <Field
                   variant="outlined"
                   name="address.street"
@@ -700,7 +700,7 @@ const FacilityManagementEditScreen = () => {
                 />
               </div>
 
-              <div className="input-container mrg-top-40">
+              <div className="input-container mrg-top-10">
                 <Field
                   inputProps={{
                     maxLength: 6
@@ -759,7 +759,7 @@ const FacilityManagementEditScreen = () => {
                   id='input_facility_add_longitude'
                 />
               </div>
-              <div className="facility-about mrg-top-40">
+              <div className="facility-about mrg-top-10">
                 <Typography color="textPrimary">About the Facility</Typography>
                 <Field
                   variant="outlined"
@@ -773,7 +773,7 @@ const FacilityManagementEditScreen = () => {
                 />
               </div>
             </div>
-            <div className="facility-other-details mrg-top-40  custom-border">
+            <div className="facility-other-details mrg-top-10  custom-border">
               <p className='card-header'>Other Details</p>
               <div className="input-container ">
                 <Field
@@ -919,7 +919,7 @@ const FacilityManagementEditScreen = () => {
                 />
               </div>
 
-              <div className="input-container mrg-top-40">
+              <div className="input-container mrg-top-10">
                 <Field
                   variant="outlined"
                   name="conditional_rates.rush.hours"
@@ -967,7 +967,7 @@ const FacilityManagementEditScreen = () => {
                 />
               </div>
 
-              <div className="input-container mrg-top-40">
+              <div className="input-container mrg-top-10">
                 <Field
                   variant="outlined"
                   name="conditional_rates.shift_early_completion.hours"
@@ -1033,7 +1033,7 @@ const FacilityManagementEditScreen = () => {
         )}
       </Formik>
 
-      <div className="facility-members mrg-top-40  custom-border">
+      <div className="facility-members mrg-top-10  custom-border">
         <p className='card-header'>Facility Members</p>
         <div className="facility-add-component-container">
           <FacilityAddComponent
@@ -1046,7 +1046,7 @@ const FacilityManagementEditScreen = () => {
         </div>
       </div>
 
-      <div className="facility-shift-timings mrg-top-40  custom-border">
+      <div className="facility-shift-timings mrg-top-10  custom-border">
         <p className='card-header'>Shift Timings</p>
 
         <ShiftAddComponent
@@ -1059,7 +1059,7 @@ const FacilityManagementEditScreen = () => {
         />
       </div>
 
-      <div className="facility-actions mrg-top-40">
+      <div className="facility-actions mrg-top-10">
         <Button
           size="large"
           variant={"outlined"}
