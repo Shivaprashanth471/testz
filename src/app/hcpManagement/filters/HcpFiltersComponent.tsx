@@ -1,58 +1,47 @@
 import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
+import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import moment from 'moment';
 import React, { PropsWithChildren } from 'react';
-import DatePickers from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import "react-multi-date-picker/styles/layouts/mobile.css";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import './HcpFiltersComponents.scss';
 export interface HcpFiltersComponentProps {
     cancel: () => void,
     confirm: () => void,
-    setHcpTypeRef: any,
-    setStatusRef: any,
-    setValueRef: any;
     status: any;
-    value?: any;
-    hcpType: any;
+    setStatus: any,
     hcpTypes: any,
     selectedHcpTypes?: any;
     setSelectedHcpTypes?: any;
     resetFilters: any;
     showStatus?: boolean
+    dateRange: any;
+    setDateRange: any;
 }
 
 const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>) => {
     const afterConfirm = props?.confirm;
     const afterCancel = props?.cancel
     const statusList = [{ name: "Active", code: true }, { name: "Inactive", code: false }];
-    const setStatusRef = props?.setStatusRef;
-    const setValueRef = props?.setValueRef;
     const hcpTypes = props?.hcpTypes;
     const status = props?.status;
+    const setStatus = props?.setStatus;
     const selectedHcpTypes = props?.selectedHcpTypes
     const setSelectedHcpTypes = props?.setSelectedHcpTypes
     const resetFilters = props?.resetFilters;
     const showStatus = props?.showStatus;
 
-
-    const handleDatePicker = (value: any) => {
-        let shift_dates = value?.map((item: any) => {
-            let mm = item?.month?.number
-            let dd = item?.day
-            let yyyy = item?.year
-            return moment(`${yyyy}-${mm}-${dd}`).format('YYYY-MM-DD')
-        })
-        setValueRef(shift_dates)
-    }
+    const dateRange = props?.dateRange
+    const setDateRange = props?.setDateRange
+    const [startDate, endDate] = dateRange;
 
     const handleDelete = (chip: any) => {
         let filterdChips = selectedHcpTypes.filter((item: any) => item?.name !== chip?.name)
         setSelectedHcpTypes(filterdChips)
     }
 
-    return <div className="pdd-40 pdd-top-40 facility-filters">
+    return <div className="pdd-40 pdd-top-40 filters">
         <div className="dialog-header d-flex" >
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
             <Button onClick={() => {
@@ -107,13 +96,14 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
                         PaperComponent={({ children }) => (
                             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                         )}
+                        value={status}
                         options={statusList}
                         getOptionLabel={(option: any) => option.name}
                         placeholder={"Select Status"}
                         id="input_select_status"
                         className="mrg-top-10"
                         onChange={($event, value) =>
-                            setStatusRef(value?.code)
+                            setStatus(value)
                         }
                         renderInput={(params) => (
                             <TextField
@@ -130,21 +120,23 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
             }
             <div className="form-field mrg-top-20">
                 <FormLabel className={'form-label filter-header'}>{('Created On')}</FormLabel>
-                <div className="mrg-top-10">
-                    <DatePickers
-                        required
-                        inputClass='custom-input'
-                        plugins={[
-                            <DatePanel />
-                        ]}
-                        format="MM/DD/YYYY"
-                        range={true}
-                        onChange={handleDatePicker}
-                        placeholder={"Select Date"}
-                        id='input_shift_requirement_shift_datepicker'
-                        name="shift_dates"
+                <div className="mrg-top-10 date-range-picker">
+                    <DatePicker
+                        dateFormat="MM/dd/yyyy"
+                        placeholderText="Select Date"
+                        className='custom-input'
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(update) => {
+                            setDateRange(update);
+                        }}
+                        isClearable={true}
                     />
-                    {/* <DateRangeOutlined className='date-icon' fontSize='large' color='action' /> */}
+                    {
+                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
+                    }
+
                 </div>
             </div>
         </DialogContent>

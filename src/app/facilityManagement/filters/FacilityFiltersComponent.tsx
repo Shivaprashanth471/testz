@@ -1,23 +1,21 @@
 import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
+import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import moment from 'moment';
 import React, { PropsWithChildren } from 'react';
-import DatePickers from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import "./FacilityFiltersComponent.scss";
 
 export interface FacilityFiltersComponentProps {
     cancel: () => void,
     confirm: () => void,
-    setStatusRef: any,
-    setRegionRef: any,
-    regionList: any,
-    setValueRef: any;
     status: any;
-    region: any;
-    value?: any;
+    setStatus: any,
+    regionList: any,
+    dateRange: any;
+    setDateRange: any;
     selectedRegions?: any;
     setSelectedRegions?: any;
     resetFilters: any;
@@ -28,31 +26,24 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
     const afterConfirm = props?.confirm;
     const afterCancel = props?.cancel
     const statusList = [{ name: "Active", code: true }, { name: "Inactive", code: false }]
-    const setStatusRef = props?.setStatusRef;
-    const regionList = props?.regionList;
+    const setStatus = props?.setStatus;
     const status = props?.status;
-    const setValueRef = props?.setValueRef;
+
+    const dateRange = props?.dateRange
+    const setDateRange = props?.setDateRange
+    const [startDate, endDate] = dateRange;
+
+    const regionList = props?.regionList;
     const selectedRegions = props?.selectedRegions
     const setSelectedRegions = props?.setSelectedRegions
     const resetFilters = props?.resetFilters;
-
-
-    const handleDatePicker = (value: any) => {
-        let shift_dates = value?.map((item: any) => {
-            let mm = item?.month?.number
-            let dd = item?.day
-            let yyyy = item?.year
-            return moment(`${yyyy}-${mm}-${dd}`).format('YYYY-MM-DD')
-        })
-        setValueRef(shift_dates)
-    }
 
     const handleDelete = (chip: any) => {
         let filterdChips = selectedRegions.filter((item: any) => item?.name !== chip?.name)
         setSelectedRegions(filterdChips)
     }
 
-    return <div className="pdd-40 pdd-top-40 facility-filters">
+    return <div className="pdd-40 pdd-top-40 filters">
         <div className="dialog-header">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
             <Button onClick={() => {
@@ -108,20 +99,21 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
                     PaperComponent={({ children }) => (
                         <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                     )}
+                    value={status}
                     options={statusList}
                     getOptionLabel={(option: any) => option.name}
                     placeholder={"Select Status"}
                     id="input_select_status"
                     className="mrg-top-10"
-                    onChange={($event, value) =>
-                        setStatusRef(value?.code)
+                    onChange={($event, value) => {
+                        setStatus(value)
+                    }
                     }
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             id='select_status'
                             variant='outlined'
-                            value={status?.current}
                             placeholder={"Select Status"}
                             fullWidth
                         />
@@ -131,22 +123,23 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
             </div>
             <div className="form-field mrg-top-20">
                 <FormLabel className={'form-label'}>{('Created On')}</FormLabel>
-                <div className="mrg-top-10">
-                    <DatePickers
-                        required
-                        inputClass='custom-input'
-                        plugins={[
-                            <DatePanel />
-                        ]}
-                        format="MM/DD/YYYY"
-                        range={true}
-                        onChange={handleDatePicker}
-
-                        placeholder={"Select Date"}
-                        id='input_shift_requirement_shift_datepicker'
-                        name="shift_dates"
+                <div className="mrg-top-10 date-range-picker">
+                    <DatePicker
+                        dateFormat="MM/dd/yyyy"
+                        placeholderText="Select Date"
+                        className='custom-input'
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(update) => {
+                            setDateRange(update);
+                        }}
+                        isClearable={true}
                     />
-                    {/* <DateRangeOutlined className='date-icon' fontSize='large' color='action' /> */}
+                    {
+                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
+                    }
+
                 </div>
             </div>
         </DialogContent>

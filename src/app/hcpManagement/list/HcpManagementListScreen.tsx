@@ -1,5 +1,6 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react';
+import { Button, LinearProgress, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,24 +8,21 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import { AddRounded, SearchRounded } from "@material-ui/icons";
+import ClearIcon from '@material-ui/icons/Clear';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
+import AccessControlComponent from '../../../components/AccessControl';
+import DialogComponent from '../../../components/DialogComponent';
+import NoDataCardComponent from '../../../components/NoDataCardComponent';
 import { ENV } from "../../../constants";
 import { ApiService, Communications } from "../../../helpers";
-import { AddRounded } from "@material-ui/icons";
-import { SearchRounded } from "@material-ui/icons";
-import './HcpManagementListScreen.scss';
-import { Button, LinearProgress } from "@material-ui/core";
-import { TextField } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import AccessControlComponent from '../../../components/AccessControl';
-import CommonService, { HUMANRESOURCE, ADMIN } from '../../../helpers/common-service';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import NoDataCardComponent from '../../../components/NoDataCardComponent';
-import moment from 'moment';
-import DialogComponent from '../../../components/DialogComponent';
+import CommonService, { ADMIN, HUMANRESOURCE } from '../../../helpers/common-service';
 import HcpFiltersComponent from '../filters/HcpFiltersComponent';
-import { withStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
+import './HcpManagementListScreen.scss';
 
 const CssTextField = withStyles({
     root: {
@@ -39,11 +37,11 @@ const CssTextField = withStyles({
 const HcpManagementListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [open, setOpen] = useState<boolean>(false);
-    const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const hcpType = useRef<any>("")
-    const status = useRef<any>("")
-    const value = useRef<any>(null)
     const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
+
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [hcpTypes, setHcpTypes] = useState<any | null>(null);
+    const [status, setStatus] = useState<any>("");
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -52,18 +50,6 @@ const HcpManagementListScreen = () => {
             return 'pdd-left-20 first-row'
         }
     }, [])
-
-    const setStatusRef = (val: any) => {
-        status.current = val
-    }
-
-    const setHcpTypeRef = (val: any) => {
-        hcpType.current = val
-    }
-
-    const setValueRef = (val: any) => {
-        value.current = val
-    }
 
     const getHcpTypes = useCallback(() => {
         CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -82,19 +68,23 @@ const HcpManagementListScreen = () => {
             payload.hcp_type = selectedHcpTypes.map((item: any) => item?.name)
         }
 
-        if (status?.current !== "") {
-            payload.is_active = status?.current
+        if (status !== "") {
+            payload.is_active = status?.code
         }
 
-        if (value.current instanceof Array) {
-            if (value.current[1]) {
-                payload.start_date = value.current[0]
-                payload.end_date = value.current[1]
-            } else {
-                payload.start_date = value.current[0]
-                payload.end_date = value.current[0]
 
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
+
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
+            } else {
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
+
         }
 
         const options = new TsDataListOptions({
@@ -105,19 +95,17 @@ const HcpManagementListScreen = () => {
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
-    }, [selectedHcpTypes])
+    }, [selectedHcpTypes, dateRange, status])
 
     const clearFilterValues = useCallback(() => {
-        hcpType.current = ""
-        status.current = ""
-        value.current = null
+        setDateRange([null, null])
+        setStatus("")
         selectedHcpTypes.length = 0
     }, [selectedHcpTypes])
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
-    }, [clearFilterValues])
+    }, [])
 
     const cancelopenFilters = useCallback(() => {
         setOpen(false)
@@ -129,9 +117,8 @@ const HcpManagementListScreen = () => {
     }, [init, clearFilterValues])
 
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
     useEffect(() => {
         init();
@@ -152,14 +139,13 @@ const HcpManagementListScreen = () => {
                         cancel={cancelopenFilters}
                         confirm={confirmopenFilters}
                         hcpTypes={hcpTypes}
-                        setStatusRef={setStatusRef}
-                        setValueRef={setValueRef}
                         status={status}
-                        setHcpTypeRef={setHcpTypeRef}
-                        hcpType={hcpType}
+                        setStatus={setStatus}
                         setSelectedHcpTypes={setSelectedHcpTypes}
+                        dateRange={dateRange}
+                        setDateRange={setDateRange}
                         selectedHcpTypes={selectedHcpTypes}
-                        value={value} />
+                    />
                 </DialogComponent>
                 <div className="custom-border pdd-10  pdd-top-20 pdd-bottom-0">
                     <div className="header">
@@ -185,7 +171,7 @@ const HcpManagementListScreen = () => {
                                                     list.table.reload();
                                                     list?.table.pageEvent(0)
                                                 }
-                                            }}  value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
+                                            }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
                                         </div>
                                     </div>
                                 </div>
