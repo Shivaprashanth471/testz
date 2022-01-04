@@ -1,5 +1,6 @@
 import { LinearProgress, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,18 +9,18 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { SearchRounded } from "@material-ui/icons";
-import React, { useCallback, useRef, useEffect, useState } from 'react';
+import ClearIcon from '@material-ui/icons/Clear';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import moment from "moment";
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import DialogComponent from "../../../../components/DialogComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
-import './ShiftsMasterListScreen.scss';
-import DialogComponent from "../../../../components/DialogComponent";
 import ShiftFilter from "../../filters/ShiftFilter";
-import { withStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
+import './ShiftsMasterListScreen.scss';
 
 const CssTextField = withStyles({
     root: {
@@ -37,11 +38,6 @@ const ShiftsMasterListScreen = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [facilityList, setFacilityList] = useState<any | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const facilityIdRef = useRef<any>('')
-    const hcpTypeRef = useRef<any>('')
-    const statusRef = useRef<any>('')
-    const valueRef = useRef<any>(null)
-    const timeTypeRef = useRef<any>('')
     const [regions, setRegions] = useState<any>([])
     const [selectedRegion, setSelectedRegion] = useState<string>('')
 
@@ -50,6 +46,7 @@ const ShiftsMasterListScreen = () => {
     const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
     const [selectedStatusTypes, setSelectedStatusTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
+    const [dateRange, setDateRange] = useState<any>([null, null])
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -58,22 +55,6 @@ const ShiftsMasterListScreen = () => {
             return 'pdd-left-20 first-row'
         }
     }, [])
-
-    const setFacilityIdRef = (val: any) => {
-        facilityIdRef.current = val;
-    }
-    const setHcpTypeRef = (val: any) => {
-        hcpTypeRef.current = val;
-    }
-    const setStatusRef = (val: any) => {
-        statusRef.current = val;
-    }
-    const setValueRef = (val: any) => {
-        valueRef.current = val;
-    }
-    const setTimeTypeRef = (val: any) => {
-        timeTypeRef.current = val;
-    }
 
     const getRegions = useCallback(() => {
         CommonService._api
@@ -127,11 +108,16 @@ const ShiftsMasterListScreen = () => {
             payload.status = selectedStatusTypes
         }
 
-        if (selectedDates instanceof Array) {
-            if (selectedDates[1]) {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[1]
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
+
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
             } else {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[0]
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
         }
 
@@ -148,24 +134,18 @@ const ShiftsMasterListScreen = () => {
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
-    }, [selectedStatusTypes, selectedTimeTypes, selectedHcps, selectedFacilities, selectedDates])
+    }, [dateRange, selectedStatusTypes, selectedTimeTypes, selectedHcps, selectedFacilities])
 
     const clearFilterValues = () => {
-        facilityIdRef.current = ""
-        hcpTypeRef.current = ""
-        statusRef.current = ""
-        valueRef.current = null
-        timeTypeRef.current = ""
-
         setSelectedTimeTypes([])
         setSelectedFacilities([])
         setSelectedHcps([])
         setSelectedStatusTypes([])
         setSelectedDates([])
+        setDateRange([null, null])
     }
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
     }, [])
 
@@ -173,9 +153,8 @@ const ShiftsMasterListScreen = () => {
         setOpen(false)
     }, [])
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
     const resetFilters = useCallback(() => {
         clearFilterValues()
@@ -198,6 +177,8 @@ const ShiftsMasterListScreen = () => {
             </div>}
             <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
                 <ShiftFilter
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
                     selectedRegion={selectedRegion}
                     setSelectedRegion={setSelectedRegion}
                     regions={regions}
@@ -220,16 +201,7 @@ const ShiftsMasterListScreen = () => {
                     confirm={confirmopenFilters}
                     facilityList={facilityList}
                     hcpTypes={hcpTypes}
-                    setHcpTypeRef={setHcpTypeRef}
-                    hcpTypeRef={hcpTypeRef}
-                    setStatusRef={setStatusRef}
-                    valueRef={valueRef}
-                    setValueRef={setValueRef}
-                    facilityIdRef={facilityIdRef}
-                    setFacilityIdRef={setFacilityIdRef}
-                    timeTypeRef={timeTypeRef}
-                    statusRef={statusRef}
-                    setTimeTypeRef={setTimeTypeRef} />
+                />
             </DialogComponent>
             <div className="header">
                 <div className="filter"></div>

@@ -1,16 +1,18 @@
 import { LinearProgress, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-// import Autocomplete from "@material-ui/lab/Autocomplete";
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { SearchRounded } from '@material-ui/icons';
+import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import moment from "moment";
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import DialogComponent from "../../../../components/DialogComponent";
@@ -19,8 +21,6 @@ import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
 import './ShiftInprogressListScreen.scss';
-import { withStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
     root: {
@@ -44,12 +44,10 @@ const ShiftInprogressListScreen = () => {
     const [selectedFacilities, setSelectedFacilities] = useState<any>([])
     const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
+    const [dateRange, setDateRange] = useState<any>([null, null])
 
 
-    const facilityIdRef = useRef<any>('')
-    const hcpTypeRef = useRef<any>('')
-    const valueRef = useRef<any>(null)
-    const timeTypeRef = useRef<any>('')
+
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -59,19 +57,6 @@ const ShiftInprogressListScreen = () => {
         }
     }, [])
 
-    const setFacilityIdRef = (val: any) => {
-        facilityIdRef.current = val;
-    }
-    const setHcpTypeRef = (val: any) => {
-        hcpTypeRef.current = val;
-    }
-
-    const setValueRef = (val: any) => {
-        valueRef.current = val;
-    }
-    const setTimeTypeRef = (val: any) => {
-        timeTypeRef.current = val;
-    }
 
     const getHcpTypes = useCallback(() => {
         CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -122,14 +107,19 @@ const ShiftInprogressListScreen = () => {
         if (selectedHcps.length > 0) {
             payload.hcp_types = selectedHcps
         }
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
 
-        if (selectedDates instanceof Array) {
-            if (selectedDates[1]) {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[1]
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
             } else {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[0]
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
         }
+
 
         if (selectedTimeTypes.length > 0) {
             payload.shift_types = selectedTimeTypes
@@ -143,7 +133,7 @@ const ShiftInprogressListScreen = () => {
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
-    }, [selectedTimeTypes, selectedFacilities, selectedHcps, selectedDates])
+    }, [dateRange, selectedTimeTypes, selectedFacilities, selectedHcps])
 
     if (list?.table?.data) {
         list?.table?.data?.sort((a: any, b: any) => {
@@ -152,29 +142,24 @@ const ShiftInprogressListScreen = () => {
     }
 
     const clearFilterValues = () => {
-        facilityIdRef.current = ""
-        hcpTypeRef.current = ""
-        valueRef.current = null
-        timeTypeRef.current = ""
-
         setSelectedTimeTypes([])
         setSelectedFacilities([])
         setSelectedHcps([])
         setSelectedDates([])
+        setDateRange([null, null])
     }
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
     }, [])
 
     const cancelopenFilters = useCallback(() => {
         setOpen(false)
     }, [])
+
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
     const resetFilters = useCallback(() => {
         clearFilterValues()
@@ -200,7 +185,8 @@ const ShiftInprogressListScreen = () => {
                 regions={regions}
                 selectedRegion={selectedRegion}
                 setSelectedRegion={setSelectedRegion}
-
+                dateRange={dateRange}
+                setDateRange={setDateRange}
                 selectedHcps={selectedHcps}
                 setSelectedHcps={setSelectedHcps}
                 selectedTimeTypes={selectedTimeTypes}
@@ -217,16 +203,7 @@ const ShiftInprogressListScreen = () => {
                 confirm={confirmopenFilters}
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
-                setHcpTypeRef={setHcpTypeRef}
-                hcpTypeRef={hcpTypeRef}
-
-                valueRef={valueRef}
-                setValueRef={setValueRef}
-                facilityIdRef={facilityIdRef}
-                setFacilityIdRef={setFacilityIdRef}
-                timeTypeRef={timeTypeRef}
-
-                setTimeTypeRef={setTimeTypeRef} />
+            />
         </DialogComponent>
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">

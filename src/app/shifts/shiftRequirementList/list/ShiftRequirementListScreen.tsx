@@ -1,5 +1,6 @@
 import { Button, LinearProgress, TablePagination, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,8 +8,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { AddRounded, SearchRounded } from '@material-ui/icons';
+import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import moment from "moment";
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import DialogComponent from "../../../../components/DialogComponent";
@@ -16,9 +19,7 @@ import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
-import { withStyles } from '@material-ui/core/styles';
 import "./ShiftRequirementListScreen.scss";
-import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
     root: {
@@ -43,29 +44,8 @@ const ShiftRequirementListScreen = () => {
     const [selectedFacilities, setSelectedFacilities] = useState<any>([])
     const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
+    const [dateRange, setDateRange] = useState<any>([null, null])
 
-
-    const facilityIdRef = useRef<any>('')
-    const hcpTypeRef = useRef<any>('')
-    const statusRef = useRef<any>('')
-    const valueRef = useRef<any>(null)
-    const timeTypeRef = useRef<any>('')
-
-    const setFacilityIdRef = (val: any) => {
-        facilityIdRef.current = val;
-    }
-    const setHcpTypeRef = (val: any) => {
-        hcpTypeRef.current = val;
-    }
-    const setStatusRef = (val: any) => {
-        statusRef.current = val;
-    }
-    const setValueRef = (val: any) => {
-        valueRef.current = val;
-    }
-    const setTimeTypeRef = (val: any) => {
-        timeTypeRef.current = val;
-    }
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -130,16 +110,24 @@ const ShiftRequirementListScreen = () => {
             url = url + "&status=" + statusType
             payload.status = statusType
         }
-        if (selectedDates instanceof Array) {
-            if (selectedDates[1]) {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[1]
+
+
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
+
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
             } else {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[0]
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
         }
         if (selectedTimeTypes.length > 0) {
             payload.shift_types = selectedTimeTypes
         }
+
 
         const options = new TsDataListOptions({
             extraPayload: payload,
@@ -149,23 +137,18 @@ const ShiftRequirementListScreen = () => {
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
-    }, [selectedTimeTypes, selectedHcps, selectedFacilities, statusType, selectedDates])
+    }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType])
 
     const clearFilterValues = () => {
-        facilityIdRef.current = ""
-        hcpTypeRef.current = ""
-        statusRef.current = ""
-        valueRef.current = null
-        timeTypeRef.current = ""
-
         setSelectedTimeTypes([])
         setSelectedFacilities([])
         setSelectedHcps([])
         setSelectedDates([])
+        setDateRange([null, null])
+        setStatusType("")
     }
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
     }, [])
 
@@ -173,9 +156,8 @@ const ShiftRequirementListScreen = () => {
         setOpen(false)
     }, [])
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
     const resetFilters = useCallback(() => {
         clearFilterValues()
@@ -197,10 +179,13 @@ const ShiftRequirementListScreen = () => {
             </div>}
             <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
                 <ShiftFilter
+                    dateRange={dateRange}
+                    setDateRange={setDateRange}
                     regions={regions}
                     selectedRegion={selectedRegion}
                     setSelectedRegion={setSelectedRegion}
                     setSelectedDates={setSelectedDates}
+                    selectedDates={selectedDates}
                     selectedHcps={selectedHcps}
                     setSelectedHcps={setSelectedHcps}
                     selectedTimeTypes={selectedTimeTypes}
@@ -215,16 +200,7 @@ const ShiftRequirementListScreen = () => {
                     confirm={confirmopenFilters}
                     facilityList={facilityList}
                     hcpTypes={hcpTypes}
-                    setHcpTypeRef={setHcpTypeRef}
-                    hcpTypeRef={hcpTypeRef}
-                    setStatusRef={setStatusRef}
-                    valueRef={valueRef}
-                    setValueRef={setValueRef}
-                    facilityIdRef={facilityIdRef}
-                    setFacilityIdRef={setFacilityIdRef}
-                    timeTypeRef={timeTypeRef}
-                    statusRef={statusRef}
-                    setTimeTypeRef={setTimeTypeRef} />
+                />
             </DialogComponent>
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
                 <div className="header">
