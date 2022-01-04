@@ -82,7 +82,7 @@ const FacilityManagementViewScreen = () => {
             </div>)}
         {!isLoading && (<div className="facility_view_details">
             <FacilityBasicDetailsComponent facilityDetails={facilityDetails} />
-            <div className="basic_details custom-border mrg-top-40">
+            <div className="basic_details custom-border mrg-top-10">
                 <Accordion expanded={expanded === 'Facility_Members'} onChange={handleChange('Facility_Members')}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -131,7 +131,7 @@ const FacilityManagementViewScreen = () => {
                     </AccordionDetails>
                 </Accordion>
             </div>
-            <div className="basic_details custom-border mrg-top-40">
+            <div className="basic_details custom-border mrg-top-10">
                 <Accordion expanded={expanded === 'Shift_Details'} onChange={handleChange('Shift_Details')}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}

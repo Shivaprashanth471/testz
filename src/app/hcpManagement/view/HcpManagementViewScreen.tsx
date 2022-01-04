@@ -146,7 +146,7 @@ const HcpManagementViewScreen = () => {
                     <div className="mrg-top-15">
                         <HcpDetailsComponent hcpBasicDetails={hcpBasicDetails} />
                     </div>
-                    <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+                    <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                         <Accordion expanded={expanded === 'Education'} onChange={handleChange('Education')}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -162,7 +162,7 @@ const HcpManagementViewScreen = () => {
                             </AccordionDetails>
                         </Accordion>
                     </div>
-                    <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+                    <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                         <Accordion expanded={expanded === 'Experience'} onChange={handleChange('Experience')}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -178,7 +178,7 @@ const HcpManagementViewScreen = () => {
                             </AccordionDetails>
                         </Accordion>
                     </div>
-                    <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+                    <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                         <Accordion expanded={expanded === 'Volunteer_Experience'} onChange={handleChange('Volunteer_Experience')}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -194,7 +194,7 @@ const HcpManagementViewScreen = () => {
                             </AccordionDetails>
                         </Accordion>
                     </div>
-                    <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+                    <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                         <Accordion expanded={expanded === 'Reference'} onChange={handleChange('Reference')}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}

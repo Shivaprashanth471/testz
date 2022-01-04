@@ -123,7 +123,7 @@ const HcpDetailsComponent = (props: any) => {
                 <p className="summary">{hcpBasicDetails?.about}</p>
             </div>
         </div>
-        <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+        <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
             <h3>Professional Details</h3>
             <div className="d-flex">
                 <div className="flex-1">
@@ -142,7 +142,7 @@ const HcpDetailsComponent = (props: any) => {
         </div>
 
         {!attachmentLoading && sortedAttachments ?
-            <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40">
+            <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                 <h3>Attachments</h3>
                 {
                     sortedAttachments?.length === 0 && <p>-</p>
@@ -156,14 +156,14 @@ const HcpDetailsComponent = (props: any) => {
 
                 </div>
             </div>
-            : <div className='custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40'>
+            : <div className='custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40'>
                 <StyledLoader />
             </div>}
         <div>
             <HcpContractComponent />
         </div>
 
-        <div className="custom-border mrg-top-40 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
+        <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
             <h3>NC Section</h3>
             <div className="d-flex">
                 <div className="flex-1">

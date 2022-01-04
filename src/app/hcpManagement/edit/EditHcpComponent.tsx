@@ -24,6 +24,7 @@ import VolunteerExperienceEditComponent from "./VolunteerExperienceEditComponent
 import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import { ScrollToError } from "../add/ScrollToError";
 
 interface HcpItemAddType {
   first_name: string;
@@ -103,6 +104,9 @@ const EditHcpComponent = () => {
   const [isAttachmentsLoading, setIsAttachmentsLoading] = useState<boolean>(true);
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [isContractDeleted, SetIsContractDeleted] = useState<boolean>(false);
+
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
     { attachment_type: "Physical Test", index: -1, id: 1 },
@@ -189,7 +193,7 @@ const EditHcpComponent = () => {
     contact_number: Yup.number().typeError("must be a number").required(),
     hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    about: Yup.string().typeError(" must be a text").trim("empty space not allowed").required("required"),
+    about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
     address: Yup.object({
       street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
       city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
@@ -212,8 +216,8 @@ const EditHcpComponent = () => {
     }),
     rate_per_hour: Yup.number().typeError("must be number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.string().typeError("must be date").nullable(),
-
+    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
+      .max(31, 'Must be less than or equal to 31'),
     nc_details: Yup.object({
       dnr: Yup.string().trim().min(2, "invalid").typeError("must be valid text"),
       shift_type_preference: Yup.string().trim().typeError("must be valid text"),
@@ -327,6 +331,7 @@ const EditHcpComponent = () => {
   const getContractDetails = useCallback(() => {
     CommonService._api.get(ENV.API_URL + 'hcp/' + id + '/contract').then((resp) => {
       setContractDetails(resp.data[0])
+      SetIsContractDeleted(false)
     }).catch((err) => {
       console.log(err);
       //  CommonService.showToast(err?.errors || 'Error', 'error');
@@ -354,6 +359,7 @@ const EditHcpComponent = () => {
   }, [id])
 
   const deleteContractFileApi = useCallback(() => {
+    SetIsContractDeleted(true)
     let payload = {
       "file_key": contractDetails?.file_key
     }
@@ -361,6 +367,7 @@ const EditHcpComponent = () => {
       getContractDetails()
       CommonService.showToast(resp?.msg || "Hcp Contract Deleted", 'info');
     }).catch((err) => {
+      SetIsContractDeleted(false)
       console.log(err);
     });
   }, [id, contractDetails?.file_key, getContractDetails])
@@ -369,12 +376,10 @@ const EditHcpComponent = () => {
     let expArr = experiences.map((item: any) => CommonService.getYearsDiff(item.start_date, item.end_date))
     const sum = expArr.reduce((partial_sum, a) => partial_sum + a, 0);
     return Math.round(sum * 10) / 10
-
   }
 
-
-
   const deleteAttachment = useCallback((file: any) => {
+    setIsDeleted(true)
     let payload = {
       "file_key": file?.file_key
     }
@@ -382,8 +387,10 @@ const EditHcpComponent = () => {
       console.log(resp)
       getAttachmentsDetails()
       CommonService.showToast(resp?.msg || "Hcp Attachment Deleted", 'info');
+      setIsDeleted(false)
     }).catch((err) => {
-      console.log(err);
+      console.log(err)
+      setIsDeleted(false)
     });
   }, [id, getAttachmentsDetails])
 
@@ -479,10 +486,12 @@ const EditHcpComponent = () => {
   }, [hcpDetails?.hcp_type, handleHcpTypeChange])
 
   const deleteContractFile = (temp: any) => {
+    SetIsContractDeleted(true)
     let data = contractFile?.wrapper.filter((_: any, index: any) => index !== temp);
     setContractFile(prevState => {
       return { wrapper: [...data] };
     })
+    SetIsContractDeleted(false)
   }
 
   const onAddEducation = useCallback((education: any) => {
@@ -697,8 +706,7 @@ const EditHcpComponent = () => {
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = moment(hcp?.salary_credit_date).format('YYYY-MM-DD');
-
+    let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = hcp
 
     delete payload[rate_per_hour]
@@ -791,8 +799,8 @@ const EditHcpComponent = () => {
                     disabled={item?.attachment_type === "SSN Card"}
                   />
                   <div className="file_actions d-flex">
-                    <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
-                    <p style={{ cursor: "pointer", width: '50px' }} className="mrg-left-20" onClick={() => deleteLocalAttachment(index)}>Delete</p>
+                    <button style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-button mrg-top-15">View</button>
+                    <button style={{ cursor: "pointer", width: '50px' }} disabled={isDeleted} className="delete-button mrg-left-20 mrg-top-15" onClick={() => deleteLocalAttachment(index)}>Delete</button>
                   </div>
                 </div>
               </div>
@@ -835,7 +843,7 @@ const EditHcpComponent = () => {
                   value={item.expiry_date}
                 />
                 <div className="file_actions">
-                  <p style={{ cursor: "pointer", width: '50px' }} onClick={() => deleteAttachment(item)}>Delete</p>
+                  <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={() => deleteAttachment(item)}>Delete</button>
                 </div>
               </div>
             </div>
@@ -855,7 +863,7 @@ const EditHcpComponent = () => {
           </div>
         </div>
         <div className="contract_actions mrg-left-5 mrg-top-10 ">
-          <p style={{ cursor: "pointer", width: '50px' }} onClick={deleteContractFileApi}>Delete</p>
+          <button style={{ cursor: "pointer", width: '50px' }} disabled={isContractDeleted} onClick={deleteContractFileApi} className="delete-button mrg-left-10">Delete</button>
         </div>
       </div>
     </div> : <>
@@ -869,8 +877,8 @@ const EditHcpComponent = () => {
                 </div>
               </div>
               <div className="d-flex contract_actions mrg-left-5 mrg-top-10">
-                <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index, "contract")} className="delete-image">View</p>
-                <p style={{ cursor: 'pointer', width: '50px' }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>Delete</p>
+                <button style={{ cursor: 'pointer' }} onClick={() => previewFile(index, "contract")} className="delete-button">View</button>
+                <button style={{ cursor: 'pointer', width: '50px' }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>Delete</button>
               </div>
             </div>
           </div>
@@ -896,6 +904,7 @@ const EditHcpComponent = () => {
           autoComplete="off"
           label="Rate / hr"
           name="rate_per_hour"
+          required={contractFile?.wrapper[0]?.file}
         />
         <Field
           orientation='landscape'
@@ -909,22 +918,20 @@ const EditHcpComponent = () => {
           fullWidth
           autoComplete="off"
           InputLabelProps={{ shrink: true }}
+          required={contractFile?.wrapper[0]?.file}
           label="Signed On"
           name="signed_on"
         />
         <Field
+          variant='outlined'
+          type={"number"}
+          component={TextField}
+          placeholder="Enter the date of salary credit"
           fullWidth
-          orientation='landscape'
-          variant="inline"
-          openTo="date"
-          views={["year", "month", "date"]}
-          inputVariant='outlined'
-          component={DatePicker}
-          placeholder="MM/DD/YYYY"
-          format="MM/dd/yyyy"
           autoComplete="off"
           InputLabelProps={{ shrink: true }}
           label="Salary Credit"
+          required={contractFile?.wrapper[0]?.file}
           name="salary_credit_date"
         />
       </div>
@@ -958,6 +965,7 @@ const EditHcpComponent = () => {
         >
           {({ isSubmitting, isValid, resetForm, setFieldValue }) => (
             <Form id="hcp-edit-form" className={"form-holder"}>
+              <ScrollToError />
               <div className="hcp-basic-details">
                 <div className="custom-border ">
                   <p className='card-header'>Basic Details</p>
@@ -1106,6 +1114,9 @@ const EditHcpComponent = () => {
                   </div>
                   <div className="input-container ">
                     <Field
+                      inputProps={{
+                        maxLength: 6
+                      }}
                       variant='outlined'
                       fullWidth
                       name="address.zip_code"
@@ -1482,6 +1493,7 @@ const EditHcpComponent = () => {
                 <p className="card-header">Contract</p>
                 {RenderContractAttachments()}
               </div>
+
             </Form>
           )}
         </Formik>
@@ -1536,7 +1548,7 @@ const EditHcpComponent = () => {
             size="large"
             onClick={() => hcpDetails?.is_approved === true ? history.push('/hcp/user/view/' + hcpDetails?.user_id) : history.push('/hcp/view/' + id)}
             variant={"outlined"}
-            color="secondary"
+            color="primary"
             id="btn_hcp_edit_cancel">Cancel</Button>
           <Button
             disabled={isHcpSubmitting}

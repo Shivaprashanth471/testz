@@ -1,3 +1,5 @@
+@import "src/assets/scss/common";
+
 .send-sms-blast {
 	.dialog-header {
 		display: flex;
@@ -15,7 +17,7 @@
 		align-items: baseline;
 		margin-left: 15px;
 		h3 {
-			color: #fe0000;
+			color: $light-black;
 		}
 	}
 
@@ -38,7 +40,7 @@
 			height: 80vh;
 			padding: 1rem 0rem 1rem 1rem;
 			border-radius: 0.5rem;
-			box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 			.sms-blast-scroll {
 				margin-top: 1rem;
 				height: calc(100% - 100px);
@@ -61,7 +63,7 @@
 			padding: 1rem;
 			padding: 1rem 0rem 1rem 1rem;
 			border-radius: 0.5rem;
-			box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
 			.sms-blast-recipients {
 				display: flex;

@@ -27,18 +27,18 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DialogComponent from "../../../components/DialogComponent";
 import FacilityFiltersComponent from "../filters/FacilityFiltersComponent";
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
   root: {
-     '& .MuiOutlinedInput-root': {
-        '&:hover fieldset': {
-           borderColor: '#10c4d3',
-        },
-     },
+    '& .MuiOutlinedInput-root': {
+      '&:hover fieldset': {
+        borderColor: '#10c4d3',
+      },
+    },
   },
 })(TextField);
-
 
 const FacilityManagementListScreen = () => {
   const [list, setList] = useState<TsDataListState | null>(null);
@@ -48,17 +48,17 @@ const FacilityManagementListScreen = () => {
   const region = useRef<any>("");
   const status = useRef<any>("");
   const value = useRef<any>(null);
-  
-  const classesFunction = useCallback((type:any)=>{
-    if(type==="Actions"){
-      return "text-right"
-    }else if(type==='Active / Inactive'){
-      return 'text-align'
-    }else if(type==="Created On"){
-      return 'pdd-left-20'
-    }
 
-  },[])
+
+  const classesFunction = useCallback((type: any) => {
+    if (type === "Actions") {
+      return "text-right last-row"
+    } else if (type === 'Active / Inactive') {
+      return 'text-align'
+    } else if (type === "Created On") {
+      return 'pdd-left-20 first-row'
+    }
+  }, [])
   const [selectedRegions, setSelectedRegions] = useState<any>([])
 
   const setRegionRef = (val: any) => {
@@ -173,6 +173,7 @@ const FacilityManagementListScreen = () => {
     Communications.pageBackButtonSubject.next(null);
   }, [init, getRegions]);
 
+
   return (
     <>
       <div className={"facility-list screen crud-layout pdd-30"}>
@@ -199,19 +200,31 @@ const FacilityManagementListScreen = () => {
         <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
           <div className="header">
             <div className="mrg-left-5 filter">
-              <div className="position-relative">
-                <div style={{ position: 'absolute', top: '9px', left: '220px' }}>
-                  <SearchRounded className="search-icon" />
-                </div>
-                <div>
-                  <CssTextField defaultValue={''} onChange={event => {
-                    if (list && list.table) {
-                      list.table.filter.search = event.target.value;
-                      list.table.reload();
-                      list?.table.pageEvent(0)
-                    }
-                  }} className="searchField"
-                    variant={"outlined"} size={"small"} type={'text'} placeholder={'Search Facility'} />
+              <div>
+                <div className="d-flex">
+                  <div className="d-flex position-relative">
+                    {!list?.table.filter.search ?
+                      <div className={"search_icon"}>
+                        <SearchRounded />
+                      </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                        if (list && list.table) {
+                          list.table.filter.search = '';
+                          list.table.reload();
+                          list?.table.pageEvent(0)
+                        }
+
+                      }} id="clear_facility_search" /></div>}
+                    <div>
+                      <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_facility" onChange={event => {
+                        if (list && list.table) {
+                          list.table.filter.search = event.target.value;
+                          list.table.reload();
+                          list?.table.pageEvent(0)
+                        }
+
+                      }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Facility')} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

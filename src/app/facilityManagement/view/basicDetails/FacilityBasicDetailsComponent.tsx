@@ -132,7 +132,7 @@ const FacilityBasicDetailsComponent = (props: any) => {
                 </div>
             </div>
         </div>
-        <div className="custom-border mrg-top-40 pdd-top-10">
+        <div className="custom-border mrg-top-10 pdd-top-10">
             <h3 className="card-header">Facility Image</h3>
             <div className="d-flex" style={{ gap: "50px" }}>
                 {
@@ -143,19 +143,19 @@ const FacilityBasicDetailsComponent = (props: any) => {
 
             </div>
         </div>
-        <div className="basic_details custom-border mrg-top-40">
+        <div className="basic_details custom-border mrg-top-10">
             <h3>Other Details</h3>
             <div className="d-flex">
                 <div className="flex-1">
-                    <h4>CNA Rate (Usd)</h4>
+                    <h4>CNA Rate ($ / hr)</h4>
                     <p>{facilityDetails?.hourly_base_rates?.cna}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>LVN Rate (Usd)</h4>
+                    <h4>LVN Rate ($ / hr)</h4>
                     <p>{facilityDetails?.hourly_base_rates?.lvn}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>RN Rate (Usd)</h4>
+                    <h4>RN Rate ($ / hr)</h4>
                     <p>{facilityDetails?.hourly_base_rates?.rn}</p>
                 </div>
             </div>
@@ -179,17 +179,17 @@ const FacilityBasicDetailsComponent = (props: any) => {
                     <p>{facilityDetails?.diff_rates?.noc}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>Hazard Rate (Usd)</h4>
+                    <h4>Hazard Rate ($ / hr)</h4>
                     <p>{facilityDetails?.hourly_base_rates?.hazard}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>PM Diff (Usd)</h4>
+                    <h4>PM Diff ($ / hr)</h4>
                     <p>{facilityDetails?.diff_rates?.pm}</p>
                 </div>
             </div>
             <div className="d-flex">
                 <div className="flex-1">
-                    <h4>Weekend Rate (Usd)</h4>
+                    <h4>Weekend Rate ($ / hr)</h4>
                     <p>{facilityDetails?.diff_rates?.weekend}</p>
                 </div>
                 <div className="flex-1">
@@ -197,7 +197,7 @@ const FacilityBasicDetailsComponent = (props: any) => {
                     <p>{facilityDetails?.conditional_rates?.overtime?.hours}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>OT Rate (Usd)</h4>
+                    <h4>OT Rate ($ / hr)</h4>
                     <p>{facilityDetails?.conditional_rates?.overtime?.rate}</p>
                 </div>
             </div>
@@ -207,7 +207,7 @@ const FacilityBasicDetailsComponent = (props: any) => {
                     <p>{facilityDetails?.conditional_rates?.rush?.hours}</p>
                 </div>
                 <div className="flex-1">
-                    <h4>Rush Rate (Usd)</h4>
+                    <h4>Rush Rate ($ / hr)</h4>
                     <p>{facilityDetails?.conditional_rates?.rush?.rate}</p>
                 </div>
                 <div className="flex-1">

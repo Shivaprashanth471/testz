@@ -19,7 +19,6 @@
       position: absolute;
       right: 10px;
       top: 0.6rem;
-      z-index: 0;
     }
     .rmdp-container {
       width: 100%;
@@ -111,5 +110,14 @@
   }
   .MuiInputBase-inputMultiline{
     border: none !important;
+  }
+
+  .rmdp-panel-body li, .rmdp-panel-body li.bg-blue{
+     background-color: $accent-color;
+  }
+
+  .rmdp-day.rmdp-selected span:not(.highlight){
+     background-color: $accent-color;
+
   }
 }

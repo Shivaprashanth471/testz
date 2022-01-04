@@ -48,9 +48,13 @@ const memberFormValidation = Yup.object({
     .trim("The contact name cannot include leading and trailing spaces")
     .required(),
   email: Yup.string().typeError("must be text").email("invalid"),
-  phone_number: Yup.number()
+  phone_number: Yup.string()
     .typeError(" must be a number")
-    .required("phone number is required"),
+    .matches(/^[0-9]+$/, "must be number")
+    .trim("empty space not allowed")
+    .min(10, 'min 10 digits')
+    .max(10, 'max 10 digits')
+    .required("required"),
   extension_number: Yup.number().typeError(" must be a number"),
   designation: Yup.string().typeError("must be text").required(),
 });
@@ -205,6 +209,7 @@ const FacilityMemberEditComponent = ({
                 <div className="facility-add-input">
                   <div className="number-container">
                     <Field
+                      inputProps={{ maxLength: 10 }}
                       className='phone_number'
                       variant="outlined"
                       name="phone_number"

@@ -103,7 +103,7 @@ const RequirementsShiftsViewScreen = () => {
                 <h2>{basicDetails?.facility?.facility_name}</h2>
                 <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
             </div>
-            <div className="facility-details mrg-top-40 custom-border">
+            <div className="facility-details mrg-top-10 custom-border">
                 <div className="d-flex shift-name-requested">
                     <h2>Shift Details</h2>
                     <div className="d-flex requested-on-wrapper">
@@ -152,7 +152,7 @@ const RequirementsShiftsViewScreen = () => {
                 </div>
             </div>
             <div>
-                {basicDetails?.status === "cancelled" ? <div className="mrg-top-40 custom-border pdd-top-10">
+                {basicDetails?.status === "cancelled" ? <div className="mrg-top-10 custom-border pdd-top-10">
                     <div className="">
                         <h2>Reason for Cancellation</h2>
                         <p>{basicDetails?.cancelled_details?.reason}</p>

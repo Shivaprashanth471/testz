@@ -6,18 +6,28 @@
 		margin: 1rem;
 		padding: 1rem 3rem 2rem 2rem;
 		border-radius: 0.5rem;
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	}
+	/* Chrome, Safari, Edge, Opera */
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
 	}
 
+	/* Firefox */
+	input[type=number] {
+		-moz-appearance: textfield;
+	}
 
-	.generic-add-multiple{
+	.generic-add-multiple {
 		color: $primary-color;
 		text-decoration: underline;
 		margin: auto;
 		font-weight: 500;
 		cursor: pointer;
 		font-size: 18px;
-	  }
+	}
 
 	.contract_actions {
 		margin-top: -15px;
@@ -138,8 +148,8 @@
 	.MuiInputBase-inputMultiline {
 		border: none !important;
 	}
-  .file-icon{
-    font-size: 6rem;
-    color: #41d5c2;
-  }
+	.file-icon {
+		font-size: 6rem;
+		color: #41d5c2;
+	}
 }

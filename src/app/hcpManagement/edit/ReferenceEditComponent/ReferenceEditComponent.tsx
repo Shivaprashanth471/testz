@@ -48,6 +48,7 @@ const referenceValidation = Yup.object({
     .trim("The contact name cannot include leading and trailing spaces")
     .required("required"),
   contactNumber: Yup.string()
+    .min(10, "min 10 digits")
     .max(10, "max 10 digits")
     .required("required")
     .matches(
@@ -113,7 +114,7 @@ const ReferenceAddComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  },[getReferenceDetails,hcpId])
+  }, [getReferenceDetails, hcpId])
 
 
   const openAdd = useCallback((id: any) => {
@@ -151,7 +152,7 @@ const ReferenceAddComponent = ({
               <ReadOnlyRow
                 key={index}
                 reference={reference}
-               openAdd={openAdd}
+                openAdd={openAdd}
               />
 
             ))}
@@ -194,6 +195,7 @@ const ReferenceAddComponent = ({
 
                 <div className="input-container">
                   <Field
+                    inputProps={{ maxLength: 10 }}
                     variant='outlined'
                     component={TextField}
                     fullWidth

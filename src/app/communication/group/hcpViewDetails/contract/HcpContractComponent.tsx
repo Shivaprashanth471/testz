@@ -21,7 +21,7 @@ const HcpContractComponent = (props: any) => {
         init()
     }, [init])
     return <>
-        <div className="hcp_contract_details mrg-top-40">
+        <div className="hcp_contract_details mrg-top-10">
             {
                 contractDetails ?
                     <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">

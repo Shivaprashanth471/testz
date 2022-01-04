@@ -1,0 +1,20 @@
+@import "src/assets/scss/common";
+
+.shift-requirment-list{
+    .MuiPaper-elevation1 {
+		box-shadow: none !important;
+	}
+	.filter-icon{
+		font-size: 2rem;
+		color:$light-black;
+	}
+    .cancelled{
+        color: #f10000 !important;
+    }
+	.last-row{
+		border-radius: 0px 5px 5px 0px;
+	}
+	.first-row{
+	 border-radius: 5px 0px 0px 5px;
+	}
+}

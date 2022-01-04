@@ -18,6 +18,7 @@ import { pdfIcon } from "../../../constants/ImageConfig";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import ScrollToTop from "react-scroll-to-top";
+import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -160,7 +161,7 @@ const facilityFormValidation = Yup.object({
   email: Yup.string()
     .typeError(" must be a text")
     .email("invalid"),
-  phone_number: Yup.number().typeError(" must be a number"),
+  phone_number: Yup.number().typeError(" must be a number").required('required'),
   extension_number: Yup.number().typeError(" must be a number"),
   website_url: Yup.string()
     .typeError(" must be a text")
@@ -168,7 +169,7 @@ const facilityFormValidation = Yup.object({
       /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
       'Enter correct url!'
     ),
-  timezone: Yup.number().typeError(" must be a number"),
+  timezone: Yup.number().typeError(" must be a number").required('required'),
   about: Yup.string()
     .typeError(" must be a text")
     .trim("empty space not allowed"),
@@ -408,8 +409,7 @@ const FacilityManagementAddScreen = () => {
   const onAdd = (facility: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<FacilityItemAddType>) => {
     setIsFacilitySubmitting(true)
     facility.phone_number = facility?.phone_number?.toLowerCase();
-    facility.coordinates = [Number(facility?.longitude),
-    Number(facility?.latitude)]
+    facility.coordinates = [Number(facility?.longitude), Number(facility?.latitude)]
     ApiService.post(ENV.API_URL + "facility", facility)
       .then((resp: any) => {
         if (resp && resp.success) {
@@ -485,6 +485,7 @@ const FacilityManagementAddScreen = () => {
         >
           {({ isSubmitting, isValid, resetForm }) => (
             <Form id="facility-add-form" className={"form-holder"}>
+              <ScrollToError />
               <div className="facility-basic-details custom-border">
                 <p className='card-header'>Basic Details</p>
                 <div className="input-container">
@@ -559,9 +560,9 @@ const FacilityManagementAddScreen = () => {
 
                   <div className="flex-1 d-flex">
                     <div className="phone-number">
-                      <Field name={'phone_number'} variant="outlined" className="flex-1" id='phone_num' style={{ font: "inherit" }}>
+                      <Field name={'phone_number'} variant="outlined" inputProps={{ maxLength: 10 }} className="flex-1" id='phone_num' style={{ font: "inherit" }}>
                         {(field: FieldProps) => {
-                          return <PhoneInputComponent field={field} placeholder={'Enter Phone number'} />
+                          return <PhoneInputComponent field={field} placeholder={'Enter Phone number*'} />
                         }}
                       </Field>
                     </div>
@@ -573,7 +574,6 @@ const FacilityManagementAddScreen = () => {
                         autoComplete="off"
                         label="Extension No"
                         name="extension_number"
-
                         id="input_facility_add_extension_number"
                       />
                     </div>
@@ -650,6 +650,10 @@ const FacilityManagementAddScreen = () => {
                 </div>
                 <div className="input-container ">
                   <Field
+                    input
+                    inputProps={{
+                      maxLength: 6
+                    }}
                     variant="outlined"
                     name="address.zip_code"
                     type={"text"}
@@ -665,7 +669,7 @@ const FacilityManagementAddScreen = () => {
                     type={"text"}
                     component={TextField}
                     select
-                    label="Facility Timezone"
+                    label="Facility Timezone*"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_timezone'
@@ -717,10 +721,8 @@ const FacilityManagementAddScreen = () => {
                     id='input_facility_add_about'
                   />
                 </div>
-              </div>
-              <div className="custom-border mrg-top-40">
-                <h3 className="card-header">Upload Facility Image</h3>
-                <div className="d-flex" style={{ gap: "50px" }}>
+                <h3 className="card-header facility-image-header mrg-bottom-0">Upload Facility Image</h3>
+                <div className="d-flex mrg-top-10" style={{ gap: "50px" }}>
                   {
                     fileUpload?.wrapper && fileUpload?.wrapper?.map((item: any, index: any) => {
                       return (
@@ -760,7 +762,7 @@ const FacilityManagementAddScreen = () => {
                     name="hourly_base_rates.cna"
                     type={"text"}
                     component={TextField}
-                    label="CNA Rate (Usd)"
+                    label="CNA Rate ($/hr)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_hourly_base_rates_cna'
@@ -770,7 +772,7 @@ const FacilityManagementAddScreen = () => {
                     name="hourly_base_rates.lvn"
                     type={"text"}
                     component={TextField}
-                    label="LVN Rate (Usd)"
+                    label="LVN Rate ($/hr)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_hourly_base_rates_lvn'
@@ -783,7 +785,7 @@ const FacilityManagementAddScreen = () => {
                     name="hourly_base_rates.rn"
                     type={"text"}
                     component={TextField}
-                    label="RN Rate (Usd)"
+                    label="RN Rate ($/hr)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_hourly_base_rates_rn'
@@ -818,7 +820,7 @@ const FacilityManagementAddScreen = () => {
                     name="hourly_base_rates.holiday"
                     type={"text"}
                     component={TextField}
-                    label="Holiday Rate (hr)"
+                    label="Holiday Rate ($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_hourly_base_rates_holiday'
@@ -831,7 +833,7 @@ const FacilityManagementAddScreen = () => {
                     name="diff_rates.noc"
                     type={"text"}
                     component={TextField}
-                    label="NOC Diff"
+                    label="NOC Diff ($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_diff_rates_noc'
@@ -842,7 +844,7 @@ const FacilityManagementAddScreen = () => {
                     name="hourly_base_rates.hazard"
                     type={"text"}
                     component={TextField}
-                    label="Hazard Rate (Usd)"
+                    label="Hazard Rate ($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_hourly_base_rates_hazard'
@@ -855,7 +857,7 @@ const FacilityManagementAddScreen = () => {
                     name="diff_rates.pm"
                     type={"text"}
                     component={TextField}
-                    label="PM Diff (Usd)"
+                    label="PM Diff ($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_diff_rates_pm'
@@ -866,7 +868,7 @@ const FacilityManagementAddScreen = () => {
                     name="diff_rates.weekend"
                     type={"text"}
                     component={TextField}
-                    label="Weekend Rate (Usd)"
+                    label="Weekend Rate ($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_diff_rates_weekend'
@@ -875,12 +877,13 @@ const FacilityManagementAddScreen = () => {
 
                 <div className='input-container'>
                   <Field
+                    SelectProps={showDropDownBelowField}
                     variant="outlined"
                     name="conditional_rates.overtime.hours"
                     type={"text"}
                     component={TextField}
                     select
-                    label="OT Hours"
+                    label="OT Hours (hr/day)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_conditional_rates.overtime.hours'
@@ -898,7 +901,7 @@ const FacilityManagementAddScreen = () => {
                     name="conditional_rates.overtime.rate"
                     type={"text"}
                     component={TextField}
-                    label="OT Rate(Usd)"
+                    label="OT Rate($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_conditional_rates_overtime_rate'
@@ -922,7 +925,7 @@ const FacilityManagementAddScreen = () => {
                     name="conditional_rates.rush.rate"
                     type={"text"}
                     component={TextField}
-                    label="Rush Rate(Usd)"
+                    label="Rush Rate($)"
                     fullWidth
                     autoComplete="off"
                     id='input_facility_add_conditional_rates_rush_rate'

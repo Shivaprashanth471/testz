@@ -13,4 +13,10 @@
     .MuiTableCell-body{
         width: 20px !important;
     }
+	.last-row {
+		border-radius: 0px 5px 5px 0px;
+	}
+	.first-row {
+		border-radius: 5px 0px 0px 5px;
+	}
 }
