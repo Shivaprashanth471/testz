@@ -702,7 +702,7 @@ const EditHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-
+   const AddHcp=()=>{
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
@@ -721,7 +721,7 @@ const EditHcpComponent = () => {
     ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
       console.log(resp);
       if (resp && resp.success) {
-        if (contractFile) {
+        if (contractFile?.wrapper[0]?.file) {
           handleContractUpload(id, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors)
         }
         handleAttachmentsUpload(id, resp)
@@ -738,6 +738,18 @@ const EditHcpComponent = () => {
         setIsHcpSubmitting(false)
 
       });
+   }
+    if(contractFile?.wrapper[0]?.file){
+      if(hcp?.signed_on){
+        AddHcp()
+      }else{
+        CommonService.showToast("Please fill Signed On", "info")
+        setSubmitting(false);
+        setIsHcpSubmitting(false)
+      }
+    }else{
+      AddHcp()
+    }
   };
 
 

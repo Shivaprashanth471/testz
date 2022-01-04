@@ -367,14 +367,13 @@ const AddHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, resetForm, setFieldValue }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-
+    const AddHcp=()=>{
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
     let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = {}
     payload = hcp
-
     payload = {
       ...payload,
       professional_details: {
@@ -407,7 +406,18 @@ const AddHcpComponent = () => {
         setIsHcpSubmitting(false)
         CommonService.showToast(err?.msg || "Error", "error");
       });
-
+    }
+      if(contractFile?.wrapper[0]?.file){
+        if(hcp?.signed_on){
+          AddHcp()
+        }else{
+          CommonService.showToast("Please fill Signed On", "info")
+          setSubmitting(false);
+          setIsHcpSubmitting(false)
+        }
+      }else{
+        AddHcp()
+      }
 
   };
 
