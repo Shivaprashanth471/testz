@@ -18,6 +18,7 @@ const loginFormValidation = Yup.object({
   password: Yup.string().required("Required").min(6,"Password should be minimum 6 characters"),
 });
 
+
 const LoginScreen = (props: any) => {
   const dispatch = useDispatch();
   const [values, setValues] = React.useState({
