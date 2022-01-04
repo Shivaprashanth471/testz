@@ -702,13 +702,13 @@ const EditHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-   const AddHcp=()=>{
+    console.log(hcp)
+    const AddHcp=()=>{
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
     let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = hcp
-
     delete payload[rate_per_hour]
     delete payload[signed_on]
     delete payload[salary_credit_date]

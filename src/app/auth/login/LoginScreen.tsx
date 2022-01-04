@@ -15,7 +15,7 @@ import { loginUser } from "../../../store/actions/auth.action";
 
 const loginFormValidation = Yup.object({
   email: Yup.string().required("Required"),
-  password: Yup.string().required("Required"),
+  password: Yup.string().required("Required").min(6,"Password should be minimum 6 characters"),
 });
 
 const LoginScreen = (props: any) => {

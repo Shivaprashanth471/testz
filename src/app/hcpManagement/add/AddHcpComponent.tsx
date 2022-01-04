@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, CircularProgress, MenuItem } from "@material-ui/core";
-import NormalTextField from '@material-ui/core/TextField';
 import { Field, FieldProps, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import 'react-phone-number-input/style.css';
 import { useHistory } from "react-router";
-import * as Yup from "yup";
 import { TsFileUploadConfig, TsFileUploadWrapperClass } from '../../../classes/ts-file-upload-wrapper.class';
 import FileDropZoneComponent from '../../../components/core/FileDropZoneComponent';
 import PhoneInputComponent from "../../../components/phoneInput/PhoneInputComponent";
@@ -24,59 +22,8 @@ import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { ScrollToError } from "./ScrollToError";
-
-interface HcpItemAddType {
-  first_name: string;
-  last_name: string;
-  email?: string;
-  contact_number: string;
-  hcp_type: string;
-  gender: string;
-  about?: string;
-  experience?: string;
-  speciality?: string;
-  summary?: string;
-  address?: {
-    street: string;
-    city: string;
-    state: string;
-    region: string;
-    country: string;
-    zip_code: string;
-  };
-
-  professional_details?: {
-    speciality: string;
-    experience: number | string;
-    summary: string;
-  };
-
-  rate_per_hour: any;
-  signed_on: any;
-  salary_credit_date: any;
-
-  nc_details?: {
-    dnr: string;
-    shift_type_preference: string;
-    location_preference: string;
-    more_important_preference: string;
-    family_consideration: string;
-    zone_assignment: string;
-    vaccine: string;
-    covid_facility_preference: string,
-    is_fulltime_job: any;
-    is_supplement_to_income: any;
-    is_studying: any;
-    is_gusto_invited: any;
-    is_gusto_onboarded: any;
-    gusto_type: any;
-    nc_last_updated: any;
-    last_call_date: any;
-    contact_type: any;
-    other_information: any;
-  }
-
-}
+import { AddHcpInitialValues, HcpItemAddType, hcpFormValidation } from "./AddHcpValuesValidationsComponent";
+import HcpAddAttachmentsComponent from "./AddAtachments/HcpAddAttachmentsComponent";
 
 const AddHcpComponent = () => {
   const history = useHistory();
@@ -112,60 +59,8 @@ const AddHcpComponent = () => {
   const [expInYears, setExpInYears] = useState<number>(0)
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
-  const user: any = localStorage.getItem("currentUser");
-  let currentUser = JSON.parse(user);
 
-  let hcpInitialState: HcpItemAddType = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    contact_number: "",
-    hcp_type: "",
-    gender: "",
-    about: "",
-    experience: "",
-    speciality: "",
-    summary: "",
-    address: {
-      street: "",
-      city: "",
-      state: "",
-      region: "",
-      country: "",
-      zip_code: "",
-    },
-
-    professional_details: {
-      experience: "",
-      speciality: "",
-      summary: "",
-    },
-
-    rate_per_hour: "",
-    signed_on: null,
-    salary_credit_date: null,
-
-    nc_details: {
-      dnr: "",
-      shift_type_preference: "",
-      location_preference: "",
-      more_important_preference: "",
-      family_consideration: "",
-      zone_assignment: "",
-      vaccine: "",
-      covid_facility_preference: "",
-      is_fulltime_job: "",
-      is_supplement_to_income: "",
-      is_studying: "",
-      is_gusto_invited: "",
-      is_gusto_onboarded: "",
-      gusto_type: "",
-      nc_last_updated: `${currentUser?.first_name} ${currentUser?.last_name}`,
-      last_call_date: null,
-      contact_type: "",
-      other_information: "",
-    }
-  };
+  let hcpInitialState: HcpItemAddType = AddHcpInitialValues;
 
   const getSpecialities = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-specialities").then((resp) => {
@@ -210,61 +105,6 @@ const AddHcpComponent = () => {
       console.log(err);
     });
   }, []);
-
-  const hcpFormValidation = Yup.object({
-    first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required"),
-    last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required"),
-    email: Yup.string().min(3, "invalid").trim("empty space not allowed").typeError(" must be a text").email("invalid").required("required"),
-    contact_number: Yup.number().typeError(" must be a number").required("required"),
-    hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-    about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
-    address: Yup.object({
-      street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-      city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-      state: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-      region: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-      country: Yup.string().typeError(" must be a text").min(2, "invalid").required("required").trim("empty space not allowed").required("required"),
-      zip_code: Yup.string()
-        .typeError(" must be a text")
-        .matches(/^[0-9]+$/, "Must be only digits")
-        .trim("empty space not allowed")
-        .min(5, 'min 5 digits')
-        .max(6, 'max 6 digits allowed')
-        .required("required"),
-    }),
-    professional_details: Yup.object({
-      experience: Yup.number(),
-      speciality: Yup.string().typeError(" must be a text").min(2, "invalid"),
-      summary: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
-    }),
-    rate_per_hour: Yup.number().typeError("must be a number"),
-    signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
-      .max(31, 'Must be less than or equal to 31'),
-
-    nc_details: Yup.object({
-      dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
-      shift_type_preference: Yup.string().trim().typeError("must be valid text"),
-      location_preference: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
-      more_important_preference: Yup.string().trim().typeError("must be valid text"),
-      family_consideration: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
-      zone_assignment: Yup.string().min(2, "invalid").trim().typeError("must be valid text"),
-      vaccine: Yup.string().trim().typeError("must be valid text"),
-      covid_facility_preference: Yup.string().trim().typeError("must be valid "),
-      is_fulltime_job: Yup.string().trim().typeError("must be valid "),
-      is_supplement_to_income: Yup.string().trim().typeError("must be valid "),
-      is_studying: Yup.string().trim().typeError("must be valid "),
-      is_gusto_invited: Yup.string().trim().typeError("must be valid "),
-      is_gusto_onboarded: Yup.string().trim().typeError("must be valid "),
-      gusto_type: Yup.string().trim().typeError("must be valid text"),
-      nc_last_updated: Yup.string().trim().typeError("must be valid text"),
-      last_call_date: Yup.string().typeError("must be date").nullable(),
-      contact_type: Yup.string().trim().typeError("must be valid text"),
-      other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text")
-    })
-
-  });
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Add HCP");
@@ -426,15 +266,6 @@ const AddHcpComponent = () => {
     setHcpTypeSpecialities(selectedSpeciality);
   };
 
-  const handleExpiryDate = (event: any, index: any) => {
-    setFileUpload(prevState => {
-      if (prevState) {
-        prevState.wrapper[index].extraPayload.expiry_date = event.target.value;
-      }
-      return { wrapper: [...(prevState || { wrapper: [] }).wrapper] };
-    })
-  }
-
   const handleContractFileUpload = useCallback((link: any) => {
     const file = contractFile?.wrapper[0].file;
     delete file.base64;
@@ -516,68 +347,6 @@ const AddHcpComponent = () => {
       CommonService.showToast(err, 'error');
     })
   }, [handleContractFileUpload, contractFile?.wrapper])
-
-  const OnFileSelected = (files: File[], index: any) => {
-    if (required_attachments[index]) {
-      required_attachments[index].index = fileUpload?.wrapper?.length || 0
-      setRequiredAttachments([...required_attachments])
-    }
-    for (let file of files) {
-      // console.log(file)
-      const uploadConfig: TsFileUploadConfig = {
-        file: file,
-        fileFieldName: 'Data',
-        uploadUrl: ENV.API_URL + 'facility/add',
-        allowed_types: ['jpg', 'png', 'csv', 'pdf'],
-        extraPayload: { expiry_date: '', file_type: required_attachments[index]?.name }
-      };
-      const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
-        // console.log(state);
-        setFileUpload((prevState) => {
-          if (prevState) {
-            const index = prevState?.wrapper.findIndex((value: any) => value.uploadId === state.wrapper.uploadId);
-            prevState.wrapper[index] = state.wrapper;
-            return { wrapper: prevState.wrapper };
-          }
-          return prevState;
-        })
-      });
-      uploadWrapper.onError = (err, heading) => {
-        // console.error(err, heading);
-        if (heading) {
-          CommonService.showToast(err, 'error');
-        }
-      };
-      uploadWrapper.onSuccess = (resp) => {
-        console.log(resp);
-        if (resp && resp.success) {
-          CommonService.showToast(resp.msg || resp.error, 'success');
-        }
-      };
-      uploadWrapper.onProgress = (progress) => {
-        // console.log('progress', progress);
-      };
-      setFileUpload(prevState => {
-        let state: TsFileUploadWrapperClass[] = [];
-        if (prevState) {
-          state = prevState?.wrapper;
-        }
-        const newState = [...state, uploadWrapper];
-        return { wrapper: newState };
-      });
-      // uploadWrapper.startUpload();
-    }
-  }
-
-  const deleteFile = (temp: any, itemIndex: any) => {
-    console.log(temp, "deleteindex", itemIndex)
-    let data = fileUpload?.wrapper.filter((_: any, index: any) => index !== itemIndex);
-    console.log(data)
-    if (required_attachments[temp]) {
-      required_attachments[temp].index = -1
-      setRequiredAttachments([...required_attachments])
-    }
-  }
 
   const OnContractFileUpload = (files: File[]) => {
     for (let file of files) {
@@ -919,51 +688,7 @@ const AddHcpComponent = () => {
               </div>
               <div className="hcp-documents mrg-top-10 custom-border">
                 <h3 className="card-header">Documents/Attachments</h3>
-                <div className="attachments_wrapper">
-                  {required_attachments?.map((item: any, index: any) => {
-                    if (item.index !== -1) {
-                      return (<>
-                        <div className="attachments">
-                          <div className="custom_file mrg-top-0">
-                            <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {required_attachments[index].name}</h3>
-                            <div className="d-flex">
-                              <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
-                              <div className="file_details mrg-left-20 mrg-top-20">
-                                <NormalTextField
-                                  onKeyDown={(e) => e.preventDefault()}
-                                  required
-                                  label="Expires On"
-                                  type={"date"}
-                                  InputLabelProps={{ shrink: true }}
-                                  onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
-                                  value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
-                                  disabled={index === 5}
-                                />
-                                <div className="file_actions d-flex">
-                                  <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
-                                  <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-30" onClick={() => deleteFile(index, item?.index)}>Delete</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                      )
-                    } else {
-                      return (
-                        <div className="attachments">
-                          <div className="">
-                            <h3 className="attachement_name mrg-left-10 file_attachment_title">{item?.name}</h3>
-                            <FileDropZoneComponent
-                              OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"}
-                            />
-                          </div>
-                        </div>
-                      )
-                    }
-                  })}
-                  <></>
-                </div>
+                <HcpAddAttachmentsComponent required_attachments={required_attachments} setRequiredAttachments={setRequiredAttachments} fileUpload={fileUpload} setFileUpload={setFileUpload} previewFile={previewFile}/>
               </div>
               <div className="custom-border mrg-top-10">
                 <div className="attachments_wrapper  mrg-bottom-30">
@@ -1323,11 +1048,8 @@ const AddHcpComponent = () => {
             </div>
             <ScrollToError />
           </Form>
-
         )}
-
       </Formik>
-
       <div className="mrg-top-0 custom-border">
         <p className='card-header'>Education</p>
         <EducationAddComponent
