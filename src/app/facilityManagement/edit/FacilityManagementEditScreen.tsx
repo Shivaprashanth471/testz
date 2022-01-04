@@ -459,7 +459,7 @@ const FacilityManagementEditScreen = () => {
         file: file,
         fileFieldName: 'Data',
         uploadUrl: ENV.API_URL + 'facility/add',
-        allowed_types: ['jpg', 'png', 'csv', 'pdf'],
+        allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
         extraPayload: { expiry_date: '' }
       };
       const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {

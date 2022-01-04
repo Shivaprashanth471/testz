@@ -88,7 +88,7 @@ export class TsFileUploadWrapperClass {
             this.uploadDone = false;
             if (this.generatePreview) {
                 const fileReader = new FileReader();
-                fileReader.onload = () => {
+                fileReader.onloadend = () => {
                     file.base64 = fileReader.result;
                     cb(file);
                 };

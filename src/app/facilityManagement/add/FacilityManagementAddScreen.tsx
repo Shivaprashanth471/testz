@@ -281,7 +281,7 @@ const FacilityManagementAddScreen = () => {
         file: file,
         fileFieldName: 'image',
         uploadUrl: ENV.API_URL + 'facility/add',
-        allowed_types: ['jpg', 'png', 'csv', 'pdf'],
+        allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
       };
       const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
         // console.log(state);
