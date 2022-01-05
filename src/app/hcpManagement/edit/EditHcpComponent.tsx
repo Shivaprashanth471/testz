@@ -832,7 +832,6 @@ const EditHcpComponent = () => {
         )
       }
     })
-
   }
 
   function RenderAvailableAttachments() {
