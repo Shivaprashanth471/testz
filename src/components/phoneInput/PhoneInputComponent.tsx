@@ -30,9 +30,7 @@ const PhoneInputComponent = (props: PhoneInputComponentProps) => {
             onChange={
                 (phoneVal) => {
                     form.setFieldTouched(field.name);
-                    if (phoneVal) {
-                        form.setFieldValue(field.name, phoneVal);
-                    }
+                    form.setFieldValue(field.name, phoneVal);
                 }
             }
             type={'text'}
