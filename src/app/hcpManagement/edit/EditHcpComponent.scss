@@ -2,12 +2,11 @@
 
 .edit-hcp {
 	width: 100%;
-
 	.custom-border {
 		margin: 1rem;
 		padding: 1rem 3rem 2rem 2rem;
 		border-radius: 0.5rem;
-		box-shadow: 0 3px 10px 0 #a1a1a1;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 	}
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,

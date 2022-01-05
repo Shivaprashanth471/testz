@@ -1,34 +1,32 @@
-import { Button, LinearProgress } from "@material-ui/core";
+import { Button, LinearProgress, TextField } from "@material-ui/core";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from "@material-ui/core/Paper";
+import { withStyles } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
+import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from "@material-ui/core/TableRow";
-import { AddRounded } from "@material-ui/icons";
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { AddRounded, SearchRounded } from "@material-ui/icons";
+import ClearIcon from '@material-ui/icons/Clear';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import moment from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import AccessControlComponent from "../../../components/AccessControl";
+import DialogComponent from "../../../components/DialogComponent";
+import NoDataCardComponent from "../../../components/NoDataCardComponent";
 import { ENV } from "../../../constants";
 import { ApiService, Communications } from "../../../helpers";
 import CommonService, { ACCOUNTMANAGER, ADMIN } from "../../../helpers/common-service";
-import './FacilityManagementListScreen.scss';
-import TablePagination from '@material-ui/core/TablePagination';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import NoDataCardComponent from "../../../components/NoDataCardComponent";
-import moment from "moment";
-import { TextField } from "@material-ui/core";
-import { SearchRounded } from "@material-ui/icons";
-import { useSelector } from "react-redux";
 import { StateParams } from "../../../store/reducers";
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import DialogComponent from "../../../components/DialogComponent";
 import FacilityFiltersComponent from "../filters/FacilityFiltersComponent";
-import { withStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
+import './FacilityManagementListScreen.scss';
 
 const CssTextField = withStyles({
   root: {
@@ -42,12 +40,11 @@ const CssTextField = withStyles({
 
 const FacilityManagementListScreen = () => {
   const [list, setList] = useState<TsDataListState | null>(null);
-  const [regionList, setRegionList] = useState<any | null>(null);
   const { role } = useSelector((state: StateParams) => state?.auth?.user);
   const [open, setOpen] = useState<boolean>(false);
-  const region = useRef<any>("");
-  const status = useRef<any>("");
-  const value = useRef<any>(null);
+  const [regionList, setRegionList] = useState<any | null>(null);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [status, setStatus] = useState<any>("");
 
 
   const classesFunction = useCallback((type: any) => {
@@ -61,17 +58,6 @@ const FacilityManagementListScreen = () => {
   }, [])
   const [selectedRegions, setSelectedRegions] = useState<any>([])
 
-  const setRegionRef = (val: any) => {
-    region.current = val
-  }
-
-  const setStatusRef = (val: any) => {
-    status.current = val
-  }
-
-  const setValueRef = (val: any) => {
-    value.current = val
-  }
 
   const onReload = useCallback((page = 1) => {
     if (list) {
@@ -93,30 +79,34 @@ const FacilityManagementListScreen = () => {
     });
   }, []);
 
-
-
   const init = useCallback(() => {
     let url = "facility/list"
     let payload: any = {}
+
+
 
     if (selectedRegions.length > 0) {
       payload.regions = selectedRegions.map((item: any) => item?.name)
     }
 
-    if (status?.current !== "") {
-      payload.is_active = status?.current
+    if (status !== "") {
+      payload.is_active = status?.code
     }
-    if (value.current instanceof Array) {
-      if (value.current[1]) {
-        payload.start_date = value.current[0]
-        payload.end_date = value.current[1]
-      } else {
-        payload.start_date = value.current[0]
-        payload.end_date = value.current[0]
 
+    if (dateRange[0] || dateRange[1]) {
+      let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+      let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
+
+      if (!dateRange[1]) {
+        payload.start_date = startDate
+        payload.end_date = startDate
+      } else {
+        payload.start_date = startDate
+        payload.end_date = endDate
       }
 
     }
+
     const options = new TsDataListOptions({
       extraPayload: payload,
       webMatColumns: role === "super_admin" ?
@@ -127,33 +117,29 @@ const FacilityManagementListScreen = () => {
       ENV.API_URL + url, setList, ApiService, "post");
     let tableWrapperObj = new TsDataListWrapperClass(options);
     setList({ table: tableWrapperObj });
-  }, [role, selectedRegions]);
+  }, [role, selectedRegions, status, dateRange]);
 
-  const clearFilterValues = useCallback(() => {
-    region.current = ""
-    status.current = ""
-    value.current = null
+  const clearFilterValues = () => {
+    setDateRange([null, null])
+    setStatus('')
     selectedRegions.length = 0
-  }, [selectedRegions])
+  }
 
   const openFilters = useCallback((index: any) => {
-    clearFilterValues()
     setOpen(true)
-  }, [clearFilterValues])
+  }, [])
 
   const cancelopenFilters = useCallback(() => {
     setOpen(false)
   }, [])
 
-  const resetFilters = useCallback(() => {
+  const resetFilters = () => {
     clearFilterValues()
-    init()
-  }, [init, clearFilterValues])
+  }
 
   const confirmopenFilters = useCallback(() => {
-    init()
     setOpen(false)
-  }, [init])
+  }, [])
 
   const handletoggleStatus = useCallback((id: any, is_active) => {
     let payload = {
@@ -184,18 +170,17 @@ const FacilityManagementListScreen = () => {
         )}
         <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
           <FacilityFiltersComponent
+            dateRange={dateRange}
+            setDateRange={setDateRange}
             selectedRegions={selectedRegions}
             setSelectedRegions={setSelectedRegions}
             resetFilters={resetFilters}
             cancel={cancelopenFilters}
             confirm={confirmopenFilters}
-            setRegionRef={setRegionRef}
-            setStatusRef={setStatusRef}
+            setStatus={setStatus}
             regionList={regionList}
-            setValueRef={setValueRef}
             status={status}
-            region={region}
-            value={value} />
+          />
         </DialogComponent>
         <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
           <div className="header">

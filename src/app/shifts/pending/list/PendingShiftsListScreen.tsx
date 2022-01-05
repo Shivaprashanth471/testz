@@ -1,5 +1,6 @@
 import { LinearProgress, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,10 +8,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import { SearchRounded } from '@material-ui/icons';
+import { DateRange, SearchRounded } from '@material-ui/icons';
+import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import DialogComponent from '../../../../components/DialogComponent';
@@ -19,8 +21,6 @@ import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from '../../filters/ShiftFilter';
 import './PendingShiftsListScreen.scss';
-import { withStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
     root: {
@@ -42,13 +42,10 @@ const PendingShiftsListScreen = () => {
     const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
     const [selectedDates, setSelectedDates] = useState<any>(null);
 
-    const facilityIdRef = useRef<any>('')
-    const hcpTypeRef = useRef<any>('')
-    const valueRef = useRef<any>(null)
-    const timeTypeRef = useRef<any>('')
-
     const [regions, setRegions] = useState<any>([])
     const [selectedRegion, setSelectedRegion] = useState<string>('')
+    const [dateRange, setDateRange] = useState<any>([null, null])
+
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -58,20 +55,6 @@ const PendingShiftsListScreen = () => {
         }
     }, [])
 
-    const setFacilityIdRef = (val: any) => {
-        facilityIdRef.current = val;
-    }
-    const setHcpTypeRef = (val: any) => {
-        hcpTypeRef.current = val;
-    }
-
-    const setValueRef = (val: any) => {
-        valueRef.current = val;
-    }
-
-    const setTimeTypeRef = (val: any) => {
-        timeTypeRef.current = val;
-    }
 
     const getHcpTypes = useCallback(() => {
         CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -122,11 +105,16 @@ const PendingShiftsListScreen = () => {
             payload.hcp_types = selectedHcps
         }
 
-        if (selectedDates instanceof Array) {
-            if (selectedDates[1]) {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[1]
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
+
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
             } else {
-                payload.start_date = selectedDates[0]; payload.end_date = selectedDates[0]
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
         }
 
@@ -143,22 +131,18 @@ const PendingShiftsListScreen = () => {
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
-    }, [selectedFacilities, selectedHcps, selectedTimeTypes, selectedDates])
+    }, [dateRange, selectedFacilities, selectedHcps, selectedTimeTypes])
 
     const clearFilterValues = () => {
-        facilityIdRef.current = ""
-        hcpTypeRef.current = ""
-        valueRef.current = null
-        timeTypeRef.current = ""
-
         setSelectedTimeTypes([])
         setSelectedFacilities([])
         setSelectedHcps([])
         setSelectedDates([])
+        setDateRange([null, null])
+
     }
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
     }, [])
 
@@ -166,14 +150,14 @@ const PendingShiftsListScreen = () => {
         setOpen(false)
     }, [])
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
-    const resetFilters = useCallback(() => {
+
+
+    const resetFilters = () => {
         clearFilterValues()
-        init()
-    }, [init])
+    }
 
     useEffect(() => {
         init()
@@ -189,6 +173,8 @@ const PendingShiftsListScreen = () => {
         </div>}
         <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
             <ShiftFilter
+                dateRange={DateRange}
+                setDateRange={setDateRange}
                 regions={regions}
                 selectedRegion={selectedRegion}
                 setSelectedRegion={setSelectedRegion}
@@ -209,16 +195,7 @@ const PendingShiftsListScreen = () => {
                 confirm={confirmopenFilters}
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
-                setHcpTypeRef={setHcpTypeRef}
-                hcpTypeRef={hcpTypeRef}
-
-                valueRef={valueRef}
-                setValueRef={setValueRef}
-                facilityIdRef={facilityIdRef}
-                setFacilityIdRef={setFacilityIdRef}
-                timeTypeRef={timeTypeRef}
-
-                setTimeTypeRef={setTimeTypeRef} />
+            />
         </DialogComponent>
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">

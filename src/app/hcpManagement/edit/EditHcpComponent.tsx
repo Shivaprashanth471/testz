@@ -702,13 +702,12 @@ const EditHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-
+    const AddHcp=()=>{
     hcp.contact_number = hcp?.contact_number?.toLowerCase();
     let rate_per_hour = hcp?.rate_per_hour;
     let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
     let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
     let payload: any = hcp
-
     delete payload[rate_per_hour]
     delete payload[signed_on]
     delete payload[salary_credit_date]
@@ -721,7 +720,7 @@ const EditHcpComponent = () => {
     ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
       console.log(resp);
       if (resp && resp.success) {
-        if (contractFile) {
+        if (contractFile?.wrapper[0]?.file) {
           handleContractUpload(id, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors)
         }
         handleAttachmentsUpload(id, resp)
@@ -738,6 +737,18 @@ const EditHcpComponent = () => {
         setIsHcpSubmitting(false)
 
       });
+   }
+    if(contractFile?.wrapper[0]?.file){
+      if(hcp?.signed_on){
+        AddHcp()
+      }else{
+        CommonService.showToast("Please fill Signed On", "info")
+        setSubmitting(false);
+        setIsHcpSubmitting(false)
+      }
+    }else{
+      AddHcp()
+    }
   };
 
 
@@ -789,7 +800,7 @@ const EditHcpComponent = () => {
                 <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
                 <div className="file_details mrg-left-20 mrg-top-20">
                   <NormalTextField
-                    onKeyDown={(e) => e.preventDefault()}
+
                     required
                     label="Expires On:"
                     type={"date"}
@@ -821,7 +832,6 @@ const EditHcpComponent = () => {
         )
       }
     })
-
   }
 
   function RenderAvailableAttachments() {
@@ -836,7 +846,6 @@ const EditHcpComponent = () => {
                 <NormalTextField
                   label="Expires On"
                   type={"date"}
-                  onKeyDown={(e) => e.preventDefault()}
                   InputLabelProps={{ shrink: true }}
                   onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                   disabled
@@ -967,7 +976,7 @@ const EditHcpComponent = () => {
             <Form id="hcp-edit-form" className={"form-holder"}>
               <ScrollToError />
               <div className="hcp-basic-details">
-                <div className="custom-border ">
+                <div className="custom-border">
                   <p className='card-header'>Basic Details</p>
                   <div className="input-container">
                     <Field
@@ -1138,7 +1147,7 @@ const EditHcpComponent = () => {
                     />
                   </div>
 
-                  <div className="facility-about mrg-top-50">
+                  <div className="facility-about mrg-top-10">
                     <p className='card-header'>About the HCP</p>
                     <Field
                       variant='outlined'
@@ -1154,7 +1163,7 @@ const EditHcpComponent = () => {
                   </div>
                 </div>
 
-                <div className="hcp-profession-details  mrg-top-50 custom-border">
+                <div className="hcp-profession-details  mrg-top-10 custom-border">
                   <p className='card-header'>Professional Details (Based On Work Experience)</p>
                   <div className="input-container">
                     <Field
@@ -1185,7 +1194,7 @@ const EditHcpComponent = () => {
                   </div>
                 </div>
 
-                <div className="professional-summary mrg-top-40 custom-border">
+                <div className="professional-summary mrg-top-10 custom-border">
                   <p className='card-header'>Professional Summary</p>
                   <Field
                     variant='outlined'
@@ -1200,7 +1209,7 @@ const EditHcpComponent = () => {
                   />
                 </div>
               </div>
-              <div className="nc-section custom-border mrg-top-40" >
+              <div className="nc-section custom-border mrg-top-10" >
                 <p className="card-header">NC Section</p>
                 <div className="input-container">
                   <Field
@@ -1481,7 +1490,7 @@ const EditHcpComponent = () => {
                 </div>
               </div>
 
-              <div className="custom-border mrg-top-40 pdd-top-10 pdd-left-40 pdd-right-40 pdd-bottom-40">
+              <div className="custom-border mrg-top-10 pdd-top-10 pdd-left-40 pdd-right-40 pdd-bottom-40">
                 <h3 className="card-header">Documents/Attachments</h3>
                 <div className="attachments_wrapper mrg-top-30">
                   {RenderAvailableAttachments()}
@@ -1489,7 +1498,7 @@ const EditHcpComponent = () => {
                 </div>
               </div>
 
-              <div className="mrg-top-50 custom-border">
+              <div className="mrg-top-10 custom-border">
                 <p className="card-header">Contract</p>
                 {RenderContractAttachments()}
               </div>
@@ -1497,7 +1506,7 @@ const EditHcpComponent = () => {
             </Form>
           )}
         </Formik>
-        <div className="mrg-top-50 custom-border ">
+        <div className="mrg-top-0 custom-border ">
           <p className='card-header'>Education</p>
           <EducationAddComponent
             getEducationDetails={getEducationDetails}
@@ -1508,7 +1517,7 @@ const EditHcpComponent = () => {
           />
         </div>
 
-        <div className="mrg-top-50 custom-border ">
+        <div className="mrg-top-0 custom-border ">
           <p className='card-header'>Work Experience</p>
           <ExperienceEditComponent
             hcpTypeSpecialities={hcpTypeSpecialities}
@@ -1523,7 +1532,7 @@ const EditHcpComponent = () => {
           />
         </div>
 
-        <div className="mrg-top-50 custom-border">
+        <div className="mrg-top-0 custom-border">
           <p className='card-header'>Volunteer Experience</p>
           <VolunteerExperienceEditComponent
             getExperienceDetails={getVolunteerExperienceDetails}
@@ -1533,7 +1542,7 @@ const EditHcpComponent = () => {
             setExperience={setVolunteerExperiences}
           />
         </div>
-        <div className="mrg-top-50 custom-border ">
+        <div className="mrg-top-0 custom-border ">
           <p className='card-header'>References</p>
           <ReferenceAddComponent
             getReferenceDetails={getReferenceDetails}

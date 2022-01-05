@@ -1,6 +1,7 @@
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, TextField } from "@material-ui/core";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,62 +10,52 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import moment from "moment";
 import { SearchRounded } from "@material-ui/icons";
+import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import moment from "moment";
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
+import DialogComponent from "../../../components/DialogComponent";
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import { StateParams } from '../../../store/reducers';
-import { TextField } from "@material-ui/core";
-import DialogComponent from "../../../components/DialogComponent";
 import HcpFiltersComponent from "../filters/HcpFiltersComponent";
-import {withStyles} from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
 
 const CssTextField = withStyles({
-  root: {
-     '& .MuiOutlinedInput-root': {
-        '&:hover fieldset': {
-           borderColor: '#10c4d3',
+    root: {
+        '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#10c4d3',
+            },
         },
-     },
-  },
+    },
 })(TextField);
 
 const HcpApprovedListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const { role } = useSelector((state: StateParams) => state?.auth?.user);
     const [open, setOpen] = useState<boolean>(false);
-    const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const hcpType = useRef<any>("")
-    const status = useRef<any>("")
-    const value = useRef<any>(null)
+
     const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
+    const [hcpTypes, setHcpTypes] = useState<any | null>(null);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [status, setStatus] = useState<any>("");
 
-    const classesFunction = useCallback((type:any)=>{
-        if(type === "Actions"){
-          return "last-row"
-        }else if(type === 'Active/Inactive'){
+    const classesFunction = useCallback((type: any) => {
+        if (type === "Actions") {
+            return "last-row"
+        } else if (type === 'Active/Inactive') {
             return 'text-align'
-        }else if(type === "Created On"){
-          return 'pdd-left-20 first-row'
+        } else if (type === "Created On") {
+            return 'pdd-left-20 first-row'
         }
-    },[])
+    }, [])
 
-    const setStatusRef = (val: any) => {
-        status.current = val
-    }
-    const setHcpTypeRef = (val: any) => {
-        hcpType.current = val
-    }
-    const setValueRef = (val: any) => {
-        value.current = val
-    }
+
     const onReload = useCallback((page = 1) => {
         if (list) {
             list.table.reload(page);
@@ -93,19 +84,22 @@ const HcpApprovedListScreen = () => {
             payload.hcp_type = selectedHcpTypes.map((item: any) => item?.name)
         }
 
-        if (status?.current !== "") {
-            payload.is_active = status?.current
+        if (status !== "") {
+            payload.is_active = status?.code
         }
 
-        if (value.current instanceof Array) {
-            if (value.current[1]) {
-                payload.start_date = value.current[0]
-                payload.end_date = value.current[1]
-            } else {
-                payload.start_date = value.current[0]
-                payload.end_date = value.current[0]
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
 
+            if (!dateRange[1]) {
+                payload.start_date = startDate
+                payload.end_date = startDate
+            } else {
+                payload.start_date = startDate
+                payload.end_date = endDate
             }
+
         }
 
         const options = new TsDataListOptions({
@@ -116,28 +110,25 @@ const HcpApprovedListScreen = () => {
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
-    }, [role, selectedHcpTypes])
+    }, [role, selectedHcpTypes, dateRange, status])
 
-    const clearFilterValues = useCallback(() => {
-        hcpType.current = ""
-        status.current = ""
-        value.current = null
+    const clearFilterValues = () => {
+        setDateRange([null, null])
+        setStatus("")
         selectedHcpTypes.length = 0
-    }, [selectedHcpTypes])
+    }
 
     const openFilters = useCallback((index: any) => {
-        clearFilterValues()
         setOpen(true)
-    }, [clearFilterValues])
+    }, [])
 
     const cancelopenFilters = useCallback(() => {
         setOpen(false)
     }, [])
 
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         clearFilterValues()
-        init()
-    }, [init, clearFilterValues])
+    }
 
     const handletoggleStatus = useCallback((id: any, is_active) => {
         let payload = {
@@ -151,9 +142,8 @@ const HcpApprovedListScreen = () => {
     }, [onReload, list?.table?.pagination?.pageIndex])
 
     const confirmopenFilters = useCallback(() => {
-        init()
         setOpen(false)
-    }, [init])
+    }, [])
 
     useEffect(() => {
         init();
@@ -177,12 +167,11 @@ const HcpApprovedListScreen = () => {
                         cancel={cancelopenFilters}
                         confirm={confirmopenFilters}
                         hcpTypes={hcpTypes}
-                        setStatusRef={setStatusRef}
-                        setValueRef={setValueRef}
                         status={status}
-                        setHcpTypeRef={setHcpTypeRef}
-                        hcpType={hcpType}
-                        value={value} />
+                        setStatus={setStatus}
+                        dateRange={dateRange}
+                        setDateRange={setDateRange}
+                    />
                 </DialogComponent>
                 <div className="custom-border pdd-10  pdd-top-20 pdd-bottom-0">
                     <div className="header">
@@ -208,7 +197,7 @@ const HcpApprovedListScreen = () => {
                                                     list.table.reload();
                                                     list?.table.pageEvent(0)
                                                 }
-                                            }}  value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
+                                            }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
                                         </div>
                                     </div>
                                 </div>
@@ -258,7 +247,7 @@ const HcpApprovedListScreen = () => {
                                                     role === "super_admin" ? <TableCell style={{ textAlign: "center" }}> <FormControlLabel
                                                         control={<Switch checked={row['is_active']} onChange={() => handletoggleStatus(row['_id'], row['is_active'])} />}
                                                         label={''}
-                                                    /> </TableCell> :row['is_active'] ?  <TableCell style={{color:"#41D6C3"}}>Active</TableCell>:<TableCell style={{color:"#808080"}}> Inactive</TableCell>
+                                                    /> </TableCell> : row['is_active'] ? <TableCell style={{ color: "#41D6C3" }}>Active</TableCell> : <TableCell style={{ color: "#808080" }}> Inactive</TableCell>
                                                 }
                                                 <TableCell >
                                                     <Link to={'/hcp/user/view/' + row['user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >

@@ -1,10 +1,11 @@
 import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
+import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import moment from 'moment';
 import React, { PropsWithChildren, useState } from 'react';
-import DatePickers from "react-multi-date-picker";
-import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import "react-multi-date-picker/styles/layouts/mobile.css";
 import { AllShiftStatusList, shiftType, SomeShiftStatusList } from "../../../constants/data";
 import './ShiftFilter.scss';
 
@@ -14,11 +15,6 @@ export interface ShiftFilterProps {
     confirm: () => void,
     hcpTypes: any,
     facilityList: any,
-    hcpTypeRef?: any,
-    valueRef?: any,
-    statusRef?: any,
-    facilityIdRef: any,
-    timeTypeRef: any,
     noStatus?: boolean;
 
     isMaster?: boolean;
@@ -26,11 +22,7 @@ export interface ShiftFilterProps {
     isRequired?: boolean;
     isInProgress?: boolean;
 
-    setValueRef?: any,
-    setStatusRef?: any,
-    setHcpTypeRef: any,
-    setTimeTypeRef: any,
-    setFacilityIdRef: any,
+
     resetFilters: any;
 
     regions?: any;
@@ -50,6 +42,9 @@ export interface ShiftFilterProps {
 
     selectedDates?: any;
     setSelectedDates?: any;
+
+    dateRange: any;
+    setDateRange: any;
 }
 
 const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
@@ -64,7 +59,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const isMaster = props?.isMaster
     const statusList = props?.isMaster ? AllShiftStatusList : SomeShiftStatusList
 
-    const setValueRef = props?.setValueRef;
     const facilityList = props?.facilityList;
     const resetFilters = props?.resetFilters
     const noMultiStatus = props?.noStatus
@@ -72,31 +66,22 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const isRequired = props?.isRequired
     const isInProgress = props?.isInProgress
 
+    const selectedFaciltities = props?.selectedFaciltities
     const selectedHcps = props?.selectedHcps
     const setSelectedHcps = props?.setSelectedHcps
-    const selectedTimeTypes = props?.selectedTimeTypes
-    const selectedStatusTypes = props?.selectedStatusTypes
-    const setSelectedTimeTypes = props?.setSelectedTimeTypes
-    const selectedFaciltities = props?.selectedFaciltities
-    const setSelectedFacilities = props?.setSelectedFacilities
-    const setSelectedStatusTypes = props?.setSelectedStatusTypes
-    const setStatusType = props?.setStatusType
     const statusType = props?.statusType
+    const selectedStatusTypes = props?.selectedStatusTypes
+    const selectedTimeTypes = props?.selectedTimeTypes
+    const setSelectedTimeTypes = props?.setSelectedTimeTypes
+    const setSelectedStatusTypes = props?.setSelectedStatusTypes
+    const setSelectedFacilities = props?.setSelectedFacilities
+    const setStatusType = props?.setStatusType
 
-    const setSelectedDates = props?.setSelectedDates
 
+    const dateRange = props?.dateRange
+    const setDateRange = props?.setDateRange
+    const [startDate, endDate] = dateRange;
 
-
-    const handleDatePicker = (value: any) => {
-        let shift_dates = value?.map((item: any) => {
-            let mm = item?.month?.number
-            let dd = item?.day
-            let yyyy = item?.year
-            return moment(`${yyyy}-${mm}-${dd}`).format('YYYY-MM-DD')
-        })
-        setValueRef(shift_dates)
-        setSelectedDates(shift_dates)
-    }
 
     const formatDateFieldLabel = () => {
         if (isCompleted) {
@@ -135,13 +120,25 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
         setIsDropdownAndSelect(prevState => !prevState)
     }
 
-    return <div className="pdd-30 pdd-top-40 facility-filters">
+    const handleDisableReset = (): boolean => {
+        let isDisable = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
+        let additionalCheckIfNotMaster = !isMaster && (statusType !== "" && statusType !== null)
+        if (isDisable || additionalCheckIfNotMaster) return false
+        else {
+            return true
+        }
+    }
+
+    return <div className="pdd-30 pdd-top-40 filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button onClick={() => {
-                resetFilters()
-                afterCancel()
-            }} color="secondary" id="btn_reset_filter">
+
+            <Button
+                disabled={handleDisableReset()}
+                onClick={() => {
+                    resetFilters()
+                    afterCancel()
+                }} color="secondary" id="btn_reset_filter">
                 {'Reset'}
             </Button>
         </div>
@@ -149,8 +146,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             <div className="form-field">
                 <FormLabel className={'form-label'}>{"Region"}</FormLabel>
                 {facilityList !== null ? <Autocomplete
-
-
                     PaperComponent={({ children }) => (
                         <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                     )}
@@ -293,21 +288,23 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             }
             <div className="form-field mrg-top-20">
                 <FormLabel className={'form-label'}>{formatDateFieldLabel()}</FormLabel>
-                <div className="mrg-top-10">
-                    <DatePickers
-                        required
-                        inputClass='custom-input'
-                        className="rmdp-prime"
-                        plugins={[
-                            <DatePanel />
-                        ]}
-                        format="MM/DD/YYYY"
-                        range={true}
-                        onChange={handleDatePicker}
-                        placeholder={"Select Date"}
-                        id='input_shift_requirement_shift_datepicker'
-                        name="shift_dates"
+                <div className="mrg-top-10 date-range-picker">
+                    <DatePicker
+                        dateFormat="MM/dd/yyyy"
+                        placeholderText="Select Date"
+                        className='custom-input'
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(update) => {
+                            setDateRange(update);
+                        }}
+                        isClearable={true}
                     />
+                    {
+                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
+                    }
+
                 </div>
                 <div className="form-field mrg-top-20">
                     <FormLabel className={'form-label'}>Time Type</FormLabel>
