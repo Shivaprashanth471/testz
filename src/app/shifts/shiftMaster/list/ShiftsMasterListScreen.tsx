@@ -93,6 +93,7 @@ const ShiftsMasterListScreen = () => {
 
 
     const init = useCallback(() => {
+
         let url = "shift"
         let payload: any = {}
 
@@ -136,6 +137,7 @@ const ShiftsMasterListScreen = () => {
 
     }, [dateRange, selectedStatusTypes, selectedTimeTypes, selectedHcps, selectedFacilities])
 
+
     const clearFilterValues = () => {
         setSelectedTimeTypes([])
         setSelectedFacilities([])
@@ -156,17 +158,11 @@ const ShiftsMasterListScreen = () => {
         setOpen(false)
     }, [])
 
-    const onReload = useCallback(() => {
-        if (list && list.table) {
-            list.table.reload();
-            list?.table.pageEvent(0)
-        }
-    }, [list])
 
-    const resetFilters = useCallback(() => {
+
+    const resetFilters = () => {
         clearFilterValues()
-        onReload()
-    }, [onReload])
+    }
 
     useEffect(() => {
         init()

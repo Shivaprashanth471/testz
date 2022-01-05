@@ -43,13 +43,22 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
         setSelectedRegions(filterdChips)
     }
 
+    const handleDisableReset = (): boolean => {
+        if (selectedRegions.length === 0 || status === "" || (dateRange[0] === null || dateRange[1] === null)) return true
+        else {
+            return false
+        }
+    }
+
     return <div className="pdd-40 pdd-top-40 filters">
         <div className="dialog-header">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button onClick={() => {
-                resetFilters()
-                afterCancel()
-            }} color="secondary" id="btn_reset_filter">
+            <Button
+                disabled={handleDisableReset()}
+                onClick={() => {
+                    resetFilters()
+                    afterCancel()
+                }} color="secondary" id="btn_reset_filter">
                 {'Reset'}
             </Button>
         </div>

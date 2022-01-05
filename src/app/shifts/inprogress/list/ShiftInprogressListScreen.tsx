@@ -47,8 +47,6 @@ const ShiftInprogressListScreen = () => {
     const [dateRange, setDateRange] = useState<any>([null, null])
 
 
-
-
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
             return "last-row"
@@ -161,18 +159,10 @@ const ShiftInprogressListScreen = () => {
         setOpen(false)
     }, [])
 
-    const onReload = useCallback(() => {
-        if (list && list.table) {
-            list.table.reload();
-            list?.table.pageEvent(0)
-        }
-    }, [list])
 
-
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         clearFilterValues()
-        onReload()
-    }, [onReload])
+    }
 
 
     useEffect(() => {
