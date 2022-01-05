@@ -42,7 +42,7 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
     }
 
     const handleDisableReset = (): boolean => {
-        if (hcpTypes.length > 0 || status !== "" || (dateRange[0] !== null || dateRange[1] !== null)) return false
+        if (selectedHcpTypes?.length > 0 || (status !== "" && status !== null) || (dateRange[0] !== null || dateRange[1] !== null)) return false
         else {
             return true
         }

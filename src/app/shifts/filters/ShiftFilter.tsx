@@ -66,16 +66,16 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const isRequired = props?.isRequired
     const isInProgress = props?.isInProgress
 
+    const selectedFaciltities = props?.selectedFaciltities
     const selectedHcps = props?.selectedHcps
     const setSelectedHcps = props?.setSelectedHcps
-    const selectedTimeTypes = props?.selectedTimeTypes
-    const selectedStatusTypes = props?.selectedStatusTypes
-    const setSelectedTimeTypes = props?.setSelectedTimeTypes
-    const selectedFaciltities = props?.selectedFaciltities
-    const setSelectedFacilities = props?.setSelectedFacilities
-    const setSelectedStatusTypes = props?.setSelectedStatusTypes
-    const setStatusType = props?.setStatusType
     const statusType = props?.statusType
+    const selectedStatusTypes = props?.selectedStatusTypes
+    const selectedTimeTypes = props?.selectedTimeTypes
+    const setSelectedTimeTypes = props?.setSelectedTimeTypes
+    const setSelectedStatusTypes = props?.setSelectedStatusTypes
+    const setSelectedFacilities = props?.setSelectedFacilities
+    const setStatusType = props?.setStatusType
 
 
     const dateRange = props?.dateRange
@@ -120,13 +120,25 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
         setIsDropdownAndSelect(prevState => !prevState)
     }
 
+    const handleDisableReset = (): boolean => {
+        let isDisable = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
+        let additionalCheckIfNotMaster = !isMaster && (statusType !== "" && statusType !== null)
+        if (isDisable || additionalCheckIfNotMaster) return false
+        else {
+            return true
+        }
+    }
+
     return <div className="pdd-30 pdd-top-40 filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button onClick={() => {
-                resetFilters()
-                afterCancel()
-            }} color="secondary" id="btn_reset_filter">
+
+            <Button
+                disabled={handleDisableReset()}
+                onClick={() => {
+                    resetFilters()
+                    afterCancel()
+                }} color="secondary" id="btn_reset_filter">
                 {'Reset'}
             </Button>
         </div>
