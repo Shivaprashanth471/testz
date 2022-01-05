@@ -8,7 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import { DateRange, SearchRounded } from '@material-ui/icons';
+import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
@@ -173,7 +173,7 @@ const PendingShiftsListScreen = () => {
         </div>}
         <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
             <ShiftFilter
-                dateRange={DateRange}
+                dateRange={dateRange}
                 setDateRange={setDateRange}
                 regions={regions}
                 selectedRegion={selectedRegion}
