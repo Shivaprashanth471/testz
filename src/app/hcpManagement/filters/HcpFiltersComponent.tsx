@@ -41,13 +41,22 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
         setSelectedHcpTypes(filterdChips)
     }
 
+    const handleDisableReset = (): boolean => {
+        if (hcpTypes.length > 0 || status !== "" || (dateRange[0] !== null || dateRange[1] !== null)) return false
+        else {
+            return true
+        }
+    }
+
     return <div className="pdd-40 pdd-top-40 filters">
         <div className="dialog-header d-flex" >
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button onClick={() => {
-                resetFilters()
-                afterConfirm()
-            }} color="secondary" id="btn_reset_filter">
+            <Button
+                disabled={handleDisableReset()}
+                onClick={() => {
+                    resetFilters()
+                    afterConfirm()
+                }} color="secondary" id="btn_reset_filter">
                 {'Reset'}
             </Button>
         </div>

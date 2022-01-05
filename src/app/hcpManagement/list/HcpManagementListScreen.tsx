@@ -97,11 +97,11 @@ const HcpManagementListScreen = () => {
         setList({ table: tableWrapperObj });
     }, [selectedHcpTypes, dateRange, status])
 
-    const clearFilterValues = useCallback(() => {
+    const clearFilterValues = () => {
         setDateRange([null, null])
         setStatus("")
         selectedHcpTypes.length = 0
-    }, [selectedHcpTypes])
+    }
 
     const openFilters = useCallback((index: any) => {
         setOpen(true)
@@ -111,10 +111,9 @@ const HcpManagementListScreen = () => {
         setOpen(false)
     }, [])
 
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         clearFilterValues()
-        init()
-    }, [init, clearFilterValues])
+    }
 
     const confirmopenFilters = useCallback(() => {
         setOpen(false)

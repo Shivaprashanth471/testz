@@ -44,9 +44,9 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
     }
 
     const handleDisableReset = (): boolean => {
-        if (selectedRegions.length === 0 || status === "" || (dateRange[0] === null || dateRange[1] === null)) return true
+        if (selectedRegions.length !== 0 || status !== "" || (dateRange[0] !== null || dateRange[1] !== null)) { return false }
         else {
-            return false
+            return true
         }
     }
 

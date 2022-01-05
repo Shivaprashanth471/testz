@@ -119,11 +119,11 @@ const FacilityManagementListScreen = () => {
     setList({ table: tableWrapperObj });
   }, [role, selectedRegions, status, dateRange]);
 
-  const clearFilterValues = useCallback(() => {
+  const clearFilterValues = () => {
     setDateRange([null, null])
     setStatus('')
     selectedRegions.length = 0
-  }, [selectedRegions])
+  }
 
   const openFilters = useCallback((index: any) => {
     setOpen(true)
@@ -133,10 +133,9 @@ const FacilityManagementListScreen = () => {
     setOpen(false)
   }, [])
 
-  const resetFilters = useCallback(() => {
+  const resetFilters = () => {
     clearFilterValues()
-    onReload()
-  }, [onReload, clearFilterValues])
+  }
 
   const confirmopenFilters = useCallback(() => {
     setOpen(false)
