@@ -800,9 +800,10 @@ const EditHcpComponent = () => {
                 <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
                 <div className="file_details mrg-left-20 mrg-top-20">
                   <NormalTextField
+
                     required
                     label="Expires On:"
-                    type={"text"}
+                    type={"date"}
                     InputLabelProps={{ shrink: true }}
                     onChange={(event) => handleExpiryDate(event, item?.index)}
                     value={fileUpload?.wrapper[item?.index]?.extraPayload?.expiry_date}
@@ -845,7 +846,7 @@ const EditHcpComponent = () => {
               <div className="file_details mrg-left-20 mrg-top-20">
                 <NormalTextField
                   label="Expires On"
-                  type={"text"}
+                  type={"date"}
                   InputLabelProps={{ shrink: true }}
                   onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                   disabled
