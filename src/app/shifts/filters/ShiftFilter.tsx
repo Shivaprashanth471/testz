@@ -134,8 +134,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             <div className="form-field">
                 <FormLabel className={'form-label'}>{"Region"}</FormLabel>
                 {facilityList !== null ? <Autocomplete
-
-
                     PaperComponent={({ children }) => (
                         <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                     )}
