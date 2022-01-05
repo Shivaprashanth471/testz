@@ -135,8 +135,8 @@ const FacilityManagementListScreen = () => {
 
   const resetFilters = useCallback(() => {
     clearFilterValues()
-    init()
-  }, [init, clearFilterValues])
+    onReload()
+  }, [onReload, clearFilterValues])
 
   const confirmopenFilters = useCallback(() => {
     setOpen(false)

@@ -154,17 +154,10 @@ const CompletedShiftsListScreen = () => {
         setOpen(false)
     }, [])
 
-    const onReload = useCallback(() => {
-        if (list && list.table) {
-            list.table.reload();
-            list?.table.pageEvent(0)
-        }
-    }, [list])
 
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         clearFilterValues()
-        onReload()
-    }, [onReload])
+    }
 
     useEffect(() => {
         init()
