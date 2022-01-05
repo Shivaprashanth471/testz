@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import "./HcpDetailsComponent.scss";
-// import CustomFile from '../../../../components/shared/CustomFile';
 import { CommonService } from '../../../../../helpers';
 import { ENV } from '../../../../../constants';
 import { useParams } from 'react-router-dom';

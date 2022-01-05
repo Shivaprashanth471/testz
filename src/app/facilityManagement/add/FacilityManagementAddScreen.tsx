@@ -999,7 +999,7 @@ const FacilityManagementAddScreen = () => {
         </div>
       </div>
 
-      <div className="facility-actions mrg-top-10">
+      <div className="facility-actions mrg-top-60">
         <Button
           type="reset"
           size="large"

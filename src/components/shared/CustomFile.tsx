@@ -11,7 +11,6 @@ interface CustomFileProps {
 }
 
 const CustomFile = (props: CustomFileProps) => {
-    console.log(props?.data)
     const [open, setOpen] = React.useState(false);
     const previewFile = useCallback(() => {
         setOpen(true)
