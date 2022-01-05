@@ -38,7 +38,6 @@ const AddHcpBasicDetailsComponent = (props: any) => {
             getContentAnchorEl: null
         }
     }
-
     const previewFile = useCallback((index: any, type: any) => {
         if (type === "contract") {
             setPreviewFile(contractFile?.wrapper[0])
