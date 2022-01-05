@@ -112,11 +112,11 @@ const HcpApprovedListScreen = () => {
         setList({ table: tableWrapperObj });
     }, [role, selectedHcpTypes, dateRange, status])
 
-    const clearFilterValues = useCallback(() => {
+    const clearFilterValues = () => {
         setDateRange([null, null])
         setStatus("")
         selectedHcpTypes.length = 0
-    }, [selectedHcpTypes])
+    }
 
     const openFilters = useCallback((index: any) => {
         setOpen(true)
@@ -126,10 +126,9 @@ const HcpApprovedListScreen = () => {
         setOpen(false)
     }, [])
 
-    const resetFilters = useCallback(() => {
+    const resetFilters = () => {
         clearFilterValues()
-        init()
-    }, [init, clearFilterValues])
+    }
 
     const handletoggleStatus = useCallback((id: any, is_active) => {
         let payload = {
