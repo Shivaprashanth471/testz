@@ -164,8 +164,4 @@ export const hcpFormValidation = Yup.object({
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text")
   })
 
-<<<<<<< Updated upstream
 });
-=======
-});
->>>>>>> Stashed changes
