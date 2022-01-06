@@ -96,7 +96,7 @@ const FacilityMemberEditComponent = ({
     setIsMembers(false)
   };
 
-  const handleDeleteClick = (memberId: number) => {
+  const handleDeleteClick = useCallback((memberId: number) => {
     ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
       .then((resp: any) => {
         CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'error')
@@ -106,7 +106,7 @@ const FacilityMemberEditComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  };
+  },[getFacilityMembers,hcpId])
 
   const showDropDownBelowField = {
     MenuProps: {

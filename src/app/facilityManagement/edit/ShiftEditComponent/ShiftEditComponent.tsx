@@ -91,7 +91,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
     });
   };
 
-  const handleDeleteClick = (shiftId: number) => {
+  const handleDeleteClick = useCallback((shiftId: number) => {
     ApiService.delete(
       ENV.API_URL + "facility/" + facilityId + "/shift/" + shiftId
     )
@@ -103,7 +103,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       .catch((err) => {
         console.log(err);
       });
-  };
+  },[facilityId,getShiftDetails])
 
   // function formattedTime(time: any) {
   //   let timeInMins = CommonService.convertHoursToMinutes(time)

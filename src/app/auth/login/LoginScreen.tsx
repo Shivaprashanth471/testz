@@ -13,9 +13,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 
-const isEmail = new RegExp('^[^\s]+(\s+[^\s]+)*$')
 const loginFormValidation = Yup.object({
-  email: Yup.string().matches(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,"Invalid").required("Required"),
+  email: Yup.string().required("Required"),
   password: Yup.string().required("Required").min(6,"Password should be minimum 6 characters"),
 });
 
