@@ -23,7 +23,7 @@ const VitawerksConfirmComponent = (props: PropsWithChildren<VitawerksConfirmComp
             </div>
         </DialogTitle>
         <DialogActions className={'pdd-20 mrg-top-40'}>
-            <Button onClick={props?.cancel} variant={"outlined"} color={'primary'}>
+            <Button onClick={props?.cancel} variant={"outlined"} color={'primary'} className='pdd-left-25 pdd-right-25'>
                 {props?.notext || 'No, Cancel'}
             </Button>
             <Button onClick={props?.confirm} variant={"contained"} color={'primary'}>

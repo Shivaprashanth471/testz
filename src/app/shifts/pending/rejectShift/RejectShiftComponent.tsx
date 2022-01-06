@@ -88,7 +88,7 @@ const RejectShiftComponent = (props: PropsWithChildren<RejectShiftComponentProps
               validationSchema={formValidation} onSubmit={onAdd}>
               {({ isSubmitting, isValid, resetForm }) => (<Form className={'form-holder'}>
                   <DialogContent>
-                      <FormLabel component="legend" color={"primary"} className={classes.selectReason}>Select Reson</FormLabel>
+                      <FormLabel component="legend" color={"primary"} className={classes.selectReason}>Select Reason</FormLabel>
                       <Field component={RadioGroup} name="reason" id="radio_reason_reject" className="mrg-top-20">
                           <>
                               {reasonsList?.map((item: any) => {
