@@ -32,7 +32,6 @@ interface ShiftItem {
   start_time: string | number,
   end_time: string | number,
   shift_dates: any;
-  // end_date: any;
   shift_type: string;
   warning_type: string;
   hcp_count: string;
@@ -69,6 +68,7 @@ const AddShiftsScreen = () => {
 
   const [value, setValue] = useState<any>(null)
   const [mode, setMode] = useState('')
+
 
   const user: any = localStorage.getItem("currentUser");
   let currentUser = JSON.parse(user);
@@ -134,10 +134,11 @@ const AddShiftsScreen = () => {
       .min(1, 'min limit 1.')
       .max(25, 'max limit 25.').required('required'),
     shift_details: Yup.string().trim("empty space not allowed").required('required'),
-    // shift_timings: 
   });
 
   const handleFacilitySelect = (facility: any) => {
+    setShiftTimings([])
+
     if (facility) {
       setFacilityId(facility?._id)
       getFacilityShiftTimings(facility?._id)
@@ -147,12 +148,10 @@ const AddShiftsScreen = () => {
   }
 
   const formatShiftTimings = (item: any) => {
-    // console.log(item)
     let start = moment(CommonService.convertMinsToHrsMins(item?.shift_start_time), 'hh:mm').format('LT')
     let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), 'hh:mm').format('LT')
     let type = item?.shift_type
 
-    // console.log(start, end, type)
 
     return `${start} - ${end} (${type}-Shift)`
   }
@@ -220,7 +219,14 @@ const AddShiftsScreen = () => {
 
     let newShift;
 
-    console.log(shift_dates)
+    //check for absence of shift timings in shift req.
+    if (shiftTimings.length === 0) {
+      data.start_time = "";
+      data.end_time = "";
+      data.shift_type = "";
+
+      return
+    }
 
     if (mode === 'multiple') {
       newShift = {
@@ -321,6 +327,7 @@ const AddShiftsScreen = () => {
     !loading && !shiftLoading && !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
         {facilities !== null && <Autocomplete
+          disableClearable
           PaperComponent={({ children }) => (
             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
           )}
@@ -330,6 +337,7 @@ const AddShiftsScreen = () => {
           placeholder={"Select Facility"}
           id="input_select_facility"
           onChange={($event, value) => {
+
             handleFacilitySelect(value)
           }
           }
@@ -414,10 +422,11 @@ const AddShiftsScreen = () => {
                         fullWidth
                         onChange={(e: any) => {
                           const selectedShiftTiming = e.target.value
-                          console.log(selectedShiftTiming)
-                          setFieldValue('start_time', selectedShiftTiming?.shift_start_time)
-                          setFieldValue('end_time', selectedShiftTiming?.shift_end_time)
-                          setFieldValue('shift_type', selectedShiftTiming?.shift_type)
+                          if (shiftTimings.length > 0) {
+                            setFieldValue('start_time', selectedShiftTiming?.shift_start_time)
+                            setFieldValue('end_time', selectedShiftTiming?.shift_end_time)
+                            setFieldValue('shift_type', selectedShiftTiming?.shift_type)
+                          }
 
                         }}
                       >

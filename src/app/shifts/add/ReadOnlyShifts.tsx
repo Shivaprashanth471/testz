@@ -51,7 +51,8 @@ const ReadOnlyShifts = ({ mode, facilityOffset, item, setShifts, shifts }: readO
         <div className="shift-second-row shift-row mrg-top-30 ">
             <NormalTextField
                 variant='outlined'
-                value={`${moment(CommonService.convertMinsToHrsMins(item?.start_time), 'hh:mm').format('LT')} - ${moment(CommonService.convertMinsToHrsMins(item?.end_time), 'hh:mm').format('LT')}- ${item?.shift_type}`}
+                value={(item?.start_time || item?.end_time) ? `${moment(CommonService.convertMinsToHrsMins(item?.start_time), 'hh:mm').format('LT')} - ${moment(CommonService.convertMinsToHrsMins(item?.end_time), 'hh:mm').format('LT')}- ${item?.shift_type}` : "NA"}
+
                 fullWidth
                 disabled
                 label="Shift Timing & Shift Type"
