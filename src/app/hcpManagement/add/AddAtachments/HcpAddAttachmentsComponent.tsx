@@ -12,7 +12,6 @@ const HcpAddAttachmentsComponent = (props:any) => {
     const previewFile = props?.previewFile;
     const required_attachments = props?.required_attachments;
     const setRequiredAttachments = props?.setRequiredAttachments;
-    const myMaxDate = new Date('2999-01-01');
     
       const OnFileSelected = (files: File[], index: any) => {
         if (required_attachments[index]) {
