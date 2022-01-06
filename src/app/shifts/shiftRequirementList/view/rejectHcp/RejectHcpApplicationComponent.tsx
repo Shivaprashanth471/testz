@@ -80,7 +80,7 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
                 validationSchema={formValidation} onSubmit={onAdd}>
                 {({ isSubmitting, isValid, resetForm }) => (<Form className={'form-holder'}>
                     <DialogContent>
-                        <FormLabel component="legend">Select Reson</FormLabel>
+                        <FormLabel component="legend">Select Reason</FormLabel>
                         <Field component={RadioGroup} name="reason" id="radio_reason_reject" className="mrg-top-20">
                             <>
                                 {reasonsList?.map((item: any) => {

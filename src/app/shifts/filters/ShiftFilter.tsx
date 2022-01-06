@@ -119,11 +119,12 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const handleRegionLabelAndIconToggle = () => {
         setIsDropdownAndSelect(prevState => !prevState)
     }
+    let regularCheckForAllFields = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
+    let checkForStatusField = noMultiStatus ? false : !isMaster && (statusType !== "" && statusType !== null)
+
 
     const handleDisableReset = (): boolean => {
-        let isDisable = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
-        let additionalCheckIfNotMaster = !isMaster && (statusType !== "" && statusType !== null)
-        if (isDisable || additionalCheckIfNotMaster) return false
+        if (regularCheckForAllFields || checkForStatusField) { return false }
         else {
             return true
         }
@@ -132,6 +133,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     return <div className="pdd-30 pdd-top-40 filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
+
 
             <Button
                 disabled={handleDisableReset()}
@@ -289,21 +291,23 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             <div className="form-field mrg-top-20">
                 <FormLabel className={'form-label'}>{formatDateFieldLabel()}</FormLabel>
                 <div className="mrg-top-10 date-range-picker">
-                    <DatePicker
-                        dateFormat="MM/dd/yyyy"
-                        placeholderText="Select Date"
-                        className='custom-input'
-                        selectsRange={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                        onChange={(update) => {
-                            setDateRange(update);
-                        }}
-                        isClearable={true}
-                    />
-                    {
-                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
-                    }
+                    <label>
+                        <DatePicker
+                            dateFormat="MM/dd/yyyy"
+                            placeholderText="Select Date"
+                            className='custom-input'
+                            selectsRange={true}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onChange={(update) => {
+                                setDateRange(update);
+                            }}
+                            isClearable={true}
+                        />
+                        {
+                            (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
+                        }
+                    </label>
 
                 </div>
                 <div className="form-field mrg-top-20">

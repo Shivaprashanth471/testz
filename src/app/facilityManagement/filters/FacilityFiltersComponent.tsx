@@ -133,21 +133,23 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
             <div className="form-field mrg-top-20">
                 <FormLabel className={'form-label'}>{('Created On')}</FormLabel>
                 <div className="mrg-top-10 date-range-picker">
-                    <DatePicker
-                        dateFormat="MM/dd/yyyy"
-                        placeholderText="Select Date"
-                        className='custom-input'
-                        selectsRange={true}
-                        startDate={startDate}
-                        endDate={endDate}
-                        onChange={(update) => {
-                            setDateRange(update);
-                        }}
-                        isClearable={true}
-                    />
-                    {
-                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='large' color='action' />
-                    }
+                    <label>
+                        <DatePicker
+                            dateFormat="MM/dd/yyyy"
+                            placeholderText="Select Date"
+                            className='custom-input'
+                            selectsRange={true}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onChange={(update) => {
+                                setDateRange(update);
+                            }}
+                            isClearable={true}
+                        />
+                        {
+                            (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
+                        }
+                    </label>
 
                 </div>
             </div>

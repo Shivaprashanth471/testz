@@ -95,7 +95,7 @@ const RequirementsShiftsViewScreen = () => {
                 <div className="actions">
                     {basicDetails?.status !== "cancelled" ?
                         <Button variant={"contained"} onClick={openRejectShift} color={"primary"} >
-                            Cancel Shift Requirment
+                            Cancel Shift Requirement
                         </Button> : <p className='status-header'>Status:&nbsp;<span className='status'>Cancelled</span></p>}
                 </div>
             </div>

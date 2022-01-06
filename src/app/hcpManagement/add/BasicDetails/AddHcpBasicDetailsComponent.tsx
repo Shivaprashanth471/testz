@@ -190,7 +190,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                                     inputVariant='outlined' component={DatePicker} required={contractFile?.wrapper[0]?.file} placeholder="MM/DD/YYYY" fullWidth
                                     autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="signed_on"/>
                                 <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit" fullWidth autoComplete="off" 
-                                InputLabelProps={{ shrink: true }} label="Salary Credit" required={contractFile?.wrapper[0]?.file} name="salary_credit_date"/>
+                                InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file} name="salary_credit_date"/>
                             </div>
                         </div>
 

@@ -101,7 +101,9 @@ const facilityFormValidation = Yup.object({
   email: Yup.string()
     .typeError(" must be a text")
     .email("invalid"),
-  phone_number: Yup.number().typeError(" must be a number").required('required'),
+  phone_number: Yup.string()
+    .min(12, "min 10 digits")
+    .required("required"),
   extension_number: Yup.number().typeError(" must be a number"),
   website_url: Yup.string()
     .typeError(" must be a text")
@@ -459,7 +461,7 @@ const FacilityManagementEditScreen = () => {
         file: file,
         fileFieldName: 'Data',
         uploadUrl: ENV.API_URL + 'facility/add',
-        allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
+        allowed_types: ['jpg', 'png', 'csv', 'pdf', 'jpeg'],
         extraPayload: { expiry_date: '' }
       };
       const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
@@ -1059,7 +1061,7 @@ const FacilityManagementEditScreen = () => {
         />
       </div>
 
-      <div className="facility-actions mrg-top-10">
+      <div className="facility-actions mrg-top-60">
         <Button
           size="large"
           variant={"outlined"}

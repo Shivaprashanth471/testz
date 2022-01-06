@@ -14,7 +14,7 @@ import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 
 const loginFormValidation = Yup.object({
-  email: Yup.string().trim().required("Required"),
+  email: Yup.string().required("Required"),
   password: Yup.string().required("Required").min(6,"Password should be minimum 6 characters"),
 });
 

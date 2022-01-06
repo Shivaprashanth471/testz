@@ -161,7 +161,9 @@ const facilityFormValidation = Yup.object({
   email: Yup.string()
     .typeError(" must be a text")
     .email("invalid"),
-  phone_number: Yup.number().typeError(" must be a number").required('required'),
+  phone_number: Yup.string()
+    .min(12, "min 10 digits")
+    .required("required"),
   extension_number: Yup.number().typeError(" must be a number"),
   website_url: Yup.string()
     .typeError(" must be a text")
@@ -281,7 +283,7 @@ const FacilityManagementAddScreen = () => {
         file: file,
         fileFieldName: 'image',
         uploadUrl: ENV.API_URL + 'facility/add',
-        allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
+        allowed_types: ['jpg', 'png', 'csv', 'pdf', 'jpeg'],
       };
       const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
         // console.log(state);
@@ -558,9 +560,9 @@ const FacilityManagementAddScreen = () => {
                       ))}
                   </Field>
 
-                  <div className="flex-1 d-flex">
+                  <div className="flex-1 d-flex" >
                     <div className="phone-number">
-                      <Field name={'phone_number'} variant="outlined" inputProps={{ maxLength: 10 }} className="flex-1" id='phone_num' style={{ font: "inherit" }}>
+                      <Field name={'phone_number'} variant="outlined" inputProps={{ maxLength: 10 }} id='phone_num' style={{ font: "inherit" }}>
                         {(field: FieldProps) => {
                           return <PhoneInputComponent field={field} placeholder={'Enter Phone number*'} />
                         }}
@@ -577,6 +579,7 @@ const FacilityManagementAddScreen = () => {
                         id="input_facility_add_extension_number"
                       />
                     </div>
+
                   </div>
 
                 </div>
