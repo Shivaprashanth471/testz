@@ -39,7 +39,7 @@ const HcpContractComponent = (props: any) => {
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit</h4>
-                                <p>{moment(contractDetails?.salary_credit_date).format('MMMM, YYYY')}</p>
+                                <p>{contractDetails?.salary_credit_date}</p>
                             </div>
                             <div className="flex-1">
 
