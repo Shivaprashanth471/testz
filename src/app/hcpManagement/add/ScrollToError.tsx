@@ -6,8 +6,9 @@ export function ScrollToError() {
     const submitting = formik?.isSubmitting;
 
     useEffect(() => {
-        const el = document.querySelector('.Mui-error, [data-error]');
-        (el?.parentElement?.parentElement?.parentElement)?.scrollIntoView();
+        const el = document.querySelector('.Mui-error, [data-error],.form-error');
+
+        (el?.parentElement?.parentElement?.parentElement?.parentElement)?.scrollIntoView();
     }, [submitting]);
     return null;
 }

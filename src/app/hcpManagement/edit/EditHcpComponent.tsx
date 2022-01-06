@@ -660,7 +660,7 @@ const EditHcpComponent = () => {
     }
     CommonService.showToast("Hcp attachment Removed", 'info');
   }
-  
+
   if (isLoading || specIsLoading || regIsLoading || hcpTypesLoading || isAttachmentsLoading) {
     return <div className="add-hcp screen">
       <div className="view-loading-indicator">

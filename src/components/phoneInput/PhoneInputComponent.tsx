@@ -15,6 +15,8 @@ const PhoneInputComponent = (props: PhoneInputComponentProps) => {
     const international = props.international === undefined ? false : props.international;
     return (
         <div className={'position-relative'}><PhoneInput
+            required={form?.errors?.[field.name] === 'required'}
+            name={field?.name}
             inputMode={"tel"} className={'tel-input-holder'}
             international={international}
             defaultCountry="US"
@@ -38,6 +40,12 @@ const PhoneInputComponent = (props: PhoneInputComponentProps) => {
             <ErrorMessage name={field.name}
                 className={'form-error MuiFormHelperText-root MuiFormHelperText-contained Mui-error'}
                 component="div" />
+
+            {
+                form?.errors?.[field.name] === 'required' && <ErrorMessage name={field.name}
+                    className={'form-error MuiFormHelperText-root MuiFormHelperText-contained Mui-error'}
+                    component="div" />
+            }
         </div>
     )
 }
