@@ -702,51 +702,51 @@ const EditHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-    const AddHcp=()=>{
-    hcp.contact_number = hcp?.contact_number?.toLowerCase();
-    let rate_per_hour = hcp?.rate_per_hour;
-    let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
-    let payload: any = hcp
-    delete payload[rate_per_hour]
-    delete payload[signed_on]
-    delete payload[salary_credit_date]
+    const AddHcp = () => {
+      hcp.contact_number = hcp?.contact_number?.toLowerCase();
+      let rate_per_hour = hcp?.rate_per_hour;
+      let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
+      let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
+      let payload: any = hcp
+      delete payload[rate_per_hour]
+      delete payload[signed_on]
+      delete payload[salary_credit_date]
 
-    payload = {
-      ...payload, professional_details: {
-        ...payload?.professional_details, experience: expInYears, speciality: specialities
-      }
-    }
-    ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
-      console.log(resp);
-      if (resp && resp.success) {
-        if (contractFile?.wrapper[0]?.file) {
-          handleContractUpload(id, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors)
+      payload = {
+        ...payload, professional_details: {
+          ...payload?.professional_details, experience: expInYears, speciality: specialities
         }
-        handleAttachmentsUpload(id, resp)
-
-      } else {
-        setSubmitting(false);
-        setIsHcpSubmitting(false)
       }
-    })
-      .catch((err) => {
-        console.log(err)
-        CommonService.handleErrors(setErrors, err);
-        setSubmitting(false);
-        setIsHcpSubmitting(false)
+      ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          if (contractFile?.wrapper[0]?.file) {
+            handleContractUpload(id, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors)
+          }
+          handleAttachmentsUpload(id, resp)
 
-      });
-   }
-    if(contractFile?.wrapper[0]?.file){
-      if(hcp?.signed_on){
+        } else {
+          setSubmitting(false);
+          setIsHcpSubmitting(false)
+        }
+      })
+        .catch((err) => {
+          console.log(err)
+          CommonService.handleErrors(setErrors, err);
+          setSubmitting(false);
+          setIsHcpSubmitting(false)
+
+        });
+    }
+    if (contractFile?.wrapper[0]?.file) {
+      if (hcp?.signed_on) {
         AddHcp()
-      }else{
+      } else {
         CommonService.showToast("Please fill Signed On", "info")
         setSubmitting(false);
         setIsHcpSubmitting(false)
       }
-    }else{
+    } else {
       AddHcp()
     }
   };
@@ -800,7 +800,9 @@ const EditHcpComponent = () => {
                 <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
                 <div className="file_details mrg-left-20 mrg-top-20">
                   <NormalTextField
-
+                    inputProps={{
+                      max: '2999-01-01'
+                    }}
                     required
                     label="Expires On:"
                     type={"date"}
@@ -849,6 +851,9 @@ const EditHcpComponent = () => {
                   InputLabelProps={{ shrink: true }}
                   onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                   disabled
+                  inputProps={{
+                    max: '2999-01-01'
+                  }}
                   value={item.expiry_date}
                 />
                 <div className="file_actions">

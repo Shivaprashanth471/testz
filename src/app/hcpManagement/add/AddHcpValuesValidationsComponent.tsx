@@ -162,4 +162,4 @@ export const AddHcpInitialValues={
       other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text")
     })
 
-  });
+});

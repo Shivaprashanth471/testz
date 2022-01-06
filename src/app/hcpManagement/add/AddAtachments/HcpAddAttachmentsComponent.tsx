@@ -12,7 +12,8 @@ const HcpAddAttachmentsComponent = (props:any) => {
     const previewFile = props?.previewFile;
     const required_attachments = props?.required_attachments;
     const setRequiredAttachments = props?.setRequiredAttachments;
-   
+    const myMaxDate = new Date('2999-01-01');
+    
       const OnFileSelected = (files: File[], index: any) => {
         if (required_attachments[index]) {
           required_attachments[index].index = fileUpload?.wrapper?.length || 0
@@ -103,6 +104,9 @@ const HcpAddAttachmentsComponent = (props:any) => {
                                   onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                                   value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
                                   disabled={index === 5}
+                                  inputProps={{
+                                  max:'2999-01-01'
+                                  }}
                                 />
                                 <div className="file_actions d-flex">
                                   <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
