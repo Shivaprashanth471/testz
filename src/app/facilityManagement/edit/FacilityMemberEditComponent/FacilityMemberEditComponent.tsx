@@ -9,8 +9,10 @@ import {
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import * as Yup from "yup";
+import DialogComponent from "../../../../components/DialogComponent";
+import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { designationNames } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
@@ -67,9 +69,8 @@ const FacilityMemberEditComponent = ({
 }: FacilityMemberEditComponentProps) => {
   const [isMembers, setIsMembers] = useState<boolean>(false);
   const [fieldType, setFieldType] = useState<boolean>(false);
-
-
-
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [facilityId, setFacilityId] = useState<any>(null);
 
   const onAdd = (
     member: MemberType,
@@ -100,6 +101,7 @@ const FacilityMemberEditComponent = ({
       .then((resp: any) => {
         CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'error')
         getFacilityMembers();
+        setIsAddOpen(false);
       })
       .catch((err) => {
         console.log(err);
@@ -116,8 +118,24 @@ const FacilityMemberEditComponent = ({
     }
   }
 
+  const openAdd = useCallback((id: any) => {
+    setFacilityId(id)
+    setIsAddOpen(true);
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    handleDeleteClick(facilityId)
+  }, [facilityId, handleDeleteClick])
+
   return (
     <div className="facility-add-container">
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Facility Member'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+      </DialogComponent>
       {members.length > 0 && (
         <Table className="mrg-top-50">
           <TableHead>
@@ -135,7 +153,7 @@ const FacilityMemberEditComponent = ({
               <ReadOnlyRow
                 key={member?._id}
                 member={member}
-                handleDeleteClick={handleDeleteClick}
+                openAdd={openAdd}
               />
             ))}
           </TableBody>

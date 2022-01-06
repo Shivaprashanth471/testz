@@ -1059,7 +1059,7 @@ const FacilityManagementEditScreen = () => {
         />
       </div>
 
-      <div className="facility-actions mrg-top-10">
+      <div className="facility-actions mrg-top-60">
         <Button
           size="large"
           variant={"outlined"}

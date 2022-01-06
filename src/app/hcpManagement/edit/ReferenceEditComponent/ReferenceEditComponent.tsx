@@ -213,8 +213,6 @@ const ReferenceAddComponent = ({
                     label="Email (optional)"
                     id="input_hcp_edit_reference_email"
                   />
-
-
                 </div>
 
                 <div className="hcp-common-btn-grp">

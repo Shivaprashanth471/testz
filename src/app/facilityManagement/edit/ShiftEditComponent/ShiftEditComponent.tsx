@@ -4,9 +4,11 @@ import {
   TableHead,
   TableRow
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import DialogComponent from "../../../../components/DialogComponent";
 import CustomSelect from "../../../../components/shared/CustomSelect";
 import CustomTextField from "../../../../components/shared/CustomTextField";
+import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { shiftType } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
@@ -23,15 +25,10 @@ type ShiftEditComponentProps = {
   setShiftTimings: any;
 };
 
-const ShiftEditComponent = ({
-  timezone,
-  facilityId,
-  getShiftDetails,
-  shiftTimings,
-  setShiftTimings,
-  onAddShift,
-}: ShiftEditComponentProps) => {
+const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTimings, setShiftTimings, onAddShift, }: ShiftEditComponentProps) => {
   const [isShifts, setIsShifts] = useState<boolean>(false);
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [shiftId, setShiftId] = useState<any>(null);
   const [addFormData, setAddFormData] = useState<any>({
     shiftStartTime: "",
     shiftEndTime: "",
@@ -101,6 +98,7 @@ const ShiftEditComponent = ({
       .then((resp: any) => {
         CommonService.showToast('Facility Shift Timing Deleted', 'error')
         getShiftDetails();
+        setIsAddOpen(false);
       })
       .catch((err) => {
         console.log(err);
@@ -113,8 +111,25 @@ const ShiftEditComponent = ({
   // }
 
 
+  const openAdd = useCallback((id: any) => {
+    setShiftId(id)
+    setIsAddOpen(true);
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    handleDeleteClick(shiftId)
+  }, [shiftId, handleDeleteClick])
+
+
   return (
     <div className="shift-add-container">
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Shift'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+      </DialogComponent>
       {shiftTimings.length > 0 && (
         <Table className="mrg-top-50">
           <TableHead>
@@ -131,7 +146,7 @@ const ShiftEditComponent = ({
                 timezone={timezone}
                 key={shiftTiming?._id}
                 shiftTimings={shiftTiming}
-                handleDeleteClick={handleDeleteClick}
+                openAdd={openAdd}
               />
             ))}
           </TableBody>

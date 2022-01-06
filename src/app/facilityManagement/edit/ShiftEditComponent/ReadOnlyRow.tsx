@@ -7,10 +7,10 @@ import { CommonService } from "../../../../helpers";
 interface readOnlyRowProps {
   timezone: any;
   shiftTimings: any;
-  handleDeleteClick: any;
+  openAdd: any;
 }
 
-const ReadOnlyRow = ({ timezone, shiftTimings, handleDeleteClick }: readOnlyRowProps) => {
+const ReadOnlyRow = ({ timezone, shiftTimings, openAdd }: readOnlyRowProps) => {
   const start_time_to_show = moment(CommonService.convertMinsToHrsMins(shiftTimings.shift_start_time), 'hh:mm').format('LT')
   const end_time_to_show = moment(CommonService.convertMinsToHrsMins(shiftTimings.shift_end_time), 'hh:mm').format('LT');
 
@@ -70,7 +70,7 @@ const ReadOnlyRow = ({ timezone, shiftTimings, handleDeleteClick }: readOnlyRowP
       </td>
 
       <td>
-        <IconButton onClick={() => handleDeleteClick(shiftTimings?._id)}>
+        <IconButton onClick={() => openAdd(shiftTimings?._id)}>
           <DeleteIcon className="delete-icon" />
         </IconButton>
       </td>

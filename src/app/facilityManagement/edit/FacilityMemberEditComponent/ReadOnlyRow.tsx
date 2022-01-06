@@ -4,10 +4,10 @@ import React from "react";
 
 interface readOnlyRowProps {
   member: any;
-  handleDeleteClick: any;
+  openAdd: any;
 }
 
-const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
+const ReadOnlyRow = ({ member, openAdd }: readOnlyRowProps) => {
   return (
     <TableRow>
       <td>
@@ -61,7 +61,7 @@ const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
       </td>
 
       <td>
-        <IconButton onClick={() => handleDeleteClick(member?._id)}>
+        <IconButton onClick={() => openAdd(member?._id)}>
           <Delete className="delete-icon" />
         </IconButton>
       </td>
