@@ -171,7 +171,6 @@ const AddShiftsScreen = () => {
   }, []);
 
   const addShiftsRequirement = useCallback(async () => {
-
     let promArray = []
     try {
       for (let i = 0; i < shifts.length; i++) {
@@ -182,11 +181,9 @@ const AddShiftsScreen = () => {
         CommonService.showToast(resp.length + ' Shift Requirement Created' || "Success");
         setTimeout(() => history.push('/shiftrequirementMaster/list'), 200)
       }).catch(err => {
-        CommonService.showToast(err?.msg || "Error,Please check the Date Range format", "error");
+        CommonService.showToast(err?.msg || "Error", "error");
         setDoubleClick(false)
       })
-
-
     } catch (error: any) {
       CommonService.showToast(error?.msg || "Error", "error");
       setDoubleClick(false)
@@ -200,8 +197,6 @@ const AddShiftsScreen = () => {
     addShiftsRequirement()
 
   }
-
-
 
   const onAdd = (
     data: any,
@@ -224,6 +219,8 @@ const AddShiftsScreen = () => {
     })
 
     let newShift;
+
+    console.log(shift_dates)
 
     if (mode === 'multiple') {
       newShift = {
@@ -255,7 +252,7 @@ const AddShiftsScreen = () => {
         facility_id: facilityId,
         requirement_owner_id: currentUser._id,
         start_date: shift_dates[0],
-        end_date: shift_dates[1],
+        end_date: shift_dates[1] ? shift_dates[1] : shift_dates[0],
         shift_type: data.shift_type,
         warning_type: data.warning_type,
         hcp_count: data.hcp_count,
@@ -439,6 +436,7 @@ const AddShiftsScreen = () => {
                     <div className='shift-second-row shift-row mrg-top-30'>
                       <div className="shift-mode">
                         <Field
+                          SelectProps={showDropDownBelowField}
                           id='input_shift_requirement_mode'
                           variant='outlined'
                           onChange={(e: any) => {
@@ -462,7 +460,6 @@ const AddShiftsScreen = () => {
                       </div>
                       <div className='shift-calender'>
                         <Field
-
                           disabled={!mode ? true : false}
                           required
                           inputClass='custom-input'
