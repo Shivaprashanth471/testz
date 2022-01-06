@@ -190,7 +190,9 @@ const EditHcpComponent = () => {
     first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required"),
     last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required"),
     email: Yup.string().typeError(" must be a text").email("invalid").trim("empty space not allowed").required("required"),
-    contact_number: Yup.number().typeError("must be a number").required(),
+    contact_number: Yup.string()
+      .min(12, "min 10 digits")
+      .required("required"),
     hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
     about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
