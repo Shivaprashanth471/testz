@@ -483,7 +483,12 @@ const AddHcpComponent = () => {
         />
       </div>
       <div className="add-hcp-actions mrg-top-80">
-        <Button size="large" onClick={openAdd} variant={"outlined"} color="primary" id="btn_hcp_add_cancel">{"Cancel"}</Button>
+        <Button
+          size="large"
+          onClick={openAdd}
+          variant={"outlined"}
+          color="primary"
+          id="btn_hcp_add_cancel">{"Cancel"}</Button>
         <Button
           disabled={isHcpSubmitting}
           form="add-hcp-form"

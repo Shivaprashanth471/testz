@@ -3,7 +3,7 @@ import { Field, FieldProps, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import 'react-phone-number-input/style.css';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import PhoneInputComponent from "../../../components/phoneInput/PhoneInputComponent";
 import { ENV } from "../../../constants";
@@ -19,6 +19,7 @@ import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import ScrollToTop from "react-scroll-to-top";
 import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -258,6 +259,7 @@ const FacilityManagementAddScreen = () => {
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false)
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const previewFile = useCallback((index: any) => {
     setPreviewFile(fileUpload?.wrapper[index])
@@ -448,6 +450,18 @@ const FacilityManagementAddScreen = () => {
       });
   }, []);
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push('/facility/list')
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Facility");
     Communications.pageBackButtonSubject.next(null);
@@ -465,6 +479,8 @@ const FacilityManagementAddScreen = () => {
   }
 
 
+
+
   if (regIsLoading) {
     return <div className="facility-main  screen">
       <div className="view-loading-indicator">
@@ -476,6 +492,9 @@ const FacilityManagementAddScreen = () => {
     !regIsLoading && <div className="facility-main  screen">
       <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
         <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
+      </DialogComponent>
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+        <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
       </DialogComponent>
       <div className="form-container mrg-top-30">
         <Formik
@@ -1008,9 +1027,8 @@ const FacilityManagementAddScreen = () => {
           size="large"
           variant={"outlined"}
           className={"normal"}
-          component={Link}
           color="primary"
-          to={`/facility/list`}
+          onClick={openAdd}
           id='btn_facility_add_cancel'
         >
           Cancel
@@ -1026,7 +1044,6 @@ const FacilityManagementAddScreen = () => {
           id='btn_facility_add_submit'
         >
           {isFacilitySubmitting ? "Saving" : "Save"}
-
         </Button>
       </div>
       <ScrollToTop smooth color="white" />
