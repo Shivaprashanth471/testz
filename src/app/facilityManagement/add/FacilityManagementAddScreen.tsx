@@ -450,7 +450,7 @@ const FacilityManagementAddScreen = () => {
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Facility");
-    Communications.pageBackButtonSubject.next("/facility/list");
+    Communications.pageBackButtonSubject.next(null);
     getRegions();
   }, [getRegions]);
 

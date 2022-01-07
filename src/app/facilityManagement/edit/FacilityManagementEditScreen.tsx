@@ -451,7 +451,7 @@ const FacilityManagementEditScreen = () => {
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Edit Facility");
-    Communications.pageBackButtonSubject.next("/facility/list");
+    Communications.pageBackButtonSubject.next(null);
   }, []);
 
   const onFileSelected = (files: File[]) => {
