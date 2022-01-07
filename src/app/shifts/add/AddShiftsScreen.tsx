@@ -12,9 +12,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import DatePickers from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import * as Yup from "yup";
+import DialogComponent from "../../../components/DialogComponent";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import {
   calenderMode, warningZone
@@ -65,6 +67,7 @@ const AddShiftsScreen = () => {
   const [isShifts, setIsShifts] = useState<boolean>(false);
   const [doubleClick, setDoubleClick] = useState<boolean>(false);
   const [hcpTypes, setHcpTypes] = useState<any>([])
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const [value, setValue] = useState<any>(null)
   const [mode, setMode] = useState('')
@@ -207,7 +210,6 @@ const AddShiftsScreen = () => {
       return
     }
 
-
     let shift_dates = value.map((item: any) => {
       let mm = item?.month?.number
       let dd = item?.day
@@ -282,6 +284,19 @@ const AddShiftsScreen = () => {
     handleCancelAdd()
   };
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push(`/shiftrequirementMaster/list`)
+
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Shift Requirement");
     Communications.pageBackButtonSubject.next('/shiftrequirementMaster/list');
@@ -326,6 +341,9 @@ const AddShiftsScreen = () => {
   return (
     !loading && !shiftLoading && !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
+        <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+        </DialogComponent>
         {facilities !== null && <Autocomplete
           disableClearable
           PaperComponent={({ children }) => (
@@ -521,7 +539,6 @@ const AddShiftsScreen = () => {
                         label="No of HCPs"
                         fullWidth
                       />
-
                     </div>
 
                     <div className="shift-third-row mrg-top-30">
@@ -585,9 +602,8 @@ const AddShiftsScreen = () => {
               size="large"
               variant={"outlined"}
               className={"normal"}
-              component={Link}
               color={"primary"}
-              to={`/shiftrequirementMaster/list`}
+              onClick={openAdd}
             >
               Cancel
             </Button>
