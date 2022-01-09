@@ -16,6 +16,7 @@ import ScrollToTop from "react-scroll-to-top";
 import { FacilityItemAddType } from "./FacilityInitialAndValidationsComponent";
 import FacilityAddDetailsComponent from "./BasicDetails/FacilityAddDetailsComponent";
 
+
 const FacilityManagementAddScreen = () => {
   const history = useHistory();
   const [members, setMembers] = useState<any[]>([]);
