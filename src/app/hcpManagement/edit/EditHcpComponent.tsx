@@ -1,4 +1,4 @@
-import {  Button, CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -16,8 +16,9 @@ import VolunteerExperienceEditComponent from "./VolunteerExperienceEditComponent
 import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
-import {  HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
+import { HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
 import EditHcpBasicDetailsComponent from "./BasicDetails/EditHcpBasicDetailsComponent";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 const EditHcpComponent = () => {
   const user: any = localStorage.getItem("currentUser");
@@ -47,6 +48,7 @@ const EditHcpComponent = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [isContractDeleted, SetIsContractDeleted] = useState<boolean>(false);
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
@@ -362,10 +364,10 @@ const EditHcpComponent = () => {
   useEffect(() => {
     if (hcpDetails?.status === "approved") {
       Communications.pageTitleSubject.next("Edit HCP");
-      Communications.pageBackButtonSubject.next("/hcp/user/list");
+      Communications.pageBackButtonSubject.next(null);
     } else {
       Communications.pageTitleSubject.next("Edit HCP");
-      Communications.pageBackButtonSubject.next("/hcp/list");
+      Communications.pageBackButtonSubject.next(null);
     }
   }, [hcpDetails?.status]);
 
@@ -661,6 +663,18 @@ const EditHcpComponent = () => {
     CommonService.showToast("Hcp attachment Removed", 'info');
   }
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    hcpDetails?.is_approved === true ? history.push('/hcp/user/view/' + hcpDetails?.user_id) : history.push('/hcp/view/' + id)
+  }, [history, hcpDetails?.is_approved, hcpDetails?.user_id, id])
+
   if (isLoading || specIsLoading || regIsLoading || hcpTypesLoading || isAttachmentsLoading) {
     return <div className="add-hcp screen">
       <div className="view-loading-indicator">
@@ -678,6 +692,9 @@ const EditHcpComponent = () => {
         <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
           <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
         </DialogComponent>
+        <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+        </DialogComponent>
         <EditHcpBasicDetailsComponent
           isContractDeleted={isContractDeleted}
           contractFile={contractFile}
@@ -693,13 +710,13 @@ const EditHcpComponent = () => {
           deleteContractFile={deleteContractFile}
           OnFileSelected={OnFileSelected}
           deleteAttachment={deleteAttachment}
-          isDeleted = {isDeleted}
+          isDeleted={isDeleted}
           attachmentsDetails={attachmentsDetails}
-          deleteContractFileApi = {deleteContractFileApi}
-          previewFile = {previewFile}
-          contractDetails ={contractDetails}
-          handleExpiryDate = {handleExpiryDate}
-          deleteLocalAttachment = {deleteLocalAttachment} />
+          deleteContractFileApi={deleteContractFileApi}
+          previewFile={previewFile}
+          contractDetails={contractDetails}
+          handleExpiryDate={handleExpiryDate}
+          deleteLocalAttachment={deleteLocalAttachment} />
 
         <div className="mrg-top-0 custom-border ">
           <p className='card-header'>Education</p>
@@ -750,7 +767,7 @@ const EditHcpComponent = () => {
         <div className="add-hcp-actions mrg-top-80">
           <Button
             size="large"
-            onClick={() => hcpDetails?.is_approved === true ? history.push('/hcp/user/view/' + hcpDetails?.user_id) : history.push('/hcp/view/' + id)}
+            onClick={openAdd}
             variant={"outlined"}
             color="primary"
             id="btn_hcp_edit_cancel">Cancel</Button>

@@ -27,6 +27,7 @@ const FacilityManagementAddScreen = () => {
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false)
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const previewFile = useCallback((index: any) => {
     setPreviewFile(fileUpload?.wrapper[index])
@@ -217,9 +218,21 @@ const FacilityManagementAddScreen = () => {
       });
   }, []);
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push('/facility/list')
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Facility");
-    Communications.pageBackButtonSubject.next("/facility/list");
+    Communications.pageBackButtonSubject.next(null);
     getRegions();
   }, [getRegions]);
 
@@ -234,6 +247,9 @@ const FacilityManagementAddScreen = () => {
     !regIsLoading && <div className="facility-main  screen">
       <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
         <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
+      </DialogComponent>
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+        <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
       </DialogComponent>
       <div className="form-container mrg-top-30">
         <FacilityAddDetailsComponent onAdd={onAdd} regions={regions} americanTimeZone={americanTimeZone} fileUpload={fileUpload} previewFile={previewFile} deleteFile={deleteFile} OnFileSelected={OnFileSelected} otHours={otHours}/>
@@ -260,9 +276,8 @@ const FacilityManagementAddScreen = () => {
           size="large"
           variant={"outlined"}
           className={"normal"}
-          component={Link}
           color="primary"
-          to={`/facility/list`}
+          onClick={openAdd}
           id='btn_facility_add_cancel'
         >
           Cancel
@@ -278,7 +293,6 @@ const FacilityManagementAddScreen = () => {
           id='btn_facility_add_submit'
         >
           {isFacilitySubmitting ? "Saving" : "Save"}
-
         </Button>
       </div>
       <ScrollToTop smooth color="white" />

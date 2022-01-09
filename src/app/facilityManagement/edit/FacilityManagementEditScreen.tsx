@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, CircularProgress, MenuItem, Typography } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers, FieldProps } from "formik";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { americanTimeZone, otHours } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
@@ -19,6 +19,7 @@ import ScrollToTop from "react-scroll-to-top";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import DialogComponent from "../../../components/DialogComponent";
 import { ScrollToError } from "../../hcpManagement/add/ScrollToError";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 interface FacilityItemAddType {
   facility_uid: string;
@@ -206,6 +207,7 @@ const FacilityManagementEditScreen = () => {
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false)
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const facilityInitialState: FacilityItemAddType = {
     facility_uid: facilityDetails?.facility_uid,
@@ -343,6 +345,18 @@ const FacilityManagementEditScreen = () => {
       });
   }, [id]);
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push(`/facility/view/${id}`)
+  }, [id, history])
+
   useEffect(() => {
     init();
     getFacilityMembers();
@@ -451,7 +465,7 @@ const FacilityManagementEditScreen = () => {
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Edit Facility");
-    Communications.pageBackButtonSubject.next("/facility/list");
+    Communications.pageBackButtonSubject.next(null);
   }, []);
 
   const onFileSelected = (files: File[]) => {
@@ -533,6 +547,9 @@ const FacilityManagementEditScreen = () => {
     <div className="facility-main  screen">
       <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
         <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
+      </DialogComponent>
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+        <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
       </DialogComponent>
       <Formik initialValues={facilityInitialState} validateOnChange={true} validationSchema={facilityFormValidation} onSubmit={onAdd}>
         {({ isSubmitting, isValid, resetForm }) => (
@@ -771,9 +788,9 @@ const FacilityManagementEditScreen = () => {
           size="large"
           variant={"outlined"}
           className={"normal"}
-          component={Link}
+          onClick={openAdd}
           color="primary"
-          to={`/facility/view/${id}`}
+          id='btn_facility_edit_submit'
         >
           Cancel
         </Button>
@@ -785,6 +802,7 @@ const FacilityManagementEditScreen = () => {
           variant={"contained"}
           className="pdd-left-30 pdd-right-30"
           color={"primary"}
+          id='btn_facility_edit_submit'
         >
           Save
         </Button>

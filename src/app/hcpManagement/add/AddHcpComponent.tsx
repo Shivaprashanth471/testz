@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {  Button, CircularProgress } from "@material-ui/core";
-import {  FormikHelpers } from "formik";
+import { Button, CircularProgress } from "@material-ui/core";
+import { FormikHelpers } from "formik";
 import moment from "moment";
 import 'react-phone-number-input/style.css';
 import { useHistory } from "react-router";
@@ -17,6 +17,7 @@ import DialogComponent from "../../../components/DialogComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import { HcpItemAddType } from "./AddHcpValuesValidationsComponent";
 import AddHcpBasicDetailsComponent from "./BasicDetails/AddHcpBasicDetailsComponent";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 const AddHcpComponent = () => {
   const history = useHistory();
@@ -52,6 +53,7 @@ const AddHcpComponent = () => {
   const [regions, setRegions] = useState<any>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const getSpecialities = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-specialities").then((resp) => {
@@ -172,57 +174,57 @@ const AddHcpComponent = () => {
 
   const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, resetForm, setFieldValue }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
-    const AddHcp=()=>{
-    hcp.contact_number = hcp?.contact_number?.toLowerCase();
-    let rate_per_hour = hcp?.rate_per_hour;
-    let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-    let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
-    let payload: any = {}
-    payload = hcp
-    payload = {
-      ...payload,
-      professional_details: {
-        ...payload.professional_details,
-        experience: expInYears, speciality: specialities.join(',')
+    const AddHcp = () => {
+      hcp.contact_number = hcp?.contact_number?.toLowerCase();
+      let rate_per_hour = hcp?.rate_per_hour;
+      let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
+      let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
+      let payload: any = {}
+      payload = hcp
+      payload = {
+        ...payload,
+        professional_details: {
+          ...payload.professional_details,
+          experience: expInYears, speciality: specialities.join(',')
 
-      }
-    }
-
-    delete payload[rate_per_hour]
-    delete payload[signed_on]
-    delete payload[salary_credit_date]
-    ApiService.post(ENV.API_URL + "hcp", payload).then((resp: any) => {
-      if (resp && resp.success) {
-        const hcpId = resp.data._id;
-        addEducations(hcpId);
-        addReferences(hcpId);
-        addExperiences(hcpId);
-        addVolunteerExperiences(hcpId);
-        handleContractUpload(hcpId, rate_per_hour, signed_on, salary_credit_date)
-        handleAttachmentsUpload(hcpId, resp)
-      } else {
-        setSubmitting(false);
-      }
-    })
-      .catch((err) => {
-        console.log(err)
-        setSubmitting(false);
-        CommonService.handleErrors(setErrors, err);
-        setIsHcpSubmitting(false)
-        CommonService.showToast(err?.msg || "Error", "error");
-      });
-    }
-      if(contractFile?.wrapper[0]?.file){
-        if(hcp?.signed_on){
-          AddHcp()
-        }else{
-          CommonService.showToast("Please fill Signed On", "info")
-          setSubmitting(false);
-          setIsHcpSubmitting(false)
         }
-      }else{
-        AddHcp()
       }
+
+      delete payload[rate_per_hour]
+      delete payload[signed_on]
+      delete payload[salary_credit_date]
+      ApiService.post(ENV.API_URL + "hcp", payload).then((resp: any) => {
+        if (resp && resp.success) {
+          const hcpId = resp.data._id;
+          addEducations(hcpId);
+          addReferences(hcpId);
+          addExperiences(hcpId);
+          addVolunteerExperiences(hcpId);
+          handleContractUpload(hcpId, rate_per_hour, signed_on, salary_credit_date)
+          handleAttachmentsUpload(hcpId, resp)
+        } else {
+          setSubmitting(false);
+        }
+      })
+        .catch((err) => {
+          console.log(err)
+          setSubmitting(false);
+          CommonService.handleErrors(setErrors, err);
+          setIsHcpSubmitting(false)
+          CommonService.showToast(err?.msg || "Error", "error");
+        });
+    }
+    if (contractFile?.wrapper[0]?.file) {
+      if (hcp?.signed_on) {
+        AddHcp()
+      } else {
+        CommonService.showToast("Please fill Signed On", "info")
+        setSubmitting(false);
+        setIsHcpSubmitting(false)
+      }
+    } else {
+      AddHcp()
+    }
 
   };
 
@@ -395,10 +397,22 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  
+
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push('/hcp/list')
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add HCP");
-    Communications.pageBackButtonSubject.next("/hcp/list");
+    Communications.pageBackButtonSubject.next(null);
     getRegions();
     getSpecialities();
     getHcpTypes();
@@ -416,22 +430,25 @@ const AddHcpComponent = () => {
     <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
       <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
     </DialogComponent>
+    <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+      <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+    </DialogComponent>
     <div className="add-hcp screen">
-      <AddHcpBasicDetailsComponent 
-      contractFile={contractFile}
-       fileUpload={fileUpload} 
-       setPreviewFile={setPreviewFile} 
-       setOpen={setOpen} 
-       onAdd={onAdd} 
-       hcpTypes={hcpTypes} 
-       regions={regions} 
-       specialities={specialities} 
-       expInYears={expInYears} 
-       required_attachments={required_attachments} 
-       setRequiredAttachments={setRequiredAttachments} 
-       OnContractFileUpload={OnContractFileUpload} 
-       deleteContractFile={deleteContractFile} 
-       setFileUpload={setFileUpload}/>
+      <AddHcpBasicDetailsComponent
+        contractFile={contractFile}
+        fileUpload={fileUpload}
+        setPreviewFile={setPreviewFile}
+        setOpen={setOpen}
+        onAdd={onAdd}
+        hcpTypes={hcpTypes}
+        regions={regions}
+        specialities={specialities}
+        expInYears={expInYears}
+        required_attachments={required_attachments}
+        setRequiredAttachments={setRequiredAttachments}
+        OnContractFileUpload={OnContractFileUpload}
+        deleteContractFile={deleteContractFile}
+        setFileUpload={setFileUpload} />
       <div className="mrg-top-0 custom-border">
         <p className='card-header'>Education</p>
         <EducationAddComponent
@@ -466,13 +483,18 @@ const AddHcpComponent = () => {
         />
       </div>
       <div className="add-hcp-actions mrg-top-80">
-        <Button size="large" onClick={() => history.push('/hcp/list')} variant={"outlined"}    color="primary" id="btn_hcp_add_cancel">{"Cancel"}</Button>
+        <Button
+          size="large"
+          onClick={openAdd}
+          variant={"outlined"}
+          color="primary"
+          id="btn_hcp_add_cancel">{"Cancel"}</Button>
         <Button
           disabled={isHcpSubmitting}
           form="add-hcp-form"
           type="submit"
-          size="large"
           id="btn_hcp_add_save"
+          size="large"
           variant={"contained"}
           color={"primary"}
         >

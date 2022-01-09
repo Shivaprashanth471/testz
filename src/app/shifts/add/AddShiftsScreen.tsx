@@ -12,9 +12,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import DatePickers from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import * as Yup from "yup";
+import DialogComponent from "../../../components/DialogComponent";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import {
   calenderMode, warningZone
@@ -32,7 +34,6 @@ interface ShiftItem {
   start_time: string | number,
   end_time: string | number,
   shift_dates: any;
-  // end_date: any;
   shift_type: string;
   warning_type: string;
   hcp_count: string;
@@ -66,9 +67,11 @@ const AddShiftsScreen = () => {
   const [isShifts, setIsShifts] = useState<boolean>(false);
   const [doubleClick, setDoubleClick] = useState<boolean>(false);
   const [hcpTypes, setHcpTypes] = useState<any>([])
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const [value, setValue] = useState<any>(null)
   const [mode, setMode] = useState('')
+
 
   const user: any = localStorage.getItem("currentUser");
   let currentUser = JSON.parse(user);
@@ -134,10 +137,11 @@ const AddShiftsScreen = () => {
       .min(1, 'min limit 1.')
       .max(25, 'max limit 25.').required('required'),
     shift_details: Yup.string().trim("empty space not allowed").required('required'),
-    // shift_timings: 
   });
 
   const handleFacilitySelect = (facility: any) => {
+    setShiftTimings([])
+
     if (facility) {
       setFacilityId(facility?._id)
       getFacilityShiftTimings(facility?._id)
@@ -147,12 +151,10 @@ const AddShiftsScreen = () => {
   }
 
   const formatShiftTimings = (item: any) => {
-    // console.log(item)
     let start = moment(CommonService.convertMinsToHrsMins(item?.shift_start_time), 'hh:mm').format('LT')
     let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), 'hh:mm').format('LT')
     let type = item?.shift_type
 
-    // console.log(start, end, type)
 
     return `${start} - ${end} (${type}-Shift)`
   }
@@ -208,7 +210,6 @@ const AddShiftsScreen = () => {
       return
     }
 
-
     let shift_dates = value.map((item: any) => {
       let mm = item?.month?.number
       let dd = item?.day
@@ -220,7 +221,14 @@ const AddShiftsScreen = () => {
 
     let newShift;
 
-    console.log(shift_dates)
+    //check for absence of shift timings in shift req.
+    if (shiftTimings.length === 0) {
+      data.start_time = "";
+      data.end_time = "";
+      data.shift_type = "";
+
+      return
+    }
 
     if (mode === 'multiple') {
       newShift = {
@@ -276,6 +284,19 @@ const AddShiftsScreen = () => {
     handleCancelAdd()
   };
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push(`/shiftrequirementMaster/list`)
+
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Shift Requirement");
     Communications.pageBackButtonSubject.next('/shiftrequirementMaster/list');
@@ -320,7 +341,11 @@ const AddShiftsScreen = () => {
   return (
     !loading && !shiftLoading && !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
+        <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+        </DialogComponent>
         {facilities !== null && <Autocomplete
+          disableClearable
           PaperComponent={({ children }) => (
             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
           )}
@@ -330,6 +355,7 @@ const AddShiftsScreen = () => {
           placeholder={"Select Facility"}
           id="input_select_facility"
           onChange={($event, value) => {
+
             handleFacilitySelect(value)
           }
           }
@@ -414,10 +440,11 @@ const AddShiftsScreen = () => {
                         fullWidth
                         onChange={(e: any) => {
                           const selectedShiftTiming = e.target.value
-                          console.log(selectedShiftTiming)
-                          setFieldValue('start_time', selectedShiftTiming?.shift_start_time)
-                          setFieldValue('end_time', selectedShiftTiming?.shift_end_time)
-                          setFieldValue('shift_type', selectedShiftTiming?.shift_type)
+                          if (shiftTimings.length > 0) {
+                            setFieldValue('start_time', selectedShiftTiming?.shift_start_time)
+                            setFieldValue('end_time', selectedShiftTiming?.shift_end_time)
+                            setFieldValue('shift_type', selectedShiftTiming?.shift_type)
+                          }
 
                         }}
                       >
@@ -512,7 +539,6 @@ const AddShiftsScreen = () => {
                         label="No of HCPs"
                         fullWidth
                       />
-
                     </div>
 
                     <div className="shift-third-row mrg-top-30">
@@ -576,9 +602,8 @@ const AddShiftsScreen = () => {
               size="large"
               variant={"outlined"}
               className={"normal"}
-              component={Link}
               color={"primary"}
-              to={`/shiftrequirementMaster/list`}
+              onClick={openAdd}
             >
               Cancel
             </Button>
