@@ -45,7 +45,6 @@ const FileDropZoneComponent = (props: FileDropZoneComponentProps) => {
     //     e.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
     // }
 
-    
     return (
         <>
             <div style={{ width: '110px', fontSize: '16px' }} className={"ts-file-drop-zone"}>
