@@ -47,12 +47,12 @@ const FileDropZoneComponent = (props: FileDropZoneComponentProps) => {
 
     return (
         <>
-            <div style={{ width: '130px', fontSize: '16px' }} className={"ts-file-drop-zone"}>
+            <div style={{ width: '110px', fontSize: '16px' }} className={"ts-file-drop-zone"}>
                 <input id={'upload-btn'} ref={instance => inputFile.current = instance} type="file"
                     onChange={handleFileInputSelect} className="display-none" accept={allowedTypes} />
                 <Button onClick={event => {
                     if (inputFile.current) inputFile.current.click();
-                }} color="primary" className='icon'><div><CloudUploadOutlinedIcon style={{ fontSize: 70 }} /></div></Button>
+                }} color="primary" className='icon'><div><CloudUploadOutlinedIcon style={{ fontSize: 55 }} /></div></Button>
             </div>
         </>
     )

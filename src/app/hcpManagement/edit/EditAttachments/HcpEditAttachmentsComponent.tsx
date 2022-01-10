@@ -30,7 +30,9 @@ const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsC
         let filteredData = required_attachments?.filter((item: any) => !attachmentsDetails?.some((item2: any) => item?.attachment_type === item2?.attachment_type))
         // let SortedData = [...filteredData].sort((a: any, b: any) => a?.id - b?.id)
         // let filteredData = filterAvailableDocs()
-        return filteredData.map((item: any, index: any) => {
+
+        console.log(filteredData,required_attachments)
+        return required_attachments.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
                     <div key={item?.id} className="attachments mrg-top-15">
@@ -113,7 +115,7 @@ const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsC
             )
         })
     }
-    return <div>
+    return <div  className="attachments_wrapper">
         {RenderAvailableAttachments()}
         {RenderSortedAttachments()}
     </div>;

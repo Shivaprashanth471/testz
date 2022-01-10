@@ -294,12 +294,10 @@ const EditHcpComponent = () => {
   }, []);
 
   const OnFileSelected = (files: File[], id: any) => {
-    let notselectedAttachment = required_attachments?.filter((item: any) => item?.id !== id)
     let selectedAttachment = required_attachments?.filter((item: any) => item?.id === id)
-
     if (selectedAttachment[0]) {
-      selectedAttachment[0].index = fileUpload?.wrapper?.length || 0
-      setRequiredAttachments([...selectedAttachment, ...notselectedAttachment])
+      required_attachments[(selectedAttachment[0]?.id)-1].index = fileUpload?.wrapper?.length || 0
+      setRequiredAttachments([...required_attachments])
     }
     for (let file of files) {
       // console.log(file)
@@ -717,7 +715,6 @@ const EditHcpComponent = () => {
           contractDetails={contractDetails}
           handleExpiryDate={handleExpiryDate}
           deleteLocalAttachment={deleteLocalAttachment} />
-
         <div className="mrg-top-0 custom-border ">
           <p className='card-header'>Education</p>
           <EducationAddComponent
