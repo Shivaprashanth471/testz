@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import "./HcpDetailsComponent.scss";
-import { CommonService } from '../../../../../helpers';
-import { ENV } from '../../../../../constants';
+import { CommonService } from '../../../../helpers';
+import { ENV } from '../../../../constants';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import CustomFile from '../../../../../components/shared/CustomFile';
+import CustomFile from '../../../../components/shared/CustomFile';
 import HcpContractComponent from '../contract/HcpContractComponent';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';

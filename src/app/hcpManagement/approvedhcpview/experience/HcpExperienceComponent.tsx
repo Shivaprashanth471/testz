@@ -1,20 +1,20 @@
 import moment from 'moment';
 import React from 'react';
-import NoDataToShowCardComponent from '../../../../../components/NoDataToShowCardComponent';
-import { CommonService } from '../../../../../helpers';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
+import { CommonService } from '../../../../helpers';
 
-const HcpVolunteerExperienceComponent = (props: any) => {
-    const volunteerExperience = props?.volunteerExperience
-    const sortedExpData = volunteerExperience && CommonService.sortDatesByLatest(volunteerExperience, 'start_date')
+const HcpExperienceComponent = (props: any) => {
+    const experience = props?.experience;
+    const sortedExpData = experience && CommonService.sortDatesByLatest(experience, 'start_date')
 
     return <div>
         {
-            volunteerExperience?.length > 0 ? sortedExpData?.map((item: any, index: any) => {
+            experience?.length > 0 ? sortedExpData?.map((item: any, index: any) => {
                 return (<div className={index !== 0 ? "mrg-top-30" : ""}>
-                    <h4 className="title-count ">Volunteer Experience {index + 1}</h4>
+                    <h4 className="title-count">Experience {index + 1}</h4>
                     <div className="d-flex">
                         <div className="flex-1">
-                            <h4>Organization Name</h4>
+                            <h4>Facility Name</h4>
                             <p>{item?.facility_name}</p>
                         </div>
                         <div className="flex-1">
@@ -22,8 +22,8 @@ const HcpVolunteerExperienceComponent = (props: any) => {
                             <p>{item?.location}</p>
                         </div>
                         <div className="flex-1">
-                            <h4>Speciality</h4>
-                            <p>{item?.specialisation}</p>
+                            <h4>Position Title</h4>
+                            <p>{item?.position_title}</p>
                         </div>
                     </div>
                     <div className="d-flex">
@@ -32,21 +32,20 @@ const HcpVolunteerExperienceComponent = (props: any) => {
                             <p>{moment(item?.start_date).format('MMMM, YYYY')}&nbsp;-&nbsp;{item?.end_date !== "" ? moment(item?.end_date).format('MMMM, YYYY') : "N/A"}</p>
                         </div>
                         <div className="flex-1">
-                            <h4>Position Title</h4>
-                            <p>{item?.position_title}</p>
+                            <h4>Speciality</h4>
+                            <p>{item?.specialisation} </p>
                         </div>
-                        <div className="flex-1">
-                            <h4>Still Working Here</h4>
-                            <p>{item?.still_working_here === 0 ? "NO" : "YES"}</p>
-                        </div>
-                    </div>
-                    <div className="d-flex">
                         <div className="flex-1">
                             <h4>Skill</h4>
                             <p>{item?.skills ? item?.skills : "N/A"} </p>
                         </div>
                     </div>
-
+                    <div>
+                        <div className="flex-1">
+                            <h4>Still Working Here</h4>
+                            <p>{item?.still_working_here === 0 ? "NO" : "YES"}</p>
+                        </div>
+                    </div>
                 </div>
                 )
             }) : <NoDataToShowCardComponent />
@@ -54,4 +53,5 @@ const HcpVolunteerExperienceComponent = (props: any) => {
     </div>;
 }
 
-export default HcpVolunteerExperienceComponent;
+
+export default HcpExperienceComponent;

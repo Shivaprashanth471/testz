@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ENV } from '../../../constants';
-import { CommonService, Communications } from '../../../helpers';
+import { ENV } from '../../../../constants';
+import { CommonService, Communications } from '../../../../helpers';
 import './ShiftCompletedViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
 import { Avatar, Button, CircularProgress } from "@material-ui/core";
@@ -8,7 +8,7 @@ import { Avatar, Button, CircularProgress } from "@material-ui/core";
 //import StarBorderIcon from '@material-ui/icons/StarBorder';
 import moment from 'moment';
 //import StarIcon from '@material-ui/icons/Star';
-import ShiftTimeline from '../timeline/ShiftTimeline';
+import ShiftTimeline from '../../timeline/ShiftTimeline';
 
 const ShiftCompletedViewScreen = () => {
     const param = useParams<any>()

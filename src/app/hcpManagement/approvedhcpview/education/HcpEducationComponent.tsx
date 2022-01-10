@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
-import NoDataToShowCardComponent from '../../../../../components/NoDataToShowCardComponent';
-import { CommonService } from '../../../../../helpers';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
+import { CommonService } from '../../../../helpers';
 
 const HcpEducationComponent = (props: any) => {
     const educationDetails = props?.educationDetails
