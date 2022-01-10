@@ -9,7 +9,7 @@ import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, 
 import { AddHcpInitialValues, hcpFormValidation, HcpItemAddType } from '../AddHcpValuesValidationsComponent';
 import { Box, MenuItem } from "@material-ui/core";
 import HcpAddAttachmentsComponent from '../AddAtachments/HcpAddAttachmentsComponent';
-import { ScrollToError } from '../ScrollToError';
+import { ScrollToError } from '../../../../components/ScrollToError';
 
 const AddHcpBasicDetailsComponent = (props: any) => {
     const contractFile = props?.contractFile;
@@ -26,7 +26,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
     const OnContractFileUpload = props?.OnContractFileUpload;
     const deleteContractFile = props?.deleteContractFile;
     const setFileUpload = props?.setFileUpload;
-    
+
     let hcpInitialState: HcpItemAddType = AddHcpInitialValues;
 
     const showDropDownBelowField = {
@@ -45,7 +45,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
             setPreviewFile(fileUpload?.wrapper[index])
         }
         setOpen(true)
-    }, [fileUpload, contractFile?.wrapper,setPreviewFile,setOpen])
+    }, [fileUpload, contractFile?.wrapper, setPreviewFile, setOpen])
 
     return <div>
         <Formik
@@ -123,27 +123,27 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             </div>
                             <div className="facility-about mrg-top-50">
                                 <p className='card-header'>About the HCP</p>
-                                <Field placeholder="About the Hcp" variant='outlined' component={TextField} type={"text"} 
-                                fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline rows={2}/>
+                                <Field placeholder="About the Hcp" variant='outlined' component={TextField} type={"text"}
+                                    fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline rows={2} />
                             </div>
                         </div>
                         <div className="hcp-profession-details  mrg-top-10 custom-border">
                             <p className='card-header'>Professional Details (Based on Work Experience)</p>
                             <div className="input-container">
-                                <Field value={expInYears} disabled variant='outlined' component={TextField} label="Years of Experience" 
-                                name="professional_details.experience" id="input_hcp_add_proffesional_details" fullWidth autoComplete="off"/>
+                                <Field value={expInYears} disabled variant='outlined' component={TextField} label="Years of Experience"
+                                    name="professional_details.experience" id="input_hcp_add_proffesional_details" fullWidth autoComplete="off" />
                             </div>
                             <div className="input-container professional-details">
-                                <Field value={specialities.join(',')} disabled variant='outlined' component={TextField} type={"text"} 
-                                label="Specialities" id="input_hcp_add_speciality" name="professional_details.speciality" fullWidth autoComplete="off"/>
+                                <Field value={specialities.join(',')} disabled variant='outlined' component={TextField} type={"text"}
+                                    label="Specialities" id="input_hcp_add_speciality" name="professional_details.speciality" fullWidth autoComplete="off" />
                             </div>
                         </div>
 
                         <div className="custom-border">
                             <div className="professional-summary mrg-top-10">
                                 <p className='card-header'>Professional Summary</p>
-                                <Field variant='outlined' component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" 
-                                id="input_hcp_add_summary" multiline rows={2} placeholder="Enter Professional Summary"/>
+                                <Field variant='outlined' component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary"
+                                    id="input_hcp_add_summary" multiline rows={2} placeholder="Enter Professional Summary" />
                             </div>
                         </div>
                         <div className="hcp-documents mrg-top-10 custom-border">
@@ -185,12 +185,12 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             )}
                             <div className="input-container mrg-top-30">
                                 <Field placeholder="Rate/hr" variant='outlined' component={TextField} type={"text"} fullWidth
-                                    autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file} label="Rate/hr" name="rate_per_hour"/>
+                                    autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file} label="Rate/hr" name="rate_per_hour" />
                                 <Field variant="inline" orientation="landscape" openTo="date" format="MM/dd/yyyy" views={["year", "month", "date"]}
                                     inputVariant='outlined' component={DatePicker} required={contractFile?.wrapper[0]?.file} placeholder="MM/DD/YYYY" fullWidth
-                                    autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="signed_on"/>
-                                <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit" fullWidth autoComplete="off" 
-                                InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file} name="salary_credit_date"/>
+                                    autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="signed_on" />
+                                <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit" fullWidth autoComplete="off"
+                                    InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file} name="salary_credit_date" />
                             </div>
                         </div>
 
@@ -198,7 +198,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             <p className="card-header">NC Section</p>
                             <div className="input-container">
                                 <Field variant='outlined' name="nc_details.dnr" type={"text"} component={TextField}
-                                    label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off"/>
+                                    label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
                                 <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.vaccine" type={"text"} component={TextField}
                                     id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
                                     {vaccine.map((item: any, index: any) => (
@@ -209,7 +209,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
 
                             <div className="input-container">
                                 <Field variant='outlined' name="nc_details.location_preference" type={"text"} component={TextField}
-                                    label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off"/>
+                                    label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
                                 <Field select variant='outlined' name="nc_details.contact_type" type={"text"}
                                     component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
                                     {contactType.map((item: any, index: any) => (
@@ -237,7 +237,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
 
                             <div className="input-container">
                                 <Field variant='outlined' name="nc_details.zone_assignment" type={"text"} component={TextField}
-                                    id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off"/>
+                                    id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                                 <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_fulltime_job"
                                     type={"text"} component={TextField} id="input_hcp_is_fulltime_job" label="Do you have a Full-time Job?" fullWidth autoComplete="off">
                                     {boolAcknowledge.map((item: any, index: any) => (
@@ -280,8 +280,8 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             </div>
 
                             <div className="input-container">
-                                <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_gusto_invited" type={"text"} component={TextField} 
-                                id="input_hcp_add_is_gusto_invited" label="Is Gusto Invited ?" fullWidth autoComplete="off">
+                                <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_gusto_invited" type={"text"} component={TextField}
+                                    id="input_hcp_add_is_gusto_invited" label="Is Gusto Invited ?" fullWidth autoComplete="off">
                                     {boolAcknowledge.map((item: any, index: any) => (
                                         <MenuItem value={item.value} id={"menu_hcp_add_is_gusto_invited" + index}>{item.label}</MenuItem>
                                     ))}
@@ -296,14 +296,14 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             </div>
                             <div className="input-container">
                                 <Field variant="inline" openTo="date" inputVariant='outlined' component={DateTimePicker} placeholder="MM/DD/YYYY HH:MM "
-                                    fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Last Call Date" name="nc_details.last_call_date"/>
+                                    fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Last Call Date" name="nc_details.last_call_date" />
                                 <Field variant='outlined' name="nc_details.family_consideration" type={"text"} component={TextField}
-                                    id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off"/>
+                                    id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off" />
                             </div>
 
                             <div className="input-container">
-                                <Field variant='outlined' name="nc_details.other_information" type={"text"} component={TextField} 
-                                id="input_hcp_add_other_information" label="Other Information Gathered" fullWidth autoComplete="off"/>
+                                <Field variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
+                                    id="input_hcp_add_other_information" label="Other Information Gathered" fullWidth autoComplete="off" />
                             </div>
                         </div>
                     </div>

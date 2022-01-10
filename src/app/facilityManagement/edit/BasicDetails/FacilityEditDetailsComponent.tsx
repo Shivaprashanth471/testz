@@ -4,10 +4,10 @@ import { pdfIcon } from "../../../../constants/ImageConfig";
 import { TextField } from "formik-material-ui";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
-import { ScrollToError } from "../../../hcpManagement/add/ScrollToError";
 import { facilityFormEditValidation, FacilityItemEditType } from '../FacilityInitialAndValidationsComponent';
 import { Box, MenuItem, Typography } from "@material-ui/core";
 import { Field, Form, Formik, FieldProps } from "formik";
+import { ScrollToError } from '../../../../components/ScrollToError';
 
 export interface FacilityEditDetailsComponentProps {
     onAdd :any;
