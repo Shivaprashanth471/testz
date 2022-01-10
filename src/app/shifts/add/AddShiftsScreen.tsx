@@ -299,7 +299,7 @@ const AddShiftsScreen = () => {
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Shift Requirement");
-    Communications.pageBackButtonSubject.next('/shiftrequirementMaster/list');
+    Communications.pageBackButtonSubject.next(null);
 
     getFacilityData();
     getHcpTypes()
