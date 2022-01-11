@@ -82,11 +82,26 @@ const ExperienceAddComponent = ({
   const [isExperiences, setIsExperiences] = useState<boolean>(false);
   const [showEndDate, setShowEndDate] = useState<boolean>(true);
 
+  const handleAcceptedDate = (startDate: any, endDate: any): boolean => {
+    console.log(moment(endDate).isAfter(startDate))
+    return moment(endDate).isAfter(startDate)
 
+  }
   const onAdd = (
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
+    let isAccepted: boolean = true;
+    if (experience?.endDate) {
+      isAccepted = handleAcceptedDate(experience.startDate, experience.endDate)
+    }
+
+    if (!isAccepted) {
+      CommonService.showToast("Start Date can not be greater than End Date")
+      setSubmitting(false)
+      return
+    }
+
     const newExperience = {
       tempId: nanoid(),
       facility_name: experience.facilityName,
