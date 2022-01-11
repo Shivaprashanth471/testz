@@ -42,6 +42,8 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [checkOut, setCheckOut] = useState<any | null>({ date: null, time: null });
     const shiftDetails = props?.shiftDetails;
+    const [lastBreakOut,setLastBreakOut] = useState<any | null>({ date: null, time: null });
+    console.log(shiftDetails)
 
     const handleCheckInCheckOut = useCallback(() => {
         if(checkOut?.date!==null && checkOut?.time!==null){
@@ -84,9 +86,16 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         handleCheckInCheckOut()
     }, [handleCheckInCheckOut])
 
+    
     useEffect(() => {
+        if (shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]) {
+            setLastBreakOut({ date: shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]?.break_out_time.slice(0, 10), time: shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]?.break_out_time.slice(11, 19) })
+        }
 
-        console.log(shiftDetails?.time_breakup?.check_out_time.slice(0, 10))
+    }, [shiftDetails?.time_breakup?.break_timings])
+
+    console.log(shiftDetails?.time_breakup?.break_timings[0],";;;;;;;;;;")
+    useEffect(() => {
         if (shiftDetails?.time_breakup?.check_out_time) {
             setCheckOut({date:shiftDetails?.time_breakup?.check_out_time.slice(0, 10),time:shiftDetails?.time_breakup?.check_out_time.slice(11, 19)})
         }
@@ -100,6 +109,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
                 <DatePicker className="mrg-top-10" label="Date" inputVariant='outlined'
                     value={checkOut?.date}
                     format="MMMM do yyyy"
+                    minDate={moment(lastBreakOut?.date)}
                     onChange={(event: any) => {
                         let value = moment(event).format('YYYY-MM-DD')
                         setCheckOut({ date: value, time: checkOut?.time });
