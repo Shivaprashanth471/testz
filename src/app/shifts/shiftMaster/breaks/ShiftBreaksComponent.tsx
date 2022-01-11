@@ -41,10 +41,21 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     const afterConfirm = props?.confirm;
     const classes = useStyles();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [checkIn, setCheckIn] = useState<any | null>({ date: null, time: null });
     const [shiftBreakTimings, setShiftBreakTimings] = useState<any | null>([{ break_in_date: null, break_in_time: null, break_out_time: null, break_out_date: null }])
-    let shiftDetails = Object.assign({},  props?.shiftDetails);
+    let shiftDetails = Object.assign({}, props?.shiftDetails);
 
+
+    useEffect(() => {
+        if (shiftDetails?.time_breakup?.check_in_time) {
+            setCheckIn({ date: shiftDetails?.time_breakup?.check_in_time.slice(0, 10), time: shiftDetails?.time_breakup?.check_in_time.slice(11, 19) })
+        }
+
+    }, [shiftDetails?.time_breakup?.check_in_time])
+
+    console.log(shiftDetails, checkIn, "565656")
     const handleAddBreakTime = useCallback(() => {
+
         let data = { break_in_date: null, break_in_time: null, break_out_time: null, break_out_date: null }
         setShiftBreakTimings((prevState: any) => [...prevState, data]);
     }, [setShiftBreakTimings])
@@ -69,14 +80,31 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     const handleBreakInDateChange = useCallback((event: any, index: any) => {
         const data = shiftBreakTimings;
         let value = moment(event).format('YYYY-MM-DD');
-        data[index] = {
-            break_in_date: value,
-            break_in_time: data[index]?.break_in_time,
-            break_out_date: data[index]?.break_out_date,
-            break_out_time: data[index]?.break_out_time
+        console.log(checkIn?.date, value)
+        let checkinDate = moment(checkIn?.date)
+        let now = moment(value);
+
+        if (checkinDate > now) {
+            // date is past
+            CommonService.showToast("error" || "Error", "error")
+            data[index] = {
+                break_in_date: null,
+                break_in_time: data[index]?.break_in_time,
+                break_out_date: data[index]?.break_out_date,
+                break_out_time: data[index]?.break_out_time
+            }
+
+        } else {
+
+            data[index] = {
+                break_in_date: value,
+                break_in_time: data[index]?.break_in_time,
+                break_out_date: data[index]?.break_out_date,
+                break_out_time: data[index]?.break_out_time
+            }
+            setShiftBreakTimings([...data])
         }
-        setShiftBreakTimings([...data])
-    }, [setShiftBreakTimings, shiftBreakTimings])
+    }, [setShiftBreakTimings, shiftBreakTimings,checkIn?.date])
 
     const handleBreakOutDateChange = useCallback((event: any, index: any) => {
         const data = shiftBreakTimings;
@@ -105,15 +133,15 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     const handleBreakTimings = useCallback(() => {
         setIsSubmitting(true)
         let data = shiftBreakTimings;
-        let tempError=""
+        let tempError = ""
         data?.forEach((item: any) => {
             if (item?.break_in_date === null || item?.break_out_date === null || item?.break_in_time === null || item?.break_out_time === null) {
-                tempError="Please fill all the fields"
+                tempError = "Please fill all the fields"
             }
         })
         if (tempError) {
             CommonService.showToast(tempError || "Error", "error")
-            tempError=""
+            tempError = ""
         } else {
             data.forEach((item: any, index: any) => {
                 if (item?.break_in_time !== null) {
@@ -125,22 +153,22 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                     data[index].break_out_time = dateBreakOut.toString();
                 }
             })
-                let payload = {
-                    "hcp_user_id": shiftDetails?.hcp_user_id,
-                    "break_timings": data
+            let payload = {
+                "hcp_user_id": shiftDetails?.hcp_user_id,
+                "break_timings": data
+            }
+            CommonService._api.post(ENV.API_URL + 'shift/' + id + '/webBreak', payload).then((resp) => {
+                if (afterConfirm) {
+                    afterConfirm();
+                    CommonService.showToast(resp.msg || 'Success', 'success');
                 }
-                CommonService._api.post(ENV.API_URL + 'shift/' + id + '/webBreak', payload).then((resp) => {
-                    if (afterConfirm) {
-                        afterConfirm();
-                        CommonService.showToast(resp.msg || 'Success', 'success');
-                    }
-                }).catch((err) => {
-                    console.log(err)
-                    setIsSubmitting(false)
-                })
+            }).catch((err) => {
+                console.log(err)
+                setIsSubmitting(false)
+            })
         }
 
-    }, [id, shiftBreakTimings, shiftDetails?.hcp_user_id,afterConfirm])
+    }, [id, shiftBreakTimings, shiftDetails?.hcp_user_id, afterConfirm])
 
     useEffect(() => {
         if (shiftDetails?.time_breakup?.break_timings?.length > 0) {
@@ -179,6 +207,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                     <div className="d-flex form-field" style={{ gap: "30px" }} >
                                         <DatePicker className="mrg-top-10" label="Date" inputVariant='outlined'
                                             value={shiftBreakTimings[index]?.break_in_date}
+                                            minDate={moment(checkIn?.date)}
                                             format="MMMM do yyyy"
                                             onChange={(event: any) => handleBreakInDateChange(event, index)}
                                             fullWidth required />
@@ -195,6 +224,8 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                                 <DatePicker className="mrg-top-10" label="Date" inputVariant='outlined'
                                                     value={shiftBreakTimings[index]?.break_out_date}
                                                     format="MMMM do yyyy"
+                                                    minDate={moment(shiftBreakTimings[index]?.break_in_date)}
+                                                    disabled={!shiftBreakTimings[index]?.break_in_date}
                                                     onChange={(event: any) => handleBreakOutDateChange(event, index)}
                                                     fullWidth required />
                                                 <TimePicker className="mrg-top-10" ampm={true} label="Time"
@@ -227,7 +258,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             <Button color="secondary" onClick={afterCancel}>
                 {'Cancel'}
             </Button>
-            <Button type={"submit"} onClick={handleBreakTimings}  disabled={isSubmitting} className={"submit"} variant={"contained"} color="secondary" autoFocus>
+            <Button type={"submit"} onClick={handleBreakTimings} disabled={isSubmitting} className={"submit"} variant={"contained"} color="secondary" autoFocus>
                 {'Save'}
             </Button>
         </DialogActions>

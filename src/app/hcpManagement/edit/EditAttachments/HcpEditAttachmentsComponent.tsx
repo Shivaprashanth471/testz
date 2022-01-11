@@ -32,7 +32,7 @@ const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsC
         // let filteredData = filterAvailableDocs()
 
         console.log(filteredData,required_attachments)
-        return required_attachments.map((item: any, index: any) => {
+        return filteredData.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
                     <div key={item?.id} className="attachments mrg-top-15">
