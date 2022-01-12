@@ -31,6 +31,16 @@ const ShiftAddComponent = ({
     shift_type: "",
   });
 
+  const showDropDownBelowField = {
+    MenuProps: {
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "left"
+      },
+      getContentAnchorEl: null
+    }
+  }
+
   const handleAddFormChange = (event: any) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -156,6 +166,7 @@ const ShiftAddComponent = ({
               id="input_shift_add_shift_end_time"
             />
             <CustomSelect
+              SelectProps={showDropDownBelowField}
               variant='outlined'
               required
               name="shift_type"

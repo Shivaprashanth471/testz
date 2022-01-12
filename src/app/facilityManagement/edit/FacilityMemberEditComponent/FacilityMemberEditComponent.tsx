@@ -10,12 +10,12 @@ import BackspaceIcon from "@material-ui/icons/Backspace";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import React, { useCallback, useState } from "react";
-import * as Yup from "yup";
 import DialogComponent from "../../../../components/DialogComponent";
 import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { designationNames } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
+import { memberFormValidation } from "../../add/FacilityMemberAddComponent/FacilityMemberFormValidation";
 import "./FacilityMemberEditComponent.scss";
 import ReadOnlyRow from "./ReadOnlyRow";
 
@@ -43,23 +43,6 @@ const memberInitialState: MemberType = {
   email: "",
 };
 
-const memberFormValidation = Yup.object({
-  name: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 chracters")
-    .trim("The contact name cannot include leading and trailing spaces")
-    .required(),
-  email: Yup.string().typeError("must be text").email("invalid"),
-  phone_number: Yup.string()
-    .typeError(" must be a number")
-    .matches(/^[0-9]+$/, "must be number")
-    .trim("empty space not allowed")
-    .min(10, 'min 10 digits')
-    .max(10, 'max 10 digits')
-    .required("required"),
-  extension_number: Yup.number().typeError(" must be a number"),
-  designation: Yup.string().typeError("must be text").required(),
-});
 
 const FacilityMemberEditComponent = ({
   onAddMember,
@@ -84,15 +67,11 @@ const FacilityMemberEditComponent = ({
       designation: member.designation,
     };
 
-    //add and update with latest data
     onAddMember(newMember)
       .then(() => getFacilityMembers())
       .catch((err: any) => console.log(err));
 
-    //clear state
     resetForm();
-
-    //close form
     setIsMembers(false)
   };
 
@@ -106,7 +85,7 @@ const FacilityMemberEditComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  },[getFacilityMembers,hcpId])
+  }, [getFacilityMembers, hcpId])
 
   const showDropDownBelowField = {
     MenuProps: {
@@ -240,6 +219,7 @@ const FacilityMemberEditComponent = ({
                     />
 
                     <Field
+                      inputProps={{ maxLength: 10 }}
                       className='extension_number'
                       variant="outlined"
                       name="extension_number"

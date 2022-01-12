@@ -59,10 +59,10 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                         <div className="custom-border">
                             <p className='card-header'>Basic Details</p>
                             <div className="input-container">
-                                <Field variant='outlined' required name="first_name" type={"text"} component={TextField}
-                                    id="input_hcp_add_first_name" label="First Name" fullWidth autoComplete="off" />
-                                <Field variant='outlined' required name="last_name" id="input_hcp_add_last_name"
-                                    type={"text"} component={TextField} label="Last Name" fullWidth autoComplete="off" />
+                                <Field variant='outlined' name="first_name" type={"text"} component={TextField}
+                                    id="input_hcp_add_first_name" label="First Name*" fullWidth autoComplete="off" />
+                                <Field variant='outlined' name="last_name" id="input_hcp_add_last_name"
+                                    type={"text"} component={TextField} label="Last Name*" fullWidth autoComplete="off" />
                             </div>
 
                             <div className="input-container">

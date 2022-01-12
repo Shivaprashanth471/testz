@@ -1,170 +1,183 @@
 import * as Yup from "yup";
 
 export interface FacilityItemEditType {
-    facility_uid: string;
-    facility_name: string;
-    facility_short_name: string;
-    business_name: string;
-    email?: string;
-    phone_number?: string;
-    extension_number: string;
-    website_url?: string;
-    timezone?: string;
-    about?: string;
-    address?: {
-      street: string;
-      city: string;
-      state: string;
-      region_name: string;
-      country: string;
-      zip_code: string;
+  facility_uid: string;
+  facility_name: string;
+  facility_short_name: string;
+  business_name: string;
+  email?: string;
+  phone_number?: string;
+  extension_number: string;
+  website_url?: string;
+  timezone?: string;
+  about?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    region_name: string;
+    country: string;
+    zip_code: string;
+  };
+  hourly_base_rates?: {
+    cna?: number;
+    lvn?: number;
+    rn?: number;
+    care_giver?: number;
+    med_tech?: number;
+    holiday?: number;
+    hazard?: number;
+  };
+  diff_rates?: {
+    pm?: number;
+    noc?: number;
+    weekend?: number;
+  };
+  conditional_rates: {
+    overtime?: {
+      hours?: number;
+      rate?: number;
     };
-    hourly_base_rates?: {
-      cna?: number;
-      lvn?: number;
-      rn?: number;
-      care_giver?: number;
-      med_tech?: number;
-      holiday?: number;
-      hazard?: number;
+    rush?: {
+      hours?: number;
+      rate?: number;
     };
-    diff_rates?: {
-      pm?: number;
-      noc?: number;
-      weekend?: number;
+    cancellation_before?: {
+      hours?: number;
+      rate?: number;
     };
-    conditional_rates: {
-      overtime?: {
-        hours?: number;
-        rate?: number;
-      };
-      rush?: {
-        hours?: number;
-        rate?: number;
-      };
-      cancellation_before?: {
-        hours?: number;
-        rate?: number;
-      };
-      shift_early_completion?: {
-        hours?: number;
-        rate?: number;
-      };
+    shift_early_completion?: {
+      hours?: number;
+      rate?: number;
     };
-  
-    location: any;
-    coordinates?: any
-  }
-  
-export  const facilityFormEditValidation = Yup.object({
-    facility_uid: Yup.string()
+  };
+
+  location: any;
+  coordinates?: any
+}
+
+export const facilityFormEditValidation = Yup.object({
+  facility_uid: Yup.string()
+    .typeError(" must be a text")
+    .required("required")
+    .min(3, "min 3 letters")
+    .trim("empty space not allowed")
+    .required("required"),
+  facility_name: Yup.string()
+    .typeError(" must be a text")
+    .min(3, "min 3 letters")
+    .max(255, "max limit 255")
+    .trim("empty space not allowed")
+    .required("required"),
+  facility_short_name: Yup.string()
+    .typeError(" must be a text")
+    .min(3, "min 3 letters")
+    .max(30, "max limit 30")
+    .trim("empty space not allowed")
+    .required("required"),
+  business_name: Yup.string()
+    .typeError(" must be a text")
+    .min(3, "min 3 letters")
+    .max(255, "max limit 255")
+    .trim("empty space not allowed"),
+  email: Yup.string()
+    .typeError(" must be a text")
+    .email("invalid").max(30, 'max limit 30'),
+  phone_number: Yup.string()
+    .min(12, "min 10 digits")
+    .required("required"),
+  extension_number: Yup.string()
+    .matches(/^[0-9]+$/, "must be number")
+    .trim("empty space not allowed")
+    .min(1, 'min 1 digit')
+    .max(10, 'max 10 digits')
+    .required("required"),
+  website_url: Yup.string()
+    .typeError(" must be a text")
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      'Enter correct url!'
+    ).max(30, 'max limit 30'),
+  timezone: Yup.number().typeError(" must be a number").required('required'),
+  about: Yup.string()
+    .typeError(" must be a text")
+    .max(750, "max limit 750")
+    .trim("empty space not allowed"),
+  address: Yup.object({
+    street: Yup.string()
       .typeError(" must be a text")
-      .required("required")
-      .min(3, "invalid")
+      .min(2, "min 2 letters")
+      .max(30, 'max limit 30')
       .trim("empty space not allowed")
       .required("required"),
-    facility_name: Yup.string()
+    city: Yup.string()
       .typeError(" must be a text")
-      .min(3, "invalid")
+      .min(2, "min 2 letters")
+      .max(30, 'max limit 30')
       .trim("empty space not allowed")
       .required("required"),
-    facility_short_name: Yup.string()
+    state: Yup.string()
       .typeError(" must be a text")
-      .min(3, "invalid")
+      .min(2, "min 2 letters")
+      .max(30, 'max limit 30')
       .trim("empty space not allowed")
       .required("required"),
-    business_name: Yup.string()
+    region_name: Yup.string()
       .typeError(" must be a text")
-      .min(3, "invalid")
+      .min(2, "min 2 letters")
+      .max(30, 'max limit 30')
+      .trim("empty space not allowed").required("required"),
+    country: Yup.string()
+      .typeError(" must be a text")
+      .min(2, "min 2 letters")
+      .max(30, 'max limit 30')
       .trim("empty space not allowed")
       .required("required"),
-    email: Yup.string()
+    zip_code: Yup.string()
       .typeError(" must be a text")
-      .email("invalid"),
-    phone_number: Yup.string()
-      .min(12, "min 10 digits")
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .trim("empty space not allowed")
+      .min(5, 'min 5 digits')
+      .max(6, 'max 6 digits allowed')
       .required("required"),
-    extension_number: Yup.number().typeError(" must be a number"),
-    website_url: Yup.string()
-      .typeError(" must be a text")
-      .matches(
-        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-        'Enter correct url!'
-      ),
-    timezone: Yup.number().typeError(" must be a number").required('required'),
-    about: Yup.string()
-      .typeError(" must be a text")
-      .trim("empty space not allowed"),
-    address: Yup.object({
-      street: Yup.string()
-        .typeError(" must be a text")
-        .min(2, "invalid")
-        .trim("empty space not allowed")
-        .required("required"),
-      city: Yup.string()
-        .typeError(" must be a text")
-        .min(2, "invalid")
-        .trim("empty space not allowed")
-        .required("required"),
-      state: Yup.string()
-        .typeError(" must be a text")
-        .min(2, "invalid")
-        .trim("empty space not allowed")
-        .required("required"),
-      region_name: Yup.string()
-        .typeError(" must be a text")
-        .min(2, "invalid")
-        .trim("empty space not allowed"),
-      country: Yup.string()
-        .typeError(" must be a text")
-        .min(2, "invalid")
-        .trim("empty space not allowed")
-        .required("required"),
-      zip_code: Yup.string()
-        .typeError(" must be a text")
-        .matches(/^[0-9]+$/, "Must be only digits")
-        .trim("empty space not allowed")
-        .min(5, 'min 5 digits')
-        .max(6, 'max 6 digits allowed')
-        .required("required"),
+  }),
+  hourly_base_rates: Yup.object({
+    cna: Yup.number().typeError(" must be a number").nullable().required('required'),
+    lvn: Yup.number().typeError(" must be a number").nullable().required('required'),
+    rn: Yup.number().typeError(" must be a number").nullable().required('required'),
+    care_giver: Yup.number().typeError(" must be a number").nullable().required('required'),
+    med_tech: Yup.number().typeError(" must be a number").nullable().required('required'),
+    holiday: Yup.number().typeError(" must be a number").nullable(),
+    hazard: Yup.number().typeError(" must be a number").nullable(),
+  }),
+  diff_rates: Yup.object({
+    pm: Yup.number().typeError(" must be a number").nullable().required('required'),
+    noc: Yup.number().typeError(" must be a number").nullable().required('required'),
+    weekend: Yup.number().typeError(" must be a number").nullable().required('required'),
+  }),
+  conditional_rates: Yup.object({
+    overtime: Yup.object({
+      hours: Yup.number().typeError(" must be a number").nullable(),
+      rate: Yup.number().typeError(" must be a number").nullable(),
     }),
-    hourly_base_rates: Yup.object({
-      cna: Yup.number().typeError(" must be a number").nullable(),
-      lvn: Yup.number().typeError(" must be a number").nullable(),
-      rn: Yup.number().typeError(" must be a number").nullable(),
-      care_giver: Yup.number().typeError(" must be a number").nullable(),
-      med_tech: Yup.number().typeError(" must be a number").nullable(),
-      holiday: Yup.number().typeError(" must be a number").nullable(),
-      hazard: Yup.number().typeError(" must be a number").nullable(),
+    rush: Yup.object({
+      hours: Yup.number().typeError(" must be a number").nullable(),
+      rate: Yup.number().typeError(" must be a number").nullable(),
     }),
-    diff_rates: Yup.object({
-      pm: Yup.number().typeError(" must be a number").nullable(),
-      noc: Yup.number().typeError(" must be a number").nullable(),
-      weekend: Yup.number().typeError(" must be a number").nullable(),
+    cancellation_before: Yup.object({
+      hours: Yup.number().typeError(" must be a number").nullable(),
+      rate: Yup.number().typeError(" must be a number").nullable(),
     }),
-    conditional_rates: Yup.object({
-      overtime: Yup.object({
-        hours: Yup.number().typeError(" must be a number").nullable(),
-        rate: Yup.number().typeError(" must be a number").nullable(),
-      }),
-      rush: Yup.object({
-        hours: Yup.number().typeError(" must be a number").nullable(),
-        rate: Yup.number().typeError(" must be a number").nullable(),
-      }),
-      cancellation_before: Yup.object({
-        hours: Yup.number().typeError(" must be a number").nullable(),
-        rate: Yup.number().typeError(" must be a number").nullable(),
-      }),
-      shift_early_completion: Yup.object({
-        hours: Yup.number().typeError(" must be a number").nullable(),
-        rate: Yup.number().typeError(" must be a number").nullable(),
-      }),
+    shift_early_completion: Yup.object({
+      hours: Yup.number().typeError(" must be a number").nullable(),
+      rate: Yup.number().typeError(" must be a number").nullable(),
     }),
-  
-    location: Yup.object({
-      coordinates: Yup.object({
-        longitude: Yup.number().typeError("must be a number").required("required"),
-        latitude: Yup.number().typeError("must be a number").required("required"),
-      })
+  }),
+
+  location: Yup.object({
+    coordinates: Yup.object({
+      longitude: Yup.number().typeError("must be a number").required("required"),
+      latitude: Yup.number().typeError("must be a number").required("required"),
     })
-  });
+  })
+});

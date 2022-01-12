@@ -9,12 +9,12 @@ import { TextField } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
-import * as Yup from "yup";
 import DialogComponent from "../../../../components/DialogComponent";
 import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { acknowledgement } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
+import { experienceValidation } from "../../add/ExperienceAddComponent/ExperienceValidation";
 import "./ExperienceEditComponent.scss";
 import ReadOnlyRow from "./ReadOnlyRow";
 
@@ -40,30 +40,7 @@ const experienceInitialState: ExperienceItem = {
   skills: ""
 };
 
-const experienceValidation = Yup.object({
-  facilityName: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 letter")
-    .trim("")
-    .required("required"),
-  speciality: Yup.string()
-    .typeError("must be text")
-    .trim("")
-    .required(" required"),
-  hcpType: Yup.string()
-    .typeError("must be text")
-    .trim()
-    .required("required"),
-  location: Yup.string().typeError("must be date").trim().required(" required"),
-  startDate: Yup.string()
-    .typeError("must be date")
-    .required("required").nullable(),
-  endDate: Yup.string().typeError("must be date").nullable(),
-  stillWorkingHere: Yup.string().trim().required("required"),
-  skills: Yup.string()
-    .typeError("must be text")
-    .trim()
-});
+
 
 type ExperienceAddComponentProps = {
   getExperienceDetails: any;
@@ -87,26 +64,11 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [experienceId, setExperienceId] = useState<any>(null);
 
-  const handleAcceptedDate = (startDate: any, endDate: any): boolean => {
-    console.log(moment(endDate).isAfter(startDate))
-    return moment(endDate).isAfter(startDate)
-  }
-
   const onAdd = (
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
 
-    let isAccepted: boolean = true;
-    if (experience?.endDate) {
-      isAccepted = handleAcceptedDate(experience.startDate, experience.endDate)
-    }
-
-    if (!isAccepted) {
-      CommonService.showToast("Start Date can not be greater than End Date")
-      setSubmitting(false)
-      return
-    }
     const newExperience = {
       facility_name: experience.facilityName,
       specialisation: experience.speciality,

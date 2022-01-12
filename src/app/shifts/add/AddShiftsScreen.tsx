@@ -487,6 +487,7 @@ const AddShiftsScreen = () => {
                       </div>
                       <div className='shift-calender'>
                         <Field
+                          minDate={new Date()}
                           disabled={!mode ? true : false}
                           required
                           inputClass='custom-input'
