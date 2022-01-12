@@ -10,18 +10,18 @@ import { Field, Form, Formik, FieldProps } from "formik";
 import { ScrollToError } from '../../../../components/ScrollToError';
 
 export interface FacilityEditDetailsComponentProps {
-    onAdd :any;
-    regions :any;
-    isImageRemoved:any;
-    facilityDetails :any;
-    deleteFacilityImage:any;
-    fileUpload :any;
-    previewFile :any;
-    deleteFile :any;
-    OnFileSelected :any;
+    onAdd: any;
+    regions: any;
+    isImageRemoved: any;
+    facilityDetails: any;
+    deleteFacilityImage: any;
+    fileUpload: any;
+    previewFile: any;
+    deleteFile: any;
+    OnFileSelected: any;
 }
 
-const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) => {
+const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) => {
     const onAdd = props?.onAdd;
     const regions = props?.regions;
     const isImageRemoved = props?.isImageRemoved;
@@ -34,15 +34,15 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
 
     const showDropDownBelowField = {
         MenuProps: {
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "left"
-          },
-          getContentAnchorEl: null
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left"
+            },
+            getContentAnchorEl: null
         }
-      }
+    }
 
-      const facilityInitialState: FacilityItemEditType = {
+    const facilityInitialState: FacilityItemEditType = {
         facility_uid: facilityDetails?.facility_uid,
         facility_name: facilityDetails?.facility_name,
         facility_short_name: facilityDetails?.facility_short_name,
@@ -53,58 +53,58 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
         website_url: facilityDetails?.website_url,
         about: facilityDetails?.about,
         address: {
-          street: facilityDetails?.address?.street,
-          city: facilityDetails?.address?.city,
-          state: facilityDetails?.address?.state,
-          region_name: facilityDetails?.address?.region_name,
-          country: facilityDetails?.address?.country,
-          zip_code: facilityDetails?.address?.zip_code,
+            street: facilityDetails?.address?.street,
+            city: facilityDetails?.address?.city,
+            state: facilityDetails?.address?.state,
+            region_name: facilityDetails?.address?.region_name,
+            country: facilityDetails?.address?.country,
+            zip_code: facilityDetails?.address?.zip_code,
         },
         timezone: facilityDetails?.timezone,
         hourly_base_rates: {
-          cna: facilityDetails?.hourly_base_rates?.cna,
-          lvn: facilityDetails?.hourly_base_rates?.lvn,
-          rn: facilityDetails?.hourly_base_rates?.rn,
-          care_giver: facilityDetails?.hourly_base_rates?.care_giver,
-          med_tech: facilityDetails?.hourly_base_rates?.med_tech,
-          holiday: facilityDetails?.hourly_base_rates?.holiday,
-          hazard: facilityDetails?.hourly_base_rates?.hazard,
+            cna: facilityDetails?.hourly_base_rates?.cna,
+            lvn: facilityDetails?.hourly_base_rates?.lvn,
+            rn: facilityDetails?.hourly_base_rates?.rn,
+            care_giver: facilityDetails?.hourly_base_rates?.care_giver,
+            med_tech: facilityDetails?.hourly_base_rates?.med_tech,
+            holiday: facilityDetails?.hourly_base_rates?.holiday,
+            hazard: facilityDetails?.hourly_base_rates?.hazard,
         },
         diff_rates: {
-          pm: facilityDetails?.diff_rates?.pm,
-          noc: facilityDetails?.diff_rates?.noc,
-          weekend: facilityDetails?.diff_rates?.weekend,
+            pm: facilityDetails?.diff_rates?.pm,
+            noc: facilityDetails?.diff_rates?.noc,
+            weekend: facilityDetails?.diff_rates?.weekend,
         },
         conditional_rates: {
-          overtime: {
-            hours: facilityDetails?.conditional_rates?.overtime?.hours,
-            rate: facilityDetails?.conditional_rates?.overtime?.rate,
-          },
-          rush: {
-            hours: facilityDetails?.conditional_rates?.rush?.hours,
-            rate: facilityDetails?.conditional_rates?.rush?.rate,
-          },
-          cancellation_before: {
-            hours: facilityDetails?.conditional_rates?.cancellation_before?.hours,
-            rate: facilityDetails?.conditional_rates?.cancellation_before?.rate,
-          },
-          shift_early_completion: {
-            hours:
-              facilityDetails?.conditional_rates?.shift_early_completion?.hours,
-            rate: facilityDetails?.conditional_rates?.shift_early_completion?.rate,
-          },
+            overtime: {
+                hours: facilityDetails?.conditional_rates?.overtime?.hours,
+                rate: facilityDetails?.conditional_rates?.overtime?.rate,
+            },
+            rush: {
+                hours: facilityDetails?.conditional_rates?.rush?.hours,
+                rate: facilityDetails?.conditional_rates?.rush?.rate,
+            },
+            cancellation_before: {
+                hours: facilityDetails?.conditional_rates?.cancellation_before?.hours,
+                rate: facilityDetails?.conditional_rates?.cancellation_before?.rate,
+            },
+            shift_early_completion: {
+                hours:
+                    facilityDetails?.conditional_rates?.shift_early_completion?.hours,
+                rate: facilityDetails?.conditional_rates?.shift_early_completion?.rate,
+            },
         },
-    
-        location: {
-          coordinates: {
-            longitude: facilityDetails?.location?.coordinates?.[0],
-            latitude: facilityDetails?.location?.coordinates?.[1],
-          }
-        }
-      };
-    
 
-      
+        location: {
+            coordinates: {
+                longitude: facilityDetails?.location?.coordinates?.[0],
+                latitude: facilityDetails?.location?.coordinates?.[1],
+            }
+        }
+    };
+
+
+
     return <div>
         <Formik initialValues={facilityInitialState} validateOnChange={true} validationSchema={facilityFormEditValidation} onSubmit={onAdd}>
             {({ isSubmitting, isValid, resetForm }) => (
@@ -116,7 +116,7 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
                             <Field variant="outlined" name="facility_name" type={"text"} component={TextField}
                                 label="Facility Name*" fullWidth autoComplete="off" id='input_facility_edit_facility_name' />
                             <Field variant="outlined" name="business_name" type={"text"} component={TextField}
-                                label="Business Name*" fullWidth autoComplete="off" id='input_facility_edit_business_name' />
+                                label="Business Name" fullWidth autoComplete="off" id='input_facility_edit_business_name' />
                         </div>
 
                         <div className="input-container">
@@ -127,7 +127,7 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
                         </div>
                         <div className="input-container mrg-top-10">
                             <Field SelectProps={showDropDownBelowField} variant="outlined" name="address.region_name"
-                                type={"text"} component={TextField} select label="Region" fullWidth autoComplete="off"
+                                type={"text"} component={TextField} select label="Region*" fullWidth autoComplete="off"
                                 id='input_facility_edit_address_region_name' className="flex-1">
                                 {regions &&
                                     regions.map((item: any, index: any) => (
@@ -145,7 +145,7 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
                                     </Field>
                                 </div>
                                 <div className="extension-number" >
-                                    <Field variant='outlined' component={TextField} fullWidth autoComplete="off"
+                                    <Field inputProps={{ maxLength: 10 }} variant='outlined' component={TextField} fullWidth autoComplete="off"
                                         label="Extension No." name="extension_number" id="input_facility_add_extension_number" />
                                 </div>
                             </div>
@@ -207,33 +207,33 @@ const FacilityEditDetailsComponent = (props:FacilityEditDetailsComponentProps) =
                         <p className='card-header'>Other Details</p>
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.cna" type={"text"} component={TextField}
-                                label="CNA Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_cna' />
+                                label="CNA Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_cna' />
                             <Field variant="outlined" name="hourly_base_rates.lvn" type={"text"} component={TextField}
-                                label="LVN Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_lvn' />
+                                label="LVN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_lvn' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="hourly_base_rates.rn" type={"text"} component={TextField}
-                                label="RN Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_rn' />
+                                label="RN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_rn' />
                             <Field variant="outlined" name="hourly_base_rates.care_giver" type={"text"} component={TextField}
-                                label="Care Giver (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
+                                label="Care Giver (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.med_tech" type={"text"} component={TextField}
-                                label="Med Tech (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
+                                label="Med Tech (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
                             <Field variant="outlined" name="hourly_base_rates.holiday" type={"text"} component={TextField}
                                 label="Holiday Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_holiday' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="diff_rates.noc" type={"text"} component={TextField}
-                                label="NOC Diff ($)" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_noc' />
+                                label="NOC Diff ($)*" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_noc' />
                             <Field variant="outlined" name="hourly_base_rates.hazard" type={"text"} component={TextField}
                                 label="Hazard Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_hazard' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="diff_rates.pm" type={"text"} component={TextField}
-                                label="PM Diff ($)" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_pm' />
+                                label="PM Diff ($)*" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_pm' />
                             <Field variant="outlined" name="diff_rates.weekend" type={"text"} component={TextField}
-                                label="Weekend Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_weekend' />
+                                label="Weekend Rate ($)*" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_weekend' />
                         </div>
                         <div className="input-container">
                             <Field SelectProps={showDropDownBelowField} variant="outlined" name="conditional_rates.overtime.hours"

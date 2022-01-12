@@ -35,6 +35,16 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
     shiftType: "",
   });
 
+  const showDropDownBelowField = {
+    MenuProps: {
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "left"
+      },
+      getContentAnchorEl: null
+    }
+  }
+
   const handleAddFormChange = (event: any) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -70,7 +80,6 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
 
     onAddShift(newShiftTimings).then(() => getShiftDetails());
 
-    //clear state after add
     setAddFormData({
       shiftStartTime: "",
       shiftEndTime: "",
@@ -83,7 +92,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   const handleCancelShift = () => {
     setIsShifts(false);
 
-    //clear state after cancel
+
     setAddFormData({
       shiftStartTime: "",
       shiftEndTime: "",
@@ -103,7 +112,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       .catch((err) => {
         console.log(err);
       });
-  },[facilityId,getShiftDetails])
+  }, [facilityId, getShiftDetails])
 
   // function formattedTime(time: any) {
   //   let timeInMins = CommonService.convertHoursToMinutes(time)
@@ -178,6 +187,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
               id="input_shift_add_shift_end_time"
             />
             <CustomSelect
+              SelectProps={showDropDownBelowField}
               placeholder="Shift Type"
               variant='outlined'
               required

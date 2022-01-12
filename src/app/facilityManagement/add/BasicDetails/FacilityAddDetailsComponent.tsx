@@ -54,7 +54,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                             <Field variant="outlined" name="facility_name" type={"text"} component={TextField}
                                 label="Facility Name*" fullWidth autoComplete="off" id='input_facility_add_facility_name' />
                             <Field variant="outlined" name="business_name" type={"text"} component={TextField}
-                                label="Business Name*" fullWidth autoComplete="off" id='input_facility_add_business_name' />
+                                label="Business Name" fullWidth autoComplete="off" id='input_facility_add_business_name' />
                         </div>
 
                         <div className="input-container">
@@ -66,7 +66,7 @@ const FacilityAddDetailsComponent = (props: any) => {
 
                         <div className="input-container ">
                             <Field SelectProps={showDropDownBelowField} variant="outlined" name="address.region_name" type={"text"}
-                                component={TextField} select label="Region" fullWidth className="flex-1" autoComplete="off"
+                                component={TextField} select label="Region*" fullWidth className="flex-1" autoComplete="off"
                                 id='input_facility_add_address_region_name'>
                                 {regions &&
                                     regions.map((item: any, index: any) => (
@@ -85,7 +85,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                                     </Field>
                                 </div>
                                 <div className="extension-number" >
-                                    <Field variant='outlined' component={TextField} fullWidth autoComplete="off"
+                                    <Field inputProps={{ maxLength: 10 }} variant='outlined' component={TextField} fullWidth autoComplete="off"
                                         label="Extension No" name="extension_number" id="input_facility_add_extension_number" />
                                 </div>
                             </div>
@@ -178,36 +178,36 @@ const FacilityAddDetailsComponent = (props: any) => {
 
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.cna" type={"text"} component={TextField}
-                                label="CNA Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_cna' />
+                                label="CNA Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_cna' />
                             <Field variant="outlined" name="hourly_base_rates.lvn" type={"text"} component={TextField}
-                                label="LVN Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_lvn' />
+                                label="LVN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_lvn' />
                         </div>
 
                         <div className="input-container">
                             <Field variant="outlined" name="hourly_base_rates.rn" type={"text"} component={TextField}
-                                label="RN Rate ($/hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_rn' />
+                                label="RN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_rn' />
                             <Field variant="outlined" name="hourly_base_rates.care_giver" type={"text"} component={TextField}
-                                label="Care Giver (hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_care_giver' />
+                                label="Care Giver (hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_care_giver' />
                         </div>
 
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.med_tech" type={"text"} component={TextField}
-                                label="Med Tech (hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_med_tech' />
+                                label="Med Tech (hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_med_tech' />
                             <Field variant="outlined" name="hourly_base_rates.holiday" type={"text"} component={TextField}
                                 label="Holiday Rate ($)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_holiday' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="diff_rates.noc" type={"text"} component={TextField}
-                                label="NOC Diff ($)" fullWidth autoComplete="off" id='input_facility_add_diff_rates_noc' />
+                                label="NOC Diff ($)*" fullWidth autoComplete="off" id='input_facility_add_diff_rates_noc' />
                             <Field variant="outlined" name="hourly_base_rates.hazard" type={"text"} component={TextField}
                                 label="Hazard Rate ($)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_hazard' />
                         </div>
 
                         <div className="input-container ">
                             <Field variant="outlined" name="diff_rates.pm" type={"text"} component={TextField}
-                                label="PM Diff ($)" fullWidth autoComplete="off" id='input_facility_add_diff_rates_pm' />
+                                label="PM Diff ($)*" fullWidth autoComplete="off" id='input_facility_add_diff_rates_pm' />
                             <Field variant="outlined" name="diff_rates.weekend" type={"text"} component={TextField}
-                                label="Weekend Rate ($)" fullWidth autoComplete="off" id='input_facility_add_diff_rates_weekend' />
+                                label="Weekend Rate ($)*" fullWidth autoComplete="off" id='input_facility_add_diff_rates_weekend' />
                         </div>
 
                         <div className='input-container'>
