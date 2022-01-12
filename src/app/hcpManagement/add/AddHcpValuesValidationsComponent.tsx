@@ -110,21 +110,21 @@ export const AddHcpInitialValues = {
 
 
 export const hcpFormValidation = Yup.object({
-  first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(255, 'max limit 255'),
-  last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(255, 'max limit 255'),
+  first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50'),
+  last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50'),
   email: Yup.string().min(3, "invalid").trim("empty space not allowed").typeError(" must be a text").email("invalid").required("required"),
   contact_number: Yup.string()
     .min(12, "min 10 digits")
     .required("required"),
   hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
   gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(750, 'max limit 750'),
+  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(50, 'max limit 50'),
   address: Yup.object({
-    street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(255, 'max limit 255').required("required"),
-    city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(255, 'max limit 255').required("required"),
-    state: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(255, 'max limit 255').required("required"),
-    region: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(255, 'max limit 255').required("required"),
-    country: Yup.string().typeError(" must be a text").min(2, "invalid").required("required").trim("empty space not allowed").max(255, 'max limit 255').required("required"),
+    street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
+    city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
+    state: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
+    region: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
+    country: Yup.string().typeError(" must be a text").min(2, "invalid").required("required").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
     zip_code: Yup.string()
       .typeError(" must be a text")
       .matches(/^[0-9]+$/, "Must be only digits")
@@ -134,9 +134,9 @@ export const hcpFormValidation = Yup.object({
       .required("required"),
   }),
   professional_details: Yup.object({
-    experience: Yup.number(),
+    experience: Yup.number().positive(),
     speciality: Yup.string().typeError(" must be a text").min(2, "invalid"),
-    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(750, 'max limit 750'),
+    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(100, 'max limit 100'),
   }),
   rate_per_hour: Yup.number().moreThan(0, 'must be greater than 0').max(999, 'max limit 999').typeError("must be a number"),
   signed_on: Yup.string().typeError("must be date").nullable(),
@@ -144,24 +144,24 @@ export const hcpFormValidation = Yup.object({
     .max(31, 'Must be less than or equal to 31'),
 
   nc_details: Yup.object({
-    dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30"),
-    shift_type_preference: Yup.string().trim().typeError("must be valid text"),
-    location_preference: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30"),
-    more_important_preference: Yup.string().trim().typeError("must be valid text"),
-    family_consideration: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(100, "max limit 100"),
-    zone_assignment: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30"),
-    vaccine: Yup.string().trim().typeError("must be valid text"),
-    covid_facility_preference: Yup.string().trim().typeError("must be valid "),
-    is_fulltime_job: Yup.string().trim().typeError("must be valid "),
-    is_supplement_to_income: Yup.string().trim().typeError("must be valid "),
-    is_studying: Yup.string().trim().typeError("must be valid "),
-    is_gusto_invited: Yup.string().trim().typeError("must be valid "),
-    is_gusto_onboarded: Yup.string().trim().typeError("must be valid "),
-    gusto_type: Yup.string().trim().typeError("must be valid text"),
-    nc_last_updated: Yup.string().trim().typeError("must be valid text"),
-    last_call_date: Yup.string().typeError("must be date").nullable(),
-    contact_type: Yup.string().trim().typeError("must be valid text"),
-    other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200")
+    dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30").nullable(),
+    shift_type_preference: Yup.string().trim().typeError("must be valid text").nullable(),
+    location_preference: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30").nullable(),
+    more_important_preference: Yup.string().trim().typeError("must be valid text").nullable(),
+    family_consideration: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(100, "max limit 100").nullable(),
+    zone_assignment: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30").nullable(),
+    vaccine: Yup.string().trim().typeError("must be valid text").nullable(),
+    covid_facility_preference: Yup.string().trim().typeError("must be valid ").nullable(),
+    is_fulltime_job: Yup.string().trim().typeError("must be valid ").nullable(),
+    is_supplement_to_income: Yup.string().trim().typeError("must be valid ").nullable(),
+    is_studying: Yup.string().trim().typeError("must be valid ").nullable(),
+    is_gusto_invited: Yup.string().trim().typeError("must be valid ").nullable(),
+    is_gusto_onboarded: Yup.string().trim().typeError("must be valid ").nullable(),
+    gusto_type: Yup.string().trim().typeError("must be valid text").nullable(),
+    nc_last_updated: Yup.string().trim().typeError("must be valid text").nullable(),
+    last_call_date: Yup.string().typeError("must be date").nullable().nullable(),
+    contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
+    other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable()
   })
 
 });

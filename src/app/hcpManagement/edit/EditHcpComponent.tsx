@@ -296,7 +296,7 @@ const EditHcpComponent = () => {
   const OnFileSelected = (files: File[], id: any) => {
     let selectedAttachment = required_attachments?.filter((item: any) => item?.id === id)
     if (selectedAttachment[0]) {
-      required_attachments[(selectedAttachment[0]?.id)-1].index = fileUpload?.wrapper?.length || 0
+      required_attachments[(selectedAttachment[0]?.id) - 1].index = fileUpload?.wrapper?.length || 0
       setRequiredAttachments([...required_attachments])
     }
     for (let file of files) {
