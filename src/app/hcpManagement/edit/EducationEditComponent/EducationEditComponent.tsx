@@ -9,11 +9,11 @@ import { TextField } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
-import * as Yup from "yup";
 import DialogComponent from "../../../../components/DialogComponent";
 import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService } from "../../../../helpers";
+import { educationValidation } from "../../add/EducationAddComponent/EducationValidation";
 import "./EducationEditComponent.scss";
 import ReadOnlyRow from "./ReadOnlyRow";
 
@@ -41,23 +41,6 @@ const educationInitialState: EducationItem = {
   graduation_date: null,
 };
 
-const educationValidation = Yup.object({
-  institute_name: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 chracters")
-    .trim("The contact name cannot include leading and trailing spaces")
-    .required("required"),
-  degree: Yup.string()
-    .typeError("must be text")
-    .trim("empty space")
-    .required("required"),
-  location: Yup.string()
-    .typeError("must be text")
-    .trim("empty space")
-    .required(" required"),
-  start_date: Yup.string().typeError("must be date").required(" required").nullable(),
-  graduation_date: Yup.string().typeError("must be date").required(" required").nullable(),
-});
 
 const EducationAddComponent = ({
   onAddEducation,
@@ -68,8 +51,8 @@ const EducationAddComponent = ({
 }: EducationAddComponentProps) => {
   const [isEducation, setIsEducation] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  const [educationId,setEducationId] = useState<any>(null);
-  
+  const [educationId, setEducationId] = useState<any>(null);
+
   const onAdd = (
     education: EducationItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<EducationItem>
@@ -110,10 +93,10 @@ const EducationAddComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  },[getEducationDetails,hcpId])
+  }, [getEducationDetails, hcpId])
 
 
-  const openAdd = useCallback((id: any) => {  
+  const openAdd = useCallback((id: any) => {
     setEducationId(id)
     setIsAddOpen(true);
   }, [])
@@ -124,7 +107,7 @@ const EducationAddComponent = ({
 
   const confirmAdd = useCallback(() => {
     handleDeleteClick(educationId)
-  }, [educationId,handleDeleteClick])
+  }, [educationId, handleDeleteClick])
 
 
   const sortedEducationData = CommonService.sortDatesByLatest(education, 'start_date')

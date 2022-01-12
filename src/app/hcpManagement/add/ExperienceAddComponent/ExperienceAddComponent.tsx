@@ -10,10 +10,10 @@ import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
-import * as Yup from "yup";
 import { acknowledgement } from "../../../../constants/data";
 import { CommonService } from "../../../../helpers";
 import "./ExperienceAddComponent.scss";
+import { experienceValidation } from "./ExperienceValidation";
 import ReadOnlyRow from "./ReadOnlyRow";
 
 type ExperienceAddComponentProps = {
@@ -49,26 +49,7 @@ const experienceInitialState: ExperienceItem = {
   skills: "",
 };
 
-const experienceValidation = Yup.object({
-  facilityName: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 chracters")
-    .trim("")
-    .required("required"),
-  speciality: Yup.string()
-    .typeError("must be text")
-    .trim("")
-    .required("required"),
-  hcpType: Yup.string()
-    .typeError("must be number")
-    .trim()
-    .required("required"),
-  location: Yup.string().typeError("must be date").trim().required("required"),
-  startDate: Yup.string().typeError("must be date").required("required").nullable(),
-  endDate: Yup.string().typeError("must be date").nullable(),
-  stillWorkingHere: Yup.string().trim().required("required"),
-  skills: Yup.string().trim()
-});
+
 
 const ExperienceAddComponent = ({
   handleCalcSpecialities,
@@ -82,25 +63,10 @@ const ExperienceAddComponent = ({
   const [isExperiences, setIsExperiences] = useState<boolean>(false);
   const [showEndDate, setShowEndDate] = useState<boolean>(true);
 
-  const handleAcceptedDate = (startDate: any, endDate: any): boolean => {
-    console.log(moment(endDate).isAfter(startDate))
-    return moment(endDate).isAfter(startDate)
-
-  }
   const onAdd = (
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
-    let isAccepted: boolean = true;
-    if (experience?.endDate) {
-      isAccepted = handleAcceptedDate(experience.startDate, experience.endDate)
-    }
-
-    if (!isAccepted) {
-      CommonService.showToast("Start Date can not be greater than End Date")
-      setSubmitting(false)
-      return
-    }
 
     const newExperience = {
       tempId: nanoid(),

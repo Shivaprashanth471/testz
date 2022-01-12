@@ -82,19 +82,19 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <p className='card-header'>Basic Details</p>
                             <div className="input-container">
                                 <Field variant='outlined' name="first_name" type={"text"} component={TextField}
-                                    label="First Name" fullWidth id="input_hcp_edit_first_name" autoComplete="off" />
+                                    label="First Name*" fullWidth id="input_hcp_edit_first_name" autoComplete="off" />
                                 <Field variant='outlined' name="last_name" type={"text"} component={TextField}
-                                    label="Last Name" fullWidth id="input_hcp_edit_last_name" autoComplete="off" />
+                                    label="Last Name*" fullWidth id="input_hcp_edit_last_name" autoComplete="off" />
                             </div>
 
                             <div className="input-container">
                                 <Field variant='outlined' component={TextField} type={"text"} fullWidth autoComplete="off"
-                                    label="Email" name="email" id="input_hcp_edit_email" className="flex-1" />
+                                    label="Email*" name="email" id="input_hcp_edit_email" className="flex-1" />
                                 <div className="flex-1">
                                     <Field
                                         name={'contact_number'} className="flex-1">
                                         {(field: FieldProps) => {
-                                            return <PhoneInputComponent field={field} placeholder={'Enter Phone number'} />
+                                            return <PhoneInputComponent field={field} placeholder={'Enter Phone number*'} />
                                         }}
                                     </Field>
                                 </div>
@@ -105,7 +105,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                         const hcpType = e.target.value;
                                         setFieldValue("hcp_type", hcpType);
                                     }}
-                                    component={TextField} type={"text"} select label="HCP Type" name="hcp_type"
+                                    component={TextField} type={"text"} select label="HCP Type*" name="hcp_type"
                                     id="menu_hcp_edit_hcp_type" fullWidth autoComplete="off">
 
                                     {hcpTypes.map((item: any, index: number) => (
@@ -116,7 +116,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 </Field>
 
                                 <Field SelectProps={showDropDownBelowField} variant='outlined' component={TextField} type={"text"} select
-                                    label="Gender" name="gender" id="menu_hcp_edit_gender" fullWidth autoComplete="off">
+                                    label="Gender*" name="gender" id="menu_hcp_edit_gender" fullWidth autoComplete="off">
                                     {genderTypes.map((item: any, index: any) => (
                                         <MenuItem value={item.value} key={index} id={"menu_hcp_edit_gender_" + item.value}>
                                             {item.label}
@@ -127,13 +127,13 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                             <div className="input-container">
                                 <Field variant='outlined' name="address.street" type={"text"} component={TextField}
-                                    label="Street" id="input_hcp_edit_street" fullWidth autoComplete="off" />
+                                    label="Street*" id="input_hcp_edit_street" fullWidth autoComplete="off" />
                                 <Field variant='outlined' name="address.city" type={"text"} id="input_hcp_edit_city"
-                                    component={TextField} label="City" fullWidth autoComplete="off" />
+                                    component={TextField} label="City*" fullWidth autoComplete="off" />
                             </div>
                             <div className="input-container">
                                 <Field SelectProps={showDropDownBelowField} variant='outlined' component={TextField} type={"text"} select
-                                    label="Region" name="address.region" id="menu_hcp_edit_region" fullWidth autoComplete="off">
+                                    label="Region*" name="address.region" id="menu_hcp_edit_region" fullWidth autoComplete="off">
                                     {regions &&
                                         regions.map((item: any, index: any) => (
                                             <MenuItem value={item.name} key={index} id={"menu_hcp_edit_region" + item.name}>
@@ -143,7 +143,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 </Field>
 
                                 <Field variant='outlined' name="address.state" type={"text"} component={TextField}
-                                    label="State" id="input_hcp_edit_state" fullWidth autoComplete="off" />
+                                    label="State*" id="input_hcp_edit_state" fullWidth autoComplete="off" />
                             </div>
                             <div className="input-container ">
                                 <Field
@@ -151,9 +151,9 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                         maxLength: 6
                                     }}
                                     variant='outlined' fullWidth name="address.zip_code" type={"text"} component={TextField}
-                                    label="Zip" id="input_hcp_edit_zip" autoComplete="off" />
+                                    label="Zip*" id="input_hcp_edit_zip" autoComplete="off" />
                                 <Field variant='outlined' name="address.country" type={"text"} component={TextField}
-                                    label="Country" fullWidth id="input_hcp_edit_country" autoComplete="off" />
+                                    label="Country*" fullWidth id="input_hcp_edit_country" autoComplete="off" />
                             </div>
 
                             <div className="facility-about mrg-top-10">
