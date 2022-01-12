@@ -50,12 +50,9 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         if (shiftDetails?.time_breakup?.check_in_time) {
             setCheckIn({ date: shiftDetails?.time_breakup?.check_in_time.slice(0, 10), time: shiftDetails?.time_breakup?.check_in_time.slice(11, 19) })
         }
-
     }, [shiftDetails?.time_breakup?.check_in_time])
 
-    console.log(shiftDetails, checkIn, "565656")
     const handleAddBreakTime = useCallback(() => {
-
         let data = { break_in_date: null, break_in_time: null, break_out_time: null, break_out_date: null }
         setShiftBreakTimings((prevState: any) => [...prevState, data]);
     }, [setShiftBreakTimings])
@@ -66,85 +63,121 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     }, [setShiftBreakTimings, shiftBreakTimings])
 
     const handleBreakoutChange = useCallback((event: any, index: any) => {
-        let date = moment(shiftBreakTimings[index]?.break_out_date)
-        let now =  moment(shiftBreakTimings[index]?.break_in_date);
-        let error=false
-        console.log(date, now)
-        if (now < date) {
+        let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date)
+        let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
+        let error = false
+        if (breakInDate < breakOutDate) {
             // date is past
-        } else if (now > date) {
+        } else if (breakInDate > breakOutDate) {
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
-            let endTime =moment(shiftBreakTimings[index]?.break_in_time,'HH:mm:ss')
-         console.log(beginningTime.isBefore(endTime))
-            if(beginningTime.isBefore(endTime)){
-              error=true
-          }
+            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss')
+            if (beginningTime.isBefore(endTime)) {
+                error = true
+            }
         }
 
-        if(error){
-            CommonService.showToast("error" || "Error","error")
-        }else{
-        const data = shiftBreakTimings;
-        let value = moment(event).format("HH:mm:ss");
-        data[index] = {
-            break_in_date: data[index]?.break_in_date,
-            break_in_time: data[index]?.break_in_time,
-            break_out_date: data[index]?.break_out_date,
-            break_out_time: value
+        if (error) {
+            CommonService.showToast("Break Out Time has to be greater than Break In Time" || "Error", "error")
+        } else {
+            const data = shiftBreakTimings;
+            let value = moment(event).format("HH:mm:ss");
+            data[index] = {
+                break_in_date: data[index]?.break_in_date,
+                break_in_time: data[index]?.break_in_time,
+                break_out_date: data[index]?.break_out_date,
+                break_out_time: value
+            }
+            setShiftBreakTimings([...data])
         }
-        setShiftBreakTimings([...data])
-    }
     }, [setShiftBreakTimings, shiftBreakTimings])
 
     const handleBreakInDateChange = useCallback((event: any, index: any) => {
-        const data = shiftBreakTimings;
-        let value = moment(event).format('YYYY-MM-DD');
-        data[index] = {
-            break_in_date: value,
-            break_in_time: data[index]?.break_in_time,
-            break_out_date: data[index]?.break_out_date,
-            break_out_time: data[index]?.break_out_time
-        }
-        setShiftBreakTimings([...data])
-    }, [setShiftBreakTimings, shiftBreakTimings])
+        let breakInDate = moment(event).format('YYYY-MM-DD')
+        let breakOutDate = index === 0 ? moment(checkIn?.date) : moment(shiftBreakTimings[index - 1]?.break_out_date);
+        let error = false
 
-    const handleBreakOutDateChange = useCallback((event: any, index: any) => {
-        const data = shiftBreakTimings;
-        let value = moment(event).format('YYYY-MM-DD');
-        data[index] = {
-            break_in_date: data[index]?.break_in_date,
-            break_in_time: data[index]?.break_in_time,
-            break_out_date: value,
-            break_out_time: data[index]?.break_out_time
-        }
-        setShiftBreakTimings([...data])
-    }, [setShiftBreakTimings, shiftBreakTimings])
-
-    const handleBreakInChange = useCallback((event: any, index: any) => {
-        console.log(shiftBreakTimings, checkIn)
-        let date = moment(shiftBreakTimings[index]?.break_in_date)
-        let now = index === 0 ? moment(checkIn?.date) : moment(shiftBreakTimings[index - 1]?.break_out_date);
-        let error=false
-        console.log(date, now)
-        if (now < date) {
+        if (breakOutDate < moment(breakInDate)) {
             // date is past
-        } else if (now > date) {
+        } else if (breakOutDate > moment(breakInDate)) {
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
-            let endTime =index===0? moment(checkIn?.time, 'HH:mm:ss'):moment(shiftBreakTimings[index-1]?.break_out_time,'HH:mm:ss')
-         console.log(beginningTime.isBefore(endTime))
-            if(beginningTime.isBefore(endTime)){
-              error=true
-          }
+            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
+            console.log(beginningTime.isBefore(endTime))
+            if (beginningTime.isBefore(endTime)) {
+                error = true
+            }
         }
 
-        if(error){
-            CommonService.showToast("error" || "Error","error")
-        }else{
-            console.log(true)
+        if (error) {
+            CommonService.showToast(index === 0 ? "Break In Time has to greater than Check In Time" :
+                "Break In Time has to greater than Previous Break Out Time" || "Error", "error")
+        } else {
+            const data = shiftBreakTimings;
+            let value = moment(event).format('YYYY-MM-DD');
+            data[index] = {
+                break_in_date: value,
+                break_in_time: data[index]?.break_in_time,
+                break_out_date: data[index]?.break_out_date,
+                break_out_time: data[index]?.break_out_time
+            }
+            setShiftBreakTimings([...data])
+        }
+    }, [setShiftBreakTimings, shiftBreakTimings, checkIn?.date, checkIn?.time])
+
+    const handleBreakOutDateChange = useCallback((event: any, index: any) => {
+        let breakOutDate =  moment(event).format('YYYY-MM-DD')
+        let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
+        let error = false
+        if (breakInDate < moment(breakOutDate)) {
+            // date is past
+        } else if (breakInDate > moment(breakOutDate)) {
+        } else {
+            let value = moment(event).format("HH:mm:ss");
+            let beginningTime = moment(value, 'HH:mm:ss');
+            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss')
+            if (beginningTime.isBefore(endTime)) {
+                error = true
+            }
+        }
+
+        if (error) {
+            CommonService.showToast("Break Out Time has to be greater than Break In Time" || "Error", "error")
+        } else {
+            const data = shiftBreakTimings;
+            let value = moment(event).format('YYYY-MM-DD');
+            data[index] = {
+                break_in_date: data[index]?.break_in_date,
+                break_in_time: data[index]?.break_in_time,
+                break_out_date: value,
+                break_out_time: data[index]?.break_out_time
+            }
+            setShiftBreakTimings([...data])
+        }
+    }, [setShiftBreakTimings, shiftBreakTimings])
+
+    const handleBreakInChange = useCallback((event: any, index: any) => {
+        let breakInDate = moment(shiftBreakTimings[index]?.break_in_date)
+        let breakOutDate = index === 0 ? moment(checkIn?.date) : moment(shiftBreakTimings[index - 1]?.break_out_date);
+        let error = false
+        if (breakOutDate < breakInDate) {
+            // date is past
+        } else if (breakOutDate > breakInDate) {
+        } else {
+            let value = moment(event).format("HH:mm:ss");
+            let beginningTime = moment(value, 'HH:mm:ss');
+            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
+            if (beginningTime.isBefore(endTime)) {
+                error = true
+            }
+        }
+
+        if (error) {
+            CommonService.showToast(index === 0 ? "Break In Time has to greater than Check In Time" :
+                "Break In Time has to greater than Previous Break Out Time" || "Error", "error")
+        } else {
             const data = shiftBreakTimings;
             let value = moment(event).format("HH:mm:ss");
             data[index] = {
@@ -156,17 +189,18 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             setShiftBreakTimings([...data]);
         }
 
-    }, [setShiftBreakTimings, shiftBreakTimings,checkIn])
+    }, [setShiftBreakTimings, shiftBreakTimings, checkIn])
 
     const handleBreakTimings = useCallback(() => {
         setIsSubmitting(true)
         let data = shiftBreakTimings;
         let tempError = ""
-        data?.forEach((item: any) => {
+        data?.forEach((item: any, index: any) => {
             if (item?.break_in_date === null || item?.break_out_date === null || item?.break_in_time === null || item?.break_out_time === null) {
                 tempError = "Please fill all the fields"
             }
         })
+
         if (tempError) {
             CommonService.showToast(tempError || "Error", "error")
             tempError = ""
@@ -241,6 +275,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                             fullWidth required />
                                         <TimePicker className="mrg-top-10" ampm={true} label="Time"
                                             inputVariant='outlined'
+                                            disabled={!shiftBreakTimings[index]?.break_in_date}
                                             value={shiftBreakTimings[index]?.break_in_time ? formattedTime(shiftBreakTimings[index]?.break_in_time) : null}
                                             onChange={(e: any) => handleBreakInChange(e, index)}
                                             required fullWidth />
@@ -258,6 +293,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                                     fullWidth required />
                                                 <TimePicker className="mrg-top-10" ampm={true} label="Time"
                                                     inputVariant='outlined'
+                                                    disabled={!shiftBreakTimings[index]?.break_out_date}
                                                     value={shiftBreakTimings[index]?.break_out_time ? formattedTime(shiftBreakTimings[index]?.break_out_time) : null}
                                                     onChange={(e: any) => handleBreakoutChange(e, index)}
                                                     fullWidth />

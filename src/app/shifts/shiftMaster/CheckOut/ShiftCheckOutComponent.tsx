@@ -81,6 +81,56 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         }
     }, [shiftDetails?.time_breakup?.check_out_time, shiftDetails?.hcp_user_id, id,checkOut?.date,afterConfirm,checkOut?.time])
 
+    const handleCheckoutTimeChange = useCallback((event: any) => {
+        let date = moment(checkOut?.date)
+        let now = moment(lastBreakOut?.date)
+        let error=false
+        console.log(date, now)
+        if (now < date) {
+            // date is past
+        } else if (now > date) {
+        } else {
+            let value = moment(event).format("HH:mm:ss");
+            let beginningTime = moment(value, 'HH:mm:ss');
+            let endTime =moment(lastBreakOut?.time,'HH:mm:ss')
+            if(beginningTime.isBefore(endTime)){
+              error=true
+          }
+        }
+
+        if(error){
+            CommonService.showToast("Check Out Time has to be greater than last break Out Time" || "Error","error")
+        }else{
+            let value = moment(event).format("HH:mm:ss")
+            setCheckOut({ date: checkOut?.date, time: value });
+        }
+    },[checkOut?.date,lastBreakOut?.date,lastBreakOut?.time])
+
+    
+    const handleCheckoutDateChange = useCallback((event: any) => {
+        let checkoutDate =moment(event).format('YYYY-MM-DD')
+        let now = moment(lastBreakOut?.date)
+        let error=false
+        if (now < moment(checkoutDate)) {
+            // checkoutDate is past
+        } else if (now > moment(checkoutDate)) {
+        } else {
+            let value = moment(event).format("HH:mm:ss");
+            let beginningTime = moment(value, 'HH:mm:ss');
+            let endTime =moment(lastBreakOut?.time,'HH:mm:ss')
+            if(beginningTime.isBefore(endTime)){
+              error=true
+          }
+        }
+
+        if(error){
+            CommonService.showToast("Check Out Time has to be greater than last break Out Time" || "Error","error")
+        }else{
+            let value = moment(event).format("HH:mm:ss")
+            setCheckOut({ date: value, time: checkOut?.time });
+        }
+    },[checkOut?.time,lastBreakOut?.date,lastBreakOut?.time])
+
     const handleShiftCheckout = useCallback(() => {
         setIsSubmitting(true)
         handleCheckInCheckOut()
@@ -110,18 +160,12 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
                     value={checkOut?.date}
                     format="MMMM do yyyy"
                     minDate={moment(lastBreakOut?.date)}
-                    onChange={(event: any) => {
-                        let value = moment(event).format('YYYY-MM-DD')
-                        setCheckOut({ date: value, time: checkOut?.time });
-                    }} fullWidth required/>
+                    onChange={(event:any)=>handleCheckoutDateChange(event)} fullWidth required/>
             </div>
             <div className="form-field">
                 <TimePicker className="mrg-top-30" label="Time" inputVariant='outlined'
                     value={checkOut?.time ? formattedTime(checkOut?.time) : null}
-                    ampm={true} onChange={(event: any) => {
-                        let value = moment(event).format("HH:mm:ss")
-                        setCheckOut({ date: checkOut?.date, time: value });
-                    }} fullWidth required/>
+                    ampm={true} onChange={(event: any) => handleCheckoutTimeChange(event)} fullWidth required/>
             </div>
         </DialogContent>
         <DialogActions className="mrg-top-20">
