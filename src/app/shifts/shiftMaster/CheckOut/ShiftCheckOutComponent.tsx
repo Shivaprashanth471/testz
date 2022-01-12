@@ -167,6 +167,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
                     value={checkOut?.time ? formattedTime(checkOut?.time) : null}
                     ampm={true} onChange={(event: any) => handleCheckoutTimeChange(event)} fullWidth required/>
             </div>
+            
         </DialogContent>
         <DialogActions className="mrg-top-20">
             <Button color="secondary" onClick={afterCancel}>
