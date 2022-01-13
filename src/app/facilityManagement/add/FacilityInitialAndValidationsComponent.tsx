@@ -127,20 +127,24 @@ export const facilityFormValidation = Yup.object({
     .min(3, "min 3 letters")
     .max(255, "max limit 255")
     .trim("empty space not allowed")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .required("required"),
   facility_short_name: Yup.string()
     .typeError(" must be a text")
     .min(3, "min 3 letters")
     .max(30, "max limit 30")
     .trim("empty space not allowed")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .required("required"),
   business_name: Yup.string()
     .typeError(" must be a text")
     .min(3, "min 3 letters")
     .max(255, "max limit 255")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .trim("empty space not allowed"),
   email: Yup.string()
     .typeError("must be a text")
+    .max(50, 'max limit 50')
     .email("invalid"),
   phone_number: Yup.string()
     .min(12, "min 10 digits")
@@ -149,8 +153,7 @@ export const facilityFormValidation = Yup.object({
     .matches(/^[0-9]+$/, "Must be only digits")
     .trim("empty space not allowed")
     .min(1, 'min 1 digit')
-    .max(10, 'max 10 digits')
-    .required("required"),
+    .max(10, 'max 10 digits'),
   website_url: Yup.string()
     .typeError(" must be a text")
     .matches(
@@ -201,35 +204,107 @@ export const facilityFormValidation = Yup.object({
       .required("required"),
   }),
   hourly_base_rates: Yup.object({
-    cna: Yup.number().typeError(" must be a number").nullable().required('required'),
-    lvn: Yup.number().typeError(" must be a number").nullable().required('required'),
-    rn: Yup.number().typeError(" must be a number").nullable().required('required'),
-    care_giver: Yup.number().typeError(" must be a number").nullable().required('required'),
-    med_tech: Yup.number().typeError(" must be a number").nullable().required('required'),
+    cna: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
+    lvn: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
+    rn: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
+    care_giver: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
+    med_tech: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
     holiday: Yup.number().typeError(" must be a number").nullable(),
     hazard: Yup.number().typeError(" must be a number").nullable(),
   }),
   diff_rates: Yup.object({
-    pm: Yup.number().typeError(" must be a number").nullable().required('required'),
-    noc: Yup.number().typeError(" must be a number").nullable().required('required'),
-    weekend: Yup.number().typeError(" must be a number").nullable().required('required'),
+    pm: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required"),
+    noc: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required"),
+    weekend: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required"),
   }),
   conditional_rates: Yup.object({
     overtime: Yup.object({
-      hours: Yup.number().typeError(" must be a number").nullable(),
-      rate: Yup.number().typeError(" must be a number").nullable(),
+      hours: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
+      rate: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
     }),
     rush: Yup.object({
-      hours: Yup.number().typeError(" must be a number").nullable(),
-      rate: Yup.number().typeError(" must be a number").nullable(),
+      hours: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
+      rate: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
     }),
     cancellation_before: Yup.object({
-      hours: Yup.number().typeError(" must be a number").nullable(),
-      rate: Yup.number().typeError(" must be a number").nullable(),
+      hours: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
+      rate: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
     }),
     shift_early_completion: Yup.object({
-      hours: Yup.number().typeError(" must be a number").nullable(),
-      rate: Yup.number().typeError(" must be a number").nullable(),
+      hours: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
+      rate: Yup.string()
+        .typeError(" must be valid")
+        .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+        .trim("empty space not allowed")
+        .max(10, 'max 10 digits allowed').nullable(),
     }),
   }),
 

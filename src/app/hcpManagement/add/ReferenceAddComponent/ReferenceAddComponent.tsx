@@ -8,6 +8,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
+import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./ReferenceAddComponent.scss";
 import { referenceValidation } from "./ReferenceValidation";
@@ -57,6 +58,7 @@ const ReferenceAddComponent = ({
 
     resetForm();
     handleCancelAdd()
+    CommonService.showToast('HCP reference added', 'info')
   };
 
   const handleCancelAdd = () => {
@@ -70,6 +72,7 @@ const ReferenceAddComponent = ({
     );
     newReferences.splice(index, 1);
     setReference(newReferences);
+    CommonService.showToast('HCP reference deleted', 'error')
   };
 
   return (
@@ -132,6 +135,7 @@ const ReferenceAddComponent = ({
                 <div className="input-container">
                   <Field
                     inputProps={{ maxLength: 10 }}
+                    type='number'
                     variant='outlined'
                     component={TextField}
                     fullWidth

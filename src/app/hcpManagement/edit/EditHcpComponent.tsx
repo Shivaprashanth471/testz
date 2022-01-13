@@ -239,7 +239,7 @@ const EditHcpComponent = () => {
 
   const getAttachmentsDetails = useCallback(() => {
     CommonService._api.get(ENV.API_URL + 'hcp/' + id + '/attachments').then((resp) => {
-      console.log('api data -all attachments', resp?.data)
+      // console.log('api data -all attachments', resp?.data)
       setAttachmentsDetails(resp?.data);
       setIsAttachmentsLoading(false)
     }).catch((err) => {

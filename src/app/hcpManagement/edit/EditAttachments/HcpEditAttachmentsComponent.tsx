@@ -4,18 +4,18 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 
 export interface HcpEditAttachmentsComponentProps {
-    fileUpload :any;
-    required_attachments :any;
-    deleteAttachment :any;
-    isDeleted :any;
-    OnFileSelected :any;
-    attachmentsDetails :any;
-    previewFile :any;
-    handleExpiryDate :any;
-    deleteLocalAttachment :any;
+    fileUpload: any;
+    required_attachments: any;
+    deleteAttachment: any;
+    isDeleted: any;
+    OnFileSelected: any;
+    attachmentsDetails: any;
+    previewFile: any;
+    handleExpiryDate: any;
+    deleteLocalAttachment: any;
 }
 
-const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsComponentProps>) => {
+const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachmentsComponentProps>) => {
     const attachmentsDetails = props?.attachmentsDetails;
     const required_attachments = props?.required_attachments;
     const handleExpiryDate = props?.handleExpiryDate;
@@ -31,7 +31,7 @@ const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsC
         // let SortedData = [...filteredData].sort((a: any, b: any) => a?.id - b?.id)
         // let filteredData = filterAvailableDocs()
 
-        console.log(filteredData,required_attachments)
+
         return filteredData.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
@@ -115,7 +115,7 @@ const HcpEditAttachmentsComponent = (props:PropsWithChildren<HcpEditAttachmentsC
             )
         })
     }
-    return <div  className="attachments_wrapper">
+    return <div className="attachments_wrapper">
         {RenderAvailableAttachments()}
         {RenderSortedAttachments()}
     </div>;

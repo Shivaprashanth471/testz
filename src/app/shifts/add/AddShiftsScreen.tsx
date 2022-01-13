@@ -14,7 +14,6 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
-import * as Yup from "yup";
 import DialogComponent from "../../../components/DialogComponent";
 import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
@@ -23,6 +22,7 @@ import {
 } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import "./AddShiftsScreen.scss";
+import { addShiftsValidation } from "./AddShiftsValidation";
 import ReadOnlyShifts from "./ReadOnlyShifts";
 
 
@@ -125,20 +125,6 @@ const AddShiftsScreen = () => {
     });
   }, []);
 
-  const hcpFormValidation = Yup.object({
-    title: Yup.string().min(6, "min 6 characters").trim("empty space not allowed").required('required'),
-    shift_dates: Yup.array().required('required'),
-    mode: Yup.string().required("required"),
-    shift_type: Yup.string().required('required'),
-    hcp_type: Yup.string().required('required'),
-    warning_type: Yup.string().required('required'),
-    hcp_count: Yup.number()
-      .typeError('must be a number')
-      .min(1, 'min limit 1.')
-      .max(25, 'max limit 25.').required('required'),
-    shift_details: Yup.string().trim("empty space not allowed").required('required'),
-  });
-
   const handleFacilitySelect = (facility: any) => {
     setShiftTimings([])
 
@@ -155,11 +141,8 @@ const AddShiftsScreen = () => {
     let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), 'hh:mm').format('LT')
     let type = item?.shift_type
 
-
     return `${start} - ${end} (${type}-Shift)`
   }
-
-
 
   const onAddShiftRequirement = useCallback((shiftR: any) => {
     return new Promise(async (resolve, reject) => {
@@ -389,7 +372,7 @@ const AddShiftsScreen = () => {
           <div className="custom-card">
             <Formik
               initialValues={shiftInitialState}
-              validationSchema={hcpFormValidation}
+              validationSchema={addShiftsValidation}
               onSubmit={onAdd}
             >
               {({ isSubmitting, isValid, resetForm, handleChange, setFieldValue, values }) => (
@@ -420,6 +403,9 @@ const AddShiftsScreen = () => {
                         label="HCP Type"
                         fullWidth
                       >
+                        <MenuItem value="" >
+                          Select HCP Type
+                        </MenuItem>
                         {hcpTypes &&
                           hcpTypes.map((item: any, index: any) => (
                             <MenuItem value={item.code} key={index}>
@@ -477,6 +463,9 @@ const AddShiftsScreen = () => {
                           placeholder="Select Mode"
                           fullWidth
                         >
+                          <MenuItem value="" >
+                            Select Date Mode
+                          </MenuItem>
                           {calenderMode &&
                             calenderMode.map((item: any, index) => (
                               <MenuItem value={item.value} key={index}>
@@ -525,6 +514,9 @@ const AddShiftsScreen = () => {
                         label="Warning Zone"
                         fullWidth
                       >
+                        <MenuItem value="" >
+                          Select Warning Zone
+                        </MenuItem>
                         {warningZone &&
                           warningZone.map((item: any, index) => (
                             <MenuItem value={item.value} key={index}>
@@ -533,6 +525,11 @@ const AddShiftsScreen = () => {
                           ))}
                       </Field>
                       <Field
+                        InputProps={{
+                          inputProps: { min: 0 }
+                        }}
+                        type='number'
+                        autoComplete="off"
                         id='input_shift_requirement_no_of_hcps'
                         variant='outlined'
                         name="hcp_count"

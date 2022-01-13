@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./VolunteerExperienceAddComponent.scss";
-import { experienceValidation } from "./VolunteerExperienceValidation";
+import { volunteerExperienceValidation } from "./VolunteerExperienceValidation";
 
 type VolunteerExperienceAddComponentProps = {
   experiences: any;
@@ -76,6 +76,7 @@ const VolunteerExperienceAddComponent = ({
 
     resetForm();
     handleCancelExperience()
+    CommonService.showToast('HCP volunteer experience added', 'info')
   };
 
   const handleCancelExperience = () => {
@@ -89,6 +90,7 @@ const VolunteerExperienceAddComponent = ({
     );
     newExperiences.splice(index, 1);
     setExperience(newExperiences);
+    CommonService.showToast('HCP volunteer experience deleted', 'error')
   };
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')
@@ -128,7 +130,7 @@ const VolunteerExperienceAddComponent = ({
           <Formik
             initialValues={experienceInitialState}
             validateOnChange={true}
-            validationSchema={experienceValidation}
+            validationSchema={volunteerExperienceValidation}
             onSubmit={onAdd}
           >
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (

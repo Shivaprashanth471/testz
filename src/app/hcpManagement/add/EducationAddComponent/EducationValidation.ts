@@ -10,6 +10,7 @@ export const educationValidation = Yup.object({
         .min(3, "min 3 chracters")
         .trim("empty space")
         .max(255, 'max limit 255')
+        .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
         .required(" required"),
     degree: Yup.string()
         .typeError("must be text")

@@ -89,6 +89,7 @@ const ExperienceAddComponent = ({
     handleCancelShift()
     handleCalcExperience(newExperiences)
     handleCalcSpecialities(newExperiences)
+    CommonService.showToast('HCP experience added', 'info')
   };
 
   const handleCancelShift = () => {
@@ -104,6 +105,7 @@ const ExperienceAddComponent = ({
     setExperience(newExperiences);
     handleCalcExperience(newExperiences)
     handleCalcSpecialities(newExperiences)
+    CommonService.showToast('HCP experience deleted', 'error')
   };
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')

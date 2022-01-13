@@ -12,6 +12,7 @@ import { TextField } from "formik-material-ui";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
 import { designationNames } from "../../../../constants/data";
+import { CommonService } from "../../../../helpers";
 import "./FacilityMemberAddComponent.scss";
 import { memberFormValidation } from "./FacilityMemberFormValidation";
 import ReadOnlyRow from "./ReadOnlyRow";
@@ -54,11 +55,8 @@ const FacilityMemberAddComponent = ({
     const index = members.findIndex((member: any) => member?.tempId === memberId);
     newMembers.splice(index, 1);
     setMembers(newMembers);
+    CommonService.showToast('Facility member deleted', 'error')
   };
-
-
-
-
 
   const onAdd = (
     member: MemberAddType,
@@ -78,6 +76,7 @@ const FacilityMemberAddComponent = ({
 
     resetForm();
     handleCancelAdd()
+    CommonService.showToast('Facility member added', 'info')
   };
 
   const showDropDownBelowField = {

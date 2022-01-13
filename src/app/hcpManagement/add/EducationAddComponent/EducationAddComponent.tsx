@@ -63,6 +63,7 @@ const EducationAddComponent = ({
     const newEducations = [...educations, newEducation];
     setEducation(newEducations);
     resetForm();
+    CommonService.showToast('HCP education added', 'info')
     handleCancelEducation()
   };
 
@@ -77,6 +78,7 @@ const EducationAddComponent = ({
     );
     newEducations.splice(index, 1);
     setEducation(newEducations);
+    CommonService.showToast('HCP education deleted', 'error')
   };
 
   const sortedEducationData = CommonService.sortDatesByLatest(educations, 'start_date')
