@@ -150,7 +150,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                     inputProps={{
                                         maxLength: 6
                                     }}
-                                    variant='outlined' fullWidth name="address.zip_code" type={"text"} component={TextField}
+                                    variant='outlined' fullWidth name="address.zip_code" type={"number"} component={TextField}
                                     label="Zip*" id="input_hcp_edit_zip" autoComplete="off" />
                                 <Field variant='outlined' name="address.country" type={"text"} component={TextField}
                                     label="Country*" fullWidth id="input_hcp_edit_country" autoComplete="off" />
@@ -163,22 +163,26 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             </div>
                         </div>
 
-                        <div className="hcp-profession-details  mrg-top-10 custom-border">
-                            <p className='card-header'>Professional Details (Based On Work Experience)</p>
-                            <div className="input-container">
-                                <Field value={expInYears} disabled variant='outlined' component={TextField} label="Years of Experience"
-                                    name="professional_details.experience" id="input_hcp_edit_proffesional_details" fullWidth autoComplete="off" />
-                            </div>
-                            <div className="input-container ">
-                                <Field value={specialities} disabled variant='outlined' component={TextField} type={"text"} label="Specialities"
-                                    id="input_hcp_edit_speciality" name="professional_details.speciality" fullWidth autoComplete="off" />
+                        <div className="custom-border">
+                            <div className="professional-summary mrg-top-10 ">
+                                <p className='card-header'>Professional Summary</p>
+                                <Field variant='outlined' component={TextField} type={"text"} fullWidth autoComplete="off"
+                                    name="professional_details.summary" id="input_hcp_edit_summary" multiline rows={2} />
                             </div>
                         </div>
 
-                        <div className="professional-summary mrg-top-10 custom-border">
-                            <p className='card-header'>Professional Summary</p>
-                            <Field variant='outlined' component={TextField} type={"text"} fullWidth autoComplete="off"
-                                name="professional_details.summary" id="input_hcp_edit_summary" multiline rows={2} />
+                        <div className="custom-border">
+                            <div className="hcp-profession-details mrg-top-10">
+                                <p className='card-header'>Professional Details (Based On Work Experience)</p>
+                                <div className="input-container">
+                                    <Field value={expInYears} disabled variant='outlined' component={TextField} label="Years of Experience"
+                                        name="professional_details.experience" id="input_hcp_edit_proffesional_details" fullWidth autoComplete="off" />
+                                </div>
+                                <div className="input-container ">
+                                    <Field value={specialities} disabled variant='outlined' component={TextField} type={"text"} label="Specialities"
+                                        id="input_hcp_edit_speciality" name="professional_details.speciality" fullWidth autoComplete="off" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="nc-section custom-border mrg-top-10" >
@@ -188,6 +192,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.vaccine" type={"text"}
                                 component={TextField} id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {vaccine.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>{item.label}</MenuItem>
                                 ))}
@@ -199,6 +204,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.contact_type" type={"text"}
                                 component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {contactType.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_contact_type" + index}>{item.label}</MenuItem>
                                 ))}
@@ -211,6 +217,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.shift_type_preference" type={"text"}
                                 component={TextField} id="input_hcp_add_shift_type_preference" label="Preference Shift Type" fullWidth autoComplete="off"
                             >
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {shiftTypePreference.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_shift_type_preference" + index}>{item.label}</MenuItem>
                                 ))}
@@ -218,6 +225,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.covid_facility_preference" type={"text"}
                                 component={TextField} id="input_hcp_covid_preference" label="Covid (or) Non Covid Facility?" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {covidPreference.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_covid_preference" + index}>{item.label}</MenuItem>
                                 ))}
@@ -232,6 +240,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_fulltime_job"
                                 type={"text"} component={TextField} id="input_hcp_is_fulltime_job" label="Do you have a Full-time Job?"
                                 fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {boolAcknowledge.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_is_fulltime_job" + index}>{item.label}</MenuItem>
                                 ))}
@@ -243,6 +252,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.more_important_preference"
                                 type={"text"} component={TextField} id="input_hcp_add_more_important_preference" label="What is more important for you?"
                                 fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {moreImportant.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_more_important_preference" + index}>{item.label}</MenuItem>
                                 ))}
@@ -260,6 +270,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 fullWidth
                                 autoComplete="off"
                             >
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {boolAcknowledge.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_is_supplement_to_income" + index}>{item.label}</MenuItem>
                                 ))}
@@ -279,12 +290,14 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 fullWidth
                                 autoComplete="off"
                             >
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {boolAcknowledge.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_is_studying" + index}>{item.label}</MenuItem>
                                 ))}
                             </Field>
 
                             <Field
+                                SelectProps={showDropDownBelowField}
                                 select
                                 variant='outlined'
                                 name="nc_details.gusto_type"
@@ -295,6 +308,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 fullWidth
                                 autoComplete="off"
                             >
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {gustoType.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_gusto_type" + index}>{item.label}</MenuItem>
                                 ))}
@@ -305,6 +319,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_gusto_invited"
                                 type={"text"} component={TextField} id="input_hcp_add_is_gusto_invited" label="Is Gusto Invited ?" fullWidth
                                 autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {boolAcknowledge.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_is_gusto_invited" + index}>{item.label}</MenuItem>
                                 ))}
@@ -313,6 +328,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.is_gusto_onboarded"
                                 type={"text"} component={TextField} id="input_hcp_add_is_gusto_onboarded" label="Is Gusto Onboarded ?"
                                 fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
                                 {boolAcknowledge.map((item: any, index: any) => (
                                     <MenuItem value={item.value} id={"menu_hcp_add_is_gusto_onboarded" + index}>{item.label}</MenuItem>
                                 ))}
@@ -330,7 +346,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         </div>
 
                         <div className="input-container">
-                            <Field variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
+                            <Field multiline rows={2} variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
                                 id="input_hcp_add_other_information" label="Other Information Gathered" fullWidth autoComplete="off" />
                         </div>
                     </div>
