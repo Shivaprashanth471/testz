@@ -53,7 +53,6 @@ const ShiftAddComponent = ({
 
   const handleAddFormSubmit = (event: any) => {
     event.preventDefault();
-    console.log(addFormData)
 
     if (
       !addFormData.shift_start_time ||
@@ -76,7 +75,7 @@ const ShiftAddComponent = ({
       shift_end_time: CommonService.convertHoursToMinutes(addFormData.shift_end_time),
       shift_type: addFormData.shift_type,
     };
-    console.log('new shift timing added ==> ', newShiftTimings);
+
 
     const newShifts = [...shiftTimings, newShiftTimings];
     setShiftTimings(newShifts);
@@ -89,6 +88,7 @@ const ShiftAddComponent = ({
     });
 
     handleCancelShift()
+    CommonService.showToast('Shift Timing added', 'info')
   };
 
   const handleCancelShift = () => {
@@ -102,13 +102,14 @@ const ShiftAddComponent = ({
     });
   };
 
-  const handleDeleteClick = (memberId: number) => {
-    const newMembers = [...shiftTimings];
+  const handleDeleteClick = (shiftId: number) => {
+    const newShiftTimings = [...shiftTimings];
     const index = shiftTimings.findIndex(
-      (member: any) => member.id === memberId
+      (shiftTiming: any) => shiftTiming.id === shiftId
     );
-    newMembers.splice(index, 1);
-    setShiftTimings(newMembers);
+    newShiftTimings.splice(index, 1);
+    setShiftTimings(newShiftTimings);
+    CommonService.showToast('Shift Timing deleted', 'error')
   };
 
 

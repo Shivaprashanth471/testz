@@ -76,6 +76,7 @@ const VolunteerExperienceAddComponent = ({
 
     resetForm();
     handleCancelExperience()
+    CommonService.showToast('HCP volunteer experience added', 'info')
   };
 
   const handleCancelExperience = () => {
@@ -89,6 +90,7 @@ const VolunteerExperienceAddComponent = ({
     );
     newExperiences.splice(index, 1);
     setExperience(newExperiences);
+    CommonService.showToast('HCP volunteer experience deleted', 'error')
   };
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')
