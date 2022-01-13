@@ -1,7 +1,7 @@
 import moment from "moment";
 import * as Yup from "yup";
 
-export const experienceValidation = Yup.object({
+export const volunteerExperienceValidation = Yup.object({
     organisation: Yup.string().typeError("must be text").min(3, "min 3 letter").trim("").max(50, 'max limit 50').required("required"),
     stillWorkingHere: Yup.string().trim().required("required"),
     speciality: Yup.string().typeError("must be text").trim("").max(100, 'max limit 100').required("required"),

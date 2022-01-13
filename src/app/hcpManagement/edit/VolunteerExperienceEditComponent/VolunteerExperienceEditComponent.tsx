@@ -15,7 +15,7 @@ import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmCo
 import { ENV } from "../../../../constants";
 import { acknowledgement } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
-import { experienceValidation } from "../../add/ExperienceAddComponent/ExperienceValidation";
+import { volunteerExperienceValidation } from "../../add/VolunteerExperienceAddComponent/VolunteerExperienceValidation";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./VolunteerExperienceEditComponent.scss";
 
@@ -162,7 +162,7 @@ const VolunteerExperienceAddComponent = ({
           <Formik
             initialValues={experienceInitialState}
             validateOnChange={true}
-            validationSchema={experienceValidation}
+            validationSchema={volunteerExperienceValidation}
             onSubmit={onAdd}
           >
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (

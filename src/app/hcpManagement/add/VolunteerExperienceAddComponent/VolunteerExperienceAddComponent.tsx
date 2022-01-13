@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./VolunteerExperienceAddComponent.scss";
-import { experienceValidation } from "./VolunteerExperienceValidation";
+import { volunteerExperienceValidation } from "./VolunteerExperienceValidation";
 
 type VolunteerExperienceAddComponentProps = {
   experiences: any;
@@ -128,7 +128,7 @@ const VolunteerExperienceAddComponent = ({
           <Formik
             initialValues={experienceInitialState}
             validateOnChange={true}
-            validationSchema={experienceValidation}
+            validationSchema={volunteerExperienceValidation}
             onSubmit={onAdd}
           >
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (
