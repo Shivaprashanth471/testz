@@ -17,6 +17,7 @@ export const referenceValidation = Yup.object({
         .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
         .required("required"),
     contactNumber: Yup.string()
+        .min(10, "min 10 digits")
         .max(10, "max 10 digits")
         .required("required"),
     email: Yup.string()

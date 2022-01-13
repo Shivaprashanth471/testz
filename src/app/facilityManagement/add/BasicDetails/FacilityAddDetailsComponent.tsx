@@ -84,6 +84,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                                         }}
                                     </Field>
                                 </div>
+
                                 <div className="extension-number" >
                                     <Field inputProps={{ maxLength: 10 }} variant='outlined' component={TextField} fullWidth autoComplete="off"
                                         label="Extension No" name="extension_number" id="input_facility_add_extension_number" />
