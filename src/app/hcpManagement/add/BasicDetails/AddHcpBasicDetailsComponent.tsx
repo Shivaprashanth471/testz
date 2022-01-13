@@ -7,9 +7,11 @@ import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine } from "../../../../constants/data";
 import { AddHcpInitialValues, hcpFormValidation, HcpItemAddType } from '../AddHcpValuesValidationsComponent';
-import { Box, MenuItem } from "@material-ui/core";
+import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
 import HcpAddAttachmentsComponent from '../AddAtachments/HcpAddAttachmentsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
+import FormLabel from "@material-ui/core/FormLabel";
+import { RadioGroup } from 'formik-material-ui';
 
 const AddHcpBasicDetailsComponent = (props: any) => {
     const contractFile = props?.contractFile;
@@ -78,23 +80,32 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                                 </div>
                             </div>
                             <div className="input-container">
-                                <Field SelectProps={showDropDownBelowField} variant='outlined'
-                                    onChange={(e: any) => { const hcpType = e.target.value; setFieldValue("hcp_type", hcpType); }}
-                                    component={TextField} type={"text"} select label="HCP Type*" id="menu_hcp_add_hcp_type" name="hcp_type" fullWidth autoComplete="off">
-                                    {hcpTypes.map((item: any, index: number) => (
-                                        <MenuItem value={item.code} key={'hcp_type_' + index} id={"menu_hcp_add_hcp_type" + item.name}>
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Field>
-                                <Field SelectProps={showDropDownBelowField} variant='outlined' component={TextField} type={"text"}
-                                    select label="Gender*" name="gender" id="menu_hcp_add_gender" fullWidth autoComplete="off">
-                                    {genderTypes.map((item: any, index) => (
-                                        <MenuItem value={item.value} key={'gender_type_' + index} id={"menu_hcp_add_gender_" + item.value}>
-                                            {item.label}
-                                        </MenuItem>
-                                    ))}
-                                </Field>
+                                <div className="flex-1">
+                                    <Field SelectProps={showDropDownBelowField} variant='outlined'
+                                        onChange={(e: any) => { const hcpType = e.target.value; setFieldValue("hcp_type", hcpType); }}
+                                        component={TextField} type={"text"} select label="HCP Type*" id="menu_hcp_add_hcp_type" name="hcp_type" fullWidth autoComplete="off">
+                                        {hcpTypes.map((item: any, index: number) => (
+                                            <MenuItem value={item.code} key={'hcp_type_' + index} id={"menu_hcp_add_hcp_type" + item.name}>
+                                                {item.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Field>
+                                </div>
+                                <div className="flex-1">
+                                    <div className='pdd-top-10'>
+                                        <FormLabel className={'form-label'}>{('Gender')}*</FormLabel>
+                                    </div>
+                                    <div className='mrg-top-10'>
+                                        <Field component={RadioGroup} name="gender" id="radio_doctor_add_gender">
+                                            <div className='d-flex'>
+                                                {genderTypes.map((item: any, index) => {
+                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} onChange={(event) => handleChange(event)} label={item.label} />
+                                                    </div>)
+                                                })}
+                                            </div>
+                                        </Field>
+                                    </div>
+                                </div>
                             </div>
                             <div className="input-container">
                                 <Field variant='outlined' name="address.street" type={"text"} component={TextField}

@@ -126,7 +126,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         if(error){
             CommonService.showToast("Check Out Time has to be greater than last break Out Time" || "Error","error")
         }else{
-            let value = moment(event).format("HH:mm:ss")
+            let value = moment(event).format('YYYY-MM-DD');
             setCheckOut({ date: value, time: checkOut?.time });
         }
     },[checkOut?.time,lastBreakOut?.date,lastBreakOut?.time])

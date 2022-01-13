@@ -19,10 +19,13 @@
         margin: auto;
         color: white;
         background-color: $accent-color;
+        &:hover {
+            background-color: $accent-color;
+        }
     }
     .auth-header {
         margin: 0px 0 0;
-        font-size: 24px;
+        font-size: 18px;
         text-transform: capitalize;
         color:#32E2AB;
     }
@@ -35,7 +38,7 @@
 
         .eye_btn_wrapper {
             position: absolute;
-            top: 38px;
+            top: 35px;
             right: 10px;
             z-index: 2;
         }
