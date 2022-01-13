@@ -170,7 +170,7 @@ const ReferenceAddComponent = ({
 
                 <div className="input-container">
                   <Field
-                    inputProps={{ maxLength: 10 }}
+                    type='number'
                     variant='outlined'
                     component={TextField}
                     fullWidth

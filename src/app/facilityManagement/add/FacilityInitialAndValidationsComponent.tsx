@@ -127,17 +127,20 @@ export const facilityFormValidation = Yup.object({
     .min(3, "min 3 letters")
     .max(255, "max limit 255")
     .trim("empty space not allowed")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .required("required"),
   facility_short_name: Yup.string()
     .typeError(" must be a text")
     .min(3, "min 3 letters")
     .max(30, "max limit 30")
     .trim("empty space not allowed")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .required("required"),
   business_name: Yup.string()
     .typeError(" must be a text")
     .min(3, "min 3 letters")
     .max(255, "max limit 255")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .trim("empty space not allowed"),
   email: Yup.string()
     .typeError("must be a text")

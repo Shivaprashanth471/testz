@@ -6,6 +6,7 @@ export const memberFormValidation = Yup.object({
         .typeError("must be text")
         .min(3, "min 3 letters")
         .max(30, "max limit 30")
+        .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
         .trim("The contact name cannot include leading and trailing spaces")
         .required('required'),
     email: Yup.string().typeError("must be text").email("invalid").max(30, 'max limit 30'),

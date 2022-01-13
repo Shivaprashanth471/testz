@@ -2,10 +2,10 @@ import moment from "moment";
 import * as Yup from "yup";
 
 export const volunteerExperienceValidation = Yup.object({
-    organisation: Yup.string().typeError("must be text").min(3, "min 3 letter").trim("").max(50, 'max limit 50').required("required"),
+    organisation: Yup.string().typeError("must be text").min(3, "min 3 letter").trim("").max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").required("required"),
     stillWorkingHere: Yup.string().trim().required("required"),
-    speciality: Yup.string().typeError("must be text").trim("").max(100, 'max limit 100').required("required"),
-    positionTitle: Yup.string().typeError("must be text").trim().max(50, 'max limit 50').required("required"),
+    speciality: Yup.string().typeError("must be text").trim("").max(100, 'max limit 100').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").required("required"),
+    positionTitle: Yup.string().typeError("must be text").trim().max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").required("required"),
     location: Yup.string().typeError("must be date").trim().max(50, 'max limit 50').required("required"),
     startDate: Yup.date()
         .required("required").nullable(),
@@ -28,5 +28,5 @@ export const volunteerExperienceValidation = Yup.object({
 
         return true
     }),
-    skills: Yup.string().typeError("must be text").trim().max(100, 'max limit 100')
+    skills: Yup.string().typeError("must be text").trim().max(100, 'max limit 100').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
 });

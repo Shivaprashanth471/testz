@@ -110,8 +110,8 @@ export const AddHcpInitialValues = {
 
 
 export const hcpFormValidation = Yup.object({
-  first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50'),
-  last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50'),
+  first_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+  last_name: Yup.string().typeError(" must be a text").min(3, "invalid").trim("empty space not allowed").required("required").max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
   email: Yup.string().min(3, "invalid").trim("empty space not allowed").typeError(" must be a text").email("invalid").required("required"),
   contact_number: Yup.string()
     .min(12, "min 10 digits")
