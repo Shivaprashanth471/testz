@@ -42,5 +42,5 @@ export const experienceValidation = Yup.object({
         return true
     }),
     stillWorkingHere: Yup.string().trim().required("required"),
-    skills: Yup.string().trim().max(100, 'max limit 100').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field")
+    skills: Yup.string().trim().max(100, 'max limit 100')
 });

@@ -85,7 +85,7 @@ export const facilityFormEditValidation = Yup.object({
     .trim("empty space not allowed"),
   email: Yup.string()
     .typeError(" must be a text")
-    .email("invalid").max(30, 'max limit 30'),
+    .email("invalid").max(50, 'max limit 50'),
   phone_number: Yup.string()
     .min(12, "min 10 digits")
     .required("required"),

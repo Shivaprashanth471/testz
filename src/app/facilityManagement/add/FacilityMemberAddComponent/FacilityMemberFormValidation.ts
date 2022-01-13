@@ -9,7 +9,7 @@ export const memberFormValidation = Yup.object({
         .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
         .trim("The contact name cannot include leading and trailing spaces")
         .required('required'),
-    email: Yup.string().typeError("must be text").email("invalid").max(30, 'max limit 30'),
+    email: Yup.string().typeError("must be text").email("invalid").max(50, 'max limit 50'),
     phone_number: Yup.string()
         .typeError(" must be a number")
         .matches(/^[0-9]+$/, "must be number")

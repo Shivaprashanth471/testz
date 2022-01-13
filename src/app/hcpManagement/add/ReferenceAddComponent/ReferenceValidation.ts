@@ -20,6 +20,7 @@ export const referenceValidation = Yup.object({
         .max(10, "max 10 digits")
         .required("required"),
     email: Yup.string()
-        .typeError("must be date")
+        .typeError("must be text")
+        .max(50, 'max limit 50')
         .email("invalid")
 });

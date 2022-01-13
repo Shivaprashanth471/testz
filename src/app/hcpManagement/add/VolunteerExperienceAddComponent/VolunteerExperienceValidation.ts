@@ -28,5 +28,5 @@ export const volunteerExperienceValidation = Yup.object({
 
         return true
     }),
-    skills: Yup.string().typeError("must be text").trim().max(100, 'max limit 100').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
+    skills: Yup.string().typeError("must be text").trim().max(100, 'max limit 100')
 });
