@@ -133,8 +133,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     return <div className="pdd-30 pdd-top-40 filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-
-
             <Button
                 disabled={handleDisableReset()}
                 onClick={() => {
@@ -297,8 +295,8 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                             placeholderText="Select Date"
                             className='custom-input'
                             selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
+                            startDate={startDate && new Date(startDate)}
+                            endDate={endDate && new Date(endDate)}
                             onChange={(update) => {
                                 setDateRange(update);
                             }}
