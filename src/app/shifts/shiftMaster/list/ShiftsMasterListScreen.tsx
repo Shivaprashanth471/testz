@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import DialogComponent from "../../../../components/DialogComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from "../../filters/ShiftFilter";
@@ -39,14 +40,13 @@ const ShiftsMasterListScreen = () => {
     const [facilityList, setFacilityList] = useState<any | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
     const [regions, setRegions] = useState<any>([])
-    const [selectedRegion, setSelectedRegion] = useState<string>('')
 
-    const [selectedHcps, setSelectedHcps] = useState<any>([])
-    const [selectedFacilities, setSelectedFacilities] = useState<any>([])
-    const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
-    const [selectedStatusTypes, setSelectedStatusTypes] = useState<any>([])
-    const [selectedDates, setSelectedDates] = useState<any>(null);
-    const [dateRange, setDateRange] = useState<any>([null, null])
+    const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
+    const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
+    const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
+    const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
+    const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
+    const [selectedStatusTypes, setSelectedStatusTypes] = useLocalStorage<any[]>('selectedStatusTypes', [])
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -143,7 +143,7 @@ const ShiftsMasterListScreen = () => {
         setSelectedFacilities([])
         setSelectedHcps([])
         setSelectedStatusTypes([])
-        setSelectedDates([])
+        setSelectedRegion('')
         setDateRange([null, null])
     }
 
@@ -194,8 +194,6 @@ const ShiftsMasterListScreen = () => {
                     setSelectedFacilities={setSelectedFacilities}
                     selectedStatusTypes={selectedStatusTypes}
                     setSelectedStatusTypes={setSelectedStatusTypes}
-                    setSelectedDates={setSelectedDates}
-                    selectedDates={selectedDates}
 
                     isMaster={true}
                     noStatus={false}
