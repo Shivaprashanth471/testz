@@ -43,7 +43,6 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
     const [checkOut, setCheckOut] = useState<any | null>({ date: null, time: null });
     const shiftDetails = props?.shiftDetails;
     const [lastBreakOut,setLastBreakOut] = useState<any | null>({ date: null, time: null });
-    console.log(shiftDetails)
 
     const handleCheckInCheckOut = useCallback(() => {
         if(checkOut?.date!==null && checkOut?.time!==null){
@@ -85,7 +84,6 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         let date = moment(checkOut?.date)
         let now = moment(lastBreakOut?.date)
         let error=false
-        console.log(date, now)
         if (now < date) {
             // date is past
         } else if (now > date) {
@@ -115,8 +113,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
             // checkoutDate is past
         } else if (now > moment(checkoutDate)) {
         } else {
-            let value = moment(event).format("HH:mm:ss");
-            let beginningTime = moment(value, 'HH:mm:ss');
+            let beginningTime = moment(checkOut?.time, 'HH:mm:ss');
             let endTime =moment(lastBreakOut?.time,'HH:mm:ss')
             if(beginningTime.isBefore(endTime)){
               error=true
@@ -136,15 +133,15 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         handleCheckInCheckOut()
     }, [handleCheckInCheckOut])
 
-    
     useEffect(() => {
         if (shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]) {
             setLastBreakOut({ date: shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]?.break_out_time.slice(0, 10), time: shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]?.break_out_time.slice(11, 19) })
+        }else{
+            setLastBreakOut({ date: shiftDetails?.time_breakup?.check_in_time?.slice(0, 10), time: shiftDetails?.time_breakup?.check_in_time.slice(11, 19) })   
         }
 
-    }, [shiftDetails?.time_breakup?.break_timings])
+    }, [shiftDetails?.time_breakup?.break_timings,shiftDetails?.time_breakup?.check_in_time])
 
-    console.log(shiftDetails?.time_breakup?.break_timings[0],";;;;;;;;;;")
     useEffect(() => {
         if (shiftDetails?.time_breakup?.check_out_time) {
             setCheckOut({date:shiftDetails?.time_breakup?.check_out_time.slice(0, 10),time:shiftDetails?.time_breakup?.check_out_time.slice(11, 19)})

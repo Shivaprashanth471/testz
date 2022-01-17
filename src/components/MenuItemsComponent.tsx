@@ -66,18 +66,25 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
-    name: "HCP",
+    name: "HCP Management",
     type: "",
     icon: <HomeOutlined />,
     allowed_roles: [ADMIN, NURSECHAMPION, ACCOUNTMANAGER, HUMANRESOURCE],
     children: [
       {
         state: "/hcp/user/list",
-        name: "HCP Management",
+        name: "HCP Approved",
         type: "link",
         icon: HCPManagement,
         coloredIcon: ColorHCPManagement,
       },
+      {
+        state: "/hcp/user/list",
+        name: "HCP Rejected",
+        type: "link",
+        icon: HCPManagement,
+        coloredIcon: ColorHCPManagement,
+      }
     ],
   },
   {

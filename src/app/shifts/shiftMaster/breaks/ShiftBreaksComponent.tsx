@@ -288,7 +288,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                                     value={shiftBreakTimings[index]?.break_out_date}
                                                     format="MMMM do yyyy"
                                                     minDate={moment(shiftBreakTimings[index]?.break_in_date)}
-                                                    disabled={!shiftBreakTimings[index]?.break_in_date}
+                                                    disabled={!shiftBreakTimings[index]?.break_in_date || !shiftBreakTimings[index]?.break_in_time}
                                                     onChange={(event: any) => handleBreakOutDateChange(event, index)}
                                                     fullWidth required />
                                                 <TimePicker className="mrg-top-10" ampm={true} label="Time"

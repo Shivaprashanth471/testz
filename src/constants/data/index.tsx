@@ -82,8 +82,9 @@ export const acknowledgement = [
 ]
 
 export const boolAcknowledge = [
-  { value: true, label: "Yes" },
-  { value: false, label: "No" },
+  { value: "true", label: "Yes" },
+  { value: "false", label: "No" },
+  { value: "none", label : "None"}
 ]
 
 
@@ -123,6 +124,7 @@ export const moreImportant = [
     value: "location",
     label: "Location",
   },
+  { value: "none", label : "None"}
 ]
 
 
@@ -187,6 +189,7 @@ export const gustoType = [
     value: "paycheck",
     label: "Paycheck",
   },
+  { value: "none", label : "None"}
 ]
 
 

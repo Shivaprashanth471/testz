@@ -213,7 +213,7 @@ const HcpManagementViewScreen = () => {
                     <div style={{ justifyContent: "center" }} className="mrg-top-50 d-flex button-wrapper">
                         <AccessControlComponent role={[HUMANRESOURCE, ADMIN]} >
                             {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"} onClick={openAdd} className="mrg-right-20">Approve</Button> : <></>}
-                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"} className="mrg-right-20">Reject</Button> : <></>}
+                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"}  className="mrg-right-20">Reject</Button> : <></>}
                         </AccessControlComponent>
                     </div>
                 </div>
