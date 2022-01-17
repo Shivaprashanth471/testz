@@ -132,6 +132,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         setIsSubmitting(true)
         handleCheckInCheckOut()
     }, [handleCheckInCheckOut])
+    
 
     useEffect(() => {
         if (shiftDetails?.time_breakup?.break_timings[(shiftDetails?.time_breakup?.break_timings?.length)-1]) {
