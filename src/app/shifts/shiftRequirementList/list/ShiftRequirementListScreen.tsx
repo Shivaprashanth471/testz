@@ -164,7 +164,7 @@ const ShiftRequirementListScreen = () => {
         getRegions()
         getHcpTypes()
         getFacilityData()
-        Communications.pageTitleSubject.next('Shifts Requirements');
+        Communications.pageTitleSubject.next('Open Shifts');
         Communications.pageBackButtonSubject.next(null);
     }, [init, getHcpTypes, getRegions, getFacilityData])
     return <>

@@ -119,7 +119,7 @@ export const MENUITEMS: Menu[] = [
     children: [
       {
         state: "/shiftrequirementMaster/list",
-        name: "Shifts Requirements",
+        name: "Open Shifts",
         type: "link",
         icon: ShiftRequirement,
         coloredIcon: ColorShiftRequirement,
