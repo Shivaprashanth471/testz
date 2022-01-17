@@ -18,6 +18,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import AccessControlComponent from '../../../components/AccessControl';
 import DialogComponent from '../../../components/DialogComponent';
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
+import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
 import { ApiService, Communications } from "../../../helpers";
 import CommonService, { ADMIN, HUMANRESOURCE } from '../../../helpers/common-service';
@@ -37,11 +38,11 @@ const CssTextField = withStyles({
 const HcpManagementListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [open, setOpen] = useState<boolean>(false);
-    const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
-
-    const [dateRange, setDateRange] = useState([null, null]);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const [status, setStatus] = useState<any>("");
+
+    const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any[]>('hcpSelectedTypes', [])
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "");
+    const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -100,7 +101,7 @@ const HcpManagementListScreen = () => {
     const clearFilterValues = () => {
         setDateRange([null, null])
         setStatus("")
-        selectedHcpTypes.length = 0
+        setSelectedHcpTypes([])
     }
 
     const openFilters = useCallback((index: any) => {

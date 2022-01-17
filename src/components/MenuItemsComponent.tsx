@@ -2,6 +2,8 @@ import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mate
 import HomeOutlined from "@material-ui/icons/HomeOutlined";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { clearFacilityFilterValues } from "../app/facilityManagement/filters/FacilityFiltersComponent";
+import { clearHcpFilterValues } from "../app/hcpManagement/filters/HcpFiltersComponent";
 import { clearShiftFilterValues } from "../app/shifts/filters/ShiftFilter";
 import { ColorDashboard, ColorfacilityMaster, ColorGroupAdd, ColorHCPManagement, ColorHCPOnboarding, ColorShiftRequirement, ColorShiftsCancelled, ColorShiftsClosed, ColorShiftsCompleted, ColorShiftsInprogress, ColorShiftsMaster, ColorShiftsPending, ColorSMSBlast, Dashboard, facilityMaster, groupAdd, HCPManagement, HCPOnboarding, ShiftRequirement, ShiftsCancelled, ShiftsClosed, ShiftsCompleted, ShiftsInprogress, ShiftsMaster, ShiftsPending, SMSBlast } from "../constants/ImageConfig";
 import { ACCOUNTMANAGER, ADMIN, HUMANRESOURCE, NURSECHAMPION } from "../helpers/common-service";
@@ -14,8 +16,14 @@ export interface Menu {
   icon: any;
   children: any;
   clearLocalFilters?: () => void;
-  isAction?: boolean;
+  isClearFilter?: boolean;
   allowed_roles: ("super_admin" | "account_manager" | "nurse_champion" | "hr" | "finance_manager")[];
+}
+
+function clearLocalFilters() {
+  clearFacilityFilterValues()
+  clearShiftFilterValues()
+  clearHcpFilterValues()
 }
 
 export const MENUITEMS: Menu[] = [
@@ -37,6 +45,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Facility",
     type: "",
     icon: <HomeOutlined />,
@@ -53,6 +63,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Applications",
     type: "",
     icon: <HomeOutlined />,
@@ -69,6 +81,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "HCP Management",
     type: "",
     icon: <HomeOutlined />,
@@ -92,6 +106,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Communication",
     type: "",
     icon: <HomeOutlined />,
@@ -115,8 +131,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
-    isAction: true,
-    clearLocalFilters: clearShiftFilterValues,
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Shift Management",
     type: "",
     icon: <HomeOutlined />,
@@ -183,6 +199,8 @@ export const MENUITEMS: Menu[] = [
   },
   // {
   //   state: "",
+  // isClearFilter: true,
+  // clearLocalFilters: clearLocalFilters,
   //   name: "Employee Management",
   //   type: "",
   //   icon: <HomeOutlined />,
@@ -226,7 +244,7 @@ const MenuItemsComponent = (props: any) => {
               key={index + "-menu-item"}
               role={item.allowed_roles}
             >
-              <div onClick={() => item?.isAction && item.clearLocalFilters()}>
+              <div onClick={() => item?.isClearFilter && item.clearLocalFilters()}>
                 <ListSubheader>{item.name}</ListSubheader>
                 {item.children &&
                   item.children.length > 0 &&

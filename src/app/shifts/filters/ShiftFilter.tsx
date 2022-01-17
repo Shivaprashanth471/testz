@@ -358,7 +358,7 @@ export const clearShiftFilterValues = () => {
     localStore.removeItem('selectedStatusTypes')
     localStore.removeItem('dateRange')
     localStore.removeItem('selectedTimeTypes')
-    // console.log('shift filters cleared')
+
 }
 
 export default ShiftFilter;
