@@ -236,11 +236,10 @@ const FacilityManagementListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table">
+                <Table stickyHeader aria-label="sticky table" className="table">
                   <TableHead>
                     <TableRow>
-                      {list?.table.matColumns.map(
-                        (column: any, columnIndex: any) => (
+                      {list?.table.matColumns.map((column: any, columnIndex: any) => (
                           <TableCell
                             className={classesFunction(column)}
                             key={"header-col-" + columnIndex}
@@ -257,12 +256,7 @@ const FacilityManagementListScreen = () => {
                     }
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={"row-" + rowIndex}
-                        >
+                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
                           <TableCell className="pdd-left-20">
                             {moment(row['created_at']).format("MM-DD-YYYY")}
                           </TableCell>

@@ -38,9 +38,9 @@ body {
 	color: #c4c4c4;
 	cursor: pointer;
 	position: absolute;
-    top: 8px;
-    z-index: 2;
-    right: 10px;
+	top: 8px;
+	z-index: 2;
+	right: 10px;
 }
 #alert-dialog-title {
 	h2 {
@@ -360,6 +360,12 @@ body {
 .table-responsive {
 	//	box-shadow: 2px 2px 2px 2px $primary-color !important;
 	border-radius: 0px !important;
+	.table {
+		width: 100%;
+		overflow: auto;
+		min-height: 300px;
+		min-width: 650px;
+	}
 	.min-width-cell {
 		padding-right: 10px !important;
 		width: 20px !important;
@@ -386,7 +392,6 @@ body {
 		}
 		.MuiTableCell-stickyHeader {
 			border: 0px !important;
-		
 		}
 	}
 
@@ -402,7 +407,7 @@ body {
 				word-wrap: break-word;
 				hyphens: auto;
 				text-align: left;
-				max-width:calc(80vw - 100px);
+				max-width: calc(80vw - 100px);
 				color: $light-black;
 				.MuiIconButton-root.icon-btn {
 					margin-right: 4px;
@@ -695,7 +700,6 @@ body {
 	border-color: $primary-color;
 }
 
-.width-20{
+.width-20 {
 	width: 20px !important;
 }
-

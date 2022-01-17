@@ -241,7 +241,7 @@ const ShiftRequirementListScreen = () => {
                 </div>
                 {list && list.table && <>
                     <TableContainer component={Paper} className={'table-responsive'}>
-                        <Table stickyHeader aria-label="sticky table">
+                        <Table stickyHeader aria-label="sticky table" className="table">
                             <TableHead>
                                 <TableRow>
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
