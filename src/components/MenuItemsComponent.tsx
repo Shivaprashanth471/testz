@@ -78,13 +78,13 @@ export const MENUITEMS: Menu[] = [
         icon: HCPManagement,
         coloredIcon: ColorHCPManagement,
       },
-      {
-        state: "/hcp/user/list",
-        name: "HCP Rejected",
-        type: "link",
-        icon: HCPManagement,
-        coloredIcon: ColorHCPManagement,
-      }
+      // {
+      //   state: "/hcp/user/list",
+      //   name: "HCP Rejected",
+      //   type: "link",
+      //   icon: HCPManagement,
+      //   coloredIcon: ColorHCPManagement,
+      // }
     ],
   },
   {
