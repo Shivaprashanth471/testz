@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import { AllShiftStatusList, shiftType, SomeShiftStatusList } from "../../../constants/data";
+import { localStore } from '../../../helpers';
 import './ShiftFilter.scss';
 
 
@@ -346,6 +347,18 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             </Button>
         </DialogActions>
     </div>;
+}
+
+
+export const clearShiftFilterValues = () => {
+    localStore.removeItem('selectedRegion')
+    localStore.removeItem('selectedFacilities')
+    localStore.removeItem('selectedHcps')
+    localStore.removeItem('statusType')
+    localStore.removeItem('selectedStatusTypes')
+    localStore.removeItem('dateRange')
+    localStore.removeItem('selectedTimeTypes')
+    // console.log('shift filters cleared')
 }
 
 export default ShiftFilter;

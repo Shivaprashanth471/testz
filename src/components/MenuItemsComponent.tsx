@@ -2,6 +2,7 @@ import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mate
 import HomeOutlined from "@material-ui/icons/HomeOutlined";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { clearShiftFilterValues } from "../app/shifts/filters/ShiftFilter";
 import { ColorDashboard, ColorfacilityMaster, ColorGroupAdd, ColorHCPManagement, ColorHCPOnboarding, ColorShiftRequirement, ColorShiftsCancelled, ColorShiftsClosed, ColorShiftsCompleted, ColorShiftsInprogress, ColorShiftsMaster, ColorShiftsPending, ColorSMSBlast, Dashboard, facilityMaster, groupAdd, HCPManagement, HCPOnboarding, ShiftRequirement, ShiftsCancelled, ShiftsClosed, ShiftsCompleted, ShiftsInprogress, ShiftsMaster, ShiftsPending, SMSBlast } from "../constants/ImageConfig";
 import { ACCOUNTMANAGER, ADMIN, HUMANRESOURCE, NURSECHAMPION } from "../helpers/common-service";
 import AccessControlComponent from "./AccessControl";
@@ -12,6 +13,8 @@ export interface Menu {
   type: string;
   icon: any;
   children: any;
+  clearLocalFilters?: () => void;
+  isAction?: boolean;
   allowed_roles: ("super_admin" | "account_manager" | "nurse_champion" | "hr" | "finance_manager")[];
 }
 
@@ -112,6 +115,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isAction: true,
+    clearLocalFilters: clearShiftFilterValues,
     name: "Shift Management",
     type: "",
     icon: <HomeOutlined />,
@@ -209,30 +214,33 @@ export const MENUITEMS: Menu[] = [
   //   ],
   // },
 ];
+
 const MenuItemsComponent = (props: any) => {
   return (
     <List>
       {MENUITEMS &&
         MENUITEMS.length > 0 &&
-        MENUITEMS.map((item, index) => {
+        MENUITEMS.map((item: any, index) => {
           return (
             <AccessControlComponent
               key={index + "-menu-item"}
               role={item.allowed_roles}
             >
-              <ListSubheader>{item.name}</ListSubheader>
-              {item.children &&
-                item.children.length > 0 &&
-                item.children.map((subItem: any, index: any) => {
-                  return (
-                    <ListItem button component={NavLink} to={subItem.state} id={"menu-item-" + subItem.name} key={index + "sub-menu-item"}>
-                      <ListItemIcon className={'active-icon'}><img src={subItem.icon} alt="icon" /></ListItemIcon>
-                      <ListItemIcon className={'inactive-icon'}><img src={subItem.coloredIcon} alt="filled-icon" /></ListItemIcon>
+              <div onClick={() => item?.isAction && item.clearLocalFilters()}>
+                <ListSubheader>{item.name}</ListSubheader>
+                {item.children &&
+                  item.children.length > 0 &&
+                  item.children.map((subItem: any, index: any) => {
+                    return (
+                      <ListItem button component={NavLink} to={subItem.state} id={"menu-item-" + subItem.name} key={index + "sub-menu-item"} >
+                        <ListItemIcon className={'active-icon'}><img src={subItem.icon} alt="icon" /></ListItemIcon>
+                        <ListItemIcon className={'inactive-icon'}><img src={subItem.coloredIcon} alt="filled-icon" /></ListItemIcon>
 
-                      <ListItemText primary={subItem.name} />
-                    </ListItem>
-                  );
-                })}
+                        <ListItemText primary={subItem.name} />
+                      </ListItem>
+                    );
+                  })}
+              </div>
             </AccessControlComponent>
           );
         })}
