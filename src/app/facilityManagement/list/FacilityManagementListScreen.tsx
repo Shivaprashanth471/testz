@@ -269,7 +269,7 @@ const FacilityManagementListScreen = () => {
                               label={''}
                             /> </TableCell> : <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
                           }
-                          <TableCell className="text-right mrg-right-10">
+                          <TableCell className="text-right mrg-right-10 position-sticky">
                             <Link
                               to={"/facility/tabs/" + row?._id}
                               className="info-link "

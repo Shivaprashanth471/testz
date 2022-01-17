@@ -22,7 +22,7 @@ import HcpExperienceComponent from './experience/HcpExperienceComponent';
 import HcpVolunteerExperienceComponent from './volunteerExperience/HcpVolunteerExperienceComponent';
 import HcpReferenceComponent from './reference/HcpReferenceComponent';
 import ScrollToTop from "react-scroll-to-top";
-
+import RejectHcpComponent from "./rejectHcp/RejectHcpComponent";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,13 +39,14 @@ const HcpManagementViewScreen = () => {
     const param = useParams<any>();
     const { id } = param;
     const [hcpBasicDetails, setBasicDetails] = useState<any | null>(null)
-    const [isAddOpen, setIsAddOpen] = React.useState<boolean>(false);
+    const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [educationDetails, setEducationDetails] = useState<any | null>(null)
     const [volunteerExperience, setVolunteerExperience] = useState<any | null>(null);
     const [referenceDetails, setReferenceDetails] = useState<any | null>(null);
     const [experience, setExperienceDetails] = useState<any | null>(null);
     const [expanded, setExpanded] = useState<string | false>(false);
+    const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false);
 
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
@@ -119,6 +120,19 @@ const HcpManagementViewScreen = () => {
         init()
     }, [init])
 
+    const openRejectHcp = useCallback(() => {
+        setIsRejectOpen(true);
+    }, [])
+
+    const cancelRejectHcp = useCallback(() => {
+        setIsRejectOpen(false);
+    }, [])
+
+    const confirmRejectHcp = useCallback(() => {
+        setIsRejectOpen(false);
+        init()
+    }, [init])
+
     // const handleRejectHcp = useCallback(() => {
     //     CommonService._api.patch(ENV.API_URL + 'hcp/' + id + '/reject').then((resp) => {
     //         init()
@@ -136,6 +150,9 @@ const HcpManagementViewScreen = () => {
             {!isLoading && (<>
                 <DialogComponent open={isAddOpen} cancel={cancelAdd}>
                     <AssignToNcComponent cancel={cancelAdd} confirm={confirmAdd} />
+                </DialogComponent>
+                <DialogComponent open={isRejectOpen} cancel={cancelRejectHcp}>
+                    <RejectHcpComponent cancel={cancelRejectHcp} confirm={confirmRejectHcp} />
                 </DialogComponent>
                 <div className="hcp_view_details">
                     <div className="d-flex profile-status-wrapper">
@@ -213,7 +230,7 @@ const HcpManagementViewScreen = () => {
                     <div style={{ justifyContent: "center" }} className="mrg-top-50 d-flex button-wrapper">
                         <AccessControlComponent role={[HUMANRESOURCE, ADMIN]} >
                             {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"} onClick={openAdd} className="mrg-right-20">Approve</Button> : <></>}
-                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"}  className="mrg-right-20">Reject</Button> : <></>}
+                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"}  className="mrg-right-20" onClick={openRejectHcp}>Reject</Button> : <></>}
                         </AccessControlComponent>
                     </div>
                 </div>
