@@ -225,7 +225,7 @@
 		overflow: auto;
 	}
 	.menuButton {
-		@include sm() {
+		@include md() {
 			display: none;
 		}
 	}

@@ -67,44 +67,26 @@ const useStyles = makeStyles((theme: Theme) =>
 const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
     const dispatch = useDispatch();
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const matches = useMediaQuery(theme.breakpoints.up('md'));
 
     const [pageTitle, setPageTitle] = useState<string | null>(null);
     const [pageBackButtonLink, setPageBackButtonLink] = useState<string | null>(null);
-
     const [isDrawerOpen, setIsDrawerOpen] = useState(matches);
-
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     const ITEM_HEIGHT = 48;
     const { user } = useSelector((state: StateParams) => state.auth)
-    // const { newNotificationsCount } = useSelector((state: StateParams) => state.polling)
     const [profileMenu, setProfileMenu] = React.useState<null | HTMLElement>(null);
     const openProfileMenu = Boolean(profileMenu);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setProfileMenu(event.currentTarget);
     };
-    // const toggleModal = useCallback(
-    //     () => {
-    //         setIsModalOpen(!isModalOpen)
-    //     },
-    //     [isModalOpen],
-    // )
+
     const toggleDrawer = () => {
         setIsDrawerOpen(s => !s);
     }
     useEffect(() => {
         setIsDrawerOpen(matches);
     }, [matches])
-
-    useEffect(() => {
-        // if(user && user.role === COUNSELLOR) {
-        //     dispatch(startNotificationPolling());
-        // }
-        return () => {
-            // dispatch(stopNotificationPolling());
-        }
-    }, [dispatch, user])
 
     useEffect(() => {
         const pageTitleSubscription = Communications.pageTitleSubject.subscribe((title) => {

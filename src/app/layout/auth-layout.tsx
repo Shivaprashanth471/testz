@@ -14,8 +14,8 @@ const AuthLayout = (props: PropsWithChildren<AuthLayoutProps>) => {
 
         <div className='main-wrapper'>
            <div className='img-wrapper'>
-           {/* <div className={'no-repeat-background'} style={{ backgroundImage: 'url(' + login + ')' }}></div> */}
-           <img src={login} alt={''}/>
+            <div className={'no-repeat-background'} style={{ backgroundImage: 'url(' + login + ')' }}></div> 
+           {/* <img src={login} alt={''}/> */}
            </div>
 
            <div className='auth-wrapper position-relative'>

@@ -90,7 +90,7 @@ const ShiftCheckOutComponent = (props: PropsWithChildren<ShiftCheckOutComponentP
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
-            let endTime =moment(lastBreakOut?.time,'HH:mm:ss')
+            let endTime = moment(lastBreakOut?.time,'HH:mm:ss')
             if(beginningTime.isBefore(endTime)){
               error=true
           }
