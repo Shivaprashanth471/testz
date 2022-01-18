@@ -151,7 +151,7 @@ const HcpApprovedListScreen = () => {
     useEffect(() => {
         init();
         getHcpTypes()
-        Communications.pageTitleSubject.next('HCP Management');
+        Communications.pageTitleSubject.next('HCP Approved');
         Communications.pageBackButtonSubject.next(null);
     }, [init, getHcpTypes])
 
