@@ -164,6 +164,7 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
                 </div>
             </Toolbar>
         </AppBar>
+        
         <Drawer
             className={classes.drawer + (isDrawerOpen ? ' drawerOpened ' : ' drawerClosed ')}
             variant={"permanent"}
