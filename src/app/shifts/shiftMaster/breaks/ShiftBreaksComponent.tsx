@@ -62,20 +62,13 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         setShiftBreakTimings([...data]);
     }, [setShiftBreakTimings, shiftBreakTimings])
 
+    console.log(shiftBreakTimings)
     const handleBreakoutChange = useCallback((event: any, index: any) => {
         let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date)
         let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
     
         let error = false
-        if (breakInDate < breakOutDate) {
-            // date is past
-            // let value = moment(event).format("HH:mm:ss");
-            // let beginningTime = moment(value, 'HH:mm:ss');
-            // let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
-            // if(beginningTime.isBefore(currBreakOutTime)){
-            //     error = true
-            // }
-         
+        if (breakInDate < breakOutDate) {         
         } else if (breakInDate > breakOutDate) {
           
         } else {
@@ -85,8 +78,9 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
-            let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
-             if(currBreakOutTime.isBefore(beginningTime)){
+            let checkoutTime = shiftDetails?.time_breakup?.check_out_time.slice(11, 19);
+            let currBreakOutTime = index !== shiftBreakTimings?.length-1 ? moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss'): moment(checkoutTime, 'HH:mm:ss')
+            if(currBreakOutTime.isBefore(beginningTime)){
                  error = true
              }
            
@@ -105,7 +99,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             }
             setShiftBreakTimings([...data])
         }
-    }, [setShiftBreakTimings, shiftBreakTimings])
+    }, [setShiftBreakTimings, shiftBreakTimings,shiftDetails?.time_breakup?.check_out_time])
 
     const handleBreakInDateChange = useCallback((event: any, index: any) => {
         let breakInDate = moment(event).format('YYYY-MM-DD');
