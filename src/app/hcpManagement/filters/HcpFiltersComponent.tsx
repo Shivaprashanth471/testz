@@ -5,6 +5,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { PropsWithChildren } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { localStore } from '../../../helpers';
 import './HcpFiltersComponents.scss';
 export interface HcpFiltersComponentProps {
     cancel: () => void,
@@ -160,6 +161,13 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
             </Button>
         </DialogActions>
     </div>;
+}
+
+
+export const clearHcpFilterValues = () => {
+    localStore.removeItem('hcpSelectedTypes')
+    localStore.removeItem('hcpStatus')
+    localStore.removeItem('hcpDateRange')
 }
 
 export default HcpFiltersComponent;

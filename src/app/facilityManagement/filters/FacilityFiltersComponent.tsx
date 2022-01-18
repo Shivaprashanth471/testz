@@ -6,6 +6,7 @@ import React, { PropsWithChildren } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
+import { localStore } from '../../../helpers';
 import "./FacilityFiltersComponent.scss";
 
 export interface FacilityFiltersComponentProps {
@@ -166,6 +167,13 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
             </Button>
         </DialogActions>
     </div>;
+}
+
+
+export const clearFacilityFilterValues = () => {
+    localStore.removeItem('facilityRegions')
+    localStore.removeItem('facilityStatus')
+    localStore.removeItem('facilityDateRange')
 }
 
 export default FacilityFiltersComponent;
