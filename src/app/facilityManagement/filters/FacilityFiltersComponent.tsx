@@ -140,8 +140,8 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
                             placeholderText="Select Date"
                             className='custom-input'
                             selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
+                            startDate={startDate && new Date(startDate)}
+                            endDate={endDate && new Date(endDate)}
                             onChange={(update) => {
                                 setDateRange(update);
                             }}
