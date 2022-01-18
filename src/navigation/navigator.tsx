@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import {BrowserRouter,Redirect,Route,Switch,useHistory} from "react-router-dom";
 import NotFoundComponent from "../components/NotFoundComponent";
-import AppLayout from "../app/layout/app-layout";
-import AuthLayout from "../app/layout/auth-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { StateParams } from "../store/reducers";
 import CommonService from "../helpers/common-service";
@@ -53,6 +51,8 @@ import EmployeeManagementScreen from "../app/employee/list/EmployeeManagementScr
 import AddEmployeeComponent from "../app/employee/add/AddEmployeeComponent";
 import EmployeeViewScreen from "../app/employee/view/EmployeeViewScreen";
 import EditEmployeeComponent from "../app/employee/edit/EditEmployeeComponent";
+import AppLayout from "../app/layout/app-layout/app-layout";
+import AuthLayout from "../app/layout/auth-layout/auth-layout";
 
 // @ts-ignore
 const AuthLayoutRoute = ({ component: Component, ...rest }) => {

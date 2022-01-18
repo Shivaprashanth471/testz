@@ -13,22 +13,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './app-layout.scss';
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../../store/actions/auth.action";
-import MenuItemsComponent from "../../components/MenuItemsComponent";
+import { logoutUser } from "../../../store/actions/auth.action";
+import MenuItemsComponent from "../../../components/MenuItemsComponent";
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import Communications from "../../helpers/communications-service";
-import { StateParams } from "../../store/reducers";
-// import Badge from '@material-ui/core/Badge';
-// import NotificationsIcon from '@material-ui/icons/Notifications';
-// import NotificationsOutlinedIcon from '@material-ui/icons/NotificationsOutlined';
-// import DialogComponent from '../../components/DialogComponent';
-// import NotificationsViewComponent from '../notifications/NotificationsViewComponent';
-// import AccessControlComponent from "../../components/AccessControl";
-// import { FINANCEMANAGER, ACCOUNTMANAGER, HUMANRESOURCE, ADMIN } from "../../helpers/common-service";
-import { ImageConfig } from '../../constants';
+import Communications from "../../../helpers/communications-service";
+import { StateParams } from "../../../store/reducers";
+import { ImageConfig } from '../../../constants';
 import Avatar from '@material-ui/core/Avatar';
-import { Logout } from '../../constants/ImageConfig';
-// import { stopNotificationPolling } from "../../store/actions/polling.action";
+import { Logout } from '../../../constants/ImageConfig';
 
 export interface AppLayoutProps {
 
@@ -72,8 +64,9 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
     const [pageTitle, setPageTitle] = useState<string | null>(null);
     const [pageBackButtonLink, setPageBackButtonLink] = useState<string | null>(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(matches);
+
     const ITEM_HEIGHT = 48;
-    const { user } = useSelector((state: StateParams) => state.auth)
+    const {user} = useSelector((state: StateParams) => state.auth);
     const [profileMenu, setProfileMenu] = React.useState<null | HTMLElement>(null);
     const openProfileMenu = Boolean(profileMenu);
 
@@ -83,10 +76,11 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
 
     const toggleDrawer = () => {
         setIsDrawerOpen(s => !s);
-    }
+    };
+
     useEffect(() => {
         setIsDrawerOpen(matches);
-    }, [matches])
+    }, [matches]);
 
     useEffect(() => {
         const pageTitleSubscription = Communications.pageTitleSubject.subscribe((title) => {
@@ -99,66 +93,54 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
             pageTitleSubscription.unsubscribe();
             pageBackButtonSubscription.unsubscribe();
         }
-    }, [])
-
+    }, []);
 
     const classes = useStyles();
     const logout = useCallback(() => {
-        // console.log('logout');
         dispatch(logoutUser());
-    }, [dispatch])
+    }, [dispatch]);
 
     const handleClose = useCallback(() => {
         setProfileMenu(null);
     }, [])
 
     return (<div className={classes.root + ' app-layout'}>
-        <CssBaseline />
+        <CssBaseline/>
         <AppBar position="fixed" color={"inherit"} variant={"elevation"} elevation={1} className={classes.appBar}>
             <Toolbar>
-            <div className="brand">
+                <div className="brand">
                     <Link to={'/'}>
                         <img src={ImageConfig.logo} alt={'vitawerks'}/>
                     </Link>
-                    <IconButton onClick={toggleDrawer} edge="start"  className={'menuButton'} color="inherit"
-                        aria-label="menu">
-                        <MenuIcon />
+                    <IconButton onClick={toggleDrawer} edge="start" className={'menuButton'} color="inherit"
+                                aria-label="menu">
+                        <MenuIcon/>
                     </IconButton>
                 </div>
                 <div className="back-title-holder">
                     {pageBackButtonLink && <IconButton color={"secondary"} component={Link} to={pageBackButtonLink}>
-                        <ArrowBackIosOutlinedIcon />
+                        <ArrowBackIosOutlinedIcon/>
                     </IconButton>}
                     {pageTitle && <div className="page-title-text">
                         &nbsp;{pageTitle}
                     </div>}
                 </div>
-                {/* <AccessControlComponent role={[FINANCEMANAGER, ACCOUNTMANAGER, HUMANRESOURCE, ADMIN]} >
-                    <div className="notifications" onClick={toggleModal}>
-                        {(newNotificationsCount > 0) ? (<>
-                            <Badge badgeContent={newNotificationsCount} color={"primary"} style={{ color: '#FFF' }}>
-                                <NotificationsIcon style={{ fill: "orange" }} />
-                            </Badge>
-                        </>) : (<>
-                            <NotificationsOutlinedIcon />
-                        </>)}
-                    </div>
-                    <DialogComponent class={'dialog-side-wrapper'} open={isModalOpen} cancel={toggleModal}>
-                        <NotificationsViewComponent cancel={toggleModal} />
-                    </DialogComponent>
-                </AccessControlComponent> */}
-                <div><p className='account_name'>{user?.first_name}&nbsp;{user?.last_name}</p></div>
+                <div onClick={handleClick}
+                     className={"cursor-pointer display-flex align-items-center"}
+                >
+                    <p className='account_name'>{user?.first_name}&nbsp;{user?.last_name}</p>&nbsp;&nbsp;
+                    <Avatar src="/broken-image.jpg" className="profile_avatar"/>&nbsp;
+                    <IconButton
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        className="pdd-5"
+                    >
+                        <ExpandMoreIcon id="down-arrow"/>
+                    </IconButton>
+                </div>
                 <div className="">
                     <div className="profile_menu">
-                        <IconButton
-                            aria-label="more"
-                            aria-controls="long-menu"
-                            aria-haspopup="true"
-                            onClick={handleClick}
-                            className="pdd-5"
-                        >
-                            <ExpandMoreIcon id="down-arrow"/>
-                        </IconButton>
                         <Menu
                             id="long-menu"
                             anchorEl={profileMenu}
@@ -174,12 +156,12 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
                             }}
                         >
                             <MenuItem onClick={logout} key={"logout"} id="logout-btn">
-                              <img src={Logout} alt="logout"/> &nbsp;&nbsp;<p className='mrg-top-0 mrg-bottom-0 logout'>Logout</p>
+                                <img src={Logout} alt="logout"/> &nbsp;&nbsp;<p
+                                className='mrg-top-0 mrg-bottom-0 logout'>Logout</p>
                             </MenuItem>
                         </Menu>
                     </div>
                 </div>
-                <Avatar src="/broken-image.jpg"  className="profile_avatar"/>
             </Toolbar>
         </AppBar>
         <Drawer
@@ -190,13 +172,13 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
             }}
             onClose={console.log} open={isDrawerOpen}
         >
-            <Toolbar />
+            <Toolbar/>
             <div className={classes.drawerContainer}>
-                <MenuItemsComponent />
+                <MenuItemsComponent/>
             </div>
         </Drawer>
         <main className={classes.content}>
-            <Toolbar />
+            <Toolbar/>
             <div className="page-container">
                 {props.children}
             </div>

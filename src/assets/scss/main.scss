@@ -701,6 +701,46 @@ body {
 	width: 20px !important;
 }
 
+.has-loading-spinner {
+
+	&::before {
+		content: " ";
+		position: absolute;
+		top: calc(50% - 10px);
+		left: calc(50% - 10px);
+		border: 3px solid $primary-color;
+		border-top: 3px solid white;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		-webkit-animation: loaderSpin 0.5s linear infinite; /* Safari */
+		animation: loaderSpin 0.5s linear infinite;
+	}
+
+	/* Safari */
+	@-webkit-keyframes loaderSpin {
+		0% {
+			-webkit-transform: rotate(0deg);
+		}
+		100% {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+
+	@keyframes loaderSpin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+}
+
+.align-items-center{
+	align-items: center;
+}
+
 h6,h5,h4,h3,h2,h1,p {
 		overflow-wrap: break-word;
         word-wrap: break-word;

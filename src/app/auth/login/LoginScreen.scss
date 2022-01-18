@@ -1,7 +1,8 @@
 @import "src/assets/scss/common";
 
 .login-screen {
-    margin-top: 90px;
+    margin-top: 30px;
+
     .main-auth-wrapper {
         @include sm() {
             padding: 20px 40px;
@@ -14,8 +15,6 @@
         font-size: 1rem !important;
     }
     .login-button {
-        width: 300px;
-        padding: 10px;
         margin: auto;
         color: white;
         background-color: $accent-color;
@@ -34,7 +33,6 @@
     }
 
     .loginFormHolder {
-        margin: 20px;
 
         .eye_btn_wrapper {
             position: absolute;
