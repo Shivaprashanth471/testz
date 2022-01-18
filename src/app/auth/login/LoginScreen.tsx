@@ -13,7 +13,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 import EmailIcon from '@material-ui/icons/Email';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const loginFormValidation = Yup.object({
   email: Yup.string().required("Required"),
