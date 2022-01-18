@@ -176,11 +176,12 @@ const ShiftMasterViewScreen = () => {
         CommonService._api.patch(ENV.API_URL + 'shift/' + id + '/closed', payload).then((resp) => {
             CommonService.showToast(resp?.msg || "Success", "success")
             getShiftAttachments()
+            getShiftDetails()
         }).catch((err) => {
             console.log(err)
             CommonService.showToast(err || "Error", "error");
         })
-    },[basicDetails?.hcp_user_id, id, getShiftAttachments])
+    },[basicDetails?.hcp_user_id, id, getShiftAttachments,getShiftDetails])
 
     const handlegetUrlForUpload = useCallback(() => {
         setIsTimeSheetBeingUpdated(true)
