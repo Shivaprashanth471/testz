@@ -52,8 +52,8 @@ const LoginScreen = (props: any) => {
   };
 
   return (
-    <div className="main-auth-wrapper login-screen screen">
-      <div className="mrg-left-20">
+    <div className="main-auth-wrapper login-screen screen pdd-0">
+      <div className="">
         <div className="auth-header">Sign in to Continue</div>
         <p className={"form-label"}>Please Enter your Details below</p>
       </div>
@@ -132,9 +132,9 @@ const LoginScreen = (props: any) => {
                 id="login_button"
                 type={"submit"}
                 size={"medium"}
-                className={"login-button"}
+                className={isSubmitting ? 'login-button has-loading-spinner' : 'login-button'}
               >
-                Login
+                  { isSubmitting ? "Logging in" : "Login" }
               </Button>
             </div>
           </Form>
