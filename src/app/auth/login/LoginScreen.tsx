@@ -137,7 +137,6 @@ const LoginScreen = (props: any) => {
               >
                   { isSubmitting ? "Logging in" : "Login" }
               </Button>
-              {isSubmitting ?<CircularProgress color="primary"  size={30} className="login-loader"/>:<></>}
             </div>
           </Form>
         )}

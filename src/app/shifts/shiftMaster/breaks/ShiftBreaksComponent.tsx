@@ -65,6 +65,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     const handleBreakoutChange = useCallback((event: any, index: any) => {
         let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date)
         let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
+    
         let error = false
         if (breakInDate < breakOutDate) {
             // date is past
@@ -84,15 +85,15 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
-            // let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
-            // if(beginningTime.isBefore(currBreakOutTime)){
-            //     error = true
-            // }
+            let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
+             if(currBreakOutTime.isBefore(beginningTime)){
+                 error = true
+             }
            
         }
 
         if (error) {
-            CommonService.showToast("Break Out Time has to be greater than Break In Time" || "Error", "error")
+            CommonService.showToast("Break Out Time has to be greater than Previous Break In Time / less than Next Break In Time" || "Error", "error")
         } else {
             const data = shiftBreakTimings;
             let value = moment(event).format("HH:mm:ss");
@@ -123,8 +124,8 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         }
 
         if (error) {
-            CommonService.showToast(index === 0 ? "Break In Time has to greater than Check In Time" :
-                "Break In Time has to greater than Previous Break Out Time" || "Error", "error")
+            CommonService.showToast(index === 0 ? "Break In Time has to be greater than Check In Time / less than Break Out Time" :
+                "Break In Time has to be greater than Previous Break Out Time  / less than Break Out Time" || "Error", "error")
         } else {
             const data = shiftBreakTimings;
             let value = moment(event).format('YYYY-MM-DD');
@@ -179,14 +180,14 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
-           // let currBreakOutTime = moment(shiftBreakTimings[index]?.break_out_time, 'HH:mm:ss')
+            let currBreakOutTime = moment(shiftBreakTimings[index]?.break_out_time, 'HH:mm:ss')
             let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
-            // if(currBreakOutTime.isBefore(beginningTime)){
-            //     error = true
-            // }
+            if(currBreakOutTime.isBefore(beginningTime)){
+                error = true
+            }
         }
 
         if (error) {
@@ -287,6 +288,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                             minDate={index !== 0 ? shiftBreakTimings[index - 1]?.break_out_date : moment(checkIn?.date)}
                                             format="MMMM do yyyy"
                                             onChange={(event: any) => handleBreakInDateChange(event, index)}
+                                            maxDate={shiftBreakTimings[index]?.break_out_date || null}
                                             fullWidth required />
                                         <TimePicker className="mrg-top-10" ampm={true} label="Time"
                                             inputVariant='outlined'
@@ -305,6 +307,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                                                     minDate={moment(shiftBreakTimings[index]?.break_in_date)}
                                                     disabled={!shiftBreakTimings[index]?.break_in_date || !shiftBreakTimings[index]?.break_in_time}
                                                     onChange={(event: any) => handleBreakOutDateChange(event, index)}
+                                                    maxDate={shiftBreakTimings[index+1]?.break_in_date || shiftDetails?.time_breakup?.check_out_time?.slice(0,10) || null}
                                                     fullWidth required />
                                                 <TimePicker className="mrg-top-10" ampm={true} label="Time"
                                                     inputVariant='outlined'
