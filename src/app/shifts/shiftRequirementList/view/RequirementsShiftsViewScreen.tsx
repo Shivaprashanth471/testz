@@ -68,7 +68,7 @@ const RequirementsShiftsViewScreen = () => {
     }, [getShiftDetails])
 
     useEffect(() => {
-        Communications.pageTitleSubject.next('Shifts Requirement');
+        Communications.pageTitleSubject.next('Open Shifts');
         Communications.pageBackButtonSubject.next('/shiftrequirementMaster/list');
     }, [])
 
