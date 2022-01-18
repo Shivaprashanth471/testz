@@ -1,19 +1,19 @@
-# Getting Started with Create React App
+# Vitawerks-Admin-UI
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running the project
 
-In the project directory, you can run:
+1. Clone the project `https://github.com/Vitawerks/Vitawerks-Admin-UI.git`.
+2. Install dependencies `yarn install`.
+3. Run `yarn run start`.
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `yarn start`
+## Adding new environment
+1. Add a file with name `.env.ENVIRONMENT_NAME` at root level.
+2. copy contents from `.env.template` file into newly created environment file and edit the values as per requirements.
 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
 ### `yarn test`
 
