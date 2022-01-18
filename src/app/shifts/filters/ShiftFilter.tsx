@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import { AllShiftStatusList, shiftType, SomeShiftStatusList } from "../../../constants/data";
+import { localStore } from '../../../helpers';
 import './ShiftFilter.scss';
 
 
@@ -133,8 +134,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     return <div className="pdd-30 pdd-top-40 filters">
         <div className="dialog-header d-flex">
             <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-
-
             <Button
                 disabled={handleDisableReset()}
                 onClick={() => {
@@ -297,8 +296,8 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                             placeholderText="Select Date"
                             className='custom-input'
                             selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
+                            startDate={startDate && new Date(startDate)}
+                            endDate={endDate && new Date(endDate)}
                             onChange={(update) => {
                                 setDateRange(update);
                             }}
@@ -348,6 +347,18 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             </Button>
         </DialogActions>
     </div>;
+}
+
+
+export const clearShiftFilterValues = () => {
+    localStore.removeItem('selectedRegion')
+    localStore.removeItem('selectedFacilities')
+    localStore.removeItem('selectedHcps')
+    localStore.removeItem('statusType')
+    localStore.removeItem('selectedStatusTypes')
+    localStore.removeItem('dateRange')
+    localStore.removeItem('selectedTimeTypes')
+
 }
 
 export default ShiftFilter;

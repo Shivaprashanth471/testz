@@ -44,8 +44,8 @@ const FacilityBasicDetailsComponent = (props: any) => {
                         <Button variant={"contained"} color={"primary"} component={Link} to={`/facility/edit/` + id}>Edit Facility</Button>
                     </div>
                 </div>
-                <div className="d-flex">
-                    <div className="flex-1">
+                <div className="d-flex ">
+                    <div className="flex-1 ">
                         <h4>Facility Name</h4>
                         <p>{facilityDetails?.facility_name}</p>
                     </div>

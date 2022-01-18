@@ -14,10 +14,9 @@ const DashboardScreen = () => {
         Communications.pageBackButtonSubject.next(null);
     }, [])
  
-    return <div>
+    return <div className='dashboard screen crud-layout'>
         <Lottie
-            width={1250}
-            height={650}
+            height={500}
             speed={1}
             options={defaultOptions}
         />

@@ -68,7 +68,15 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         let error = false
         if (breakInDate < breakOutDate) {
             // date is past
+            // let value = moment(event).format("HH:mm:ss");
+            // let beginningTime = moment(value, 'HH:mm:ss');
+            // let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
+            // if(beginningTime.isBefore(currBreakOutTime)){
+            //     error = true
+            // }
+         
         } else if (breakInDate > breakOutDate) {
+          
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
@@ -76,6 +84,11 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
+            // let currBreakOutTime = moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss')
+            // if(beginningTime.isBefore(currBreakOutTime)){
+            //     error = true
+            // }
+           
         }
 
         if (error) {
@@ -100,13 +113,10 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
 
         if (breakOutDate < moment(breakInDate)) {
             // date is past
-            console.log("102")
         } else if (breakOutDate > moment(breakInDate)) {
-            console.log("104")
         } else {
             let beginningTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss');
             let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
-            console.log(beginningTime.isBefore(endTime),endTime,)
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
@@ -141,6 +151,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
+
         }
 
         if (error) {
@@ -168,10 +179,14 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
+           // let currBreakOutTime = moment(shiftBreakTimings[index]?.break_out_time, 'HH:mm:ss')
             let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
+            // if(currBreakOutTime.isBefore(beginningTime)){
+            //     error = true
+            // }
         }
 
         if (error) {

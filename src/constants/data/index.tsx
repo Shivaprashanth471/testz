@@ -84,7 +84,7 @@ export const acknowledgement = [
 export const boolAcknowledge = [
   { value: "true", label: "Yes" },
   { value: "false", label: "No" },
-  { value: "none", label : "None"}
+  { value: "", label : "None"}
 ]
 
 
@@ -124,7 +124,7 @@ export const moreImportant = [
     value: "location",
     label: "Location",
   },
-  { value: "none", label : "None"}
+  { value: "", label : "None"}
 ]
 
 
@@ -142,6 +142,7 @@ export const covidPreference = [
     value: "both",
     label: "Both",
   },
+  { value: "", label : "None"}
 ]
 
 export const vaccine = [
@@ -189,7 +190,7 @@ export const gustoType = [
     value: "paycheck",
     label: "Paycheck",
   },
-  { value: "none", label : "None"}
+  { value: "", label : "None"}
 ]
 
 

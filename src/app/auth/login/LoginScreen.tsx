@@ -13,6 +13,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 import EmailIcon from '@material-ui/icons/Email';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const loginFormValidation = Yup.object({
   email: Yup.string().required("Required"),
@@ -123,7 +124,7 @@ const LoginScreen = (props: any) => {
                 </Link>
               </div>
             </div> */}
-            <div className="form-field mrg-top-40">
+            <div className="form-field mrg-top-40 position-relative">
               <Button
                 disabled={isSubmitting || !isValid}
                 fullWidth
@@ -136,6 +137,7 @@ const LoginScreen = (props: any) => {
               >
                   { isSubmitting ? "Logging in" : "Login" }
               </Button>
+              {isSubmitting ?<CircularProgress color="primary"  size={30} className="login-loader"/>:<></>}
             </div>
           </Form>
         )}

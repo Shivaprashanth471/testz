@@ -21,6 +21,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import AccessControlComponent from "../../../components/AccessControl";
 import DialogComponent from "../../../components/DialogComponent";
 import NoDataCardComponent from "../../../components/NoDataCardComponent";
+import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
 import { ApiService, Communications } from "../../../helpers";
 import CommonService, { ACCOUNTMANAGER, ADMIN } from "../../../helpers/common-service";
@@ -43,8 +44,11 @@ const FacilityManagementListScreen = () => {
   const { role } = useSelector((state: StateParams) => state?.auth?.user);
   const [open, setOpen] = useState<boolean>(false);
   const [regionList, setRegionList] = useState<any | null>(null);
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [status, setStatus] = useState<any>("");
+
+
+  const [selectedRegions, setSelectedRegions] = useLocalStorage<any>('facilityRegions', [])
+  const [status, setStatus] = useLocalStorage<any>('facilityStatus', "");
+  const [dateRange, setDateRange] = useLocalStorage('facilityDateRange', [null, null]);
 
 
   const classesFunction = useCallback((type: any) => {
@@ -56,7 +60,6 @@ const FacilityManagementListScreen = () => {
       return 'pdd-left-20 first-row'
     }
   }, [])
-  const [selectedRegions, setSelectedRegions] = useState<any>([])
 
 
   const onReload = useCallback((page = 1) => {
@@ -236,18 +239,17 @@ const FacilityManagementListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table">
+                <Table stickyHeader aria-label="sticky table" className="table">
                   <TableHead>
                     <TableRow>
-                      {list?.table.matColumns.map(
-                        (column: any, columnIndex: any) => (
-                          <TableCell
-                            className={classesFunction(column)}
-                            key={"header-col-" + columnIndex}
-                          >
-                            {column}
-                          </TableCell>
-                        )
+                      {list?.table.matColumns.map((column: any, columnIndex: any) => (
+                        <TableCell
+                          className={classesFunction(column)}
+                          key={"header-col-" + columnIndex}
+                        >
+                          {column}
+                        </TableCell>
+                      )
                       )}
                     </TableRow>
                   </TableHead>
@@ -257,12 +259,7 @@ const FacilityManagementListScreen = () => {
                     }
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={"row-" + rowIndex}
-                        >
+                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
                           <TableCell className="pdd-left-20">
                             {moment(row['created_at']).format("MM-DD-YYYY")}
                           </TableCell>
@@ -275,7 +272,7 @@ const FacilityManagementListScreen = () => {
                               label={''}
                             /> </TableCell> : <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
                           }
-                          <TableCell className="text-right mrg-right-10">
+                          <TableCell className="text-right mrg-right-10 position-sticky">
                             <Link
                               to={"/facility/tabs/" + row?._id}
                               className="info-link "
@@ -306,5 +303,8 @@ const FacilityManagementListScreen = () => {
     </>
   );
 };
+
+
+
 
 export default FacilityManagementListScreen;

@@ -181,6 +181,7 @@ const AddHcpComponent = () => {
       let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
       let payload: any = {}
       payload = hcp
+     
       payload = {
         ...payload,
         professional_details: {

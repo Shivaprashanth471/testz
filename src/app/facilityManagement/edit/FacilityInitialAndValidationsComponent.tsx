@@ -174,8 +174,18 @@ export const facilityFormEditValidation = Yup.object({
       .trim("empty space not allowed")
       .max(10, 'max 10 digits allowed')
       .required("required").nullable(),
-    holiday: Yup.number().typeError(" must be a number").nullable(),
-    hazard: Yup.number().typeError(" must be a number").nullable(),
+    holiday: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
+    hazard: Yup.string()
+      .typeError(" must be valid")
+      .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
+      .trim("empty space not allowed")
+      .max(10, 'max 10 digits allowed')
+      .required("required").nullable(),
   }),
   diff_rates: Yup.object({
     pm: Yup.string()
