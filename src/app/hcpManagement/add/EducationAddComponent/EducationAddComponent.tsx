@@ -10,9 +10,9 @@ import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
-import * as Yup from "yup";
 import { CommonService } from "../../../../helpers";
 import "./EducationAddComponent.scss";
+import { educationValidation } from "./EducationValidation";
 import ReadOnlyRow from "./ReadOnlyRow";
 
 
@@ -37,27 +37,7 @@ const educationInitialState: EducationItem = {
   graduation_date: null,
 };
 
-const educationValidation = Yup.object({
-  institute_name: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 chracters")
-    .trim("empty space")
-    .required(" required"),
-  degree: Yup.string()
-    .typeError("must be text")
-    .trim("empty space")
-    .required(" required"),
-  location: Yup.string()
-    .typeError("must be text")
-    .trim("empty space")
-    .required(" required"),
-  start_date: Yup.string()
-    .trim("empty space")
-    .required("required").nullable(),
-  graduation_date: Yup.string()
-    .trim("empty space")
-    .required("required").nullable(),
-});
+
 
 const EducationAddComponent = ({
   educations,
@@ -65,10 +45,12 @@ const EducationAddComponent = ({
 }: EducationAddComponentProps) => {
   const [isEducation, setIsEducation] = useState<boolean>(false);
 
+
   const onAdd = (
     education: EducationItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<EducationItem>
   ) => {
+
     const newEducation = {
       tempId: nanoid(),
       institute_name: education.institute_name,
@@ -81,6 +63,7 @@ const EducationAddComponent = ({
     const newEducations = [...educations, newEducation];
     setEducation(newEducations);
     resetForm();
+    CommonService.showToast('HCP education added', 'info')
     handleCancelEducation()
   };
 
@@ -95,6 +78,7 @@ const EducationAddComponent = ({
     );
     newEducations.splice(index, 1);
     setEducation(newEducations);
+    CommonService.showToast('HCP education deleted', 'error')
   };
 
   const sortedEducationData = CommonService.sortDatesByLatest(educations, 'start_date')

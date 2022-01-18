@@ -10,12 +10,12 @@ import { TextField } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
-import * as Yup from "yup";
 import DialogComponent from "../../../../components/DialogComponent";
 import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { acknowledgement } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
+import { volunteerExperienceValidation } from "../../add/VolunteerExperienceAddComponent/VolunteerExperienceValidation";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./VolunteerExperienceEditComponent.scss";
 
@@ -49,16 +49,7 @@ const experienceInitialState: ExperienceItem = {
   skills: "",
 };
 
-const experienceValidation = Yup.object({
-  organisation: Yup.string().typeError("must be text").min(3, "min 3 letter").trim("").required("required"),
-  stillWorkingHere: Yup.string().trim().required("required"),
-  speciality: Yup.string().typeError("must be text").trim("").required("required"),
-  positionTitle: Yup.string().typeError("must be number").trim().required("required"),
-  location: Yup.string().typeError("must be date").trim().required("required"),
-  startDate: Yup.string().typeError("must be date").required("required").nullable(),
-  endDate: Yup.string().typeError("must be date").nullable(),
-  skills: Yup.string().typeError("must be text").trim()
-});
+
 
 const VolunteerExperienceAddComponent = ({
   getExperienceDetails,
@@ -76,6 +67,7 @@ const VolunteerExperienceAddComponent = ({
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
+
     const newExperience = {
       facility_name: experience.organisation,
       specialisation: experience.speciality,
@@ -118,7 +110,7 @@ const VolunteerExperienceAddComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  },[getExperienceDetails,hcpId])
+  }, [getExperienceDetails, hcpId])
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')
 
@@ -134,10 +126,10 @@ const VolunteerExperienceAddComponent = ({
   const confirmAdd = useCallback(() => {
     handleDeleteClick(vExperienceId)
   }, [vExperienceId, handleDeleteClick])
-  
+
   return (
     <div className="add-container">
-       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+      <DialogComponent open={isAddOpen} cancel={cancelAdd}>
         <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Volunteer Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {experiences.length > 0 && (
@@ -170,7 +162,7 @@ const VolunteerExperienceAddComponent = ({
           <Formik
             initialValues={experienceInitialState}
             validateOnChange={true}
-            validationSchema={experienceValidation}
+            validationSchema={volunteerExperienceValidation}
             onSubmit={onAdd}
           >
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (

@@ -8,9 +8,10 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
-import * as Yup from "yup";
+import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./ReferenceAddComponent.scss";
+import { referenceValidation } from "./ReferenceValidation";
 
 type ReferenceAddComponentProps = {
   references: any;
@@ -31,28 +32,7 @@ const referenceInitialState: ReferenceItem = {
   email: "",
 };
 
-const referenceValidation = Yup.object({
-  name: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 chracters")
-    .trim("The contact name cannot include leading and trailing spaces")
-    .required("required"),
-  jobTitle: Yup.string()
-    .typeError("must be text")
-    .trim("The contact name cannot include leading and trailing spaces")
-    .required("required"),
-  contactNumber: Yup.string()
-    .min(10, "min 10 digits")
-    .max(10, "max 10 digits")
-    .required("required")
-    .matches(
-      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-      "Invalid"
-    ),
-  email: Yup.string()
-    .typeError("must be date")
-    .email("invalid")
-});
+
 
 const ReferenceAddComponent = ({
   references,
@@ -78,6 +58,7 @@ const ReferenceAddComponent = ({
 
     resetForm();
     handleCancelAdd()
+    CommonService.showToast('HCP reference added', 'info')
   };
 
   const handleCancelAdd = () => {
@@ -91,6 +72,7 @@ const ReferenceAddComponent = ({
     );
     newReferences.splice(index, 1);
     setReference(newReferences);
+    CommonService.showToast('HCP reference deleted', 'error')
   };
 
   return (
@@ -153,6 +135,7 @@ const ReferenceAddComponent = ({
                 <div className="input-container">
                   <Field
                     inputProps={{ maxLength: 10 }}
+                    type='number'
                     variant='outlined'
                     component={TextField}
                     fullWidth

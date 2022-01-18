@@ -2,8 +2,8 @@ import RoomIcon from '@material-ui/icons/Room';
 import { Avatar } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
-import { CommonService } from '../../../../helpers';
-import { ENV } from '../../../../constants';
+import { CommonService } from '../../../helpers';
+import { ENV } from '../../../constants';
 
 const HcpDetailsCardComponent = () => {
     const params = useParams<{ id: string }>();

@@ -12,15 +12,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import DatePickers from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
-import * as Yup from "yup";
+import DialogComponent from "../../../components/DialogComponent";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import {
   calenderMode, warningZone
 } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import "./AddShiftsScreen.scss";
+import { addShiftsValidation } from "./AddShiftsValidation";
 import ReadOnlyShifts from "./ReadOnlyShifts";
 
 
@@ -65,6 +67,7 @@ const AddShiftsScreen = () => {
   const [isShifts, setIsShifts] = useState<boolean>(false);
   const [doubleClick, setDoubleClick] = useState<boolean>(false);
   const [hcpTypes, setHcpTypes] = useState<any>([])
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const [value, setValue] = useState<any>(null)
   const [mode, setMode] = useState('')
@@ -122,20 +125,6 @@ const AddShiftsScreen = () => {
     });
   }, []);
 
-  const hcpFormValidation = Yup.object({
-    title: Yup.string().min(6, "min 6 characters").trim("empty space not allowed").required('required'),
-    shift_dates: Yup.array().required('required'),
-    mode: Yup.string().required("required"),
-    shift_type: Yup.string().required('required'),
-    hcp_type: Yup.string().required('required'),
-    warning_type: Yup.string().required('required'),
-    hcp_count: Yup.number()
-      .typeError('must be a number')
-      .min(1, 'min limit 1.')
-      .max(25, 'max limit 25.').required('required'),
-    shift_details: Yup.string().trim("empty space not allowed").required('required'),
-  });
-
   const handleFacilitySelect = (facility: any) => {
     setShiftTimings([])
 
@@ -152,11 +141,8 @@ const AddShiftsScreen = () => {
     let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), 'hh:mm').format('LT')
     let type = item?.shift_type
 
-
     return `${start} - ${end} (${type}-Shift)`
   }
-
-
 
   const onAddShiftRequirement = useCallback((shiftR: any) => {
     return new Promise(async (resolve, reject) => {
@@ -206,7 +192,6 @@ const AddShiftsScreen = () => {
       setSubmitting(false);
       return
     }
-
 
     let shift_dates = value.map((item: any) => {
       let mm = item?.month?.number
@@ -282,9 +267,22 @@ const AddShiftsScreen = () => {
     handleCancelAdd()
   };
 
+  const openAdd = useCallback(() => {
+    setIsAddOpen(true)
+  }, [])
+
+  const cancelAdd = useCallback(() => {
+    setIsAddOpen(false);
+  }, [])
+
+  const confirmAdd = useCallback(() => {
+    history.push(`/shiftrequirementMaster/list`)
+
+  }, [history])
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Shift Requirement");
-    Communications.pageBackButtonSubject.next('/shiftrequirementMaster/list');
+    Communications.pageBackButtonSubject.next(null);
 
     getFacilityData();
     getHcpTypes()
@@ -326,6 +324,9 @@ const AddShiftsScreen = () => {
   return (
     !loading && !shiftLoading && !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
+        <DialogComponent open={isAddOpen} cancel={cancelAdd}>
+          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+        </DialogComponent>
         {facilities !== null && <Autocomplete
           disableClearable
           PaperComponent={({ children }) => (
@@ -371,7 +372,7 @@ const AddShiftsScreen = () => {
           <div className="custom-card">
             <Formik
               initialValues={shiftInitialState}
-              validationSchema={hcpFormValidation}
+              validationSchema={addShiftsValidation}
               onSubmit={onAdd}
             >
               {({ isSubmitting, isValid, resetForm, handleChange, setFieldValue, values }) => (
@@ -402,6 +403,9 @@ const AddShiftsScreen = () => {
                         label="HCP Type"
                         fullWidth
                       >
+                        <MenuItem value="" >
+                          Select HCP Type
+                        </MenuItem>
                         {hcpTypes &&
                           hcpTypes.map((item: any, index: any) => (
                             <MenuItem value={item.code} key={index}>
@@ -459,6 +463,9 @@ const AddShiftsScreen = () => {
                           placeholder="Select Mode"
                           fullWidth
                         >
+                          <MenuItem value="" >
+                            Select Date Mode
+                          </MenuItem>
                           {calenderMode &&
                             calenderMode.map((item: any, index) => (
                               <MenuItem value={item.value} key={index}>
@@ -469,6 +476,7 @@ const AddShiftsScreen = () => {
                       </div>
                       <div className='shift-calender'>
                         <Field
+                          minDate={new Date()}
                           disabled={!mode ? true : false}
                           required
                           inputClass='custom-input'
@@ -506,6 +514,9 @@ const AddShiftsScreen = () => {
                         label="Warning Zone"
                         fullWidth
                       >
+                        <MenuItem value="" >
+                          Select Warning Zone
+                        </MenuItem>
                         {warningZone &&
                           warningZone.map((item: any, index) => (
                             <MenuItem value={item.value} key={index}>
@@ -514,6 +525,11 @@ const AddShiftsScreen = () => {
                           ))}
                       </Field>
                       <Field
+                        InputProps={{
+                          inputProps: { min: 0 }
+                        }}
+                        type='number'
+                        autoComplete="off"
                         id='input_shift_requirement_no_of_hcps'
                         variant='outlined'
                         name="hcp_count"
@@ -521,7 +537,6 @@ const AddShiftsScreen = () => {
                         label="No of HCPs"
                         fullWidth
                       />
-
                     </div>
 
                     <div className="shift-third-row mrg-top-30">
@@ -585,9 +600,8 @@ const AddShiftsScreen = () => {
               size="large"
               variant={"outlined"}
               className={"normal"}
-              component={Link}
               color={"primary"}
-              to={`/shiftrequirementMaster/list`}
+              onClick={openAdd}
             >
               Cancel
             </Button>

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './HcpContractComponent.scss';
-import CustomFile from '../../../../../components/shared/CustomFile';
+import CustomFile from '../../../../components/shared/CustomFile';
 import moment from 'moment';
-import { CommonService } from '../../../../../helpers';
-import { ENV } from '../../../../../constants';
+import { CommonService } from '../../../../helpers';
+import { ENV } from '../../../../constants';
 
 const HcpContractComponent = (props: any) => {
     const id = props?.id;

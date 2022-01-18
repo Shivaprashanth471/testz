@@ -3,7 +3,7 @@ import notFound from '../assets/images/404.png';
 import csvIcon from '../assets/images/csv.svg';
 import profileIcon from "../assets/images/profile.svg";
 import logo from "../assets/images/logo.png";
-import login from "../assets/images/login.png";
+import AuthPoster from "../assets/images/AuthPoster.png";
 import facilityMaster from "../assets/images/facilityMaster.svg";
 import ShiftRequirement from "../assets/images/ShiftRequirement.svg";
 import ShiftsCancelled from '../assets/images/ShiftsCancelled.svg';
@@ -41,7 +41,7 @@ export {
     csvIcon,
     profileIcon,
     logo,
-    login,
+    AuthPoster,
     facilityMaster,
     ShiftRequirement,
     ShiftsCancelled,

@@ -1,83 +1,88 @@
 @import "src/assets/scss/common";
 
-.facility_view_details{
-    padding: 20px;
-    .custom-border {
-        padding: 20px 40px;
-        border-radius: 0.5rem;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-      }
-      .title-count{
-        color:$light-black;
+.facility_view_details {
+	padding: 20px;
+	.custom-border {
+		padding: 20px 40px;
+		border-radius: 0.5rem;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	}
+	.title-count {
+		color: $light-black;
 		margin-bottom: 0px;
 		margin-top: 30px;
-      }
-    h2{
-        color: rgb(250, 221, 221);
-    }
-    .location{
-        margin-top: -21px;
-    }
-    .location_icon{
-        font-size: 1rem !important;
-        color:$light-black;
-    }
-    .mrg-top-3{
-        margin-top: 7px;
-    }
-    .flex-1{
-        flex:1px;
-    }
-    .location_name {
-        margin-top: -1px;
-        margin-left: 5px;
-        color: $text-light;
-    }
-    button{
-        text-align: center !important;
-        margin: auto;
-    }
-    h4{
-        color: $text-light;
-        font-weight: 400;
-    }
-    p{
-        color:$light-black;
-        margin-top: -10px;
-    }
-    h3{
-        color:$light-black;
-    }
-    .edit-facility-wrapper{
-        justify-content: space-between;
-        h2{
-            color: $primary-color;
-            flex:1px;
-            font-weight: 400;
-        }
-        div{
-           
-            margin: auto;
-            margin-right: 10px;
-        }
-    }
-    .MuiPaper-elevation1{
+	}
+	h2 {
+		color: rgb(250, 221, 221);
+	}
+	.location {
+		margin-top: -21px;
+	}
+	.location_icon {
+		font-size: 1rem !important;
+		color: $light-black;
+	}
+	.mrg-top-3 {
+		margin-top: 7px;
+	}
+	.d-flex {
+        display: flex;
+        width: 100%;
+        gap: 20px;
+	}
+	.flex-1 {
+       flex: 1px;
+       width: 15%;
+	}
+	.location_name {
+		margin-top: -1px;
+		margin-left: 5px;
+		color: $text-light;
+	}
+	button {
+		text-align: center !important;
+		margin: auto;
+	}
+	h4 {
+		color: $text-light;
+		font-weight: 400;
+	}
+	p {
+		color: $light-black;
+		margin-top: -10px;
+	}
+	h3 {
+		color: $light-black;
+	}
+	.edit-facility-wrapper {
+		justify-content: space-between;
+		h2 {
+			color: $primary-color;
+			flex: 1px;
+			font-weight: 400;
+		}
+		div {
+			margin: auto;
+			margin-right: 10px;
+		}
+	}
+	.MuiPaper-elevation1 {
 		box-shadow: none !important;
 	}
-	.MuiAccordionSummary-root{
+	.MuiAccordionSummary-root {
 		padding: 0px !important;
 	}
 	// .custom-border{
 	// 	width: 78vw;
 	// }
-	.MuiAccordionDetails-root{
+	.MuiAccordionDetails-root {
 		padding: 0px !important;
 	}
-	.MuiAccordionSummary-content{
-		p{
+	.MuiAccordionSummary-content {
+		p {
 			font-size: large;
 			font-weight: 600;
-			color:$light-black;
+			color: $light-black;
 		}
 	}
 }

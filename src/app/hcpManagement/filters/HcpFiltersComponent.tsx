@@ -5,6 +5,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { PropsWithChildren } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { localStore } from '../../../helpers';
 import './HcpFiltersComponents.scss';
 export interface HcpFiltersComponentProps {
     cancel: () => void,
@@ -136,8 +137,8 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
                             placeholderText="Select Date"
                             className='custom-input'
                             selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
+                            startDate={startDate && new Date(startDate)}
+                            endDate={endDate && new Date(endDate)}
                             onChange={(update) => {
                                 setDateRange(update);
                             }}
@@ -160,6 +161,13 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
             </Button>
         </DialogActions>
     </div>;
+}
+
+
+export const clearHcpFilterValues = () => {
+    localStore.removeItem('hcpSelectedTypes')
+    localStore.removeItem('hcpStatus')
+    localStore.removeItem('hcpDateRange')
 }
 
 export default HcpFiltersComponent;

@@ -1,7 +1,8 @@
 @import "src/assets/scss/common";
 
 .login-screen {
-    margin-top: 90px;
+    margin-top: 30px;
+
     .main-auth-wrapper {
         @include sm() {
             padding: 20px 40px;
@@ -14,15 +15,16 @@
         font-size: 1rem !important;
     }
     .login-button {
-        width: 300px;
-        padding: 10px;
         margin: auto;
         color: white;
         background-color: $accent-color;
+        &:hover {
+            background-color: $accent-color;
+        }
     }
     .auth-header {
         margin: 0px 0 0;
-        font-size: 24px;
+        font-size: 18px;
         text-transform: capitalize;
         color:#32E2AB;
     }
@@ -31,11 +33,10 @@
     }
 
     .loginFormHolder {
-        margin: 20px;
 
         .eye_btn_wrapper {
             position: absolute;
-            top: 38px;
+            top: 35px;
             right: 10px;
             z-index: 2;
         }
@@ -58,5 +59,10 @@
                 opacity: 1;
             }
         }
+    }
+    .login-loader{
+        position: absolute;
+        top:7px;
+        left:47%;
     }
 }

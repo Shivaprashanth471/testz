@@ -2,7 +2,7 @@ import React from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import "./LoginScreen.scss";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import FormLabel from "@material-ui/core/FormLabel";
 import { TextField } from "formik-material-ui";
 import Button from "@material-ui/core/Button";
@@ -12,10 +12,12 @@ import IconButton from "@material-ui/core/IconButton";
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
+import EmailIcon from '@material-ui/icons/Email';
+
 
 const loginFormValidation = Yup.object({
   email: Yup.string().required("Required"),
-  password: Yup.string().required("Required").min(6,"Password should be minimum 6 characters"),
+  password: Yup.string().required("Required").min(6, "Password should be minimum 6 characters"),
 });
 
 
@@ -36,7 +38,7 @@ const LoginScreen = (props: any) => {
         // dispatch(setImageUrl(resp.data.info.logo));
       })
       .catch((err) => {
-       CommonService.handleErrors(setErrors, err);
+        CommonService.handleErrors(setErrors, err);
         // console.log(err);
         //CommonService.showToast(err.error || 'Error', 'error');
         setSubmitting(false);
@@ -51,8 +53,8 @@ const LoginScreen = (props: any) => {
   };
 
   return (
-    <div className="main-auth-wrapper login-screen screen">
-      <div className="mrg-left-20">
+    <div className="main-auth-wrapper login-screen screen pdd-0">
+      <div className="">
         <div className="auth-header">Sign in to Continue</div>
         <p className={"form-label"}>Please Enter your Details below</p>
       </div>
@@ -65,7 +67,7 @@ const LoginScreen = (props: any) => {
         {({ isSubmitting, isValid }) => (
 
           <Form className={"loginFormHolder form-holder"}>
-            <div className="form-field">
+            <div className="form-field position-relative">
               <FormLabel className={"form-label"}>Email</FormLabel>
               <Field
                 name="email"
@@ -78,6 +80,15 @@ const LoginScreen = (props: any) => {
                 placeholder={"Enter the Email"}
                 className="input-cursor"
               />
+              <div className={"eye_btn_wrapper"}>
+                <IconButton
+                  size={"small"}
+                  aria-label="toggle password visibility"
+                  id="login_password_show_hide_btn"
+                >
+                  <EmailIcon />
+                </IconButton>
+              </div>
             </div>
 
             <div className="form-field position-relative">
@@ -106,14 +117,14 @@ const LoginScreen = (props: any) => {
               </div>
             </div>
 
-            <div className="form-link">
+            {/* <div className="form-link">
               <div className="forgot-password-holder" id="link_forgot_password">
                 <Link className="forgot-password-wrapper" to="/forgot-password">
                   Forgot Password ?
                 </Link>
               </div>
-            </div>
-            <div className="form-field">
+            </div> */}
+            <div className="form-field mrg-top-40 position-relative">
               <Button
                 disabled={isSubmitting || !isValid}
                 fullWidth
@@ -122,9 +133,9 @@ const LoginScreen = (props: any) => {
                 id="login_button"
                 type={"submit"}
                 size={"medium"}
-                className={"login-button"}
+                className={isSubmitting ? 'login-button has-loading-spinner' : 'login-button'}
               >
-                Login
+                  { isSubmitting ? "Logging in" : "Login" }
               </Button>
             </div>
           </Form>

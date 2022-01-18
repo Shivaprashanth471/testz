@@ -9,12 +9,12 @@ import { TextField } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
-import * as Yup from "yup";
 import DialogComponent from "../../../../components/DialogComponent";
 import VitawerksConfirmComponent from "../../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../../constants";
 import { acknowledgement } from "../../../../constants/data";
 import { ApiService, CommonService } from "../../../../helpers";
+import { experienceValidation } from "../../add/ExperienceAddComponent/ExperienceValidation";
 import "./ExperienceEditComponent.scss";
 import ReadOnlyRow from "./ReadOnlyRow";
 
@@ -40,30 +40,7 @@ const experienceInitialState: ExperienceItem = {
   skills: ""
 };
 
-const experienceValidation = Yup.object({
-  facilityName: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 letter")
-    .trim("")
-    .required("required"),
-  speciality: Yup.string()
-    .typeError("must be text")
-    .trim("")
-    .required(" required"),
-  hcpType: Yup.string()
-    .typeError("must be text")
-    .trim()
-    .required("required"),
-  location: Yup.string().typeError("must be date").trim().required(" required"),
-  startDate: Yup.string()
-    .typeError("must be date")
-    .required("required").nullable(),
-  endDate: Yup.string().typeError("must be date").nullable(),
-  stillWorkingHere: Yup.string().trim().required("required"),
-  skills: Yup.string()
-    .typeError("must be text")
-    .trim()
-});
+
 
 type ExperienceAddComponentProps = {
   getExperienceDetails: any;
@@ -85,12 +62,13 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   const [isExperiences, setIsExperiences] = useState<boolean>(false);
   const [showEndDate, setShowEndDate] = useState<boolean>(true)
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  const [experienceId,setExperienceId] = useState<any>(null);
+  const [experienceId, setExperienceId] = useState<any>(null);
 
   const onAdd = (
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
+
     const newExperience = {
       facility_name: experience.facilityName,
       specialisation: experience.speciality,
@@ -126,12 +104,12 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
       .catch((err) => {
         console.log(err);
       });
-  },[getExperienceDetails,hcpId])
+  }, [getExperienceDetails, hcpId])
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')
 
-  
-  const openAdd = useCallback((id: any) => {  
+
+  const openAdd = useCallback((id: any) => {
     setExperienceId(id)
     setIsAddOpen(true);
   }, [])
@@ -142,7 +120,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
 
   const confirmAdd = useCallback(() => {
     handleDeleteClick(experienceId)
-  }, [experienceId,handleDeleteClick])
+  }, [experienceId, handleDeleteClick])
 
   const showDropDownBelowField = {
     MenuProps: {

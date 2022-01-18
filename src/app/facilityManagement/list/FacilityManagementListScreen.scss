@@ -18,4 +18,8 @@
    .first-row{
     border-radius: 5px 0px 0px 5px;
    }
+   .table-row-wrapper{
+       overflow: scroll !important;
+       height: 300px !important;
+   }
 }

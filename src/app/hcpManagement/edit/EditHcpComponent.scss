@@ -14,7 +14,19 @@
 		-webkit-appearance: none;
 		margin: 0;
 	}
-
+	.gender{
+		color: $text-light;
+		font-weight: 450;
+	}
+	.gender-wrapper{
+		flex-wrap: wrap;
+	}
+	.MuiTypography-body1{
+		color: $text-light;
+	}
+	.MuiIconButton-label{
+		color: $text-light;
+	}
 	/* Firefox */
 	input[type=number] {
 		-moz-appearance: textfield;

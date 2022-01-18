@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import DialogComponent from "../../../components/DialogComponent";
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
+import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import { StateParams } from '../../../store/reducers';
@@ -39,11 +40,13 @@ const HcpApprovedListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const { role } = useSelector((state: StateParams) => state?.auth?.user);
     const [open, setOpen] = useState<boolean>(false);
-
-    const [selectedHcpTypes, setSelectedHcpTypes] = useState<any>([])
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const [dateRange, setDateRange] = useState([null, null]);
-    const [status, setStatus] = useState<any>("");
+
+    const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any>('hcpSelectedTypes', [])
+    const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "");
+
+
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -115,7 +118,7 @@ const HcpApprovedListScreen = () => {
     const clearFilterValues = () => {
         setDateRange([null, null])
         setStatus("")
-        selectedHcpTypes.length = 0
+        setSelectedHcpTypes([])
     }
 
     const openFilters = useCallback((index: any) => {
@@ -148,7 +151,7 @@ const HcpApprovedListScreen = () => {
     useEffect(() => {
         init();
         getHcpTypes()
-        Communications.pageTitleSubject.next('HCP Management');
+        Communications.pageTitleSubject.next('HCP Approved');
         Communications.pageBackButtonSubject.next(null);
     }, [init, getHcpTypes])
 

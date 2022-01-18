@@ -2,6 +2,9 @@ import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mate
 import HomeOutlined from "@material-ui/icons/HomeOutlined";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { clearFacilityFilterValues } from "../app/facilityManagement/filters/FacilityFiltersComponent";
+import { clearHcpFilterValues } from "../app/hcpManagement/filters/HcpFiltersComponent";
+import { clearShiftFilterValues } from "../app/shifts/filters/ShiftFilter";
 import { ColorDashboard, ColorfacilityMaster, ColorGroupAdd, ColorHCPManagement, ColorHCPOnboarding, ColorShiftRequirement, ColorShiftsCancelled, ColorShiftsClosed, ColorShiftsCompleted, ColorShiftsInprogress, ColorShiftsMaster, ColorShiftsPending, ColorSMSBlast, Dashboard, facilityMaster, groupAdd, HCPManagement, HCPOnboarding, ShiftRequirement, ShiftsCancelled, ShiftsClosed, ShiftsCompleted, ShiftsInprogress, ShiftsMaster, ShiftsPending, SMSBlast } from "../constants/ImageConfig";
 import { ACCOUNTMANAGER, ADMIN, HUMANRESOURCE, NURSECHAMPION } from "../helpers/common-service";
 import AccessControlComponent from "./AccessControl";
@@ -12,7 +15,15 @@ export interface Menu {
   type: string;
   icon: any;
   children: any;
+  clearLocalFilters?: () => void;
+  isClearFilter?: boolean;
   allowed_roles: ("super_admin" | "account_manager" | "nurse_champion" | "hr" | "finance_manager")[];
+}
+
+function clearLocalFilters() {
+  clearFacilityFilterValues()
+  clearShiftFilterValues()
+  clearHcpFilterValues()
 }
 
 export const MENUITEMS: Menu[] = [
@@ -34,6 +45,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Facility",
     type: "",
     icon: <HomeOutlined />,
@@ -50,6 +63,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Applications",
     type: "",
     icon: <HomeOutlined />,
@@ -66,22 +81,33 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
-    name: "HCP",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
+    name: "HCP Management",
     type: "",
     icon: <HomeOutlined />,
     allowed_roles: [ADMIN, NURSECHAMPION, ACCOUNTMANAGER, HUMANRESOURCE],
     children: [
       {
         state: "/hcp/user/list",
-        name: "HCP Management",
+        name: "HCP Approved",
         type: "link",
         icon: HCPManagement,
         coloredIcon: ColorHCPManagement,
       },
+      // {
+      //   state: "/hcp/user/list",
+      //   name: "HCP Rejected",
+      //   type: "link",
+      //   icon: HCPManagement,
+      //   coloredIcon: ColorHCPManagement,
+      // }
     ],
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Communication",
     type: "",
     icon: <HomeOutlined />,
@@ -105,6 +131,8 @@ export const MENUITEMS: Menu[] = [
   },
   {
     state: "",
+    isClearFilter: true,
+    clearLocalFilters: clearLocalFilters,
     name: "Shift Management",
     type: "",
     icon: <HomeOutlined />,
@@ -112,7 +140,7 @@ export const MENUITEMS: Menu[] = [
     children: [
       {
         state: "/shiftrequirementMaster/list",
-        name: "Shifts Requirements",
+        name: "Open Shifts",
         type: "link",
         icon: ShiftRequirement,
         coloredIcon: ColorShiftRequirement,
@@ -171,6 +199,8 @@ export const MENUITEMS: Menu[] = [
   },
   // {
   //   state: "",
+  // isClearFilter: true,
+  // clearLocalFilters: clearLocalFilters,
   //   name: "Employee Management",
   //   type: "",
   //   icon: <HomeOutlined />,
@@ -202,30 +232,33 @@ export const MENUITEMS: Menu[] = [
   //   ],
   // },
 ];
+
 const MenuItemsComponent = (props: any) => {
   return (
     <List>
       {MENUITEMS &&
         MENUITEMS.length > 0 &&
-        MENUITEMS.map((item, index) => {
+        MENUITEMS.map((item: any, index) => {
           return (
             <AccessControlComponent
               key={index + "-menu-item"}
               role={item.allowed_roles}
             >
-              <ListSubheader>{item.name}</ListSubheader>
-              {item.children &&
-                item.children.length > 0 &&
-                item.children.map((subItem: any, index: any) => {
-                  return (
-                    <ListItem button component={NavLink} to={subItem.state} id={"menu-item-" + subItem.name} key={index + "sub-menu-item"}>
-                      <ListItemIcon className={'active-icon'}><img src={subItem.icon} alt="icon" /></ListItemIcon>
-                      <ListItemIcon className={'inactive-icon'}><img src={subItem.coloredIcon} alt="filled-icon" /></ListItemIcon>
+              <div onClick={() => item?.isClearFilter && item.clearLocalFilters()}>
+                <ListSubheader>{item.name}</ListSubheader>
+                {item.children &&
+                  item.children.length > 0 &&
+                  item.children.map((subItem: any, index: any) => {
+                    return (
+                      <ListItem button component={NavLink} to={subItem.state} id={"menu-item-" + subItem.name} key={index + "sub-menu-item"} >
+                        <ListItemIcon className={'active-icon'}><img src={subItem.icon} alt="icon" /></ListItemIcon>
+                        <ListItemIcon className={'inactive-icon'}><img src={subItem.coloredIcon} alt="filled-icon" /></ListItemIcon>
 
-                      <ListItemText primary={subItem.name} />
-                    </ListItem>
-                  );
-                })}
+                        <ListItemText primary={subItem.name} />
+                      </ListItem>
+                    );
+                  })}
+              </div>
             </AccessControlComponent>
           );
         })}

@@ -1,5 +1,5 @@
 import React from 'react';
-import NoDataToShowCardComponent from '../../../../../components/NoDataToShowCardComponent';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
 
 const HcpReferenceComponent = (props:any) => {
     const referenceDetails = props?.referenceDetails;

@@ -1,4 +1,4 @@
-@import "src/assets/scss/common";
+@import "../../../assets/scss/common";
 
 .app-layout {
 	.brand {
@@ -225,7 +225,7 @@
 		overflow: auto;
 	}
 	.menuButton {
-		@include sm() {
+		@include md() {
 			display: none;
 		}
 	}

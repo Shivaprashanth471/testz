@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import {BrowserRouter,Redirect,Route,Switch,useHistory} from "react-router-dom";
 import NotFoundComponent from "../components/NotFoundComponent";
-import AppLayout from "../app/layout/app-layout";
-import AuthLayout from "../app/layout/auth-layout";
 import { useDispatch, useSelector } from "react-redux";
 import { StateParams } from "../store/reducers";
 import CommonService from "../helpers/common-service";
@@ -31,8 +29,8 @@ import AddGroupScreen from "../app/communication/group/add/AddGroupScreen";
 import GroupViewScreen from "../app/communication/group/view/GroupViewScreen";
 import RemoveHcpsScreen from "../app/communication/group/removeHcps/RemoveHcpsScreen";
 import AddHcpToExistingGroupScreen from "../app/communication/group/addHcptoExistingGroup/AddHcpToExistingGroupScreen";
-import HcpUserViewScreen from "../app/communication/group/hcpViewDetails/HcpManagementViewScreen";
-import ShiftCompletedViewScreen from "../app/shifts/shiftCompletedView/ShiftCompletedViewScreen";
+import HcpUserViewScreen from "../app/hcpManagement/approvedhcpview/HcpManagementViewScreen";
+import ShiftCompletedViewScreen from "../app/shifts/completed/view/ShiftCompletedViewScreen";
 import RequirementsShiftsViewScreen from "../app/shifts/shiftRequirementList/view/RequirementsShiftsViewScreen";
 import ShiftInprogressListScreen from '../app/shifts/inprogress/list/ShiftInprogressListScreen'; 
 import SendSmsBlastScreen from "../app/communication/smsBlast/SendSmsBlastScreen";
@@ -53,6 +51,8 @@ import EmployeeManagementScreen from "../app/employee/list/EmployeeManagementScr
 import AddEmployeeComponent from "../app/employee/add/AddEmployeeComponent";
 import EmployeeViewScreen from "../app/employee/view/EmployeeViewScreen";
 import EditEmployeeComponent from "../app/employee/edit/EditEmployeeComponent";
+import AppLayout from "../app/layout/app-layout/app-layout";
+import AuthLayout from "../app/layout/auth-layout/auth-layout";
 
 // @ts-ignore
 const AuthLayoutRoute = ({ component: Component, ...rest }) => {

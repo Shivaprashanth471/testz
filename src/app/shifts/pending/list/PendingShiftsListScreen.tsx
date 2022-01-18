@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import DialogComponent from '../../../../components/DialogComponent';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from '../../filters/ShiftFilter';
@@ -36,15 +37,14 @@ const PendingShiftsListScreen = () => {
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [facilityList, setFacilityList] = useState<any | null>(null);
-
-    const [selectedHcps, setSelectedHcps] = useState<any>([])
-    const [selectedFacilities, setSelectedFacilities] = useState<any>([])
-    const [selectedTimeTypes, setSelectedTimeTypes] = useState<any>([])
-    const [selectedDates, setSelectedDates] = useState<any>(null);
-
     const [regions, setRegions] = useState<any>([])
-    const [selectedRegion, setSelectedRegion] = useState<string>('')
-    const [dateRange, setDateRange] = useState<any>([null, null])
+
+
+    const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
+    const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
+    const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
+    const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
+    const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
 
 
     const classesFunction = useCallback((type: any) => {
@@ -137,8 +137,8 @@ const PendingShiftsListScreen = () => {
         setSelectedTimeTypes([])
         setSelectedFacilities([])
         setSelectedHcps([])
-        setSelectedDates([])
         setDateRange([null, null])
+        setSelectedRegion('')
 
     }
 
@@ -185,8 +185,6 @@ const PendingShiftsListScreen = () => {
                 setSelectedTimeTypes={setSelectedTimeTypes}
                 selectedFaciltities={selectedFacilities}
                 setSelectedFacilities={setSelectedFacilities}
-                setSelectedDates={setSelectedDates}
-                selectedDates={selectedDates}
 
                 noStatus={true}
                 isRequired={true}

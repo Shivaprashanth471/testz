@@ -11,10 +11,10 @@ import { DatePicker } from "formik-material-ui-pickers";
 import moment from "moment";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
-import * as Yup from "yup";
 import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./VolunteerExperienceAddComponent.scss";
+import { volunteerExperienceValidation } from "./VolunteerExperienceValidation";
 
 type VolunteerExperienceAddComponentProps = {
   experiences: any;
@@ -43,26 +43,7 @@ const experienceInitialState: ExperienceItem = {
   skills: ""
 };
 
-const experienceValidation = Yup.object({
-  organisation: Yup.string()
-    .typeError("must be text")
-    .min(3, "min 3 letters")
-    .trim("")
-    .required("required"),
-  stillWorkingHere: Yup.string().trim().required("required"),
-  speciality: Yup.string()
-    .typeError("must be text")
-    .trim("")
-    .required("required"),
-  positionTitle: Yup.string()
-    .typeError("must be number")
-    .trim()
-    .required("required"),
-  location: Yup.string().typeError("must be date").trim().required("required"),
-  startDate: Yup.string().typeError("must be date").required("required").nullable(),
-  endDate: Yup.string().typeError("must be date").nullable(),
-  skills: Yup.string().typeError("must be text").trim()
-});
+
 
 const VolunteerExperienceAddComponent = ({
   experiences,
@@ -75,6 +56,7 @@ const VolunteerExperienceAddComponent = ({
     experience: ExperienceItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<ExperienceItem>
   ) => {
+
     const newExperience = {
       tempId: nanoid(),
       facility_name: experience.organisation,
@@ -94,6 +76,7 @@ const VolunteerExperienceAddComponent = ({
 
     resetForm();
     handleCancelExperience()
+    CommonService.showToast('HCP volunteer experience added', 'info')
   };
 
   const handleCancelExperience = () => {
@@ -107,6 +90,7 @@ const VolunteerExperienceAddComponent = ({
     );
     newExperiences.splice(index, 1);
     setExperience(newExperiences);
+    CommonService.showToast('HCP volunteer experience deleted', 'error')
   };
 
   const sortedExpData = CommonService.sortDatesByLatest(experiences, 'start_date')
@@ -146,7 +130,7 @@ const VolunteerExperienceAddComponent = ({
           <Formik
             initialValues={experienceInitialState}
             validateOnChange={true}
-            validationSchema={experienceValidation}
+            validationSchema={volunteerExperienceValidation}
             onSubmit={onAdd}
           >
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (
