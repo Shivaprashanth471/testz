@@ -1,37 +1,35 @@
 @import "src/assets/scss/common";
 
 .shift-master {
-	margin: auto;
-	text-align: center;
-	.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
-		padding: 2px !important;
-	}
-	.MuiPaper-elevation1 {
-		box-shadow: none !important;
-	}
-	.filter-icon {
-		font-size: 2rem;
-		color: $light-black;
-	}
-	.cancelled {
-		color: #f10000 !important;
-	}
-	.closed {
-		color: #00da16 !important;
-	}
-	.pending {
-		color: #454545 !important;
-	}
-	.complete {
-		color: #0c80e3 !important;
-	}
-	.in_progress {
-		color: #ffa800 !important;
-	}
-	.last-row {
-		border-radius: 0px 5px 5px 0px;
-	}
-	.first-row {
-		border-radius: 5px 0px 0px 5px;
-	}
+  margin: auto;
+  text-align: center;
+
+  .MuiPaper-elevation1 {
+    box-shadow: none !important;
+  }
+  .filter-icon {
+    font-size: 2rem;
+    color: $light-black;
+  }
+  .cancelled {
+    color: #f10000 !important;
+  }
+  .closed {
+    color: #00da16 !important;
+  }
+  .pending {
+    color: #454545 !important;
+  }
+  .complete {
+    color: #0c80e3 !important;
+  }
+  .in_progress {
+    color: #ffa800 !important;
+  }
+  .last-row {
+    border-radius: 0px 5px 5px 0px;
+  }
+  .first-row {
+    border-radius: 5px 0px 0px 5px;
+  }
 }

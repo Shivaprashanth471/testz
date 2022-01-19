@@ -1,4 +1,4 @@
-import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
+import { Chip, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
 import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -12,8 +12,6 @@ import './ShiftFilter.scss';
 
 
 export interface ShiftFilterProps {
-    cancel: () => void,
-    confirm: () => void,
     hcpTypes: any,
     facilityList: any,
     noStatus?: boolean;
@@ -22,7 +20,6 @@ export interface ShiftFilterProps {
     isCompleted?: boolean;
     isRequired?: boolean;
     isInProgress?: boolean;
-
 
     resetFilters: any;
 
@@ -51,21 +48,18 @@ export interface ShiftFilterProps {
 const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
 
     const [isDropdownAndSelect, setIsDropdownAndSelect] = useState<boolean>(true)
-    const afterConfirm = props?.confirm;
-    const afterCancel = props?.cancel;
-    const hcpTypes = props?.hcpTypes;
-    const regions = props?.regions;
+
     const selectedRegion = props?.selectedRegion;
     const setSelectedRegion = props?.setSelectedRegion;
     const isMaster = props?.isMaster
     const statusList = props?.isMaster ? AllShiftStatusList : SomeShiftStatusList
 
-    const facilityList = props?.facilityList;
+    const regions: any[] = props?.regions ? props?.regions : [];
+    const facilityList: any[] = props?.facilityList ? props?.facilityList : [];
+    const hcpTypes: any[] = props?.hcpTypes ? props?.hcpTypes : [];
+
     const resetFilters = props?.resetFilters
     const noMultiStatus = props?.noStatus
-    const isCompleted = props?.isCompleted
-    const isRequired = props?.isRequired
-    const isInProgress = props?.isInProgress
 
     const selectedFaciltities = props?.selectedFaciltities
     const selectedHcps = props?.selectedHcps
@@ -82,17 +76,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const dateRange = props?.dateRange
     const setDateRange = props?.setDateRange
     const [startDate, endDate] = dateRange;
-
-
-    const formatDateFieldLabel = () => {
-        if (isCompleted) {
-            return "Completed On"
-        } else if (isRequired || isInProgress) {
-            return "Required On"
-        } else {
-            return "Shift Date"
-        }
-    }
 
     const handleFacilityDelete = (chip: any) => {
         let filterdChips = selectedFaciltities?.filter((item: any) => item?._id !== chip)
@@ -123,7 +106,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     let regularCheckForAllFields = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
     let checkForStatusField = noMultiStatus ? false : !isMaster && (statusType !== "" && statusType !== null)
 
-
     const handleDisableReset = (): boolean => {
         if (regularCheckForAllFields || checkForStatusField) { return false }
         else {
@@ -131,59 +113,45 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
         }
     }
 
-    return <div className="pdd-30 pdd-top-40 filters">
-        <div className="dialog-header d-flex">
-            <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button
-                disabled={handleDisableReset()}
-                onClick={() => {
-                    resetFilters()
-                    afterCancel()
-                }} color="secondary" id="btn_reset_filter">
-                {'Reset'}
-            </Button>
-        </div>
-        <DialogContent>
-            <div className="form-field">
-                <FormLabel className={'form-label'}>{"Region"}</FormLabel>
-                {facilityList !== null ? <Autocomplete
-                    PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-                    options={regions}
-                    getOptionLabel={(option: any) => option.name}
-                    getOptionSelected={(option: any, value) => option?.name === value?.name}
-                    placeholder={"Region"}
-                    id="input_select_regions"
-                    className="mrg-top-10"
-                    onChange={($event, value) => {
-                        setSelectedRegion(value?.code)
-                        if (value) {
-                            if (selectedRegion !== value?.code) {
-                                setSelectedFacilities([])
+    return <div className="shift-filters mrg-bottom-20">
+        <div className="form-field-wrapper">
+            <div className="form-field-left">
+                <div className="form-field-item">
+                    <Autocomplete
+                        PaperComponent={({ children }) => (
+                            <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                        )}
+                        options={regions}
+                        getOptionLabel={(option: any) => option.name}
+                        getOptionSelected={(option: any, value) => option?.name === value?.name}
+                        placeholder={"Region"}
+                        id="input_select_regions"
+                        className="mrg-top-10"
+                        onChange={($event, value) => {
+                            setSelectedRegion(value?.code)
+                            if (value) {
+                                if (selectedRegion !== value?.code) {
+                                    setSelectedFacilities([])
+                                }
                             }
                         }
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                onClick={handleRegionLabelAndIconToggle}
+                                {...params}
+                                id='select_region'
+                                variant='outlined'
+                                placeholder={isDropdownAndSelect ? "Search (or) Select Region" : "Select Region"}
+                                value={selectedRegion}
+                            />
+                        )}
+                    />
+                </div>
 
-                    }
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            onClick={handleRegionLabelAndIconToggle}
-                            {...params}
-                            id='select_region'
-                            variant='outlined'
-                            placeholder={isDropdownAndSelect ? "Search (or) Select Region" : "Select Region"}
-                            value={selectedRegion}
+                <div className="form-field-item">
 
-                        />
-                    )}
-                /> : <></>}
-            </div>
-
-            <div className="form-field mrg-top-20">
-                <FormLabel className={'form-label'}>Facility</FormLabel>
-                {
-                    facilityList !== null && <Autocomplete
+                    <Autocomplete
                         className="mrg-top-10"
                         PaperComponent={({ children }) => (
                             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
@@ -199,23 +167,13 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         }}
                         renderTags={() => null}
                         renderInput={(params) => (
-                            <TextField {...params} variant='outlined' placeholder="Select Multiple Facilities" />
+                            <TextField {...params} variant='outlined' placeholder="Select Facilities" />
                         )}
                     />
-                }
-                {
-                    selectedFaciltities.length > 0 && <p className="hcp-chips">{selectedFaciltities.map((data: any) => <Chip
-                        key={data?._id}
-                        label={data?.facility_name}
-                        onDelete={() => handleFacilityDelete(data?._id)}
-                    />)}</p>
-                }
-            </div>
+                </div>
 
-            <div className="form-field mrg-top-20">
-                <FormLabel className={'form-label'}>HCP Types</FormLabel>
-                {
-                    hcpTypes !== null && <Autocomplete
+                <div className="form-field-item">
+                    <Autocomplete
                         className="mrg-top-10"
                         PaperComponent={({ children }) => (
                             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
@@ -227,90 +185,52 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         onChange={(e, newValue) => setSelectedHcps(newValue)}
                         renderTags={() => null}
                         renderInput={(params) => (
-                            <TextField {...params} variant='outlined' placeholder="Select Multiple HCP Types" />
+                            <TextField {...params} variant='outlined' placeholder="Select HCP Types" />
                         )}
                     />
-                }
+                </div>
+
                 {
-                    selectedHcps.length > 0 && <p className="hcp-chips">{selectedHcps.map((data: any) => <Chip
-                        key={data}
-                        label={data}
-                        onDelete={() => handleHcpDelete(data)}
-                    />)}</p>
-                }
-            </div>
-            {
-                !noMultiStatus && !isMaster && <div className="form-field mrg-top-20">
-                    <FormLabel className={'form-label'}>Status</FormLabel>
-                    <Autocomplete
-                        PaperComponent={({ children }) => (
-                            <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                        )}
-                        className="mrg-top-10"
-                        value={statusType}
-                        id="input_select_status"
-                        options={statusList.map((option: any) => option?.code)}
-                        onChange={(e, newValue) => {
-                            setStatusType(newValue)
-                        }}
-                        renderInput={(params) => (
-                            <TextField {...params} variant='outlined' placeholder="Select Status" />
-                        )}
-                    />
-                </div>
-            }
-
-            {
-                isMaster && <div className="form-field mrg-top-20">
-                    <FormLabel className={'form-label'}>Status Types</FormLabel>
-                    <Autocomplete
-                        className="mrg-top-10"
-                        PaperComponent={({ children }) => (
-                            <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                        )}
-                        multiple
-                        value={selectedStatusTypes}
-                        id="input_select_status"
-                        options={statusList.map((option: any) => option?.code)}
-                        onChange={(e, newValue) => setSelectedStatusTypes(newValue)}
-                        renderTags={() => null}
-                        renderInput={(params) => (
-                            <TextField {...params} variant='outlined' placeholder="Select Multiple Status" />
-                        )}
-                    />
-                    {
-                        selectedStatusTypes.length > 0 && <p className="hcp-chips">{selectedStatusTypes.map((data: any) => <Chip
-                            key={data}
-                            label={data}
-                            onDelete={() => handleStatusDelete(data)}
-                        />)}</p>
-                    }
-                </div>
-            }
-            <div className="form-field mrg-top-20">
-                <FormLabel className={'form-label'}>{formatDateFieldLabel()}</FormLabel>
-                <div className="mrg-top-10 date-range-picker">
-                    <label>
-                        <DatePicker
-                            dateFormat="MM/dd/yyyy"
-                            placeholderText="Select Date"
-                            className='custom-input'
-                            selectsRange={true}
-                            startDate={startDate && new Date(startDate)}
-                            endDate={endDate && new Date(endDate)}
-                            onChange={(update) => {
-                                setDateRange(update);
+                    !noMultiStatus && !isMaster && <div className="form-field-item">
+                        <Autocomplete
+                            PaperComponent={({ children }) => (
+                                <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                            )}
+                            className="mrg-top-10"
+                            value={statusType}
+                            id="input_select_status"
+                            options={statusList.map((option: any) => option?.code)}
+                            onChange={(e, newValue) => {
+                                setStatusType(newValue)
                             }}
-                            isClearable={true}
+                            renderInput={(params) => (
+                                <TextField {...params} variant='outlined' placeholder="Select Status" />
+                            )}
                         />
-                        {
-                            (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
-                        }
-                    </label>
+                    </div>
+                }
 
-                </div>
-                <div className="form-field mrg-top-20">
-                    <FormLabel className={'form-label'}>Time Type</FormLabel>
+                {
+                    isMaster && <div className="form-field-item">
+                        <Autocomplete
+                            className="mrg-top-10"
+                            PaperComponent={({ children }) => (
+                                <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                            )}
+                            multiple
+                            value={selectedStatusTypes}
+                            id="input_select_status"
+                            options={statusList.map((option: any) => option?.code)}
+                            onChange={(e, newValue) => setSelectedStatusTypes(newValue)}
+                            renderTags={() => null}
+                            renderInput={(params) => (
+                                <TextField {...params} variant='outlined' placeholder="Select Status" />
+                            )}
+                        />
+                    </div>
+                }
+
+                <div className="form-field-item">
                     <Autocomplete
                         className="mrg-top-10"
                         PaperComponent={({ children }) => (
@@ -323,29 +243,73 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         onChange={(e, newValue) => setSelectedTimeTypes(newValue)}
                         renderTags={() => null}
                         renderInput={(params) => (
-                            <TextField {...params} variant='outlined' placeholder="Select Multiple Time Types" />
+                            <TextField {...params} variant='outlined' placeholder="Select Time Types" />
                         )}
                     />
+
+                </div>
+
+            </div>
+            <div className="form-field-right">
+                <div className="mrg-top-10">
+                    <label className='label-wrapper'>
+                        <DatePicker
+                            dateFormat="MM/dd/yyyy"
+                            placeholderText="Select Date"
+                            className='custom-input'
+                            selectsRange={true}
+                            startDate={startDate && new Date(startDate)}
+                            endDate={endDate && new Date(endDate)}
+                            onChange={(update) => {
+                                setDateRange(update);
+                            }}
+                            isClearable={true}
+                        />
+                    </label>
                     {
-                        selectedTimeTypes.length > 0 && <p className="hcp-chips">{selectedTimeTypes.map((data: any) => <Chip
-                            key={data}
-                            label={data}
-                            onDelete={() => handleTimeTypeDelete(data)}
-                        />)}</p>
+                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
                     }
                 </div>
             </div>
-        </DialogContent>
-        <DialogActions className="mrg-top-40">
-            <Button onClick={afterCancel} color="secondary" variant='outlined' id="btn_cancel_filter">
-                {'Cancel'}
-            </Button>
-            <Button onClick={() => {
-                afterConfirm()
-            }} id="btn_reject_application" className={"submit mrg-left-20"} variant={"contained"} color="primary" autoFocus>
-                {'Apply'}
-            </Button>
-        </DialogActions>
+
+
+        </div>
+        <div className="custom-chips-wrapper">
+            {
+                selectedFaciltities && selectedFaciltities.length > 0 && <p className="custom-chips">{selectedFaciltities.map((data: any) => <Chip
+                    key={data?._id}
+                    label={data?.facility_name}
+                    onDelete={() => handleFacilityDelete(data?._id)}
+                />)}</p>
+            }
+            {
+                selectedHcps && selectedHcps.length > 0 && <p className="custom-chips">{selectedHcps.map((data: any) => <Chip
+                    key={data}
+                    label={data}
+                    onDelete={() => handleHcpDelete(data)}
+                />)}</p>
+            }
+            {
+                selectedStatusTypes && selectedStatusTypes.length > 0 && <p className="custom-chips">{selectedStatusTypes.map((data: any) => <Chip
+                    key={data}
+                    label={data}
+                    onDelete={() => handleStatusDelete(data)}
+                />)}</p>
+            }
+            {
+                selectedTimeTypes && selectedTimeTypes.length > 0 && <p className="custom-chips">{selectedTimeTypes.map((data: any) => <Chip
+                    key={data}
+                    label={data}
+                    onDelete={() => handleTimeTypeDelete(data)}
+                />)}</p>
+            }
+            <span
+                onClick={() => {
+                    resetFilters()
+                }} color="secondary" id="btn_reset_filter" className={`clear-all-filters mrg-top-10  ${handleDisableReset() ? ' hide-filter' : 'show-filter'}`}>
+                Clear All Filters
+            </span>
+        </div>
     </div>;
 }
 
