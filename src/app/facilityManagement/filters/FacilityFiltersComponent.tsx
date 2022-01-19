@@ -1,4 +1,4 @@
-import { Button, Chip, DialogActions, DialogContent, DialogTitle, FormLabel, Paper } from '@material-ui/core';
+import { Chip, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
 import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -10,8 +10,6 @@ import { localStore } from '../../../helpers';
 import "./FacilityFiltersComponent.scss";
 
 export interface FacilityFiltersComponentProps {
-    cancel: () => void,
-    confirm: () => void,
     status: any;
     setStatus: any,
     regionList: any,
@@ -24,8 +22,6 @@ export interface FacilityFiltersComponentProps {
 
 
 const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersComponentProps>) => {
-    const afterConfirm = props?.confirm;
-    const afterCancel = props?.cancel
     const statusList = [{ name: "Active", code: true }, { name: "Inactive", code: false }]
     const setStatus = props?.setStatus;
     const status = props?.status;
@@ -34,7 +30,7 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
     const setDateRange = props?.setDateRange
     const [startDate, endDate] = dateRange;
 
-    const regionList = props?.regionList;
+    const regionList: any[] = props.regionList ? props.regionList : [];
     const selectedRegions = props?.selectedRegions
     const setSelectedRegions = props?.setSelectedRegions
     const resetFilters = props?.resetFilters;
@@ -51,121 +47,105 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
         }
     }
 
-    return <div className="pdd-40 pdd-top-40 filters">
-        <div className="dialog-header">
-            <DialogTitle id="alert-dialog-title">Filters</DialogTitle>
-            <Button
-                disabled={handleDisableReset()}
-                onClick={() => {
-                    resetFilters()
-                    afterCancel()
-                }} color="secondary" id="btn_reset_filter">
-                {'Reset'}
-            </Button>
-        </div>
-
-
-        <DialogContent>
-            <div className="form-field">
-                <FormLabel className={'form-label'}>{('Region')}</FormLabel>
-                {regionList !== null ? <Autocomplete
-                    PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-                    multiple
-                    options={regionList}
-                    value={selectedRegions}
-                    getOptionLabel={(option: any) => option.name}
-                    getOptionSelected={(option, value) => {
-                        return option.name === value?.name
-                    }}
-                    id="input_select_region"
-                    className="mrg-top-10"
-                    onChange={($event, value) => {
-                        setSelectedRegions(value)
-                    }}
-                    renderTags={() => null}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            id='select_region'
-                            variant='outlined'
-                            placeholder={"Select Multiple Regions"}
-
-                        />
-                    )}
-                /> : <></>}
-                {
-                    selectedRegions.length > 0 && <p className="hcp-chips">{selectedRegions.map((data: any) => <Chip
-                        key={data?.name}
-                        label={data?.name}
-                        onDelete={() => handleDelete(data)}
-                    />)}</p>
-                }
-            </div>
-            <div className="form-field mrg-top-20">
-                <FormLabel className={'form-label'}>Status</FormLabel>
-                <Autocomplete
-                    PaperComponent={({ children }) => (
-                        <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                    )}
-                    value={status}
-                    options={statusList}
-                    getOptionLabel={(option: any) => option.name}
-                    placeholder={"Select Status"}
-                    id="input_select_status"
-                    className="mrg-top-10"
-                    onChange={($event, value) => {
-                        setStatus(value)
-                    }
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            id='select_status'
-                            variant='outlined'
-                            placeholder={"Select Status"}
-                            fullWidth
-                        />
-                    )}
-                />
-
-            </div>
-            <div className="form-field mrg-top-20">
-                <FormLabel className={'form-label'}>{('Created On')}</FormLabel>
-                <div className="mrg-top-10 date-range-picker">
-                    <label>
-                        <DatePicker
-                            dateFormat="MM/dd/yyyy"
-                            placeholderText="Select Date"
-                            className='custom-input'
-                            selectsRange={true}
-                            startDate={startDate && new Date(startDate)}
-                            endDate={endDate && new Date(endDate)}
-                            onChange={(update) => {
-                                setDateRange(update);
+    return <div className="facility-filters mrg-bottom-20">
+        <div className="form-field-wrapper">
+            <div className="form-field-left">
+                <div className="form-field-left-items">
+                    <div className='form-field-item'>
+                        <Autocomplete
+                            PaperComponent={({ children }) => (
+                                <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                            )}
+                            multiple
+                            options={regionList}
+                            value={selectedRegions}
+                            getOptionLabel={(option: any) => option.name}
+                            getOptionSelected={(option, value) => {
+                                return option.name === value?.name
                             }}
-                            isClearable={true}
+                            id="input_select_region"
+                            className="mrg-top-10 "
+                            onChange={($event, value) => {
+                                setSelectedRegions(value)
+                            }}
+                            renderTags={() => null}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    id='select_region'
+                                    variant='outlined'
+                                    placeholder={"Select Multiple Regions"}
+                                />
+                            )}
                         />
-                        {
-                            (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
-                        }
-                    </label>
+                    </div>
 
+                    <div className='form-field-item'>
+                        <Autocomplete
+                            PaperComponent={({ children }) => (
+                                <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                            )}
+                            value={status}
+                            options={statusList}
+                            getOptionLabel={(option: any) => option.name}
+                            placeholder={"Select Status"}
+                            id="input_select_status"
+                            className="mrg-top-10"
+                            onChange={($event, value) => {
+                                setStatus(value)
+                            }
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    id='select_status'
+                                    variant='outlined'
+                                    placeholder={"Select Status"}
+                                />
+                            )}
+                        />
+
+                    </div>
                 </div>
             </div>
-        </DialogContent>
-        <DialogActions className="mrg-top-40">
 
-            <Button variant='outlined' onClick={() => {
-                afterCancel()
-            }} color="secondary" id="btn_cancel_filter">
-                {'Cancel'}
-            </Button>
-            <Button onClick={afterConfirm} id="btn_reject_application" className={"submit mrg-left-20"} variant={"contained"} color="primary" autoFocus>
-                {'Apply'}
-            </Button>
-        </DialogActions>
+            <div className="form-field-right">
+                <label>
+                    <DatePicker
+                        dateFormat="MM/dd/yyyy"
+                        placeholderText="Select Date"
+                        className='custom-input'
+                        selectsRange={true}
+                        startDate={startDate && new Date(startDate)}
+                        endDate={endDate && new Date(endDate)}
+                        onChange={(update) => {
+                            setDateRange(update);
+                        }}
+                        isClearable={true}
+                    />
+                    {
+                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
+                    }
+                </label>
+            </div>
+
+        </div>
+        <div className="facility-chips-wrapper">
+            {
+                selectedRegions && selectedRegions.length > 0 && <p className="hcp-chips">{selectedRegions.map((data: any) => <Chip
+                    key={data?.name}
+                    label={data?.name}
+                    onDelete={() => handleDelete(data)}
+                />)}</p>
+            }
+            <span
+                onClick={() => {
+                    resetFilters()
+                }} color="secondary" id="btn_reset_filter" className={`clear-all-filters mrg-top-10  ${handleDisableReset() ? ' hide-filter' : 'show-filter'}`}>
+                Clear All Filters
+            </span>
+
+        </div>
     </div>;
 }
 
