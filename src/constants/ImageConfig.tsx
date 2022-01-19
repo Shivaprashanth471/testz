@@ -34,7 +34,7 @@ import ColorHCPManagement from '../assets/images/ColorHCPManagement.svg';
 import ColorHCPOnboarding from '../assets/images/ColorHCPOnboarding.svg';
 import PdfIcon from "../assets/images/PdfIcon.png";
 import ImageIcon from "../assets/images/ImageIcon.png";
-import Logout from '../assets/images/Logout.svg';
+import LogoutIcon from "../assets/images/Logout.svg";
 
 
 export {
@@ -73,5 +73,5 @@ export {
     ColorHCPManagement,
     PdfIcon,
     ImageIcon,
-    Logout
+    LogoutIcon
 }

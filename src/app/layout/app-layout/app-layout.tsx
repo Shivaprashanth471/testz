@@ -20,7 +20,7 @@ import Communications from "../../../helpers/communications-service";
 import { StateParams } from "../../../store/reducers";
 import { ImageConfig } from '../../../constants';
 import Avatar from '@material-ui/core/Avatar';
-import { Logout } from '../../../constants/ImageConfig';
+import { LogoutIcon } from '../../../constants/ImageConfig';
 
 export interface AppLayoutProps {
 
@@ -156,7 +156,7 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
                             }}
                         >
                             <MenuItem onClick={logout} key={"logout"} id="logout-btn">
-                                <img src={Logout} alt="logout"/> &nbsp;&nbsp;<p
+                                <img src={LogoutIcon} alt="logout"/> &nbsp;&nbsp;<p
                                 className='mrg-top-0 mrg-bottom-0 logout'>Logout</p>
                             </MenuItem>
                         </Menu>
