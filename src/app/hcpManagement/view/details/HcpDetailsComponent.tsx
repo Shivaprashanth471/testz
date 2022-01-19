@@ -34,7 +34,18 @@ const HcpDetailsComponent = (props: any) => {
     }, [getAttachmentsDetails])
 
     useEffect(() => {
-        const required_attachments = [{ name: "Physical Test", index: -1 }, { name: "Covid Certificate", index: -1 }, { name: "TB Test", index: -1 }, { name: "Chest X-ray", index: -1 }, { name: "CPR/BLS Card", index: -1 }, { name: "Driver's Licence", index: -1 }, { name: "SSN Card", index: -1 }, { name: "License", index: -1 }, { name: "Covid Vaccine Card", index: -1 }, { name: "Covid Test Result", index: -1 }, { name: "Livescan", index: -1 }, { name: "Vaccine Exemption Letter", index: -1 }]
+        const required_attachments = [{ name: "Physical Test", index: -1 },
+        { name: "TB Test", index: -1 },
+        { name: "Chest X-ray", index: -1 },
+        { name: "CPR/BLS Card", index: -1 },
+        { name: "Driver's Licence", index: -1 },
+        { name: "SSN Card", index: -1 },
+        { name: "License", index: -1 },
+        { name: "Covid Certificate", index: -1 },
+        { name: "Covid Vaccine Card", index: -1 },
+        { name: "Covid Test Result", index: -1 },
+        { name: "Livescan", index: -1 },
+        { name: "Vaccine Exemption Letter", index: -1 }]
         let tempAttachemnts: any = []
         required_attachments?.forEach((item: any) => {
             attachmentsDetails?.forEach((attachment: any) => {

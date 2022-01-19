@@ -22,7 +22,7 @@ const AuthLayout = (props: PropsWithChildren<AuthLayoutProps>) => {
                         <div className="auth-layout-card">
                             <div className="main-auth-holder">
                                 <div className="logo">
-                                    <img src={ImageConfig.logo} alt={''}/>
+                                    <img src={ImageConfig.Logo} alt={''}/>
                                 </div>
                                 {props.children}
                             </div>

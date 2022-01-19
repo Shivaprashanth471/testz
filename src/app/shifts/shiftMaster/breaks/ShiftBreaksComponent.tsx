@@ -62,7 +62,6 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         setShiftBreakTimings([...data]);
     }, [setShiftBreakTimings, shiftBreakTimings])
 
-    console.log(shiftBreakTimings)
     const handleBreakoutChange = useCallback((event: any, index: any) => {
         let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date)
         let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);

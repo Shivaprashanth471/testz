@@ -50,10 +50,9 @@ const CancelledShiftsViewScreen = () => {
                             <p>{basicDetails?.hcp_user?.hcp_type}</p>
                         </div>
                     </div>
-                    {/* <div className="ratings">
-                        <h4>Average Rating</h4>
-                        <p>4.42/5</p>
-                    </div> */}
+                    <div className="ratings">
+                       
+                    </div>
                 </div>
                 <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
                     <div className="flex-1">

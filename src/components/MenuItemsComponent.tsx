@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { clearFacilityFilterValues } from "../app/facilityManagement/filters/FacilityFiltersComponent";
 import { clearHcpFilterValues } from "../app/hcpManagement/filters/HcpFiltersComponent";
 import { clearShiftFilterValues } from "../app/shifts/filters/ShiftFilter";
-import { ColorDashboard, ColorfacilityMaster, ColorGroupAdd, ColorHCPManagement, ColorHCPOnboarding, ColorShiftRequirement, ColorShiftsCancelled, ColorShiftsClosed, ColorShiftsCompleted, ColorShiftsInprogress, ColorShiftsMaster, ColorShiftsPending, ColorSMSBlast, Dashboard, facilityMaster, groupAdd, HCPManagement, HCPOnboarding, ShiftRequirement, ShiftsCancelled, ShiftsClosed, ShiftsCompleted, ShiftsInprogress, ShiftsMaster, ShiftsPending, SMSBlast } from "../constants/ImageConfig";
+import { ColorDashboard, ColorfacilityMaster, ColorGroupAdd, ColorHCPManagement, ColorHCPOnboarding, ColorShiftRequirement, ColorShiftsCancelled, ColorShiftsClosed, ColorShiftsCompleted, ColorShiftsInprogress, ColorShiftsMaster, ColorShiftsPending, ColorSMSBlast, Dashboard, FacilityMaster, GroupAdd, HCPManagement, HCPOnboarding, ShiftRequirement, ShiftsCancelled, ShiftsClosed, ShiftsCompleted, ShiftsInprogress, ShiftsMaster, ShiftsPending, SMSBlast } from "../constants/ImageConfig";
 import { ACCOUNTMANAGER, ADMIN, HUMANRESOURCE, NURSECHAMPION } from "../helpers/common-service";
 import AccessControlComponent from "./AccessControl";
 
@@ -56,7 +56,7 @@ export const MENUITEMS: Menu[] = [
         state: "/facility/list",
         name: "Facility Management",
         type: "link",
-        icon: facilityMaster,
+        icon: FacilityMaster,
         coloredIcon: ColorfacilityMaster,
       },
     ],
@@ -117,7 +117,7 @@ export const MENUITEMS: Menu[] = [
         state: "/group/list",
         name: "Create Group",
         type: "link",
-        icon: groupAdd,
+        icon: GroupAdd,
         coloredIcon: ColorGroupAdd,
       },
       {

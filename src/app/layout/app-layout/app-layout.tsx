@@ -110,7 +110,7 @@ const AppLayout = (props: PropsWithChildren<AppLayoutProps>) => {
             <Toolbar>
                 <div className="brand">
                     <Link to={'/'}>
-                        <img src={ImageConfig.logo} alt={'vitawerks'}/>
+                        <img src={ImageConfig.Logo} alt={'vitawerks'}/>
                     </Link>
                     <IconButton onClick={toggleDrawer} edge="start" className={'menuButton'} color="inherit"
                                 aria-label="menu">

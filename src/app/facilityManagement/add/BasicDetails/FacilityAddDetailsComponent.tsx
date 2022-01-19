@@ -5,7 +5,7 @@ import { TextField } from "formik-material-ui";
 import { facilityFormValidation, facilityInitialState } from '../FacilityInitialAndValidationsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
 import PhoneInputComponent from '../../../../components/phoneInput/PhoneInputComponent';
-import { pdfIcon } from '../../../../constants/ImageConfig';
+import { PdfIcon } from '../../../../constants/ImageConfig';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 
 export interface FacilityAddDetailsComponentProps {
@@ -151,7 +151,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                                 fileUpload?.wrapper && fileUpload?.wrapper?.map((item: any, index: any) => {
                                     return (
                                         <div className="attachments">
-                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={pdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}
+                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}
                                             <div className="d-flex image_actions mrg-top-10">
                                                 <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index)} className="delete-image">View</p>
                                                 <p style={{ cursor: 'pointer' }} onClick={() => deleteFile(index)} className="delete-image mrg-left-20">Delete</p>

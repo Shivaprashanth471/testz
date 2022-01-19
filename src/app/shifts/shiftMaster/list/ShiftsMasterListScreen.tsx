@@ -207,9 +207,7 @@ const ShiftsMasterListScreen = () => {
             <div className="header">
                 <div className="filter"></div>
                 <div className="action">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                        Download All
-                    </Button> */}
+                   
                 </div>
             </div>
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-20 mrg-top-0">

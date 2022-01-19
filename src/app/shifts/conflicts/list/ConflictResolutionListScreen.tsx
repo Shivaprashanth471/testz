@@ -8,20 +8,17 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-// import { shiftType, hcpTypes } from '../../../constants/data';
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-// import ComingSoonComponent from '../../../components/ComingSoonComponent';
 import { ENV } from '../../../../constants';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 
 
 const ConflictResolutionListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-    // const [hcp_type, setHcpType] = useState<any>(null)
+    
     const init = useCallback(() => {
         if (!list) {
             const options = new TsDataListOptions({

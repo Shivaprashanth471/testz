@@ -1,6 +1,6 @@
 import React from 'react';
 import { americanTimeZone, otHours } from "../../../../constants/data";
-import { pdfIcon } from "../../../../constants/ImageConfig";
+import { PdfIcon } from "../../../../constants/ImageConfig";
 import { TextField } from "formik-material-ui";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
@@ -288,7 +288,7 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                                     <div className="attachments">
                                         <div className="custom_file">
                                             <div className="d-flex">
-                                                <div className="mrg-left-0 mrg-top-10">{item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={pdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}</div>
+                                                <div className="mrg-left-0 mrg-top-10">{item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}</div>
                                                 <div className="file_details mrg-left-20">
                                                 </div>
                                             </div>

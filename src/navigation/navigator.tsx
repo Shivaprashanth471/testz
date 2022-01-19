@@ -7,7 +7,6 @@ import CommonService from "../helpers/common-service";
 import { Communications } from "../helpers";
 import { logoutUser } from "../store/actions/auth.action";
 import LoginScreen from "../app/auth/login/LoginScreen";
-import ForgotPasswordScreen from "../app/auth/forget-password/ForgotPasswordScreen";
 import NotificationScreen from "../app/notifications/NotificationScreen";
 import HcpManagementListScreen from "../app/hcpManagement/list/HcpManagementListScreen";
 import DashboardScreen from "../app/dashboard/DashboardScreen";
@@ -124,7 +123,6 @@ const Navigator = (props: any) => {
       </Route>
 
       <AuthLayoutRoute path="/login" component={LoginScreen} />
-      <AuthLayoutRoute path="/forgot-password" component={ForgotPasswordScreen}/>
       <AppLayoutRoute path="/dashboard" component={DashboardScreen} />
       <AppLayoutRoute path="/notifications" component={NotificationScreen} />
       <AppLayoutRoute path="/hcp/list" component={HcpManagementListScreen} />

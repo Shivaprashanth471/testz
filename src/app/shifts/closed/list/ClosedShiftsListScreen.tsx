@@ -183,15 +183,12 @@ const ClosedShiftsScreen = () => {
                 selectedRegion={selectedRegion}
                 setSelectedRegion={setSelectedRegion}
                 regions={regions}
-
                 selectedHcps={selectedHcps}
                 setSelectedHcps={setSelectedHcps}
                 selectedTimeTypes={selectedTimeTypes}
                 setSelectedTimeTypes={setSelectedTimeTypes}
                 selectedFaciltities={selectedFacilities}
                 setSelectedFacilities={setSelectedFacilities}
-
-
                 noStatus={true}
                 isCompleted={true}
                 resetFilters={resetFilters}
@@ -232,9 +229,6 @@ const ClosedShiftsScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
                     <FilterListIcon className={"mrg-top-5 filter-icon"} onClick={openFilters} />
                 </div>
             </div>
