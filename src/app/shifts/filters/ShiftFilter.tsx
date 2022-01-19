@@ -2,11 +2,11 @@ import { Chip, Paper } from '@material-ui/core';
 import TextField from "@material-ui/core/TextField";
 import { DateRangeOutlined } from '@material-ui/icons';
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import { AllShiftStatusList, shiftType, SomeShiftStatusList } from "../../../constants/data";
+import { AllShiftStatusList, shiftType, OpenShiftsStatusList } from "../../../constants/data";
 import { localStore } from '../../../helpers';
 import './ShiftFilter.scss';
 
@@ -47,12 +47,11 @@ export interface ShiftFilterProps {
 
 const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
 
-    const [isDropdownAndSelect, setIsDropdownAndSelect] = useState<boolean>(true)
 
     const selectedRegion = props?.selectedRegion;
     const setSelectedRegion = props?.setSelectedRegion;
     const isMaster = props?.isMaster
-    const statusList = props?.isMaster ? AllShiftStatusList : SomeShiftStatusList
+    const statusList = props?.isMaster ? AllShiftStatusList : OpenShiftsStatusList
 
     const regions: any[] = props?.regions ? props?.regions : [];
     const facilityList: any[] = props?.facilityList ? props?.facilityList : [];
@@ -100,9 +99,6 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     }
 
 
-    const handleRegionLabelAndIconToggle = () => {
-        setIsDropdownAndSelect(prevState => !prevState)
-    }
     let regularCheckForAllFields = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || (dateRange[0] !== null || dateRange[1] !== null)
     let checkForStatusField = noMultiStatus ? false : !isMaster && (statusType !== "" && statusType !== null)
 
@@ -138,11 +134,11 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         }
                         renderInput={(params) => (
                             <TextField
-                                onClick={handleRegionLabelAndIconToggle}
+
                                 {...params}
                                 id='select_region'
                                 variant='outlined'
-                                placeholder={isDropdownAndSelect ? "Search (or) Select Region" : "Select Region"}
+                                placeholder='Select Region'
                                 value={selectedRegion}
                             />
                         )}

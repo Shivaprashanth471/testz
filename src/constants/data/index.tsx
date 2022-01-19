@@ -84,7 +84,7 @@ export const acknowledgement = [
 export const boolAcknowledge = [
   { value: "true", label: "Yes" },
   { value: "false", label: "No" },
-  { value: "", label : "None"}
+  { value: "", label: "None" }
 ]
 
 
@@ -124,7 +124,7 @@ export const moreImportant = [
     value: "location",
     label: "Location",
   },
-  { value: "", label : "None"}
+  { value: "", label: "None" }
 ]
 
 
@@ -142,7 +142,7 @@ export const covidPreference = [
     value: "both",
     label: "Both",
   },
-  { value: "", label : "None"}
+  { value: "", label: "None" }
 ]
 
 export const vaccine = [
@@ -190,7 +190,7 @@ export const gustoType = [
     value: "paycheck",
     label: "Paycheck",
   },
-  { value: "", label : "None"}
+  { value: "", label: "None" }
 ]
 
 
@@ -202,8 +202,8 @@ export const AllShiftStatusList = [
   { name: "Pending", code: "pending" },
 ]
 
-export const SomeShiftStatusList = [
-  { name: "Published", code: "published" },
+export const OpenShiftsStatusList = [
+  { name: "Open", code: "open" },
   { name: "Cancelled", code: "cancelled" },
 ]
 
