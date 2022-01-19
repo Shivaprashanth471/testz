@@ -4,10 +4,7 @@ import { CommonService, Communications } from '../../../../helpers';
 import './ShiftCompletedViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
 import { Avatar, Button, CircularProgress } from "@material-ui/core";
-//import { TextField } from "@material-ui/core";
-//import StarBorderIcon from '@material-ui/icons/StarBorder';
 import moment from 'moment';
-//import StarIcon from '@material-ui/icons/Star';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 
 const ShiftCompletedViewScreen = () => {
@@ -15,7 +12,6 @@ const ShiftCompletedViewScreen = () => {
     const { id } = param;
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    // const [rating, setRating] = useState<any>(-1);
 
     const getShiftDetails = useCallback(() => {
         // config
@@ -26,14 +22,6 @@ const ShiftCompletedViewScreen = () => {
             console.log(err)
         })
     }, [id])
-
-    // const handleChangeRating = useCallback((index: any) => {
-    //     if (index !== rating) {
-    //         setRating(index)
-    //     } else {
-    //         setRating(-1)
-    //     }
-    // }, [rating])
 
     useEffect(() => {
         getShiftDetails()
@@ -64,10 +52,6 @@ const ShiftCompletedViewScreen = () => {
                             <p>{basicDetails?.hcp_user?.hcp_type}</p>
                         </div>
                     </div>
-                    {/* <div className="ratings">
-                        <h4>Average Rating</h4>
-                        <p>4.42/5</p>
-                    </div> */}
                 </div>
                 <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
                     <div className="flex-1">
@@ -173,36 +157,6 @@ const ShiftCompletedViewScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-                {/* <div className="feedback-rating-wrapper mrg-top-10">
-                    <h3>Feedback:</h3>
-                    <div className="d-flex">
-                        {
-                            [1, 2, 3, 4, 5]?.map((item: any, index: any) => {
-                                if (index <= rating) {
-                                    return (
-                                        <StarIcon className="rating color-rating mrg-right-20" key={'rating-' + index} onClick={() => handleChangeRating(index)} />
-                                    )
-                                } else {
-                                    return (
-                                        <StarBorderIcon className="rating color-rating mrg-right-20" key={'rating-' + index} onClick={() => handleChangeRating(index)} />
-                                    )
-                                }
-                            })
-                        }
-                    </div>
-                    <div className="mrg-top-20">
-                        <TextField
-                            placeholder="Please write your review here.."
-                            variant='outlined'
-                            color={"primary"}
-                            type={"text"}
-                            name="shift_details"
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                    </div>
-                </div> */}
             </div>
 
         </>)}

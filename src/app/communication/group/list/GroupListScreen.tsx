@@ -11,7 +11,6 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, Communications } from "../../../../helpers";
 import { AddRounded } from "@material-ui/icons";
-// import FilterListIcon from '@material-ui/icons/FilterList';
 import { Button, LinearProgress, TablePagination } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './GroupListScreen.scss';
@@ -49,17 +48,6 @@ const GroupListScreen = () => {
             return Date.parse(b.created_at) - Date.parse(a.created_at)
         });
     }
-
-    // const onReload = useCallback((page = 1) => {
-    //     if (list) {
-    //         list.table.reload(page);
-    //     } else {
-    //         setList(prevState => {
-    //             prevState?.table.reload(page);
-    //             return prevState;
-    //         })
-    //     }
-    // }, [list]);
 
     const init = useCallback(() => {
         if (!list) {
@@ -124,7 +112,6 @@ const GroupListScreen = () => {
                             </div>
                         </div>
                         <div className="action pdd-right-5">
-                            {/* <FilterListIcon className={"mrg-top-5 filter-icon"} /> */}
                             <div>
                                 <Button variant={"contained"} color={"primary"} component={Link} to={`/group/add`} id="btn-add-group">
                                     <AddRounded />&nbsp;&nbsp;Create New&nbsp;&nbsp;

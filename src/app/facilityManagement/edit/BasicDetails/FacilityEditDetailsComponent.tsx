@@ -1,6 +1,6 @@
 import React from 'react';
 import { americanTimeZone, otHours } from "../../../../constants/data";
-import { pdfIcon } from "../../../../constants/ImageConfig";
+import { PdfIcon } from "../../../../constants/ImageConfig";
 import { TextField } from "formik-material-ui";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
@@ -215,19 +215,19 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                             <Field variant="outlined" name="hourly_base_rates.rn" type={"text"} component={TextField}
                                 label="RN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_rn' />
                             <Field variant="outlined" name="hourly_base_rates.care_giver" type={"text"} component={TextField}
-                                label="Care Giver (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
+                                label="Care Giver (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.med_tech" type={"text"} component={TextField}
-                                label="Med Tech (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
+                                label="Med Tech (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
                             <Field variant="outlined" name="hourly_base_rates.holiday" type={"text"} component={TextField}
-                                label="Holiday Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_holiday' />
+                                label="Holiday Rate ($)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_holiday' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="diff_rates.noc" type={"text"} component={TextField}
                                 label="NOC Diff ($)*" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_noc' />
                             <Field variant="outlined" name="hourly_base_rates.hazard" type={"text"} component={TextField}
-                                label="Hazard Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_hazard' />
+                                label="Hazard Rate ($)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_hazard' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="diff_rates.pm" type={"text"} component={TextField}
@@ -288,7 +288,7 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                                     <div className="attachments">
                                         <div className="custom_file">
                                             <div className="d-flex">
-                                                <div className="mrg-left-0 mrg-top-10">{item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={pdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}</div>
+                                                <div className="mrg-left-0 mrg-top-10">{item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}</div>
                                                 <div className="file_details mrg-left-20">
                                                 </div>
                                             </div>

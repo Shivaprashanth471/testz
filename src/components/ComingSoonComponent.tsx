@@ -15,6 +15,7 @@ const ComingSoonComponent = () => {
             options={defaultOptions}
         />
     </div>;
+    
 }
 
 export default ComingSoonComponent;

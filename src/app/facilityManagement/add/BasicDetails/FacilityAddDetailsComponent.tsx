@@ -5,7 +5,7 @@ import { TextField } from "formik-material-ui";
 import { facilityFormValidation, facilityInitialState } from '../FacilityInitialAndValidationsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
 import PhoneInputComponent from '../../../../components/phoneInput/PhoneInputComponent';
-import { pdfIcon } from '../../../../constants/ImageConfig';
+import { PdfIcon } from '../../../../constants/ImageConfig';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 
 export interface FacilityAddDetailsComponentProps {
@@ -151,7 +151,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                                 fileUpload?.wrapper && fileUpload?.wrapper?.map((item: any, index: any) => {
                                     return (
                                         <div className="attachments">
-                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={pdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}
+                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}
                                             <div className="d-flex image_actions mrg-top-10">
                                                 <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index)} className="delete-image">View</p>
                                                 <p style={{ cursor: 'pointer' }} onClick={() => deleteFile(index)} className="delete-image mrg-left-20">Delete</p>
@@ -188,20 +188,20 @@ const FacilityAddDetailsComponent = (props: any) => {
                             <Field variant="outlined" name="hourly_base_rates.rn" type={"text"} component={TextField}
                                 label="RN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_rn' />
                             <Field variant="outlined" name="hourly_base_rates.care_giver" type={"text"} component={TextField}
-                                label="Care Giver (hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_care_giver' />
+                                label="Care Giver (hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_care_giver' />
                         </div>
 
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.med_tech" type={"text"} component={TextField}
-                                label="Med Tech (hr)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_med_tech' />
+                                label="Med Tech (hr)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_med_tech' />
                             <Field variant="outlined" name="hourly_base_rates.holiday" type={"text"} component={TextField}
-                                label="Holiday Rate ($)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_holiday' />
+                                label="Holiday Rate ($)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_holiday' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="diff_rates.noc" type={"text"} component={TextField}
                                 label="NOC Diff ($)*" fullWidth autoComplete="off" id='input_facility_add_diff_rates_noc' />
                             <Field variant="outlined" name="hourly_base_rates.hazard" type={"text"} component={TextField}
-                                label="Hazard Rate ($)" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_hazard' />
+                                label="Hazard Rate ($)*" fullWidth autoComplete="off" id='input_facility_add_hourly_base_rates_hazard' />
                         </div>
 
                         <div className="input-container ">

@@ -314,13 +314,13 @@ const ShiftMasterViewScreen = () => {
             <div className="header mrg-top-10 mrg-bottom-0">
                 <div className="filter"></div>
                 <div className="actions">
-                    <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} >
+                    <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} disabled={basicDetails?.shift_status === "cancelled"}>
                         CheckIn
                     </Button>
-                    <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.time_breakup?.check_in_time === ""}>
+                    <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
                         Break-In/Out
                     </Button>
-                    <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.time_breakup?.check_in_time === ""}>
+                    <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
                         CheckOut
                     </Button>
                 </div>

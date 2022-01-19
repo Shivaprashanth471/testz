@@ -232,9 +232,6 @@ const CancelledShiftsListScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
                     <FilterListIcon className={"mrg-top-5 filter-icon"} onClick={openFilters} />
                 </div>
             </div>

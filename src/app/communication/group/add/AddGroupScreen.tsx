@@ -90,8 +90,6 @@ const AddGroupScreen = () => {
             if (resp && resp.success) {
                 const groupId = resp.data._id;
                 addHcps(groupId);
-                console.log(resp)
-                // history.push('/facility/view/' + facilityId);
             }
         }).catch((err) => {
             console.log(err)
@@ -106,8 +104,6 @@ const AddGroupScreen = () => {
         })
         setSelectedHcps(temp)
     }, [list])
-
-    console.log(selectedHcps)
 
     useEffect(() => {
 

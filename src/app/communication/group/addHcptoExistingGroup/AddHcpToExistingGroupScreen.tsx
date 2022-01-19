@@ -5,7 +5,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
 import { ENV } from "../../../../constants";
@@ -223,15 +222,6 @@ const AddHcpToExistingGroupScreen = () => {
                                 })}
                             </TableBody>
                         </Table>
-                        {/*<TablePagination*/}
-                        {/*    rowsPerPageOptions={list.table.pagination.pageSizeOptions}*/}
-                        {/*    component='div'*/}
-                        {/*    count={list?.table.pagination.totalItems}*/}
-                        {/*    rowsPerPage={list?.table.pagination.pageSize}*/}
-                        {/*    page={list?.table.pagination.pageIndex}*/}
-                        {/*    onPageChange={(event, page) => list.table.pageEvent(page)}*/}
-                        {/*    onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}*/}
-                        {/*/>*/}
                     </TableContainer>
                 </>}
             </div>

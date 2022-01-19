@@ -13,7 +13,7 @@ const NotFoundComponent = (props: NotFoundComponentProps) => {
     return (
         <div className="container">
             <div className="text-center">
-                <img src={ImageConfig.notFound} alt={''} className="img-responsive mrg-top-50 animation-slide-in-up"/>
+                <img src={ImageConfig.NotFound} alt={''} className="img-responsive mrg-top-50 animation-slide-in-up"/>
                 <div className="ts-clearfix">&nbsp;</div>
                 <Button variant={"text"} color={"primary"} component={Link} to={backUrl}>
                     <ArrowBackOutlined/>&nbsp;Back
