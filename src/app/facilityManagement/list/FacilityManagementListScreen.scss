@@ -22,4 +22,37 @@
        overflow: scroll !important;
        height: 300px !important;
    }
+
+  .facility-list-table{
+
+    .mat-td-created-at{
+      min-width: 100px;
+      max-width: 100px;
+    }
+
+    .mat-td-facility-name{
+      min-width: 250px;
+      max-width: 250px;
+    }
+
+    .mat-td-region-name{
+      min-width: 150px;
+      max-width: 150px;
+    }
+
+    .mat-td-phone-number{
+      min-width: 200px;
+      max-width: 200px;
+    }
+
+    .mat-td-is-active{
+      min-width: 100px;
+      max-width: 100px;
+    }
+
+    .mat-td-actions{
+      min-width: 200px;
+      max-width: 200px;
+    }
+  }
 }

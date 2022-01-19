@@ -50,18 +50,6 @@ const FacilityManagementListScreen = () => {
   const [status, setStatus] = useLocalStorage<any>('facilityStatus', "");
   const [dateRange, setDateRange] = useLocalStorage('facilityDateRange', [null, null]);
 
-
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "text-right last-row"
-    } else if (type === 'Active / Inactive') {
-      return 'text-align'
-    } else if (type === "Created On") {
-      return 'pdd-left-20 first-row'
-    }
-  }, [])
-
-
   const onReload = useCallback((page = 1) => {
     if (list) {
       list.table.reload(page);
@@ -239,12 +227,12 @@ const FacilityManagementListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table" className="table">
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table facility-list-table">
+                  <TableHead className={'mat-thead'} >
+                    <TableRow className={'mat-tr'}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
                         <TableCell
-                          className={classesFunction(column)}
+                          className={column === 'Actions' ? 'mat-th mat-th-sticky' : 'mat-th'}
                           key={"header-col-" + columnIndex}
                         >
                           {column}
@@ -253,26 +241,27 @@ const FacilityManagementListScreen = () => {
                       )}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={'mat-tbody'}>
                     {list.table.canShowNoData() &&
                       <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                     }
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell className="pdd-left-20">
+                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={'mat-tr'}>
+                          <TableCell className="mat-td mat-td-created-at">
                             {moment(row['created_at']).format("MM-DD-YYYY")}
                           </TableCell>
-                          <TableCell>{row["facility_name"]}</TableCell>
-                          <TableCell>{row?.address["region_name"]}</TableCell>
-                          <TableCell>{row["phone_number"]}</TableCell>
-                          {
-                            role === "super_admin" ? <TableCell style={{ textAlign: "center" }}> <FormControlLabel
+                          <TableCell className="mat-td mat-td-facility-name">{row["facility_name"]}</TableCell>
+                          <TableCell className="mat-td mat-td-region-name">{row?.address["region_name"]}</TableCell>
+                          <TableCell className="mat-td mat-td-phone-number">{row["phone_number"]}</TableCell>
+                           <TableCell className="mat-td mat-td-is-active">
+                             {
+                               role === "super_admin" ? <FormControlLabel
                               control={<Switch checked={row['is_active']} onChange={() => handletoggleStatus(row['_id'], row['is_active'])} />}
                               label={''}
-                            /> </TableCell> : <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
-                          }
-                          <TableCell className="text-right mrg-right-10 position-sticky">
+                            /> : <>{ row['is_active'] ? 'Active' : 'Inactive'}</> }
+                           </TableCell>
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Link
                               to={"/facility/tabs/" + row?._id}
                               className="info-link "
@@ -286,7 +275,8 @@ const FacilityManagementListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component='div'
                   count={list?.table.pagination.totalItems}
@@ -294,8 +284,7 @@ const FacilityManagementListScreen = () => {
                   page={list?.table.pagination.pageIndex}
                   onPageChange={(event, page) => list.table.pageEvent(page)}
                   onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
-                />
-              </TableContainer>
+              />
             </>
           )}
         </div>
