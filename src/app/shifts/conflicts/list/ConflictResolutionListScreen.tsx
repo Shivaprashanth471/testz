@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Communications, ApiService, CommonService } from '../../../../helpers';
 import './ConflictResolutionListScreen.scss';
-import { LinearProgress } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,11 +13,12 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import { ENV } from '../../../../constants';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 
 const ConflictResolutionListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-    
+
     const init = useCallback(() => {
         if (!list) {
             const options = new TsDataListOptions({
@@ -39,7 +39,7 @@ const ConflictResolutionListScreen = () => {
     return <>
         <div className={'shift-master screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                <LinearProgress />
+                <LoaderComponent />
             </div>}
             <div className="header">
                 <div className="filter">
