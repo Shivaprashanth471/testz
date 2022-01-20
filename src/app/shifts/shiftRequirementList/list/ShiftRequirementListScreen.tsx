@@ -119,7 +119,7 @@ const ShiftRequirementListScreen = () => {
             }
         }else{
             let today = moment(new Date()).format("YYYY-MM-DD")
-            url=url+'new_shifts=' + today;
+            payload.new_shifts = today;
         }
         if (selectedTimeTypes.length > 0) {
             payload.shift_types = selectedTimeTypes
