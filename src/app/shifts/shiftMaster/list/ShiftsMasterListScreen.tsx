@@ -46,6 +46,9 @@ const ShiftsMasterListScreen = () => {
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
     const [selectedStatusTypes, setSelectedStatusTypes] = useLocalStorage<any[]>('selectedStatusTypes', [])
 
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
+
+
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
             return "last-row"
@@ -76,18 +79,24 @@ const ShiftsMasterListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
-        if (selectedRegion !== "") {
+        if (selectedRegion) {
             payload.regions = [selectedRegion]
         }
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
+
+    useEffect(() => getFacilityData(), [selectedRegion, getFacilityData])
+
 
 
     const init = useCallback(() => {
@@ -153,10 +162,9 @@ const ShiftsMasterListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
         Communications.pageTitleSubject.next('Shifts Master');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getRegions, getHcpTypes, getFacilityData])
+    }, [init, getRegions, getHcpTypes])
 
     return <>
         <div className={'shift-master screen crud-layout pdd-30'}>
@@ -165,6 +173,7 @@ const ShiftsMasterListScreen = () => {
             </div>}
 
             <ShiftFilter
+                isFacilityListLoading={isFacilityListLoading}
                 dateRange={dateRange}
                 setDateRange={setDateRange}
                 selectedRegion={selectedRegion}
@@ -186,6 +195,7 @@ const ShiftsMasterListScreen = () => {
 
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
+
             />
 
             <div className="header">

@@ -44,6 +44,8 @@ const ShiftInprogressListScreen = () => {
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
 
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
+
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -75,6 +77,7 @@ const ShiftInprogressListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -82,9 +85,11 @@ const ShiftInprogressListScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -156,10 +161,10 @@ const ShiftInprogressListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
+
         Communications.pageTitleSubject.next('Shifts Inprogress');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getRegions, getFacilityData, getHcpTypes])
+    }, [init, getRegions, getHcpTypes])
 
     return <div className="shift-inprogress screen crud-layout pdd-30">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
@@ -167,6 +172,7 @@ const ShiftInprogressListScreen = () => {
         </div>}
 
         <ShiftFilter
+            isFacilityListLoading={isFacilityListLoading}
             regions={regions}
             selectedRegion={selectedRegion}
             setSelectedRegion={setSelectedRegion}

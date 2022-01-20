@@ -44,6 +44,8 @@ const ShiftRequirementListScreen = () => {
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
 
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
+
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
             return "last-row"
@@ -73,6 +75,7 @@ const ShiftRequirementListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -80,9 +83,11 @@ const ShiftRequirementListScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -154,16 +159,17 @@ const ShiftRequirementListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
         Communications.pageTitleSubject.next('Open Shifts');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getHcpTypes, getRegions, getFacilityData])
+    }, [init, getHcpTypes, getRegions])
     return <>
         <div className={'shift-requirment-list screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
                 <LoaderComponent />
             </div>}
             <ShiftFilter
+                isFacilityListLoading={isFacilityListLoading}
+
                 dateRange={dateRange}
                 setDateRange={setDateRange}
                 regions={regions}
@@ -182,6 +188,8 @@ const ShiftRequirementListScreen = () => {
 
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
+
+
             />
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
                 <div className="header">

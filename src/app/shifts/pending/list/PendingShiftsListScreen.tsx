@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {  TextField, IconButton } from "@material-ui/core";
+import { LinearProgress, TextField, IconButton } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -15,7 +15,6 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
 import moment from 'moment';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
@@ -48,7 +47,6 @@ const PendingShiftsListScreen = () => {
     const init = useCallback(() => {
         let today = moment(new Date()).format("YYYY-MM-DD")
         let url = 'shift/application?new_shifts=' + today
-        console.log(today)
 
         const options = new TsDataListOptions({
             webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
@@ -105,7 +103,6 @@ const PendingShiftsListScreen = () => {
 
     const confirmRejectApplication = useCallback(() => {
         setIsRejectOpen(false)
-        init()
     }, [])
 
     useEffect(() => {
@@ -125,7 +122,7 @@ const PendingShiftsListScreen = () => {
             <PendingSihftsViewComponent  cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId}/>
         </DialogComponent>
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LoaderComponent />
+            <LinearProgress />
         </div>}
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
