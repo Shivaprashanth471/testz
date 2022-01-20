@@ -9,12 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { AddRounded, SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-import DialogComponent from "../../../../components/DialogComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -36,7 +34,6 @@ const ShiftRequirementListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
     const [facilityList, setFacilityList] = useState<any | null>(null);
-    const [open, setOpen] = useState<boolean>(false);
     const [regions, setRegions] = useState<any>([])
 
     const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
@@ -144,16 +141,6 @@ const ShiftRequirementListScreen = () => {
         setSelectedRegion('')
     }
 
-    const openFilters = useCallback((index: any) => {
-        setOpen(true)
-    }, [])
-
-    const cancelopenFilters = useCallback(() => {
-        setOpen(false)
-    }, [])
-    const confirmopenFilters = useCallback(() => {
-        setOpen(false)
-    }, [])
 
     const resetFilters = () => {
         clearFilterValues()
@@ -172,29 +159,26 @@ const ShiftRequirementListScreen = () => {
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
                 <LinearProgress />
             </div>}
-            <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
-                <ShiftFilter
-                    dateRange={dateRange}
-                    setDateRange={setDateRange}
-                    regions={regions}
-                    selectedRegion={selectedRegion}
-                    setSelectedRegion={setSelectedRegion}
-                    selectedHcps={selectedHcps}
-                    setSelectedHcps={setSelectedHcps}
-                    selectedTimeTypes={selectedTimeTypes}
-                    setSelectedTimeTypes={setSelectedTimeTypes}
-                    selectedFaciltities={selectedFacilities}
-                    setSelectedFacilities={setSelectedFacilities}
-                    statusType={statusType}
-                    setStatusType={setStatusType}
-                    noStatus={false}
-                    resetFilters={resetFilters}
-                    cancel={cancelopenFilters}
-                    confirm={confirmopenFilters}
-                    facilityList={facilityList}
-                    hcpTypes={hcpTypes}
-                />
-            </DialogComponent>
+            <ShiftFilter
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                regions={regions}
+                selectedRegion={selectedRegion}
+                setSelectedRegion={setSelectedRegion}
+                selectedHcps={selectedHcps}
+                setSelectedHcps={setSelectedHcps}
+                selectedTimeTypes={selectedTimeTypes}
+                setSelectedTimeTypes={setSelectedTimeTypes}
+                selectedFaciltities={selectedFacilities}
+                setSelectedFacilities={setSelectedFacilities}
+                statusType={statusType}
+                setStatusType={setStatusType}
+                noStatus={false}
+                resetFilters={resetFilters}
+
+                facilityList={facilityList}
+                hcpTypes={hcpTypes}
+            />
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
                 <div className="header">
                     <div className="mrg-left-5 filter">
@@ -227,7 +211,6 @@ const ShiftRequirementListScreen = () => {
                     </div>
                     <div className="actions d-flex">
                         <div>
-                            <FilterListIcon className={"mrg-top-5 filter-icon"} onClick={openFilters} />
                         </div>
                         <div className="mrg-left-20">
                             <Button component={Link} to={'/shift/add'} variant={"contained"} color={"primary"} >

@@ -1,0 +1,7 @@
+@import "src/assets/scss/common";
+
+.hcp-list {
+  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 2px !important;
+  }
+}

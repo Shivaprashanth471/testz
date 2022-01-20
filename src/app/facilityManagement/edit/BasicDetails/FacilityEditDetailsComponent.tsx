@@ -215,19 +215,19 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                             <Field variant="outlined" name="hourly_base_rates.rn" type={"text"} component={TextField}
                                 label="RN Rate ($/hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_rn' />
                             <Field variant="outlined" name="hourly_base_rates.care_giver" type={"text"} component={TextField}
-                                label="Care Giver (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
+                                label="Care Giver (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_care_giver' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="hourly_base_rates.med_tech" type={"text"} component={TextField}
-                                label="Med Tech (hr)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
+                                label="Med Tech (hr)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_med_tech' />
                             <Field variant="outlined" name="hourly_base_rates.holiday" type={"text"} component={TextField}
-                                label="Holiday Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_holiday' />
+                                label="Holiday Rate ($)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_holiday' />
                         </div>
                         <div className="input-container">
                             <Field variant="outlined" name="diff_rates.noc" type={"text"} component={TextField}
                                 label="NOC Diff ($)*" fullWidth autoComplete="off" id='input_facility_edit_diff_rates_noc' />
                             <Field variant="outlined" name="hourly_base_rates.hazard" type={"text"} component={TextField}
-                                label="Hazard Rate ($)" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_hazard' />
+                                label="Hazard Rate ($)*" fullWidth autoComplete="off" id='input_facility_edit_hourly_base_rates_hazard' />
                         </div>
                         <div className="input-container ">
                             <Field variant="outlined" name="diff_rates.pm" type={"text"} component={TextField}

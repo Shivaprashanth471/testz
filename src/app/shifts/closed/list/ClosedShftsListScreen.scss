@@ -1,22 +1,25 @@
 @import "src/assets/scss/common";
 
 .closed-shifts {
-	margin: auto;
-	text-align: center;
-	.MuiTableRow-root {
-		width: 20px !important;
-    }
-	.filter-icon {
-		font-size: 2rem;
-		color: $light-black;
-	}
-    .MuiTableCell-body{
-        width: 20px !important;
-    }
-	.last-row {
-		border-radius: 0px 5px 5px 0px;
-	}
-	.first-row {
-		border-radius: 5px 0px 0px 5px;
-	}
+  margin: auto;
+  text-align: center;
+  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 2px !important;
+  }
+  .MuiTableRow-root {
+    width: 20px !important;
+  }
+  .filter-icon {
+    font-size: 2rem;
+    color: $light-black;
+  }
+  .MuiTableCell-body {
+    width: 20px !important;
+  }
+  .last-row {
+    border-radius: 0px 5px 5px 0px;
+  }
+  .first-row {
+    border-radius: 5px 0px 0px 5px;
+  }
 }

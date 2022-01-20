@@ -10,12 +10,10 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-import DialogComponent from '../../../../components/DialogComponent';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -34,7 +32,6 @@ const CssTextField = withStyles({
 })(TextField);
 const ClosedShiftsScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-    const [open, setOpen] = useState<boolean>(false);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
     const [facilityList, setFacilityList] = useState<any | null>(null);
     const [regions, setRegions] = useState<any>([])
@@ -146,16 +143,7 @@ const ClosedShiftsScreen = () => {
         setDateRange([null, null])
     }
 
-    const openFilters = useCallback((index: any) => {
-        setOpen(true)
-    }, [])
 
-    const cancelopenFilters = useCallback(() => {
-        setOpen(false)
-    }, [])
-    const confirmopenFilters = useCallback(() => {
-        setOpen(false)
-    }, [])
 
 
     const resetFilters = () => {
@@ -176,28 +164,30 @@ const ClosedShiftsScreen = () => {
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
             <LinearProgress />
         </div>}
-        <DialogComponent class={'dialog-side-wrapper'} open={open} cancel={cancelopenFilters}>
-            <ShiftFilter
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                selectedRegion={selectedRegion}
-                setSelectedRegion={setSelectedRegion}
-                regions={regions}
-                selectedHcps={selectedHcps}
-                setSelectedHcps={setSelectedHcps}
-                selectedTimeTypes={selectedTimeTypes}
-                setSelectedTimeTypes={setSelectedTimeTypes}
-                selectedFaciltities={selectedFacilities}
-                setSelectedFacilities={setSelectedFacilities}
-                noStatus={true}
-                isCompleted={true}
-                resetFilters={resetFilters}
-                cancel={cancelopenFilters}
-                confirm={confirmopenFilters}
-                facilityList={facilityList}
-                hcpTypes={hcpTypes}
-            />
-        </DialogComponent>
+
+        <ShiftFilter
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            selectedRegion={selectedRegion}
+            setSelectedRegion={setSelectedRegion}
+            regions={regions}
+
+            selectedHcps={selectedHcps}
+            setSelectedHcps={setSelectedHcps}
+            selectedTimeTypes={selectedTimeTypes}
+            setSelectedTimeTypes={setSelectedTimeTypes}
+            selectedFaciltities={selectedFacilities}
+            setSelectedFacilities={setSelectedFacilities}
+
+
+            noStatus={true}
+            isCompleted={true}
+            resetFilters={resetFilters}
+
+            facilityList={facilityList}
+            hcpTypes={hcpTypes}
+        />
+
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
                 <div className="mrg-left-5 filter">
@@ -229,7 +219,10 @@ const ClosedShiftsScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    <FilterListIcon className={"mrg-top-5 filter-icon"} onClick={openFilters} />
+                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
+                    Download All
+                </Button> */}
+
                 </div>
             </div>
             {list && list.table && <>

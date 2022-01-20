@@ -167,13 +167,13 @@ export const facilityFormEditValidation = Yup.object({
       .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
       .trim("empty space not allowed")
       .max(10, 'max 10 digits allowed')
-      .required("required").nullable(),
+      .nullable(),
     med_tech: Yup.string()
       .typeError(" must be valid")
       .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
       .trim("empty space not allowed")
       .max(10, 'max 10 digits allowed')
-      .required("required").nullable(),
+      .nullable(),
     holiday: Yup.string()
       .typeError(" must be valid")
       .matches(/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/, "invalid")
