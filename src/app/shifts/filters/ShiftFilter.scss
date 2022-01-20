@@ -2,6 +2,13 @@ $primary-color: #10c4d3;
 $accent-color: #0c80e3;
 
 .shift-filters {
+  .loading-text-wrapper {
+    text-align: center;
+    span {
+      display: inline-block;
+      color: gray;
+    }
+  }
   .form-field-wrapper {
     display: flex;
     gap: 10px;

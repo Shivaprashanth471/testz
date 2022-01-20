@@ -1,4 +1,4 @@
-import { LinearProgress, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,6 +14,7 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
+import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -42,6 +43,8 @@ const ApprovedShiftsListScreen = () => {
     const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
+
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
 
 
     const classesFunction = useCallback((type: any) => {
@@ -73,6 +76,7 @@ const ApprovedShiftsListScreen = () => {
     }, []);
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -80,9 +84,11 @@ const ApprovedShiftsListScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -113,7 +119,7 @@ const ApprovedShiftsListScreen = () => {
                 payload.start_date = startDate
                 payload.end_date = endDate
             }
-        }else{
+        } else {
             let today = moment(new Date()).format("YYYY-MM-DD")
             payload.new_shifts = today;
         }
@@ -150,34 +156,35 @@ const ApprovedShiftsListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
+
         Communications.pageTitleSubject.next('Shifts Approved');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getFacilityData, getRegions, getHcpTypes])
+    }, [init, getRegions, getHcpTypes])
     return <div className="pending-shifts screen crud-layout pdd-30">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
+            <LoaderComponent />
         </div>}
-            <ShiftFilter
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                regions={regions}
-                selectedRegion={selectedRegion}
-                setSelectedRegion={setSelectedRegion}
+        <ShiftFilter
+            isFacilityListLoading={isFacilityListLoading}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            regions={regions}
+            selectedRegion={selectedRegion}
+            setSelectedRegion={setSelectedRegion}
 
-                selectedHcps={selectedHcps}
-                setSelectedHcps={setSelectedHcps}
-                selectedTimeTypes={selectedTimeTypes}
-                setSelectedTimeTypes={setSelectedTimeTypes}
-                selectedFaciltities={selectedFacilities}
-                setSelectedFacilities={setSelectedFacilities}
+            selectedHcps={selectedHcps}
+            setSelectedHcps={setSelectedHcps}
+            selectedTimeTypes={selectedTimeTypes}
+            setSelectedTimeTypes={setSelectedTimeTypes}
+            selectedFaciltities={selectedFacilities}
+            setSelectedFacilities={setSelectedFacilities}
 
-                noStatus={true}
-                isRequired={true}
-                resetFilters={resetFilters}
-                facilityList={facilityList}
-                hcpTypes={hcpTypes}
-            />
+            noStatus={true}
+            isRequired={true}
+            resetFilters={resetFilters}
+            facilityList={facilityList}
+            hcpTypes={hcpTypes}
+        />
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
                 <div className="mrg-left-5 filter">

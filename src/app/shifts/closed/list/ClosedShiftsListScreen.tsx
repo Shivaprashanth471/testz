@@ -44,6 +44,8 @@ const ClosedShiftsScreen = () => {
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
 
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
+
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
             return "last-row"
@@ -73,6 +75,7 @@ const ClosedShiftsScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -80,9 +83,11 @@ const ClosedShiftsScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -156,10 +161,10 @@ const ClosedShiftsScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
+
         Communications.pageTitleSubject.next('Shifts Closed');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getRegions, getHcpTypes, getFacilityData])
+    }, [init, getRegions, getHcpTypes])
 
     return <div className="completed-shifts screen crud-layout pdd-30">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
@@ -167,6 +172,7 @@ const ClosedShiftsScreen = () => {
         </div>}
 
         <ShiftFilter
+            isFacilityListLoading={isFacilityListLoading}
             dateRange={dateRange}
             setDateRange={setDateRange}
             selectedRegion={selectedRegion}
