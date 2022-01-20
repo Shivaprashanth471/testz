@@ -44,7 +44,7 @@ const HcpManagementViewScreen = () => {
     //     })
     // }
 
-    if (isLoading || isAttachmentsLoading) {
+    if (isLoading && isAttachmentsLoading) {
         return <LoaderComponent />
     }
 

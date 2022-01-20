@@ -10,8 +10,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Button, LinearProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const RemoveHcpsScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -105,7 +106,7 @@ const RemoveHcpsScreen = () => {
         <>
             <div className={'group-view screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <div>
                     <div className="header mrg-bottom-0">
@@ -117,7 +118,7 @@ const RemoveHcpsScreen = () => {
                         </div>
                         <div className="actions">
                             <div className="">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -168,16 +169,16 @@ const RemoveHcpsScreen = () => {
                     </TableContainer>
                 </>}
                 <div className="mrg-top-20 remove-members-wrapper">
-                   <div className="d-flex">
-                   <Button
-                        size="large"
-                        onClick={() => history.push('/group/view/' + id)}
-                        variant={"outlined"}
-                        color="secondary"
-                        className="cancel"
-                        id="btn_hcp_edit_cancel">Cancel</Button>
-                    <Button variant={"contained"} className="actions" onClick={handleRemoveMembers} color={"primary"}>Remove Members</Button>
-                   </div>
+                    <div className="d-flex">
+                        <Button
+                            size="large"
+                            onClick={() => history.push('/group/view/' + id)}
+                            variant={"outlined"}
+                            color="secondary"
+                            className="cancel"
+                            id="btn_hcp_edit_cancel">Cancel</Button>
+                        <Button variant={"contained"} className="actions" onClick={handleRemoveMembers} color={"primary"}>Remove Members</Button>
+                    </div>
                 </div>
             </div>
         </>
