@@ -69,15 +69,11 @@ const EducationAddComponent = ({
     onAddEducation(newEducation)
       .then((resp: any) => {
         getEducationDetails()
+        setIsEducation(false);
+        resetForm();
         CommonService.showToast(resp?.msg || 'HCP education added', 'info')
       })
       .catch((err: any) => console.log(err));
-
-    //clear state
-    resetForm();
-
-    //close form
-    setIsEducation(false);
 
   };
 
@@ -234,8 +230,8 @@ const EducationAddComponent = ({
                   Delete
                 </Button>
 
-                <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_education_submit">
-                  Save
+                <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_education_submit" className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                  {isSubmitting?"Saving":"Save"}
                 </Button>
               </div>
 

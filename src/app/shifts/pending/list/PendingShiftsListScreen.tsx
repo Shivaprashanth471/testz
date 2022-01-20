@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { LinearProgress, TextField,IconButton } from "@material-ui/core";
+import { LinearProgress, TextField, IconButton } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -26,6 +26,7 @@ import DialogComponent from '../../../../components/DialogComponent';
 import RejectHcpApplicationComponent from '../rejectHcp/RejectHcpApplicationComponent';
 import CreateShiftScreen from '../createShift/CreateShiftScreen';
 import "./PendingShiftsListScreen.scss";
+import PendingSihftsViewComponent from '../view/PendingShiftsViewComponent';
 
 const CssTextField = withStyles({
     root: {
@@ -40,27 +41,43 @@ const CssTextField = withStyles({
 
 const PendingShiftsListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-   // const { user } = useSelector((state: StateParams) => state.auth);
-    const [isApproveOpen, setIsApproveOpen] = React.useState<boolean>(false);
+    // const { user } = useSelector((state: StateParams) => state.auth);
+    const [isApproveOpen, setIsApproveOpen] = useState<boolean>(false);
     const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false);
     const [hcpId, setHcpId] = useState<string>('');
     const [applicationId, setApplicationId] = useState<string>('')
-    const [requirementId,setRequirementId]= useState<string>('')
+    const [requirementId, setRequirementId] = useState<string>('')
+    const [isViewOpen , setIsViewOpen] = useState<boolean>(false);
 
     const init = useCallback(() => {
         let today = moment(new Date()).format("YYYY-MM-DD")
-        let url = 'shift/application?new_shifts='+today
+        let url = 'shift/application?new_shifts=' + today
         console.log(today)
-    
+
         const options = new TsDataListOptions({
-            webMatColumns: ['Applied On',  'HCP Name', 'Facility Name','Shift Date', 'Type of hcp', 'Time Type', 'Actions'],
-            mobileMatColumns: ['Applied On',  'HCP Name', 'Facility Name','Shift Date', 'Type of hcp', 'Time Type', 'Actions'],
+            webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
+            mobileMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'get');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
     }, [])
+
+    const openView = useCallback((id:any,hcp_user_id:any) => {
+        setIsViewOpen(true);
+        setRequirementId(id);
+        setHcpId(hcp_user_id)
+    }, [])
+
+    const cancelView = useCallback(() => {
+        setIsViewOpen(false);
+    }, [])
+
+    const confirmView = useCallback(() => {
+        setIsViewOpen(false);
+        init()
+    }, [init])
 
 
     const cancelApprove = useCallback(() => {
@@ -73,18 +90,18 @@ const PendingShiftsListScreen = () => {
         init()
     }, [init])
 
-    const openApprove = useCallback((hcpId: string, applicationId: string) => {
-        console.log(hcpId, applicationId)
+    const openApprove = useCallback((hcpId: string, applicationId: string,requirementId:string) => {
         setHcpId(hcpId)
         setApplicationId(applicationId)
         setIsApproveOpen(true);
+        setRequirementId(requirementId)
     }, [])
 
-    const openRejectApplication=useCallback((requirementId:any,applicationId:any)=>{
+    const openRejectApplication = useCallback((requirementId: any, applicationId: any) => {
         setApplicationId(applicationId)
         setRequirementId(requirementId)
         setIsRejectOpen(true)
-    },[])
+    }, [])
 
     const cancelRejectApplication = useCallback(() => {
         setIsRejectOpen(false)
@@ -94,125 +111,128 @@ const PendingShiftsListScreen = () => {
         setIsRejectOpen(false)
     }, [])
 
-
-    
     useEffect(() => {
         init()
         Communications.pageTitleSubject.next('Pending Shifts');
         Communications.pageBackButtonSubject.next(null);
     }, [init])
+
     return <div className="pending-hcps-list screen crud-layout pdd-30">
-          <DialogComponent open={isRejectOpen} cancel={cancelRejectApplication}>
-            <RejectHcpApplicationComponent cancel={cancelRejectApplication} confirm={confirmRejectApplication} requirementId={requirementId} applicationId={applicationId}/>
+        <DialogComponent open={isRejectOpen} cancel={cancelRejectApplication}>
+            <RejectHcpApplicationComponent cancel={cancelRejectApplication} confirm={confirmRejectApplication} requirementId={requirementId} applicationId={applicationId} />
         </DialogComponent>
         <DialogComponent open={isApproveOpen} cancel={cancelApprove}>
-             <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} applicationId={applicationId} confirm={confirmApprove} /> 
+            <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} requirementId={requirementId} applicationId={applicationId} confirm={confirmApprove} />
         </DialogComponent>
-    {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-        <LinearProgress />
-    </div>}
-    <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
-        <div className="header">
-            <div className="mrg-left-5 filter">
-                <div>
-                    <div className="d-flex">
-                        <div className="d-flex position-relative">
-                            {!list?.table.filter.search ?
-                                <div className={"search_icon"}>
-                                    <SearchRounded />
-                                </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
-                                    if (list && list.table) {
-                                        list.table.filter.search = '';
-                                        list.table.reload();
-                                        list?.table.pageEvent(0)
-                                    }
+        <DialogComponent open={isViewOpen} cancel={cancelView} maxWidth="md">
+            <PendingSihftsViewComponent  cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId}/>
+        </DialogComponent>
+        {list && list.table?._isDataLoading && <div className="table-loading-indicator">
+            <LinearProgress />
+        </div>}
+        <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
+            <div className="header">
+                <div className="mrg-left-5 filter">
+                    <div>
+                        <div className="d-flex">
+                            <div className="d-flex position-relative">
+                                {!list?.table.filter.search ?
+                                    <div className={"search_icon"}>
+                                        <SearchRounded />
+                                    </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
+                                        if (list && list.table) {
+                                            list.table.filter.search = '';
+                                            list.table.reload();
+                                            list?.table.pageEvent(0)
+                                        }
 
-                                }} id="clear_shift_search" /></div>}
-                            <div>
-                                <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_shift" onChange={event => {
-                                    if (list && list.table) {
-                                        list.table.filter.search = event.target.value;
-                                        list.table.reload();
-                                        list?.table.pageEvent(0)
-                                    }
-                                }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Shift')} />
+                                    }} id="clear_shift_search" /></div>}
+                                <div>
+                                    <CssTextField defaultValue={''} className="search-cursor searchField" id="input_search_shift" onChange={event => {
+                                        if (list && list.table) {
+                                            list.table.filter.search = event.target.value;
+                                            list.table.reload();
+                                            list?.table.pageEvent(0)
+                                        }
+                                    }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Shift')} />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <div className="actions">
-                <FilterListIcon className={"mrg-top-5 filter-icon"} onClick={openFilters} />
-            </div> */}
-        </div>
-        {list && list.table && <>
-            <TableContainer component={Paper} className={'table-responsive'}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                <TableCell key={'header-col-' + columnIndex} 
-                                >
-                                    {column}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {list.table.canShowNoData() &&
-                            <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
-                        }
-                        {list?.table.data.map((row: any, rowIndex: any) => {
-                            const shift_date = CommonService.getUtcDate(row['shift_date'])
+            {list && list.table && <>
+                <TableContainer component={Paper} className={'table-responsive'}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {list?.table.matColumns.map((column: any, columnIndex: any) => (
+                                    <TableCell key={'header-col-' + columnIndex}
+                                    >
+                                        {column}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {list.table.canShowNoData() &&
+                                <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
+                            }
+                            {list?.table.data.map((row: any, rowIndex: any) => {
+                                const shift_date = CommonService.getUtcDate(row['shift_date'])
 
-                            return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
-                                    <TableCell>
-                                        {moment(row['created_at']).format("MM-DD-YYYY")}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row['facility']?.facility_name}
-                                    </TableCell>
-                                    <TableCell>
-                                        {shift_date}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row['hcp_data']?.hcp_type}
-                                    </TableCell>
-                                    <TableCell>
-                                        {row['shift_type']}
-                                    </TableCell>
-                                    <TableCell className='action-wrapper'>
-                                        <div className="d-flex actions">
-                                            <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'])} disabled={row['status'] === "rejected"}>
-                                                <CheckIcon className="add-icon" />
-                                            </IconButton>
-                                            <IconButton  onClick={()=>openRejectApplication(row['requirement_id'],row['_id'])} disabled={row['status'] === "rejected"}>
-                                                <CancelIcon className="delete-icon" />
-                                            </IconButton>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-                <TablePagination
-                    rowsPerPageOptions={list.table.pagination.pageSizeOptions}
-                    component='div'
-                    count={list?.table.pagination.totalItems}
-                    rowsPerPage={list?.table.pagination.pageSize}
-                    page={list?.table.pagination.pageIndex}
-                    onPageChange={(event, page) => list.table.pageEvent(page)}
-                    onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
-                />
-            </TableContainer>
-        </>}
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
+                                        <TableCell>
+                                            {moment(row['created_at']).format("MM-DD-YYYY")}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row['facility_name']}
+                                        </TableCell>
+                                        <TableCell>
+                                            {shift_date}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row['hcp_data']?.hcp_type}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row['shift_type']}
+                                        </TableCell>
+                                        <TableCell  className={`captalize ${row['status']}`}>
+                                            {row['status']}
+                                        </TableCell>
+                                        <TableCell className='action-wrapper'>
+                                            <div className="d-flex actions">
+                                                <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'],row['requirement_id'])} disabled={row['status'] !== "pending"}>
+                                                    <CheckIcon className={row['status']==="pending"?"add-icon":""} />
+                                                </IconButton>
+                                                <IconButton onClick={() => openRejectApplication(row['requirement_id'], row['_id'])} disabled={row['status'] !== "pending"}>
+                                                    <CancelIcon className={row['status']==="pending"?"delete-icon":""} />
+                                                </IconButton>
+                                                <p onClick={()=>openView(row['requirement_id'],row['hcp_user_id'])} className='view-details-link'>view details</p>
+                                                </div>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        rowsPerPageOptions={list.table.pagination.pageSizeOptions}
+                        component='div'
+                        count={list?.table.pagination.totalItems}
+                        rowsPerPage={list?.table.pagination.pageSize}
+                        page={list?.table.pagination.pageIndex}
+                        onPageChange={(event, page) => list.table.pageEvent(page)}
+                        onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
+                    />
+                </TableContainer>
+            </>}
+        </div>
     </div>
-</div>
 }
 
 export default PendingShiftsListScreen;

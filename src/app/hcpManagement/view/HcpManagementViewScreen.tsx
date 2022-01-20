@@ -133,14 +133,6 @@ const HcpManagementViewScreen = () => {
         init()
     }, [init])
 
-    // const handleRejectHcp = useCallback(() => {
-    //     CommonService._api.patch(ENV.API_URL + 'hcp/' + id + '/reject').then((resp) => {
-    //         init()
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-    // }, [init, id])
-
     return (
         <div className="pdd-30 screen crud-layout">
             {isLoading && (

@@ -113,6 +113,9 @@ const ApprovedShiftsListScreen = () => {
                 payload.start_date = startDate
                 payload.end_date = endDate
             }
+        }else{
+            let today = moment(new Date()).format("YYYY-MM-DD")
+            url=url+'?new_shifts=' + today;
         }
 
         if (selectedTimeTypes.length > 0) {
