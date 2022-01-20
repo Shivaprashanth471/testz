@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
-import { CircularProgress } from "@material-ui/core";
 import moment from 'moment';
 import './ConflictResolutionViewScreen.scss';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const ConflictResolutionViewScreen = () => {
     const param = useParams<any>()
@@ -33,12 +33,13 @@ const ConflictResolutionViewScreen = () => {
 
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
 
     return <div className="shift-cancelled-view screen crud-layout pdd-30">
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className="facility-details">
                 <h2>Reason For Cancellation</h2>

@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import './ClosedShiftsViewScreen.scss';
 import { useParams } from "react-router-dom";
-import { Avatar, CircularProgress } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import moment from 'moment';
 import { Button } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import DialogComponent from '../../../../components/DialogComponent';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CustomPreviewFile from '../../../../components/shared/CustomPreviewFile';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const ClosedShiftsViewScreen = () => {
     const param = useParams<any>()
@@ -63,15 +64,15 @@ const ClosedShiftsViewScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
 
     return <div className="shift-closed-view screen crud-layout pdd-30">
         <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
             <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
         </DialogComponent>
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className="pdd-0 custom-border">
                 <div className="d-flex pdd-20 hcp-photo-details-wrapper">
@@ -200,8 +201,8 @@ const ClosedShiftsViewScreen = () => {
                                             <div>
                                                 <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
                                                 <div className='d-flex'>
-                                                {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
-                                                <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
+                                                    {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
+                                                    <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
                                                 </div>
                                             </div>
                                         </div>
