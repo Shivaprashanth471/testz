@@ -1,11 +1,14 @@
-.cancelled-shifts{
-    margin: auto;
-    text-align: center;
-    margin-top: 80px;
-    .last-row {
-		border-radius: 0px 5px 5px 0px;
-	}
-	.first-row {
-		border-radius: 5px 0px 0px 5px;
-	}
+.cancelled-shifts {
+  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 2px !important;
+  }
+  margin: auto;
+  text-align: center;
+  margin-top: 80px;
+  .last-row {
+    border-radius: 0px 5px 5px 0px;
+  }
+  .first-row {
+    border-radius: 5px 0px 0px 5px;
+  }
 }

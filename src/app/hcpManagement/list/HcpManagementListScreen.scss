@@ -1,24 +1,25 @@
 @import "src/assets/scss/common";
 
 .hcp-list {
-	.MuiPaper-elevation1 {
-		box-shadow: none !important;
-	}
-   .filter-icon{
-       font-size: 2rem;
-       color:$light-black;
-   }
-	.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
-		padding: 2px !important;
-	}
-	.text-right{
-		text-align: right !important;
-		padding-right: 20px !important;
-	}
-	.last-row{
-		border-radius: 0px 5px 5px 0px;
-	}
-	.first-row{
-	 border-radius: 5px 0px 0px 5px;
-	}
+  .MuiPaper-elevation1 {
+    box-shadow: none !important;
+  }
+  .filter-icon {
+    font-size: 2rem;
+    color: $light-black;
+  }
+  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 2px !important;
+  }
+
+  .text-right {
+    text-align: right !important;
+    padding-right: 20px !important;
+  }
+  .last-row {
+    border-radius: 0px 5px 5px 0px;
+  }
+  .first-row {
+    border-radius: 5px 0px 0px 5px;
+  }
 }

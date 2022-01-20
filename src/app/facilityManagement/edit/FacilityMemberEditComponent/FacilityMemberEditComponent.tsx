@@ -68,11 +68,12 @@ const FacilityMemberEditComponent = ({
     };
 
     onAddMember(newMember)
-      .then(() => getFacilityMembers())
-      .catch((err: any) => console.log(err));
-
-    resetForm();
-    setIsMembers(false)
+      .then(() => {
+        getFacilityMembers();
+        setIsMembers(false);
+        resetForm();
+      })
+      .catch((err: any) => { console.log(err) });
   };
 
   const handleDeleteClick = useCallback((memberId: number) => {
