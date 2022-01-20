@@ -1,4 +1,4 @@
-import { Button, LinearProgress, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -15,6 +15,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import AccessControlComponent from '../../../components/AccessControl';
+import LoaderComponent from "../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
@@ -116,9 +117,8 @@ const HcpManagementListScreen = () => {
         <>
             <div className={'hcp-list screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
-
                 <HcpFiltersComponent
                     resetFilters={resetFilters}
                     hcpTypes={hcpTypes}
