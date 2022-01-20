@@ -4,6 +4,7 @@
   .form-field-wrapper {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .form-field-left {
       width: 80%;
@@ -90,7 +91,7 @@
     font-size: 16px;
     padding: 0.25rem 0.8rem;
     width: 100%;
-    height: 3.5rem;
+    height: 2.6rem;
     border: 0.5px solid lightgray;
     border-radius: 4px;
   }
@@ -98,7 +99,7 @@
   .date-icon {
     float: right;
     margin-right: 6px;
-    margin-top: -2.5rem;
+    margin-top: -2.1rem;
     position: relative;
     z-index: 5;
   }

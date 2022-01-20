@@ -23,6 +23,8 @@ import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import { StateParams } from '../../../store/reducers';
 import HcpFiltersComponent from "../filters/HcpFiltersComponent";
+import './HcpApprovedListScreen.scss';
+
 
 const CssTextField = withStyles({
     root: {

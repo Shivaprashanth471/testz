@@ -261,10 +261,11 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                             }}
                             isClearable={true}
                         />
+                        {
+                            (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
+                        }
                     </label>
-                    {
-                        (!dateRange[0] && !dateRange[1]) && <DateRangeOutlined className='date-icon' fontSize='medium' color='action' />
-                    }
+
                 </div>
             </div>
 

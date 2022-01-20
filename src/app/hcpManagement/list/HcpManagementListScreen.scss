@@ -8,6 +8,9 @@
     font-size: 2rem;
     color: $light-black;
   }
+  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+    padding: 2px !important;
+  }
 
   .text-right {
     text-align: right !important;
