@@ -498,6 +498,7 @@ const AddHcpComponent = () => {
           size="large"
           variant={"contained"}
           color={"primary"}
+          className={isHcpSubmitting ? 'has-loading-spinner' : ''}
         >
           {isHcpSubmitting ? "Saving" : "Save"}
         </Button>

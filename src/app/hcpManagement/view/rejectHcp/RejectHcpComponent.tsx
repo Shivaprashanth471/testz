@@ -120,8 +120,12 @@ const RejectHcpComponent = (props: PropsWithChildren<RejectHcpComponentProps>) =
                       <Button onClick={() => cancel(resetForm)} color="secondary" id="btn_back_application" variant={"outlined"} className='pdd-left-30 pdd-right-30'>
                           {'Back'}
                       </Button>
-                      <Button type={"submit"} id="btn_reject_application" className={"submit"} disabled={isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
-                          {'Reject'}
+                      <Button type={"submit"}
+                       id="btn_reject_application" 
+                       disabled={isSubmitting || !isValid} 
+                       className={isSubmitting ? 'submit has-loading-spinner' : 'submit'}
+                       variant={"contained"} color="primary" autoFocus>
+                           { isSubmitting ? "Rejecting" : "Reject" }
                       </Button>
                   </DialogActions>
               </Form>)}

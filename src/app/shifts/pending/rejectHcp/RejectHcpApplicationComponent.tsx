@@ -1,14 +1,13 @@
 import React, { PropsWithChildren } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import { ENV } from '../../../../../constants';
-import { CommonService } from '../../../../../helpers';
-//import { useParams } from 'react-router';
+import { ENV } from '../../../../constants';
+import { CommonService } from '../../../../helpers';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-// import { useSelector } from 'react-redux';
-// import { StateParams } from '../../../../../store/reducers';
+import { useSelector } from 'react-redux';
+import { StateParams } from '../../../../store/reducers';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { RadioGroup } from 'formik-material-ui';
 import { TextField } from "formik-material-ui";
@@ -22,6 +21,8 @@ const formValidation = Yup.object({
 export interface RejectHcpApplicationComponentProps {
     cancel: () => void,
     confirm: () => void,
+    requirementId:any,
+    applicationId:any
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,16 +47,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplicationComponentProps>) => {
-   // const params = useParams<{ id: string }>();
-  //  const { id } = params;
     const afterCancel = props?.cancel;
     const afterConfirm = props?.confirm;
+    const applicationId = props?.applicationId;
+    const requirementId = props?.requirementId;
     const classes = useStyles();
-  //  const { user } = useSelector((state: StateParams) => state.auth);
+    const { user } = useSelector((state: StateParams) => state.auth);
     const reasonsList = ["Details don't match with the requirement", "Least rated", "Need more experienced", "HCP requested not to approve", "Not ready wo work in hazardous zone"]
-
+  
     const onAdd = (payload: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
-        CommonService._api.post(ENV.API_URL + 'shift', payload).then((resp) => {
+         payload = { 
+             ...payload,
+             "rejected_by": user?._id
+         }
+        CommonService._api.patch(ENV.API_URL + 'shift/requirement/' + requirementId + '/application/' + applicationId + '/reject', payload).then((resp) => {
             setSubmitting(false);
             if (afterConfirm) {
                 afterConfirm();

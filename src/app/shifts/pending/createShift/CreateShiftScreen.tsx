@@ -6,9 +6,9 @@ import React, { PropsWithChildren, useCallback, useEffect, useState } from 'reac
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import * as Yup from "yup";
-import { ENV } from '../../../../../../constants';
-import { ApiService, CommonService } from '../../../../../../helpers';
-import { StateParams } from '../../../../../../store/reducers';
+import { ENV } from '../../../../constants';
+import { ApiService, CommonService } from '../../../../helpers';
+import { StateParams } from '../../../../store/reducers';
 import './CreateShiftScreen.scss'
 
 
@@ -228,8 +228,8 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
                                     size="large"
                                     id="btn_hcp_edit_submit"
                                     variant={"contained"}
-                                    className={"normal"}
-                                    color={"primary"}>CREATE</Button>
+                                    className={isSubmitting ?"normal has-loading-spinner":"normal"}
+                                    color={"primary"}>{!isSubmitting?"CREATE":"CREATING"}</Button>
                             </div>
                         </Form>)}
                 </Formik>

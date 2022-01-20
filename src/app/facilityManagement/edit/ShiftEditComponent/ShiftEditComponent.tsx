@@ -29,6 +29,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   const [isShifts, setIsShifts] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [shiftId, setShiftId] = useState<any>(null);
+  const [isConfirm,setIsConfirm] = useState<boolean>(false);
   const [addFormData, setAddFormData] = useState<any>({
     shiftStartTime: "",
     shiftEndTime: "",
@@ -101,16 +102,19 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   };
 
   const handleDeleteClick = useCallback((shiftId: number) => {
+    setIsConfirm(true)
     ApiService.delete(
       ENV.API_URL + "facility/" + facilityId + "/shift/" + shiftId
     )
       .then((resp: any) => {
         CommonService.showToast('Facility Shift Timing Deleted', 'error')
         getShiftDetails();
+        setIsConfirm(true)
         setIsAddOpen(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [facilityId, getShiftDetails])
 
@@ -137,7 +141,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   return (
     <div className="shift-add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Shift'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent cancel={cancelAdd} isConfirm={isConfirm} confirm={confirmAdd} text1='Want to delete' hcpname={'Shift'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {shiftTimings.length > 0 && (
         <Table className="mrg-top-50">

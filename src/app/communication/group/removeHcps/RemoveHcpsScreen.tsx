@@ -18,9 +18,10 @@ const RemoveHcpsScreen = () => {
     const params = useParams<{ id: string }>();
     const { id } = params;
     const history = useHistory();
-    const [selectedHcps, setSelectedHcps] = React.useState<any>(null)
-    const [isAllselected, setAllSelected] = React.useState<boolean>(false);
+    const [selectedHcps, setSelectedHcps] = useState<any>(null)
+    const [isAllselected, setAllSelected] = useState<boolean>(false);
     const [groupDetails, setGroupDetails] = useState<any>(null);
+    const [isRemoveMembers,setIsRemoveMembers] = useState<boolean>(false);
 
     const init = useCallback(() => {
         if (!list) {
@@ -37,15 +38,19 @@ const RemoveHcpsScreen = () => {
     const RemoveHcpsToGroup = useCallback((hcp: any) => {
         delete hcp["checked"];
         return new Promise((resolve, reject) => {
+            setIsRemoveMembers(true)
             ApiService.delete(ENV.API_URL + 'group/' + id + '/member/' + hcp?._id).then((resp: any) => {
                 if (resp && resp.success) {
                     resolve(null);
                     history.push('/group/view/' + id);
+                    setIsRemoveMembers(false)
                 } else {
                     reject(resp);
+                    setIsRemoveMembers(false)
                 }
             }).catch((err) => {
                 reject(err);
+                setIsRemoveMembers(false)
             })
         })
     }, [history, id])
@@ -74,6 +79,8 @@ const RemoveHcpsScreen = () => {
     }
 
     const handleRemoveMembers = useCallback(() => {
+        setIsRemoveMembers(true);
+
         (selectedHcps || []).forEach((value: any) => {
             if (value?.checked === true) {
                 RemoveHcpsToGroup(value)
@@ -176,7 +183,7 @@ const RemoveHcpsScreen = () => {
                         color="secondary"
                         className="cancel"
                         id="btn_hcp_edit_cancel">Cancel</Button>
-                    <Button variant={"contained"} className="actions" onClick={handleRemoveMembers} color={"primary"}>Remove Members</Button>
+                    <Button variant={"contained"} disabled={isRemoveMembers} className={isRemoveMembers?"actions has-loading-spinner":"actions"} onClick={handleRemoveMembers} color={"primary"}>{isRemoveMembers?"Removing Members":"Remove Members"}</Button>
                    </div>
                 </div>
             </div>

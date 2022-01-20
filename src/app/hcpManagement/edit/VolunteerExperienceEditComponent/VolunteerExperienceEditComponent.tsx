@@ -62,6 +62,7 @@ const VolunteerExperienceAddComponent = ({
   const [showEndDate, setShowEndDate] = useState<boolean>(true);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [vExperienceId, setVExperience] = useState<any>(null);
+  const [isConfirm,setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     experience: ExperienceItem,
@@ -99,16 +100,19 @@ const VolunteerExperienceAddComponent = ({
   };
 
   const handleDeleteClick = useCallback((experienceId: number) => {
+    setIsConfirm(true)
     ApiService.delete(
       ENV.API_URL + "hcp/" + hcpId + "/experience/" + experienceId
     )
       .then((resp: any) => {
         getExperienceDetails();
+        setIsConfirm(false)
         setIsAddOpen(false);
         CommonService.showToast(resp?.msg || 'hcp volunteer experience deleted', 'error')
       })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [getExperienceDetails, hcpId])
 
@@ -130,7 +134,7 @@ const VolunteerExperienceAddComponent = ({
   return (
     <div className="add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Volunteer Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Volunteer Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {experiences.length > 0 && (
         <Table className="mrg-top-50">

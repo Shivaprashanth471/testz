@@ -290,7 +290,7 @@ const FacilityManagementAddScreen = () => {
           type="submit"
           size="large"
           variant={"contained"}
-          className="pdd-left-30 pdd-right-30"
+          className={isFacilitySubmitting ? 'pdd-left-30 pdd-right-30 has-loading-spinner' : 'pdd-left-30 pdd-right-30'}
           color={"primary"}
           id='btn_facility_add_submit'
         >

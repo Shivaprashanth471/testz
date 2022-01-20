@@ -23,13 +23,17 @@ const AddHcpToExistingGroupScreen = () => {
     const [groupDetails, setGroupDetails] = useState<any>(null);
     const history = useHistory();
     const [groupHcps, setGroupHcps] = useState<any>(null);
-    const [finalHcps, setFinalHcps] = useState<any>(null)
+    const [finalHcps, setFinalHcps] = useState<any>(null);
+    const [isMembersAdded,setIsMembersAdded] = useState<boolean>(false)
     const init = useCallback(() => {
+        let payload: any = {}
+        payload.is_approved = 1;
         if (!list) {
             const options = new TsDataListOptions({
+                extraPayload: payload,
                 webMatColumns: ['HCP Name', 'HCP Type', 'Actions'],
                 mobileMatColumns: ['HCP Name', 'HCP Type', 'Actions'],
-            }, ENV.API_URL + 'hcp?is_approved=1', setList, ApiService, 'get');
+            }, ENV.API_URL + "hcp/list", setList, ApiService, 'post');
 
             let tableWrapperObj = new TsDataListWrapperClass(options)
             setList({ table: tableWrapperObj });
@@ -74,12 +78,15 @@ const AddHcpToExistingGroupScreen = () => {
     const AddHcpsToGroup = useCallback((hcp: any, group_id: any) => {
         delete hcp["checked"];
         return new Promise((resolve, reject) => {
+            setIsMembersAdded(true)
             ApiService.post(ENV.API_URL + 'group/' + group_id + '/member', hcp).then((resp: any) => {
                 if (resp && resp.success) {
                     resolve(null);
                     history.push('/group/view/' + group_id);
+                    setIsMembersAdded(false)
                 } else {
                     reject(resp);
+                    setIsMembersAdded(false)
                 }
             }).catch((err) => {
                 reject(err);
@@ -166,9 +173,6 @@ const AddHcpToExistingGroupScreen = () => {
                 </div>
                 <div>
                     <div className="header mrg-top-0">
-                        {/* <div className="filter">
-                            Title:{groupDetails?.title}
-                        </div> */}
                         <div className="actions">
                             <div className="">
 
@@ -227,7 +231,8 @@ const AddHcpToExistingGroupScreen = () => {
             </div>
             <div className="button-wrapper">
                 <Button component={Link} variant={"outlined"} className={'normal pdd-left-40 pdd-right-40'} to={'/group/view/' + id} color={"primary"}>Back</Button>
-                <Button variant={"contained"} color={"primary"} className="add-button mrg-left-20" onClick={onAdd}>Add Members</Button>
+                <Button variant={"contained"} color={"primary"} className={isMembersAdded?"add-button mrg-left-20 has-loading-spinner":"add-button mrg-left-20"} onClick={onAdd} disabled={isMembersAdded}>
+                {isMembersAdded ?"Adding Members":"Add Members"}</Button>
             </div>
         </div>
     </>

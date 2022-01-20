@@ -17,7 +17,7 @@ import EmailIcon from '@material-ui/icons/Email';
 let isEmail=new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,63}$')
 
 const loginFormValidation = Yup.object({
-  email: Yup.string().matches(isEmail,"Email").required("Required"),
+  email: Yup.string().matches(isEmail,"Email is required").required("Required"),
   password: Yup.string().required("Required").min(6, "Password should be minimum 6 characters"),
 });
 
@@ -117,14 +117,6 @@ const LoginScreen = (props: any) => {
                 </IconButton>
               </div>
             </div>
-
-            {/* <div className="form-link">
-              <div className="forgot-password-holder" id="link_forgot_password">
-                <Link className="forgot-password-wrapper" to="/forgot-password">
-                  Forgot Password ?
-                </Link>
-              </div>
-            </div> */}
             <div className="form-field mrg-top-40 position-relative">
               <Button
                 disabled={isSubmitting || !isValid}

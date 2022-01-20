@@ -4,7 +4,6 @@ import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { Button, CircularProgress, DialogActions } from "@material-ui/core";
-// import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import CustomPreviewFile from '../../../../components/shared/CustomPreviewFile';
@@ -93,7 +92,7 @@ const ShiftMasterViewScreen = () => {
                 }
             };
             uploadWrapper.onProgress = (progress) => {
-                // console.log('progress', progress);
+               
             };
             setFileUpload(prevState => {
                 let state: TsFileUploadWrapperClass[] = [];
@@ -103,7 +102,6 @@ const ShiftMasterViewScreen = () => {
                 const newState = [...state, uploadWrapper];
                 return { wrapper: newState };
             });
-            // uploadWrapper.startUpload();
         }
     }
 
@@ -352,33 +350,6 @@ const ShiftMasterViewScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-
-                {/* <div className="feedback-rating-wrapper mrg-top-0">
-                    <br />
-                    <h3>Feedback:</h3>
-                    <div className="d-flex">
-                        {
-                            [1, 2, 3, 4, 5]?.map((item: any, index: any) => {
-                                return (
-                                    <div className="mrg-right-15" key={index}><StarBorderIcon color={"primary"} /></div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="mrg-top-20">
-                        <TextField
-                            placeholder="Please write your review here.."
-                            variant='outlined'
-                            color={"primary"}
-                            type={"text"}
-                            name="shift_details"
-                            disabled
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                    </div>
-                </div> */}
             </div>
             <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="mrg-top-20">
@@ -435,7 +406,7 @@ const ShiftMasterViewScreen = () => {
                         basicDetails?.shift_status === "complete" &&
                         <Button
                             type={"submit"}
-                            className={"submit"}
+                            className={isTimeSheetBeingUpdated ?"submit has-loading-spinner" :"submit"}
                             variant={"contained"}
                             color="primary"
                             autoFocus

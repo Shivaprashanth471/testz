@@ -285,7 +285,7 @@ const ShiftsMasterListScreen = () => {
                                             <TableCell>
                                                 {row['shift_type']}
                                             </TableCell>
-                                            <TableCell className={row['shift_status']}>
+                                            <TableCell className={`captalize ${row['shift_status']}`}>
                                                 {row['shift_status']}
                                             </TableCell>
                                             <TableCell>

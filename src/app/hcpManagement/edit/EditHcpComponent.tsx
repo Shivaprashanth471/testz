@@ -776,6 +776,7 @@ const EditHcpComponent = () => {
             id="btn_hcp_edit_submit"
             variant={"contained"}
             color={"primary"}
+            className={isHcpSubmitting ? 'has-loading-spinner' : ''}
           >
             {isHcpSubmitting ? "Saving" : "Save"}
           </Button>

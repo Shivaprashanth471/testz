@@ -616,8 +616,9 @@ const AddShiftsScreen = () => {
               size="large"
               variant={"contained"}
               color={"primary"}
+              className={doubleClick?'has-loading-spinner':""}
             >
-              Save Requirement
+              {doubleClick?"Saving Requirement":"Save Requirement"}
             </Button>
           </div>
         }

@@ -12,6 +12,7 @@ export interface VitawerksConfirmComponentProps {
     text1: string;
     hcpname: string;
     groupname: string;
+    isConfirm :boolean;
 }
 
 const VitawerksConfirmComponent = (props: PropsWithChildren<VitawerksConfirmComponentProps>) => {
@@ -26,7 +27,7 @@ const VitawerksConfirmComponent = (props: PropsWithChildren<VitawerksConfirmComp
             <Button onClick={props?.cancel} variant={"outlined"} color={'primary'} className='pdd-left-25 pdd-right-25'>
                 {props?.notext || 'No, Cancel'}
             </Button>
-            <Button onClick={props?.confirm} variant={"contained"} color={'primary'}>
+            <Button onClick={props?.confirm} variant={"contained"} color={'primary'} disabled={props?.isConfirm} className={props?.isConfirm?'has-loading-spinner':''}>
                 {props?.yestext || 'Yes, Confirm'}
             </Button>
         </DialogActions>

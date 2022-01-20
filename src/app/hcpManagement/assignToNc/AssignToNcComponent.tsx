@@ -150,7 +150,7 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
             </RadioGroup>
             <div className={classes.assignNcActions}>
                 <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
-                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={'normal mrg-left-30'} disabled={selectedValue === '' || isApproved} onClick={() => assignToNc()}>Save</Button>
+                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={isApproved?'normal mrg-left-30 has-loading-spinner':'normal mrg-left-30'} disabled={selectedValue === '' || isApproved} onClick={() => assignToNc()}>{!isApproved?"Save":"Saving"}</Button>
             </div>
         </div>
     </div>;

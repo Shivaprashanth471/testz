@@ -1,17 +1,12 @@
-@import "src/assets/scss/common";
-
-.pending-shifts {
-	.MuiPaper-elevation1 {
-		box-shadow: none !important;
-	}
-	.filter-icon {
-		font-size: 2rem;
-		color: $light-black;
-	}
-	.last-row {
-		border-radius: 0px 5px 5px 0px;
-	}
-	.first-row {
-		border-radius: 5px 0px 0px 5px;
-	}
+.pending-hcps-list{
+    .text-right{
+        text-align: right !important;
+        padding-right: 40px !important;
+    }
+    .action-wrapper{
+        margin: auto;
+        .actions{
+            margin-right: 20px !important;
+        }
+    }
 }

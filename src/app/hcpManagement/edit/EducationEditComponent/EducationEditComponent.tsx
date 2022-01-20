@@ -52,7 +52,7 @@ const EducationAddComponent = ({
   const [isEducation, setIsEducation] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [educationId, setEducationId] = useState<any>(null);
-
+  const [isConfirm,setIsConfirm] = useState<boolean>(false);
   const onAdd = (
     education: EducationItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<EducationItem>
@@ -82,16 +82,19 @@ const EducationAddComponent = ({
   };
 
   const handleDeleteClick = useCallback((educationId: number) => {
+    setIsConfirm(true)
     ApiService.delete(
       ENV.API_URL + "hcp/" + hcpId + "/education/" + educationId
     )
       .then((resp: any) => {
         getEducationDetails();
         CommonService.showToast(resp?.msg || 'hcp education deleted', 'error')
+        setIsConfirm(false)
         setIsAddOpen(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [getEducationDetails, hcpId])
 
@@ -116,7 +119,7 @@ const EducationAddComponent = ({
   return (
     <div className="add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Education'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Education'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {education.length > 0 && (
         <Table className="mrg-top-50 border">

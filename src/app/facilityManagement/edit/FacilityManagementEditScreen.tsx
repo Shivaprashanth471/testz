@@ -349,11 +349,11 @@ const FacilityManagementEditScreen = () => {
           type="submit"
           size="large"
           variant={"contained"}
-          className="pdd-left-30 pdd-right-30"
           color={"primary"}
+          className={facilitySubmitting ? 'has-loading-spinner pdd-left-30 pdd-right-30' : 'pdd-left-30 pdd-right-30'}
           id='btn_facility_edit_submit'
         >
-          Save
+          {facilitySubmitting ? "Saving" : "Save"}
         </Button>
       </div>
       <ScrollToTop smooth color="white" />

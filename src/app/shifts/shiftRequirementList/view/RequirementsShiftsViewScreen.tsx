@@ -5,10 +5,9 @@ import { Button, CircularProgress } from "@material-ui/core";
 import DialogComponent from "../../../../components/DialogComponent";
 import { Tab, Tabs } from '@material-ui/core';
 import "./RequirementsShiftsViewScreen.scss";
-import AddHcpToShiftScreen from '../../pending/AddHcpToShift/AddHcpToShiftScreen';
+import AddHcpToShiftScreen from '../view/AddHcpToShift/AddHcpToShiftScreen';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import PendingHcpApplicationComponent from './pending/PendingHcpApplicationComponent';
 import ApprovedHcpApplicationComponent from './approved/ApprovedHcpApplicationComponent';
 import UnApprovedHcpApplicationComponent from './unapproved/UnApprovedHcpApplicationComponent';
 import RelatedShiftsComponent from './relatedShifts/RelatedShiftsComponent';
@@ -18,7 +17,7 @@ import RejectShiftRequirementComponent from '../rejectShiftRequirement/RejectShi
 const RequirementsShiftsViewScreen = () => {
     const param = useParams<any>()
     const { id } = param;
-    const [tabValue, setTabValue] = useState("pending");
+    const [tabValue, setTabValue] = useState("approved");
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
@@ -187,14 +186,12 @@ const RequirementsShiftsViewScreen = () => {
                         variant="fullWidth"
                         scrollButtons="auto"
                     >
-                        <Tab label="HCP's Pending" value={'pending'} />
                         <Tab label="HCP's Approved" value={"approved"} />
                         <Tab label="HCP's Unapproved" value={"rejected"} />
                         <Tab label="Related Shifts" value={"relatedShifts"} />
                     </Tabs>
                 </div>
                 <div className="mrg-top-10">
-                    {tabValue === "pending" && <PendingHcpApplicationComponent isAddOpen={isAddOpen} status={basicDetails?.status} />}
                     {tabValue === "approved" && <ApprovedHcpApplicationComponent isAddOpen={isAddOpen} />}
                     {tabValue === "rejected" && <UnApprovedHcpApplicationComponent isAddOpen={isAddOpen} />}
                     {tabValue === "relatedShifts" && <RelatedShiftsComponent isAddOpen={isAddOpen} />}
