@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import DialogComponent from "../../../../components/DialogComponent";
 import { Tab, Tabs } from '@material-ui/core';
 import "./RequirementsShiftsViewScreen.scss";
@@ -13,6 +13,7 @@ import UnApprovedHcpApplicationComponent from './unapproved/UnApprovedHcpApplica
 import RelatedShiftsComponent from './relatedShifts/RelatedShiftsComponent';
 import { AddRounded } from '@material-ui/icons';
 import RejectShiftRequirementComponent from '../rejectShiftRequirement/RejectShiftRequirementComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const RequirementsShiftsViewScreen = () => {
     const param = useParams<any>()
@@ -74,12 +75,11 @@ const RequirementsShiftsViewScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.shift_timings?.start_time, basicDetails?.shift_timings?.end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
 
     return <div className="pending-shifts-view screen crud-layout pdd-30">
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
 
         <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
             <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} />

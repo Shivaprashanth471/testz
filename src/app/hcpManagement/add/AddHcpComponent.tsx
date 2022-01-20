@@ -1,23 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import moment from "moment";
+import React, { useCallback, useEffect, useState } from "react";
 import 'react-phone-number-input/style.css';
 import { useHistory } from "react-router";
+import ScrollToTop from "react-scroll-to-top";
 import { TsFileUploadConfig, TsFileUploadWrapperClass } from '../../../classes/ts-file-upload-wrapper.class';
+import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import "./AddHcpComponent.scss";
+import { HcpItemAddType } from "./AddHcpValuesValidationsComponent";
+import AddHcpBasicDetailsComponent from "./BasicDetails/AddHcpBasicDetailsComponent";
 import EducationAddComponent from "./EducationAddComponent/EducationAddComponent";
 import ExperienceAddComponent from "./ExperienceAddComponent/ExperienceAddComponent";
 import ReferenceAddComponent from "./ReferenceAddComponent/ReferenceAddComponent";
 import VolunteerExperienceAddComponent from "./VolunteerExperienceAddComponent/VolunteerExperienceAddComponent";
-import ScrollToTop from "react-scroll-to-top";
-import DialogComponent from "../../../components/DialogComponent";
-import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
-import { HcpItemAddType } from "./AddHcpValuesValidationsComponent";
-import AddHcpBasicDetailsComponent from "./BasicDetails/AddHcpBasicDetailsComponent";
-import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 const AddHcpComponent = () => {
   const history = useHistory();
@@ -181,7 +182,7 @@ const AddHcpComponent = () => {
       let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
       let payload: any = {}
       payload = hcp
-     
+
       payload = {
         ...payload,
         professional_details: {
@@ -420,11 +421,8 @@ const AddHcpComponent = () => {
   }, [getRegions, getSpecialities, getHcpTypes]);
 
   if (specIsLoading || regIsLoading || hcpTypesLoading) {
-    return <div className="add-hcp screen">
-      <div className="view-loading-indicator">
-        <CircularProgress color="secondary" className="loader" />
-      </div>
-    </div>
+    return <LoaderComponent />
+
   }
 
   return !specIsLoading && !regIsLoading && !hcpTypesLoading && (<>

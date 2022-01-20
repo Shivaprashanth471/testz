@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Chip,
-  CircularProgress,
+  LinearProgress,
   Divider,
   InputAdornment, TextField as NormalTextField, Typography
 } from "@material-ui/core";
@@ -263,8 +263,8 @@ const SendSmsBlastScreen = (props: any) => {
   };
 
   const StyledLoader = () => {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <CircularProgress color="secondary" />
+    return <div >
+      <LinearProgress color="primary" />
     </div>
   }
 

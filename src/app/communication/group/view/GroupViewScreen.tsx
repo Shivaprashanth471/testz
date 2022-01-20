@@ -10,7 +10,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import { AddRounded, DeleteForeverOutlined } from "@material-ui/icons";
-import { Button, LinearProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Link, useParams, useHistory } from "react-router-dom";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from "@material-ui/core/IconButton";
@@ -20,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import DialogComponent from '../../../../components/DialogComponent';
 import VitawerksConfirmComponent from '../../../../components/VitawerksConfirmComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const GroupViewScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -147,7 +148,7 @@ const GroupViewScreen = () => {
         <>
             <div className={'group-view screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <DialogComponent open={isAddOpen} cancel={cancelAdd}>
                     <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Remove' hcpname={removeMemberDetails?.hcp_name} groupname={groupDetails?.title} confirmationText={'from'} notext={"Cancel"} yestext={"Remove"} isConfirm={isConfirmDelete}/>

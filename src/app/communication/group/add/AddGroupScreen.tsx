@@ -10,10 +10,11 @@ import TableRow from '@material-ui/core/TableRow';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
-import { Button, LinearProgress, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './AddGroupScreen.scss';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const AddGroupScreen = () => {
     const [list, setList] = useState<TsDataListState | any>(null);
@@ -126,7 +127,7 @@ const AddGroupScreen = () => {
         <>
             <div className={'add-group screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <div>
                     <div className="title custom-border pdd-top-20">

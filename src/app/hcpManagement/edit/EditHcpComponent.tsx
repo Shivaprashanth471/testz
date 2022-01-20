@@ -1,24 +1,25 @@
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import 'react-phone-number-input/style.css';
 import { useHistory } from "react-router";
 import { useParams } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
 import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../classes/ts-file-upload-wrapper.class";
+import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
+import { HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
+import EditHcpBasicDetailsComponent from "./BasicDetails/EditHcpBasicDetailsComponent";
 import "./EditHcpComponent.scss";
 import EducationAddComponent from "./EducationEditComponent/EducationEditComponent";
 import ExperienceEditComponent from "./ExperienceEditComponent/ExperienceEditComponent";
 import ReferenceAddComponent from "./ReferenceEditComponent/ReferenceEditComponent";
 import VolunteerExperienceEditComponent from "./VolunteerExperienceEditComponent/VolunteerExperienceEditComponent";
-import ScrollToTop from "react-scroll-to-top";
-import DialogComponent from "../../../components/DialogComponent";
-import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
-import { HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
-import EditHcpBasicDetailsComponent from "./BasicDetails/EditHcpBasicDetailsComponent";
-import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 
 const EditHcpComponent = () => {
   const user: any = localStorage.getItem("currentUser");
@@ -674,11 +675,7 @@ const EditHcpComponent = () => {
   }, [history, hcpDetails?.is_approved, hcpDetails?.user_id, id])
 
   if (isLoading || specIsLoading || regIsLoading || hcpTypesLoading || isAttachmentsLoading) {
-    return <div className="add-hcp screen">
-      <div className="view-loading-indicator">
-        <CircularProgress color="secondary" className="loader" />
-      </div>
-    </div>
+    return <LoaderComponent />
   }
 
 

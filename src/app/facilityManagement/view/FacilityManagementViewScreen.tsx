@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import './FacilityManagementViewScreen.scss';
-import { CommonService, Communications } from '../../../helpers';
-import { useParams } from "react-router-dom";
-import { ENV } from '../../../constants';
-import { CircularProgress } from "@material-ui/core";
-import moment from 'moment';
-import FacilityBasicDetailsComponent from './basicDetails/FacilityBasicDetailsComponent';
-import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NoDataToShowCardComponent from '../../../components/NoDataToShowCardComponent';
+import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
+import LoaderComponent from '../../../components/LoaderComponent';
+import NoDataToShowCardComponent from '../../../components/NoDataToShowCardComponent';
+import { ENV } from '../../../constants';
+import { CommonService, Communications } from '../../../helpers';
+import FacilityBasicDetailsComponent from './basicDetails/FacilityBasicDetailsComponent';
+import './FacilityManagementViewScreen.scss';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -75,11 +75,11 @@ const FacilityManagementViewScreen = () => {
     }, [init, getFacilityMembers, getShiftDetails, id])
 
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
     return <div className="pdd-30 screen">
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
         {!isLoading && (<div className="facility_view_details">
             <FacilityBasicDetailsComponent facilityDetails={facilityDetails} />
             <div className="basic_details custom-border mrg-top-10">

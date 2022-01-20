@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { LinearProgress, TextField, IconButton } from "@material-ui/core";
+import {  TextField, IconButton } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,12 +13,9 @@ import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-// import { StateParams } from '../../../../store/reducers';
-// import { useSelector } from 'react-redux';
-//import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
-//import DialogComponent from '../../../../components/DialogComponent';
+import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
@@ -128,7 +125,7 @@ const PendingShiftsListScreen = () => {
             <PendingSihftsViewComponent  cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId}/>
         </DialogComponent>
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
+            <LoaderComponent />
         </div>}
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">

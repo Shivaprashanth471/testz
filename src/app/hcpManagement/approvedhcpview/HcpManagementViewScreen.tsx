@@ -1,14 +1,15 @@
 // import HcpAssessmentRatingComponent from "./assessmentRatings/HcpAssessmentRatingComponent";
 // import HcpContractComponent from "./contract/HcpContractComponent";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
+import LoaderComponent from "../../../components/LoaderComponent";
 import { ENV } from "../../../constants";
 import { CommonService, Communications } from "../../../helpers";
 import HcpDetailsComponent from "./details/HcpDetailsComponent";
 import './HcpManagementViewScreen.scss';
-import ScrollToTop from "react-scroll-to-top";
 
 
 const HcpManagementViewScreen = () => {
@@ -43,13 +44,12 @@ const HcpManagementViewScreen = () => {
     //     })
     // }
 
+    if (isLoading && isAttachmentsLoading) {
+        return <LoaderComponent />
+    }
 
     return (
         <div className="pdd-30 screen crud-layout">
-            {isLoading && isAttachmentsLoading && (
-                <div className="view-loading-indicator">
-                    <CircularProgress color="secondary" className="loader" />
-                </div>)}
             {!isLoading && (<>
                 <div className="hcp_view_details">
                     <div className="d-flex profile-status-wrapper">

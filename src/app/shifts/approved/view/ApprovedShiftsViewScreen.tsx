@@ -4,10 +4,12 @@ import { CommonService, Communications } from '../../../../helpers';
 import './ApprovedShiftsViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { Avatar, Button, CircularProgress } from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
+// import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import RejectShiftComponent from '../rejectShift/RejectShiftComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const ApprovedShiftsViewScreen = () => {
     const param = useParams<any>()
@@ -53,14 +55,15 @@ const ApprovedShiftsViewScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
     return <div className="pending-shifts-view screen crud-layout pdd-30">
         <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
             <RejectShiftComponent cancel={cancelRejectShift} confirm={confirmRejectShift} />
         </DialogComponent>
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className="header">
                 <div className="filter"></div>
@@ -83,7 +86,7 @@ const ApprovedShiftsViewScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
+                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{ gap: "20px" }}>
                     <div className="flex-1">
                         <h4>Years Of Experience</h4>
                         <p>{basicDetails?.hcp_user?.experience ? basicDetails?.hcp_user?.experience + " Years" : "N/A"}</p>
