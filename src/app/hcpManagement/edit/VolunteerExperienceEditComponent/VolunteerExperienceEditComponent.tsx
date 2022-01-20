@@ -86,13 +86,13 @@ const VolunteerExperienceAddComponent = ({
     onAddExperience(newExperience).then((resp: any) => {
       getExperienceDetails();
       CommonService.showToast(resp?.msg || 'HCP volunteer experience added', 'info')
+        //clear state
+      resetForm();
+
+      //close form
+       handleCancelExperience()
     }).catch((err: any) => console.log(err));
 
-    //clear state
-    resetForm();
-
-    //close form
-    handleCancelExperience()
   };
 
   const handleCancelExperience = () => {
@@ -299,8 +299,9 @@ const VolunteerExperienceAddComponent = ({
                   <Button
                     color='primary'
                     variant='contained'
-                    type="submit" id="btn_hcp_edit_Vexperience_submit">
-                    Save
+                    type="submit" id="btn_hcp_edit_Vexperience_submit"
+                    className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                     {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

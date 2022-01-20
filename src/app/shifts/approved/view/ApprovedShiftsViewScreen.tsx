@@ -5,7 +5,6 @@ import './ApprovedShiftsViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import { Avatar, Button } from "@material-ui/core";
-// import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import RejectShiftComponent from '../rejectShift/RejectShiftComponent';

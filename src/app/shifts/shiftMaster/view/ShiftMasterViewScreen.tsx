@@ -364,7 +364,6 @@ const ShiftMasterViewScreen = () => {
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} />}
-                                        {/* <a href={item?.url} download>Download</a> */}
                                         </div>
                                     )
                                 })

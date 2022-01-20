@@ -4,7 +4,6 @@ import { CommonService, Communications } from '../../../../helpers';
 import './ShiftInprogressViewScreen.scss';
 import moment from 'moment';
 import { Avatar, Button } from "@material-ui/core";
-// import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import { Link, useParams } from 'react-router-dom';
 import LoaderComponent from '../../../../components/LoaderComponent';
@@ -164,31 +163,6 @@ const ShiftInprogressViewScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-                {/* <div className="feedback-rating-wrapper mrg-top-10">
-                    <h3>Feedback:</h3>
-                    <div className="d-flex">
-                        {
-                            [1, 2, 3, 4, 5]?.map((item: any, index: any) => {
-                                return (
-                                    <div className="mrg-right-15" key={index}><StarBorderIcon color={"primary"} /></div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="mrg-top-20">
-                        <TextField
-                            placeholder="Please write your review here.."
-                            variant='outlined'
-                            color={"primary"}
-                            type={"text"}
-                            name="shift_details"
-                            disabled
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                    </div>
-                </div> */}
             </div>
         </>)}
 

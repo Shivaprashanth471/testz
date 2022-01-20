@@ -38,7 +38,6 @@ const CssTextField = withStyles({
 
 const PendingShiftsListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-    // const { user } = useSelector((state: StateParams) => state.auth);
     const [isApproveOpen, setIsApproveOpen] = useState<boolean>(false);
     const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false);
     const [hcpId, setHcpId] = useState<string>('');

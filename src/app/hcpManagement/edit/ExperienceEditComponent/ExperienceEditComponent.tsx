@@ -89,11 +89,10 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
       .then((resp: any) => {
         getExperienceDetails()
         CommonService.showToast(resp?.msg || 'HCP experience added', 'info')
+        setIsExperiences(false);
+        resetForm();
       })
       .catch((err: any) => console.log(err));
-
-    resetForm();
-    setIsExperiences(false)
   };
 
   const handleDeleteClick = useCallback((experienceId: number) => {
@@ -320,8 +319,8 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                   >
                     Delete
                   </Button>
-                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit">
-                    Save
+                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit" className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                  {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

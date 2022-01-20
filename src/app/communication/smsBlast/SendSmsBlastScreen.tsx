@@ -452,10 +452,11 @@ const SMSBlastMessages = (props: any) => {
                   color={"primary"}
                   variant={"contained"}
                   id="sms_blast_button"
+                  className={isSubmitting?"has-loading-spinner":""}
                   type="submit"
                   size={"large"}
                 >
-                  Send Blast
+                 {isSubmitting ? "Sending Blast" :"Send Blast"}
                 </Button>
               </div>
             </Form>

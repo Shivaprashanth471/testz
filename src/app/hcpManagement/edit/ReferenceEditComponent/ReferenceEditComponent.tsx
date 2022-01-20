@@ -66,13 +66,10 @@ const ReferenceAddComponent = ({
       .then((resp: any) => {
         getReferenceDetails();
         CommonService.showToast(resp?.msg || 'HCP reference added', 'info')
-
+        resetForm();
+        handleCancelAdd()
       })
       .catch((err: any) => console.log(err));
-
-    resetForm();
-
-    handleCancelAdd()
   };
 
   const handleCancelAdd = () => {
@@ -210,8 +207,9 @@ const ReferenceAddComponent = ({
                     color='primary'
                     variant='contained'
                     type="submit"
-                    id="btn_hcp_edit_reference_submit">
-                    Save
+                    id="btn_hcp_edit_reference_submit"
+                    className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                     {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

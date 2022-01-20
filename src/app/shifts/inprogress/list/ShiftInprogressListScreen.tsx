@@ -218,10 +218,7 @@ const ShiftInprogressListScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
-
+           
                 </div>
             </div>
             {list && list.table && <>

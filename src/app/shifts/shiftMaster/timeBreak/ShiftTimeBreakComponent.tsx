@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-// import moment from 'moment';
 import { TimePicker } from '@material-ui/pickers';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
@@ -103,7 +102,6 @@ const ShiftTimeBreakComponent = (props: PropsWithChildren<ShiftTimeBreakComponen
                 "break_timings": data
             }
             CommonService._api.post(ENV.API_URL + 'shift/' + id + '/webBreak', payload).then((resp) => {
-                //setTimeout(() => afterConfirm(), 500)
                 setIsBreak(true)
             }).catch((err) => {
                 console.log(err)
