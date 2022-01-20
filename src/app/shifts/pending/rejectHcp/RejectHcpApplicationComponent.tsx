@@ -9,8 +9,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { useSelector } from 'react-redux';
 import { StateParams } from '../../../../store/reducers';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { RadioGroup } from 'formik-material-ui';
-import { TextField } from "formik-material-ui";
+import { InputBase, RadioGroup } from 'formik-material-ui';
 import { DialogActions, DialogContent } from '@material-ui/core';
 import * as Yup from "yup";
 
@@ -53,7 +52,7 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
     const requirementId = props?.requirementId;
     const classes = useStyles();
     const { user } = useSelector((state: StateParams) => state.auth);
-    const reasonsList = ["Details don't match with the requirement", "Least rated", "Need more experienced", "HCP requested not to approve", "Not ready wo work in hazardous zone"]
+    const reasonsList = ["Details don't match with the requirement", "Least rated", "Need more experienced", "HCP requested not to approve", "Not ready to work in hazardous zone"]
   
     const onAdd = (payload: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
          payload = { 
@@ -103,7 +102,7 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
                             </>
                         </Field>
                         <Field
-                            component={TextField}
+                           component={InputBase}
                             type={"text"}
                             name="reason"
                             fullWidth

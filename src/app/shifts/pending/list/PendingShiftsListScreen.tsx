@@ -106,6 +106,7 @@ const PendingShiftsListScreen = () => {
 
     const confirmRejectApplication = useCallback(() => {
         setIsRejectOpen(false)
+        init()
     }, [])
 
     useEffect(() => {
