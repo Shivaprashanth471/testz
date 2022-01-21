@@ -118,7 +118,7 @@ export const hcpFormValidation = Yup.object({
     .required("required"),
   hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
   gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(50, 'max limit 50'),
+  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(255, 'max limit 255'),
   address: Yup.object({
     street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
     city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
