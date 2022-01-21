@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import AccessControlComponent from '../../../components/AccessControl';
 import LoaderComponent from "../../../components/LoaderComponent";
-import LoaderText from "../../../components/LoaderText";
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
@@ -191,9 +190,6 @@ const HcpManagementListScreen = () => {
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }
 
-                                    {list.table._isDataLoading &&
-                                        <LoaderText />
-                                    }
                                     {list?.table.data.map((row: any, rowIndex: any) => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>

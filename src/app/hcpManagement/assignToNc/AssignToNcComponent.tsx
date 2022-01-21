@@ -13,6 +13,9 @@ import { TextField } from '@material-ui/core';
 import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
 import './AssignToNcComponent.scss';
+import LoaderComponent from '../../../components/LoaderComponent';
+import Lottie from 'react-lottie';
+import animationData from '../../../animations/no_data.json'
 
 export interface AssignToNcComponentProps {
     cancel: () => void,
@@ -52,6 +55,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const defaultOptions = {
+    animationData
+}
+
 const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>) => {
     const params = useParams<{ id: string }>();
     const { id } = params;
@@ -62,8 +69,10 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
     const [ncList, setNcList] = React.useState<any>(null);
     const [isApproved, setIsApproved] = React.useState(false);
     const [searchNc, setSearchNc] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const init = useCallback(() => {
+        setIsLoading(true)
         let url = ENV.API_URL + 'user/lite?role=nurse_champion'
         if (searchNc !== '') {
             url = ENV.API_URL + 'user/lite?role=nurse_champion&search=' + searchNc
@@ -71,8 +80,10 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
         // config
         CommonService._api.get(url).then((resp) => {
             setNcList(resp.data);
+            setIsLoading(false)
         }).catch((err) => {
             console.log(err)
+            setIsLoading(false)
         })
     }, [searchNc])
 
@@ -125,7 +136,7 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
                     <div className="d-flex">
                         <div className="d-flex position-relative">
                             <CssTextField defaultValue={''} onChange={event => { setSearchNc(event?.target?.value) }}
-                                className="searchField"  variant={"outlined"} size={"small"} type={'text'} placeholder={'Search NC'} value={searchNc}
+                                className="searchField" variant={"outlined"} size={"small"} type={'text'} placeholder={'Search NC'} value={searchNc}
                             />
                             {searchNc === '' ?
                                 <div className={"search_icon"}>
@@ -135,6 +146,11 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
                     </div>
                 </div>
             </div>
+            {
+                isLoading && <div className="mrg-top-10">
+                    <LoaderComponent position='block' />
+                </div>
+            }
             <RadioGroup
                 aria-label="gender"
                 defaultValue="female"
@@ -147,10 +163,23 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
                         )
                     })
                 }
+
+
             </RadioGroup>
+            {
+                !isLoading && ncList?.length === 0 && <div >
+                    <Lottie
+                        options={defaultOptions}
+                        width={300}
+                        height={300}
+                        speed={1}
+
+                    />
+                </div>
+            }
             <div className={classes.assignNcActions}>
                 <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
-                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={isApproved?'normal mrg-left-30 has-loading-spinner':'normal mrg-left-30'} disabled={selectedValue === '' || isApproved} onClick={() => assignToNc()}>{!isApproved?"Save":"Saving"}</Button>
+                <Button type={'submit'} size='large' color={"secondary"} variant={"contained"} className={isApproved ? 'normal mrg-left-30 has-loading-spinner' : 'normal mrg-left-30'} disabled={selectedValue === '' || isApproved} onClick={() => assignToNc()}>{!isApproved ? "Save" : "Saving"}</Button>
             </div>
         </div>
     </div>;
