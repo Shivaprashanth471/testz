@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import "./HcpDetailsComponent.scss";
-import { CommonService } from '../../../../helpers';
-import { ENV } from '../../../../constants';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import LoaderComponent from '../../../../components/LoaderComponent';
 import CustomFile from '../../../../components/shared/CustomFile';
+import { ENV } from '../../../../constants';
+import { CommonService } from '../../../../helpers';
 import HcpContractComponent from '../contract/HcpContractComponent';
-import { CircularProgress } from '@material-ui/core';
+import "./HcpDetailsComponent.scss";
 
 const HcpDetailsComponent = (props: any) => {
     const params = useParams<{ id: string }>();
@@ -60,8 +60,8 @@ const HcpDetailsComponent = (props: any) => {
     console.log(sortedAttachments)
 
     const StyledLoader = () => {
-        return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <CircularProgress color="secondary" />
+        return <div className='pdd-20' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LoaderComponent position='block' />
         </div>
     }
 

@@ -2,9 +2,7 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
-  LinearProgress,
-  Divider,
+  Chip, Divider,
   InputAdornment, TextField as NormalTextField, Typography
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/SearchOutlined';
@@ -13,6 +11,7 @@ import { TextField } from "formik-material-ui";
 import React, { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
 import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import GroupDetailsCardComponent from "./groupdetailsCard/GroupDetailsCardComponent";
@@ -264,7 +263,7 @@ const SendSmsBlastScreen = (props: any) => {
 
   const StyledLoader = () => {
     return <div >
-      <LinearProgress color="primary" />
+      <LoaderComponent position="block" />
     </div>
   }
 
@@ -452,11 +451,11 @@ const SMSBlastMessages = (props: any) => {
                   color={"primary"}
                   variant={"contained"}
                   id="sms_blast_button"
-                  className={isSubmitting?"has-loading-spinner":""}
+                  className={isSubmitting ? "has-loading-spinner" : ""}
                   type="submit"
                   size={"large"}
                 >
-                 {isSubmitting ? "Sending Blast" :"Send Blast"}
+                  {isSubmitting ? "Sending Blast" : "Send Blast"}
                 </Button>
               </div>
             </Form>
