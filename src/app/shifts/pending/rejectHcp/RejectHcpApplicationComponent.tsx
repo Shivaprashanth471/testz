@@ -61,12 +61,13 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
          }
         CommonService._api.patch(ENV.API_URL + 'shift/requirement/' + requirementId + '/application/' + applicationId + '/reject', payload).then((resp) => {
             setSubmitting(false);
+            CommonService.showToast(resp?.msg || "Success","success");
             if (afterConfirm) {
                 afterConfirm();
                 resetForm({})
             }
         }).catch((err) => {
-            CommonService.handleErrors(setErrors, err);
+            CommonService.showToast(err?.msg || "Error","error");
             setSubmitting(false);
         })
     }

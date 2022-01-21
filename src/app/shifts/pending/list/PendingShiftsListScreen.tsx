@@ -46,7 +46,7 @@ const PendingShiftsListScreen = () => {
 
     const init = useCallback(() => {
         let today = moment(new Date()).format("YYYY-MM-DD")
-        let url = 'shift/application?new_shifts=' + today
+        let url = 'shift/application?status=pending&new_shifts=' + today
 
         const options = new TsDataListOptions({
             webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
@@ -103,7 +103,8 @@ const PendingShiftsListScreen = () => {
 
     const confirmRejectApplication = useCallback(() => {
         setIsRejectOpen(false)
-    }, [])
+        init()
+    }, [init])
 
     useEffect(() => {
         init()

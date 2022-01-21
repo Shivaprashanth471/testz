@@ -38,7 +38,7 @@ const ShiftRequirementListScreen = () => {
     const [regions, setRegions] = useState<any>([])
 
     const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
-    const [statusType, setStatusType] = useLocalStorage<any | string>('statusType', '')
+    const [statusType, setStatusType] = useLocalStorage<any | string>('statusType', 'open')
     const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
     const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
