@@ -43,6 +43,7 @@ export interface ShiftFilterProps {
 
     dateRange: any;
     setDateRange: any;
+    isFacilityListLoading: boolean
 }
 
 const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
@@ -75,6 +76,8 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     const dateRange = props?.dateRange
     const setDateRange = props?.setDateRange
     const [startDate, endDate] = dateRange;
+
+    const isFacilityListLoading = props?.isFacilityListLoading
 
     const handleFacilityDelete = (chip: any) => {
         let filterdChips = selectedFaciltities?.filter((item: any) => item?._id !== chip)
@@ -114,6 +117,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
             <div className="form-field-left">
                 <div className="form-field-item">
                     <Autocomplete
+                        key={selectedRegion}
                         PaperComponent={({ children }) => (
                             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
                         )}
@@ -124,8 +128,10 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         id="input_select_regions"
                         className="mrg-top-10"
                         onChange={($event, value) => {
-                            setSelectedRegion(value?.code)
+
                             if (value) {
+                                console.log({ value });
+                                setSelectedRegion(value?.code)
                                 if (selectedRegion !== value?.code) {
                                     setSelectedFacilities([])
                                 }
@@ -134,12 +140,11 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                         }
                         renderInput={(params) => (
                             <TextField
-
                                 {...params}
                                 id='select_region'
                                 variant='outlined'
                                 placeholder='Select Region'
-                                value={selectedRegion}
+
                             />
                         )}
                     />
@@ -148,6 +153,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                 <div className="form-field-item">
 
                     <Autocomplete
+                        disabled={isFacilityListLoading}
                         className="mrg-top-10"
                         PaperComponent={({ children }) => (
                             <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
@@ -166,6 +172,11 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                             <TextField {...params} variant='outlined' placeholder="Select Facilities" />
                         )}
                     />
+                    {
+                        isFacilityListLoading && <div className="loading-text-wrapper">
+                            <span className='loading-text'>loading...</span>
+                        </div>
+                    }
                 </div>
 
                 <div className="form-field-item">
@@ -272,6 +283,13 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
 
         </div>
         <div className="custom-chips-wrapper">
+            {
+                selectedRegion && <p className="custom-chips">
+                    <Chip
+                        label={selectedRegion}
+                        onDelete={() => setSelectedRegion('')}
+                    /></p>
+            }
             {
                 selectedFaciltities && selectedFaciltities.length > 0 && <p className="custom-chips">{selectedFaciltities.map((data: any) => <Chip
                     key={data?._id}

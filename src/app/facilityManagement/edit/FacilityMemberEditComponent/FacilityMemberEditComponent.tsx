@@ -54,6 +54,7 @@ const FacilityMemberEditComponent = ({
   const [fieldType, setFieldType] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [facilityId, setFacilityId] = useState<any>(null);
+  const [isConfirm,setIsConfirm] = useState<boolean>(false)
 
   const onAdd = (
     member: MemberType,
@@ -77,14 +78,17 @@ const FacilityMemberEditComponent = ({
   };
 
   const handleDeleteClick = useCallback((memberId: number) => {
+    setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
       .then((resp: any) => {
         CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'error')
         getFacilityMembers();
         setIsAddOpen(false);
+        setIsConfirm(false)
       })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [getFacilityMembers, hcpId])
 
@@ -114,7 +118,7 @@ const FacilityMemberEditComponent = ({
   return (
     <div className="facility-add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Facility Member'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} isConfirm={isConfirm} text1='Want to delete' hcpname={'Facility Member'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {members.length > 0 && (
         <Table className="mrg-top-50">

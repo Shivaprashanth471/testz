@@ -1,28 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { Communications } from "../../../helpers";
-import './HcpManagementViewScreen.scss';
-import HcpDetailsComponent from "./details/HcpDetailsComponent";
 // import HcpAssessmentRatingComponent from "./assessmentRatings/HcpAssessmentRatingComponent";
-import { Button, CircularProgress } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import AccessControlComponent from "../../../components/AccessControl";
-import CommonService, { HUMANRESOURCE, ADMIN } from "../../../helpers/common-service";
-import DialogComponent from "../../../components/DialogComponent";
-import AssignToNcComponent from "../assignToNc/AssignToNcComponent";
-import { ENV } from "../../../constants";
+import { Button } from "@material-ui/core";
 import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
+import AccessControlComponent from "../../../components/AccessControl";
+import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
+import { ENV } from "../../../constants";
+import { Communications } from "../../../helpers";
+import CommonService, { ADMIN, HUMANRESOURCE } from "../../../helpers/common-service";
+import AssignToNcComponent from "../assignToNc/AssignToNcComponent";
+import HcpDetailsComponent from "./details/HcpDetailsComponent";
 import HcpEducationComponent from './education/HcpEducationComponent';
 import HcpExperienceComponent from './experience/HcpExperienceComponent';
-import HcpVolunteerExperienceComponent from './volunteerExperience/HcpVolunteerExperienceComponent';
+import './HcpManagementViewScreen.scss';
 import HcpReferenceComponent from './reference/HcpReferenceComponent';
-import ScrollToTop from "react-scroll-to-top";
 import RejectHcpComponent from "./rejectHcp/RejectHcpComponent";
+import HcpVolunteerExperienceComponent from './volunteerExperience/HcpVolunteerExperienceComponent';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -133,20 +134,12 @@ const HcpManagementViewScreen = () => {
         init()
     }, [init])
 
-    // const handleRejectHcp = useCallback(() => {
-    //     CommonService._api.patch(ENV.API_URL + 'hcp/' + id + '/reject').then((resp) => {
-    //         init()
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-    // }, [init, id])
+    if (isLoading) {
+        return <LoaderComponent />
+    }
 
     return (
         <div className="pdd-30 screen crud-layout">
-            {isLoading && (
-                <div className="view-loading-indicator">
-                    <CircularProgress color="secondary" className="loader" />
-                </div>)}
             {!isLoading && (<>
                 <DialogComponent open={isAddOpen} cancel={cancelAdd}>
                     <AssignToNcComponent cancel={cancelAdd} confirm={confirmAdd} />
@@ -230,7 +223,7 @@ const HcpManagementViewScreen = () => {
                     <div style={{ justifyContent: "center" }} className="mrg-top-50 d-flex button-wrapper">
                         <AccessControlComponent role={[HUMANRESOURCE, ADMIN]} >
                             {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"} onClick={openAdd} className="mrg-right-20">Approve</Button> : <></>}
-                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"}  className="mrg-right-20" onClick={openRejectHcp}>Reject</Button> : <></>}
+                            {hcpBasicDetails?.status === "pending" ? <Button variant={"outlined"} className="mrg-right-20" onClick={openRejectHcp}>Reject</Button> : <></>}
                         </AccessControlComponent>
                     </div>
                 </div>

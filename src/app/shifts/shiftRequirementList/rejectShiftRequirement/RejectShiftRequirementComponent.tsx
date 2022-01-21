@@ -121,8 +121,8 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
                         <Button variant='outlined' onClick={() => cancel(resetForm)} color="primary" id="btn_reject_application" className='pdd-left-30 pdd-right-30'>
                             {'Back'}
                         </Button>
-                        <Button type={"submit"} id="btn_reject_application" className={"submit"} disabled={isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
-                            {'Cancel Shift'}
+                        <Button type={"submit"} id="btn_reject_application"  className={isSubmitting ?"submit has-loading-spinner" :"submit"} disabled={isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
+                        {isSubmitting ?"Cancelling Shift":'Cancel Shift'}
                         </Button>
                     </DialogActions>
                 </Form>)}

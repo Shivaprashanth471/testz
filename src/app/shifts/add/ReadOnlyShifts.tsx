@@ -1,13 +1,9 @@
-import {
-    Button, TextField as NormalTextField
-} from "@material-ui/core";
+import {Button, TextField as NormalTextField} from "@material-ui/core";
 import moment from "moment";
 import React from "react";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import { CommonService } from "../../../helpers";
 import "./AddShiftsScreen.scss";
-
-
 
 interface readOnlyProps {
     mode: any;

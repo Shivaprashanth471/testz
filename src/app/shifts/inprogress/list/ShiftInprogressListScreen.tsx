@@ -1,4 +1,4 @@
-import { LinearProgress, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,6 +14,7 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
+import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -42,6 +43,8 @@ const ShiftInprogressListScreen = () => {
     const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
+
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
 
 
     const classesFunction = useCallback((type: any) => {
@@ -74,6 +77,7 @@ const ShiftInprogressListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -81,9 +85,11 @@ const ShiftInprogressListScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -155,17 +161,18 @@ const ShiftInprogressListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
+
         Communications.pageTitleSubject.next('Shifts Inprogress');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getRegions, getFacilityData, getHcpTypes])
+    }, [init, getRegions, getHcpTypes])
 
     return <div className="shift-inprogress screen crud-layout pdd-30">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
+            <LoaderComponent />
         </div>}
 
         <ShiftFilter
+            isFacilityListLoading={isFacilityListLoading}
             regions={regions}
             selectedRegion={selectedRegion}
             setSelectedRegion={setSelectedRegion}
@@ -217,10 +224,7 @@ const ShiftInprogressListScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
-
+           
                 </div>
             </div>
             {list && list.table && <>

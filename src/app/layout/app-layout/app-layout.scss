@@ -21,7 +21,7 @@
 		}
 	}
 	.makeStyles-appBar-2 {
-		//z-index: 1 !important;
+	
 	}
 	.MuiAppBar-root {
 		box-shadow: 0 0 2px #aaaaaa !important;
@@ -35,13 +35,12 @@
 
 	.drawerOpened .MuiPaper-root.MuiDrawer-paper,
 	.drawerOpened.MuiDrawer-docked {
-		//background-image: linear-gradient(to bottom, #fcecec, #e5fbf4, #f2fefb, #ffffff) !important;
+
 	}
 
 	.drawerClosed,
 	.drawerOpened {
 		.MuiListItem-button {
-			//  border-radius: 0 20px 20px 0;
 			width: 98%;
 			.inactive-icon {
 				display: none;
@@ -250,7 +249,6 @@
 				font-size: 18px;
 			}
 			font-weight: 400;
-			// color: $accent-color;
 			color: $light-black;
 		}
 	}
@@ -285,15 +283,8 @@
 		color: $text-light;
 		font-size: medium;
 	}
-
-	// .profile_avatar {
-	// .MuiAvatar-fallback {
-	// 	width: 50%;
-	// 	height: 50%;
-	// }
 	.MuiAvatar-root {
 		width: 30px;
 		height: 30px;
 	}
-	//	}
 }

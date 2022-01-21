@@ -48,6 +48,7 @@ const ReferenceAddComponent = ({
   const [isReference, setIsReference] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [referenceId, setReferenceId] = useState<any>(null);
+  const [isConfirm,setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     reference: ReferenceItem,
@@ -65,13 +66,10 @@ const ReferenceAddComponent = ({
       .then((resp: any) => {
         getReferenceDetails();
         CommonService.showToast(resp?.msg || 'HCP reference added', 'info')
-
+        resetForm();
+        handleCancelAdd()
       })
       .catch((err: any) => console.log(err));
-
-    resetForm();
-
-    handleCancelAdd()
   };
 
   const handleCancelAdd = () => {
@@ -79,15 +77,18 @@ const ReferenceAddComponent = ({
   };
 
   const handleDeleteClick = useCallback((referenceId: number) => {
+    setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "hcp/" + hcpId + "/reference/" + referenceId)
       .then((resp: any) => {
         getReferenceDetails();
 
-        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'error')
+        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'error');
+        setIsConfirm(false)
         setIsAddOpen(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [getReferenceDetails, hcpId])
 
@@ -108,7 +109,7 @@ const ReferenceAddComponent = ({
   return (
     <div className="add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Reference'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Reference'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
 
       {reference.length > 0 && (
@@ -206,8 +207,9 @@ const ReferenceAddComponent = ({
                     color='primary'
                     variant='contained'
                     type="submit"
-                    id="btn_hcp_edit_reference_submit">
-                    Save
+                    id="btn_hcp_edit_reference_submit"
+                    className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                     {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

@@ -7,10 +7,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
-// import Autocomplete from "@material-ui/lab/Autocomplete";
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import {  LinearProgress } from "@material-ui/core";
 import './ApprovedHcpApplicationComponent.scss';
@@ -85,15 +83,6 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
                         })}
                     </TableBody>
                 </Table>
-                {/* <TablePagination
-                      rowsPerPageOptions={list.table.pagination.pageSizeOptions}
-                      component='div'
-                      count={list?.table.pagination.totalItems}
-                      rowsPerPage={list?.table.pagination.pageSize}
-                      page={list?.table.pagination.pageIndex}
-                      onPageChange={(event, page) => list.table.pageEvent(page)}
-                      onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
-                  /> */}
             </TableContainer>
         </>}
     </div>;

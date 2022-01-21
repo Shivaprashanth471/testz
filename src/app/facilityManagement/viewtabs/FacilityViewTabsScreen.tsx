@@ -1,7 +1,8 @@
-import { Avatar, Button, CircularProgress } from '@material-ui/core';
+import { Avatar, Button } from '@material-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ComingSoonComponent from '../../../components/ComingSoonComponent';
+import LoaderComponent from '../../../components/LoaderComponent';
 import { ENV } from '../../../constants';
 import { CommonService, Communications } from '../../../helpers';
 //import FacilityActivityComponent from './activity/FacilityActivityComponent';
@@ -37,11 +38,7 @@ const FacilityViewTabsScreen = () => {
     }, [init])
 
     if (isLoading) {
-        return <div className="pdd-30 screen">
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>
-        </div>
+        return <LoaderComponent />
     }
 
     return <div className="pdd-30 screen">
@@ -51,8 +48,8 @@ const FacilityViewTabsScreen = () => {
                     <div className="pb-16 d-flex facility_details">
                         <div className="d-flex items-center ">
                             {
-                                facilityDetails?.image_url ?  <Avatar alt="user photo" style={{ height: '80px', width: '80px' }} src={facilityDetails?.image_url}></Avatar>:
-                                <Avatar alt="user photo" style={{ height: '80px', width: '80px' }}>{facilityDetails?.facility_name?.toUpperCase().charAt('0')}</Avatar>
+                                facilityDetails?.image_url ? <Avatar alt="user photo" style={{ height: '80px', width: '80px' }} src={facilityDetails?.image_url}></Avatar> :
+                                    <Avatar alt="user photo" style={{ height: '80px', width: '80px' }}>{facilityDetails?.facility_name?.toUpperCase().charAt('0')}</Avatar>
                             }
                             <div className="mrg-left-20 items-center">
                                 <h2 className='mrg-top-15'>{facilityDetails?.facility_name}</h2>

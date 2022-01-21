@@ -1,21 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
-import './PendingShiftsViewScreen.scss';
+import './ApprovedShiftsViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
-import { Avatar, Button, CircularProgress } from "@material-ui/core";
-// import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { Avatar, Button } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import RejectShiftComponent from '../rejectShift/RejectShiftComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
-const PendingShiftsScreen = () => {
+const ApprovedShiftsViewScreen = () => {
     const param = useParams<any>()
     const { id } = param;
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isRejectShiftOpen, setRejectShiftOpen] = useState<boolean>(false);
+     
     const getShiftDetails = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
@@ -53,14 +54,15 @@ const PendingShiftsScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
     return <div className="pending-shifts-view screen crud-layout pdd-30">
         <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
             <RejectShiftComponent cancel={cancelRejectShift} confirm={confirmRejectShift} />
         </DialogComponent>
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className="header">
                 <div className="filter"></div>
@@ -82,12 +84,8 @@ const PendingShiftsScreen = () => {
                             <p>{basicDetails?.hcp_user?.hcp_type}</p>
                         </div>
                     </div>
-                    {/* <div className="ratings">
-                        <h4>Average Rating</h4>
-                        <p>4.42/5</p>
-                    </div> */}
                 </div>
-                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
+                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{ gap: "20px" }}>
                     <div className="flex-1">
                         <h4>Years Of Experience</h4>
                         <p>{basicDetails?.hcp_user?.experience ? basicDetails?.hcp_user?.experience + " Years" : "N/A"}</p>
@@ -192,31 +190,6 @@ const PendingShiftsScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-                {/* <div className="feedback-rating-wrapper mrg-top-10">
-                    <h3>Feedback:</h3>
-                    <div className="d-flex">
-                        {
-                            [1, 2, 3, 4, 5]?.map((item: any, index: any) => {
-                                return (
-                                    <div className="mrg-right-15" key={index}><StarBorderIcon color={"primary"} /></div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="mrg-top-20">
-                        <TextField
-                            placeholder="Please write your review here.."
-                            variant='outlined'
-                            color={"primary"}
-                            type={"text"}
-                            name="shift_details"
-                            disabled
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                    </div>
-                </div> */}
             </div>
         </>)}
 
@@ -225,4 +198,4 @@ const PendingShiftsScreen = () => {
 
 
 
-export default PendingShiftsScreen;
+export default ApprovedShiftsViewScreen;

@@ -4,7 +4,8 @@ import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
 import './CancelledShiftsViewScreen.scss';
 import moment from 'moment';
-import { Avatar, CircularProgress } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const CancelledShiftsViewScreen = () => {
     const param = useParams<any>()
@@ -32,12 +33,11 @@ const CancelledShiftsViewScreen = () => {
 
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
 
     return <div className="shift-cancelled-view screen crud-layout pdd-30">
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
         {!isLoading && (<>
             <div className="pdd-0 custom-border">
                 <div className="d-flex pdd-20 hcp-photo-details-wrapper">
@@ -51,10 +51,10 @@ const CancelledShiftsViewScreen = () => {
                         </div>
                     </div>
                     <div className="ratings">
-                       
+
                     </div>
                 </div>
-                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
+                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{ gap: "20px" }}>
                     <div className="flex-1">
                         <h4>Years Of Experience</h4>
                         <p>{basicDetails?.hcp_user?.experience ? basicDetails?.hcp_user?.experience + " Years" : "N/A"}</p>

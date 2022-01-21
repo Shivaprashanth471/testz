@@ -146,6 +146,13 @@ export const MENUITEMS: Menu[] = [
         coloredIcon: ColorShiftRequirement,
       },
       {
+        state: "/pendingShifts/list",
+        name: "Pending Shifts",
+        type: "link",
+        icon: ShiftsMaster,
+        coloredIcon: ColorShiftsMaster,
+      },
+      {
         state: "/shiftMaster/list",
         name: "Shifts Master",
         type: "link",

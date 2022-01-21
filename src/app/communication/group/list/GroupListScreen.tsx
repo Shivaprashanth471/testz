@@ -11,7 +11,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, Communications } from "../../../../helpers";
 import { AddRounded } from "@material-ui/icons";
-import { Button, LinearProgress, TablePagination } from "@material-ui/core";
+import { Button, TablePagination } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './GroupListScreen.scss';
 import { SearchRounded } from "@material-ui/icons";
@@ -20,6 +20,7 @@ import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const CssTextField = withStyles({
     root: {
@@ -79,7 +80,7 @@ const GroupListScreen = () => {
         <>
             <div className={'group-add screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0 mrg-top-20">
                     <div className="header">

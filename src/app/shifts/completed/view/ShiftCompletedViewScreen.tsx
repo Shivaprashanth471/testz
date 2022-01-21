@@ -3,9 +3,10 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import './ShiftCompletedViewScreen.scss';
 import { Link, useParams } from 'react-router-dom';
-import { Avatar, Button, CircularProgress } from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
 import moment from 'moment';
 import ShiftTimeline from '../../timeline/ShiftTimeline';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const ShiftCompletedViewScreen = () => {
     const param = useParams<any>()
@@ -35,11 +36,12 @@ const ShiftCompletedViewScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
     return <div className="shift-completed-view screen crud-layout pdd-30">
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className="pdd-0 custom-border">
                 <div className="d-flex pdd-20 hcp-photo-details-wrapper">
@@ -53,7 +55,7 @@ const ShiftCompletedViewScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{gap:"20px"}}>
+                <div className="d-flex hcp-details pdd-bottom-20 custom-border " style={{ gap: "20px" }}>
                     <div className="flex-1">
                         <h4>Years Of Experience</h4>
                         <p>{basicDetails?.hcp_user?.experience ? basicDetails?.hcp_user?.experience + " Years" : "N/A"}</p>

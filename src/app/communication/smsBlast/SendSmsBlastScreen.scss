@@ -1,115 +1,119 @@
 @import "src/assets/scss/common";
 
 .send-sms-blast {
-	.dialog-header {
-		display: flex;
-	}
+  .dialog-header {
+    display: flex;
+  }
 
-	.send-sms-toggle-btn {
-		text-align: right;
-		margin: auto;
-		margin-bottom: 10px;
-		margin-right: 10px;
-	}
-	.sms-blast-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		margin-left: 15px;
-		h3 {
-			color: $light-black;
-		}
-	}
+  .loader-wrapper {
+    position: relative;
+  }
 
-  .MuiOutlinedInput-multiline{
+  .send-sms-toggle-btn {
+    text-align: right;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+  .sms-blast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-left: 15px;
+    h3 {
+      color: $light-black;
+    }
+  }
+
+  .MuiOutlinedInput-multiline {
     padding: 0px !important;
   }
 
-	.sms-blast-container {
-		h3 {
-			color: #000;
-		}
-		p {
-			color: gray;
-		}
-		display: flex;
-		gap: 0.5rem;
+  .sms-blast-container {
+    h3 {
+      color: #000;
+    }
+    p {
+      color: gray;
+    }
+    display: flex;
+    gap: 0.5rem;
 
-		.sms-blast-left {
-			flex: 1.3;
-			height: 80vh;
-			padding: 1rem 0rem 1rem 1rem;
-			border-radius: 0.5rem;
-		    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-			.sms-blast-scroll {
-				margin-top: 1rem;
-				height: calc(100% - 100px);
-				overflow-y: auto;
-			}
-			.sms-blast-history {
-				color: #000;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-		}
+    .sms-blast-left {
+      flex: 1.3;
+      height: 80vh;
+      padding: 1rem 0rem 1rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      .sms-blast-scroll {
+        margin-top: 1rem;
+        height: calc(100% - 100px);
+        overflow-y: auto;
+      }
+      .sms-blast-history {
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
 
-		.sms-blast-right {
-			flex: 3;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 80vh;
-			padding: 1rem;
-			padding: 1rem 0rem 1rem 1rem;
-			border-radius: 0.5rem;
-		    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    .sms-blast-right {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 80vh;
+      padding: 1rem;
+      padding: 1rem 0rem 1rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-			.sms-blast-recipients {
-				display: flex;
-				flex-direction: column;
-			}
+      .sms-blast-recipients {
+        display: flex;
+        flex-direction: column;
+      }
 
-			.blast-history-messages {
-				display: flex;
-				flex-direction: column;
-				justify-content: space-between;
-				height: 100%;
+      .blast-history-messages {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
 
-				.selected-groups {
-					display: flex;
-					flex-wrap: wrap;
-					gap: 0.5rem;
-					align-items: center;
-				}
+        .selected-groups {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          align-items: center;
+        }
 
-				.msg-container {
-					display: flex;
-					justify-content: flex-end;
-					margin-bottom: 1rem;
+        .msg-container {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 1rem;
 
-					.message {
-						color: #000;
-						padding: 8px;
-						border-radius: 0.5rem;
-						background-color: #e3fff4;
-					}
-				}
-			}
-		}
+          .message {
+            color: #000;
+            padding: 8px;
+            border-radius: 0.5rem;
+            background-color: #e3fff4;
+          }
+        }
+      }
+    }
 
-		.selected-recipients {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.5rem;
-			align-items: center;
-		}
+    .selected-recipients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
 
-		.sms-blast-btn {
-			text-align: right;
-		}
-	}
-	.MuiInputBase-inputMultiline {
-		border: none !important;
-	}
+    .sms-blast-btn {
+      text-align: right;
+    }
+  }
+  .MuiInputBase-inputMultiline {
+    border: none !important;
+  }
 }

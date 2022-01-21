@@ -3,8 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
-import { Button, CircularProgress, DialogActions } from "@material-ui/core";
-// import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { Button, DialogActions } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import CustomPreviewFile from '../../../../components/shared/CustomPreviewFile';
@@ -15,6 +14,7 @@ import { TsFileUploadConfig, TsFileUploadWrapperClass } from '../../../../classe
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 import './ShiftMasterViewScreen.scss';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const ShiftMasterViewScreen = () => {
     const param = useParams<any>();
@@ -31,14 +31,14 @@ const ShiftMasterViewScreen = () => {
     const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
     const [isTimeSheetBeingUpdated, setIsTimeSheetBeingUpdated] = useState<boolean>(false);
 
-    const previewFile = useCallback((index: any,type:any) => {
-        if(type==="local"){
+    const previewFile = useCallback((index: any, type: any) => {
+        if (type === "local") {
             setPreviewFile(fileUpload?.wrapper[0])
-        }else{
-        setPreviewFile(attachmentsList[index])
+        } else {
+            setPreviewFile(attachmentsList[index])
         }
         setOpen(true)
-    }, [attachmentsList,fileUpload?.wrapper])
+    }, [attachmentsList, fileUpload?.wrapper])
 
     const cancelPreviewFile = useCallback(() => {
         setOpen(false)
@@ -93,7 +93,7 @@ const ShiftMasterViewScreen = () => {
                 }
             };
             uploadWrapper.onProgress = (progress) => {
-                // console.log('progress', progress);
+               
             };
             setFileUpload(prevState => {
                 let state: TsFileUploadWrapperClass[] = [];
@@ -103,7 +103,6 @@ const ShiftMasterViewScreen = () => {
                 const newState = [...state, uploadWrapper];
                 return { wrapper: newState };
             });
-            // uploadWrapper.startUpload();
         }
     }
 
@@ -181,7 +180,7 @@ const ShiftMasterViewScreen = () => {
             console.log(err)
             CommonService.showToast(err || "Error", "error");
         })
-    },[basicDetails?.hcp_user_id, id, getShiftAttachments,getShiftDetails])
+    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails])
 
     const handlegetUrlForUpload = useCallback(() => {
         setIsTimeSheetBeingUpdated(true)
@@ -220,6 +219,10 @@ const ShiftMasterViewScreen = () => {
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
+    if (isLoading) {
+        return <LoaderComponent />
+    }
+
     return <div className="shift-completed-view screen crud-layout pdd-30">
         <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
             <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
@@ -233,10 +236,7 @@ const ShiftMasterViewScreen = () => {
         <DialogComponent open={checkOutOpen} cancel={cancelCheckOut} >
             <ShiftCheckOutComponent cancel={cancelCheckOut} confirm={confirmCheckOut} shiftDetails={basicDetails} />
         </DialogComponent>
-        {isLoading && (
-            <div className="view-loading-indicator">
-                <CircularProgress color="secondary" className="loader" />
-            </div>)}
+
         {!isLoading && (<>
             <div className='d-flex custom-border facility-details'>
                 <div className='mrg-right-20'>
@@ -352,33 +352,6 @@ const ShiftMasterViewScreen = () => {
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                     </div>
                 </div>
-
-                {/* <div className="feedback-rating-wrapper mrg-top-0">
-                    <br />
-                    <h3>Feedback:</h3>
-                    <div className="d-flex">
-                        {
-                            [1, 2, 3, 4, 5]?.map((item: any, index: any) => {
-                                return (
-                                    <div className="mrg-right-15" key={index}><StarBorderIcon color={"primary"} /></div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="mrg-top-20">
-                        <TextField
-                            placeholder="Please write your review here.."
-                            variant='outlined'
-                            color={"primary"}
-                            type={"text"}
-                            name="shift_details"
-                            disabled
-                            fullWidth
-                            multiline
-                            rows={4}
-                        />
-                    </div>
-                </div> */}
             </div>
             <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="mrg-top-20">
@@ -390,7 +363,7 @@ const ShiftMasterViewScreen = () => {
                                     return (
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
-                                            {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index,"api")} />}
+                                            {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} />}
                                         </div>
                                     )
                                 })
@@ -408,7 +381,7 @@ const ShiftMasterViewScreen = () => {
                                                 <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
                                             </div>
                                             <div className="d-flex file_actions">
-                                                <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index,"local")}>View</p>
+                                                <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>View</p>
                                                 <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>Delete</p>
                                             </div>
                                         </div>
@@ -435,11 +408,11 @@ const ShiftMasterViewScreen = () => {
                         basicDetails?.shift_status === "complete" &&
                         <Button
                             type={"submit"}
-                            className={"submit"}
+                            className={isTimeSheetBeingUpdated ?"submit has-loading-spinner" :"submit"}
                             variant={"contained"}
                             color="primary"
                             autoFocus
-                            disabled={fileUpload?.wrapper?.length<=0 || isTimeSheetBeingUpdated }
+                            disabled={fileUpload?.wrapper?.length <= 0 || isTimeSheetBeingUpdated}
                             onClick={handlegetUrlForUpload}>
                             {isTimeSheetBeingUpdated ? 'Saving' : 'Save'}
                         </Button>

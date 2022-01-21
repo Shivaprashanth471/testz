@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,17 +10,19 @@ import TableRow from '@material-ui/core/TableRow';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
-import { Button, LinearProgress, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './AddGroupScreen.scss';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const AddGroupScreen = () => {
-    const [list, setList] = React.useState<TsDataListState | any>(null);
-    const [title, setTitle] = React.useState<any>(null);
-    const [selectedHcps, setSelectedHcps] = React.useState<any>(null)
-    const [isAllselected, setAllSelected] = React.useState<boolean>(false);
-    const [selectedCount, setSelectedCount] = React.useState<any>(-1)
+    const [list, setList] = useState<TsDataListState | any>(null);
+    const [title, setTitle] = useState<any>(null);
+    const [selectedHcps, setSelectedHcps] = useState<any>(null)
+    const [isAllselected, setAllSelected] = useState<boolean>(false);
+    const [selectedCount, setSelectedCount] = useState<any>(-1)
+    const [isGroupAdded,setIsGroupAdded] = useState<boolean>(false)
     const history = useHistory();
 
     const init = useCallback(() => {
@@ -56,7 +58,6 @@ const AddGroupScreen = () => {
     }
     const AddHcpsToGroup = useCallback((hcp: any, group_id: any) => {
         delete hcp["checked"];
-        console.log(hcp,"hcp")
         return new Promise((resolve, reject) => {
             ApiService.post(ENV.API_URL + 'group/' + group_id + '/member', hcp).then((resp: any) => {
                 if (resp && resp.success) {
@@ -77,15 +78,20 @@ const AddGroupScreen = () => {
                     AddHcpsToGroup(value, groupId)
                 }
             })
+            setIsGroupAdded(false)
+            
         } else {
             history.push('/group/view/' + groupId);
+            setIsGroupAdded(false)
         }
+      
     }, [selectedHcps, AddHcpsToGroup, history, selectedCount])
 
     const onAdd = () => {
         let payload = {
             title: title
         }
+        setIsGroupAdded(true)
         CommonService._api.post(ENV.API_URL + 'group', payload).then((resp) => {
             if (resp && resp.success) {
                 const groupId = resp.data._id;
@@ -93,6 +99,7 @@ const AddGroupScreen = () => {
             }
         }).catch((err) => {
             console.log(err)
+            setIsGroupAdded(true)
         })
     }
     useEffect(() => {
@@ -120,7 +127,7 @@ const AddGroupScreen = () => {
         <>
             <div className={'add-group screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <div>
                     <div className="title custom-border pdd-top-20">
@@ -194,7 +201,7 @@ const AddGroupScreen = () => {
                     </TableContainer>
                 </>}
                 <div className="button-wrapper">
-                    <Button variant={"contained"} className="add-button" color={"primary"} disabled={!title} onClick={onAdd}>Add To Group</Button>
+                    <Button variant={"contained"} className={isGroupAdded?"add-button has-loading-spinner":"add-button"} color={"primary"} disabled={!title || isGroupAdded} onClick={onAdd}>{isGroupAdded ?"Adding  Group":"Add  Group"}</Button>
                 </div>
             </div>
         </>

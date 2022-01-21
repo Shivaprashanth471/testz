@@ -1,15 +1,15 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
-import { ENV } from '../../../../constants';
-import { CommonService } from '../../../../helpers';
+import { ENV } from '../../../../../constants';
+import { CommonService } from '../../../../../helpers';
 import { useParams } from 'react-router';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import { useSelector } from 'react-redux';
-import { StateParams } from '../../../../store/reducers';
+import { StateParams } from '../../../../../store/reducers';
 import Checkbox from '@material-ui/core/Checkbox';
-import animationData from "../../../../animations/no_data.json";
+import animationData from "../../../../../animations/no_data.json";
 import './AddHcpToShiftScreen.scss';
 import Lottie from "react-lottie";
 import { SearchRounded } from '@material-ui/icons';
@@ -172,7 +172,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
             {hcpList && hcpList.length > 0 ?
                 <div className={classes.assignNcActions}>
                     <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
-                    <Button type={'submit'} color={"primary"} size='large' disabled={!isSubmitting} variant={"contained"} className={'mrg-left-30'} onClick={() => addAllHcpToshift()}>Add HCP</Button>
+                    <Button type={'submit'} color={"primary"} size='large' disabled={!isSubmitting} variant={"contained"} className={!isSubmitting?'mrg-left-30 has-loading-spinner':'mrg-left-30'} onClick={() => addAllHcpToshift()}>{ !isSubmitting ? "Adding Hcp" : "Add Hcp" }</Button>
                 </div> : <></>}
         </div>
     </div>;

@@ -4,11 +4,10 @@ import { TextField } from 'formik-material-ui';
 import moment from 'moment';
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import * as Yup from "yup";
-import { ENV } from '../../../../../../constants';
-import { ApiService, CommonService } from '../../../../../../helpers';
-import { StateParams } from '../../../../../../store/reducers';
+import { ENV } from '../../../../constants';
+import { ApiService, CommonService } from '../../../../helpers';
+import { StateParams } from '../../../../store/reducers';
 import './CreateShiftScreen.scss'
 
 
@@ -17,6 +16,7 @@ export interface AddHcpToShiftComponentProps {
     confirm: () => void,
     hcpId: string,
     applicationId: string,
+    requirementId:string
 }
 
 interface CreateShiftItem {
@@ -48,9 +48,7 @@ const hcpFormValidation = Yup.object({
 })
 
 const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>) => {
-
-    const params = useParams<{ id: string }>();
-    const { id } = params;
+    const  requirementId  = props?.requirementId;
     const afterCancel = props?.cancel;
     const afterConfirm = props?.confirm;
     const [data, setData] = useState<any>({})
@@ -76,7 +74,7 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
 
     const init = useCallback(() => {
         CommonService._api
-            .get(ENV.API_URL + `shift/requirement/${id}`)
+            .get(ENV.API_URL + `shift/requirement/${requirementId}`)
             .then((resp) => {
                 setData(resp?.data);
                 setIsLoading(false)
@@ -85,7 +83,7 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
                 console.log(err);
                 setIsLoading(false);
             });
-    }, [id]);
+    }, [requirementId]);
 
 
     const cancel = (resetForm: any) => {
@@ -140,7 +138,7 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
             "approved_by": userDetails?._id
         }
 
-        CommonService._api.patch(ENV.API_URL + 'shift/requirement/' + id + '/application/' + props?.applicationId + '/approve', approvePayload).then((resp) => {
+        CommonService._api.patch(ENV.API_URL + 'shift/requirement/' + requirementId + '/application/' + props?.applicationId + '/approve', approvePayload).then((resp) => {
             createShiftApi(createdShift, setSubmitting)
 
         }).catch((err) => {
@@ -228,8 +226,8 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
                                     size="large"
                                     id="btn_hcp_edit_submit"
                                     variant={"contained"}
-                                    className={"normal"}
-                                    color={"primary"}>CREATE</Button>
+                                    className={isSubmitting ?"normal has-loading-spinner":"normal"}
+                                    color={"primary"}>{!isSubmitting?"CREATE":"CREATING"}</Button>
                             </div>
                         </Form>)}
                 </Formik>

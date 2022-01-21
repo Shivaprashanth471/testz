@@ -10,7 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
-import moment from "moment";
+import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
@@ -20,7 +20,7 @@ import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
 import ShiftFilter from '../../filters/ShiftFilter';
-import './CompletedShiftsListScreen.scss';
+import './ApprovedShiftsListScreen.scss';
 
 const CssTextField = withStyles({
     root: {
@@ -31,12 +31,12 @@ const CssTextField = withStyles({
         },
     },
 })(TextField);
-
-const CompletedShiftsListScreen = () => {
+const ApprovedShiftsListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
     const [facilityList, setFacilityList] = useState<any | null>(null);
     const [regions, setRegions] = useState<any>([])
+
 
     const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
     const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
@@ -54,7 +54,6 @@ const CompletedShiftsListScreen = () => {
             return 'first-row'
         }
     }, [])
-
 
 
     const getHcpTypes = useCallback(() => {
@@ -76,7 +75,6 @@ const CompletedShiftsListScreen = () => {
             });
     }, []);
 
-
     const getFacilityData = useCallback(() => {
         setIsFacilityListLoading(true)
         let payload: any = {}
@@ -97,16 +95,15 @@ const CompletedShiftsListScreen = () => {
     useEffect(() => getFacilityData(), [selectedRegion, getFacilityData])
 
 
-
     const init = useCallback(() => {
         let url = 'shift'
         let payload: any = {}
 
-        payload.shift_status = 'complete'
-
+        payload.shift_status = 'pending';
         if (selectedFacilities.length > 0) {
             payload.facilities = selectedFacilities.map((item: any) => item?._id)
         }
+
         if (selectedHcps.length > 0) {
             payload.hcp_types = selectedHcps
         }
@@ -122,6 +119,9 @@ const CompletedShiftsListScreen = () => {
                 payload.start_date = startDate
                 payload.end_date = endDate
             }
+        } else {
+            let today = moment(new Date()).format("YYYY-MM-DD")
+            payload.new_shifts = today;
         }
 
         if (selectedTimeTypes.length > 0) {
@@ -130,14 +130,14 @@ const CompletedShiftsListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
-            mobileMatColumns: ['Title', 'Completed On', 'Facility Name', 'HCP Name', 'Type of hcp', 'Time Type', 'Differential Amount', 'Actions'],
+            webMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
+            mobileMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
-    }, [dateRange, selectedTimeTypes, selectedFacilities, selectedHcps])
+    }, [dateRange, selectedFacilities, selectedHcps, selectedTimeTypes])
 
     const clearFilterValues = () => {
         setSelectedTimeTypes([])
@@ -145,6 +145,7 @@ const CompletedShiftsListScreen = () => {
         setSelectedHcps([])
         setDateRange([null, null])
         setSelectedRegion('')
+
     }
 
     const resetFilters = () => {
@@ -155,35 +156,35 @@ const CompletedShiftsListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        Communications.pageTitleSubject.next('Shifts Completed');
+
+        Communications.pageTitleSubject.next('Shifts Approved');
         Communications.pageBackButtonSubject.next(null);
     }, [init, getRegions, getHcpTypes])
-    return <div className="completed-shifts screen crud-layout pdd-30">
+    return <div className="pending-shifts screen crud-layout pdd-30">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
             <LoaderComponent />
         </div>}
-
         <ShiftFilter
             isFacilityListLoading={isFacilityListLoading}
             dateRange={dateRange}
             setDateRange={setDateRange}
+            regions={regions}
             selectedRegion={selectedRegion}
             setSelectedRegion={setSelectedRegion}
-            regions={regions}
+
             selectedHcps={selectedHcps}
             setSelectedHcps={setSelectedHcps}
             selectedTimeTypes={selectedTimeTypes}
             setSelectedTimeTypes={setSelectedTimeTypes}
             selectedFaciltities={selectedFacilities}
             setSelectedFacilities={setSelectedFacilities}
-            noStatus={true}
-            isCompleted={true}
-            resetFilters={resetFilters}
 
+            noStatus={true}
+            isRequired={true}
+            resetFilters={resetFilters}
             facilityList={facilityList}
             hcpTypes={hcpTypes}
         />
-
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
                 <div className="mrg-left-5 filter">
@@ -214,9 +215,6 @@ const CompletedShiftsListScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className="actions">
-         
-                </div>
             </div>
             {list && list.table && <>
                 <TableContainer component={Paper} className={'table-responsive'}>
@@ -224,8 +222,7 @@ const CompletedShiftsListScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell key={'header-col-' + columnIndex}
-                                        className={classesFunction(column)}
+                                    <TableCell key={'header-col-' + columnIndex} className={classesFunction(column)}
                                     >
                                         {column}
                                     </TableCell>
@@ -237,7 +234,7 @@ const CompletedShiftsListScreen = () => {
                                 <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                             }
                             {list?.table.data.map((row: any, rowIndex: any) => {
-                                const completed_date = CommonService.getUtcDate(row['actuals']?.shift_end_time)
+                                const shift_date = CommonService.getUtcDate(row['shift_date'])
 
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
@@ -245,25 +242,25 @@ const CompletedShiftsListScreen = () => {
                                             {row['title']}
                                         </TableCell>
                                         <TableCell>
-                                            {completed_date}
+                                            {moment(row['created_at']).format("MM-DD-YYYY")}
                                         </TableCell>
                                         <TableCell>
                                             {row['facility']?.facility_name}
                                         </TableCell>
                                         <TableCell>
+                                            {shift_date}
+                                        </TableCell>
+                                        <TableCell>
                                             {row['hcp_user']?.first_name}&nbsp;{row['hcp_user']?.last_name}
                                         </TableCell>
                                         <TableCell>
-                                            {row['hcp_type']}
+                                            {row['hcp_user']?.hcp_type}
                                         </TableCell>
                                         <TableCell>
                                             {row['shift_type']}
                                         </TableCell>
-                                        <TableCell>
-                                            {row['payments']?.differential}
-                                        </TableCell>
                                         <TableCell >
-                                            <Link to={'/completedShifts/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                            <Link to={'/approvedShifts/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
                                                 {('View Details')}
                                             </Link>
                                         </TableCell>
@@ -284,7 +281,7 @@ const CompletedShiftsListScreen = () => {
                 </TableContainer>
             </>}
         </div>
-    </div >
+    </div>
 }
 
-export default CompletedShiftsListScreen;
+export default ApprovedShiftsListScreen;

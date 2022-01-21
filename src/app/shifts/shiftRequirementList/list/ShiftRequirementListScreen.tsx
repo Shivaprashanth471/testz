@@ -1,4 +1,4 @@
-import { Button, LinearProgress, TablePagination, TextField } from "@material-ui/core";
+import { Button, TablePagination, TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,6 +13,7 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
+import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -37,11 +38,13 @@ const ShiftRequirementListScreen = () => {
     const [regions, setRegions] = useState<any>([])
 
     const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
-    const [statusType, setStatusType] = useLocalStorage<any | string>('statusType', '')
+    const [statusType, setStatusType] = useLocalStorage<any | string>('statusType', 'open')
     const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
     const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
     const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
+
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -72,6 +75,7 @@ const ShiftRequirementListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
         if (selectedRegion) {
             payload.regions = [selectedRegion]
@@ -79,9 +83,11 @@ const ShiftRequirementListScreen = () => {
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
 
@@ -116,6 +122,9 @@ const ShiftRequirementListScreen = () => {
                 payload.start_date = startDate
                 payload.end_date = endDate
             }
+        }else{
+            let today = moment(new Date()).format("YYYY-MM-DD")
+            payload.new_shifts = today;
         }
         if (selectedTimeTypes.length > 0) {
             payload.shift_types = selectedTimeTypes
@@ -150,16 +159,17 @@ const ShiftRequirementListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
         Communications.pageTitleSubject.next('Open Shifts');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getHcpTypes, getRegions, getFacilityData])
+    }, [init, getHcpTypes, getRegions])
     return <>
         <div className={'shift-requirment-list screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                <LinearProgress />
+                <LoaderComponent />
             </div>}
             <ShiftFilter
+                isFacilityListLoading={isFacilityListLoading}
+
                 dateRange={dateRange}
                 setDateRange={setDateRange}
                 regions={regions}
@@ -178,6 +188,8 @@ const ShiftRequirementListScreen = () => {
 
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
+
+
             />
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
                 <div className="header">

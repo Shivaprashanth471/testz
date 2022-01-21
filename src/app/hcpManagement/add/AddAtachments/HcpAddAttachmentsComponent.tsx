@@ -51,7 +51,6 @@ const HcpAddAttachmentsComponent = (props: any) => {
         }
       };
       uploadWrapper.onProgress = (progress) => {
-        // console.log('progress', progress);
       };
       setFileUpload((prevState: any) => {
         let state: TsFileUploadWrapperClass[] = [];
@@ -61,7 +60,6 @@ const HcpAddAttachmentsComponent = (props: any) => {
         const newState = [...state, uploadWrapper];
         return { wrapper: newState };
       });
-      // uploadWrapper.startUpload();
     }
   }
 

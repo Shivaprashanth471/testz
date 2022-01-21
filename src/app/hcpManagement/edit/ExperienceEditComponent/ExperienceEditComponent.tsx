@@ -63,6 +63,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   const [showEndDate, setShowEndDate] = useState<boolean>(true)
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [experienceId, setExperienceId] = useState<any>(null);
+  const [isConfirm,setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     experience: ExperienceItem,
@@ -88,21 +89,23 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
       .then((resp: any) => {
         getExperienceDetails()
         CommonService.showToast(resp?.msg || 'HCP experience added', 'info')
+        setIsExperiences(false);
+        resetForm();
       })
       .catch((err: any) => console.log(err));
-
-    resetForm();
-    setIsExperiences(false)
   };
 
   const handleDeleteClick = useCallback((experienceId: number) => {
+    setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "hcp/" + hcpId + "/experience/" + experienceId).then((resp: any) => {
       getExperienceDetails()
       CommonService.showToast(resp?.msg || 'hcp experience deleted', 'error')
+      setIsConfirm(false)
       setIsAddOpen(false);
     })
       .catch((err) => {
         console.log(err);
+        setIsConfirm(false)
       });
   }, [getExperienceDetails, hcpId])
 
@@ -135,7 +138,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   return (
     <div className="add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Work Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent  isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Work Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {experiences.length > 0 && (
         <Table className="mrg-top-50">
@@ -316,8 +319,8 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                   >
                     Delete
                   </Button>
-                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit">
-                    Save
+                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit" className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
+                  {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

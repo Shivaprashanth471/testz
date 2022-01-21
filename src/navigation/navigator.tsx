@@ -17,6 +17,7 @@ import AddHcpComponent from "../app/hcpManagement/add/AddHcpComponent";
 import FacilityManagementViewScreen from "../app/facilityManagement/view/FacilityManagementViewScreen";
 import AddShiftsScreen from "../app/shifts/add/AddShiftsScreen";
 import PendingShiftsListScreen from "../app/shifts/pending/list/PendingShiftsListScreen";
+import ApprovedShiftsListScreen from "../app/shifts/approved/list/ApprovedShiftsListScreen";
 import CompletedShiftsListScreen from "../app/shifts/completed/list/CompletedShiftsListScreen";
 import ClosedShiftsListScreen from "../app/shifts/closed/list/ClosedShiftsListScreen";
 import CancelledShiftsListScreen from "../app/shifts/cancelled/list/CancelledShiftsListScreen";
@@ -34,8 +35,7 @@ import RequirementsShiftsViewScreen from "../app/shifts/shiftRequirementList/vie
 import ShiftInprogressListScreen from '../app/shifts/inprogress/list/ShiftInprogressListScreen'; 
 import SendSmsBlastScreen from "../app/communication/smsBlast/SendSmsBlastScreen";
 import ShiftRequirementListScreen from "../app/shifts/shiftRequirementList/list/ShiftRequirementListScreen";
-import CreateShiftScreen from "../app/shifts/createShift/CreateShiftScreen";
-import PendingShiftsViewScreen from "../app/shifts/pending/view/PendingShiftsViewScreen";
+import ApprovedShiftsViewScreen from "../app/shifts/approved/view/ApprovedShiftsViewScreen";
 import ShiftInprogressViewScreen from "../app/shifts/inprogress/view/ShiftInprogressViewScreen";
 import ShiftMasterViewScreen from "../app/shifts/shiftMaster/view/ShiftMasterViewScreen";
 import ClosedShiftsViewScreen from '../app/shifts/closed/view/ClosedShiftsViewScreen';
@@ -129,7 +129,6 @@ const Navigator = (props: any) => {
       <AppLayoutRoute path="/hcp/user/list" component={HcpApprovedListScreen} />
       <AppLayoutRoute path="/hcp/add" component={AddHcpComponent} />
       <AppLayoutRoute path="/hcp/view/:id" component={HcpManagementViewScreen}/>
-      <AppLayoutRoute path="/creatShift/:id" component={CreateShiftScreen}/>
       <AppLayoutRoute path="/hcp/user/view/:id" component={HcpUserViewScreen} />
       <AppLayoutRoute path="/hcp/edit/:id" component={EditHcpComponent} />
       <AppLayoutRoute path="/facility/list" component={FacilityManagementListScreen}/>
@@ -138,8 +137,8 @@ const Navigator = (props: any) => {
       <AppLayoutRoute path="/facility/tabs/:id" component={FacilityViewTabsScreen} />
       <AppLayoutRoute path="/facility/edit/:id" component={FacilityManagementEditScreen} />
       <AppLayoutRoute path="/shift/add" component={AddShiftsScreen} />
-      <AppLayoutRoute path="/approvedShifts/list" component={PendingShiftsListScreen}/>
-      <AppLayoutRoute path="/approvedShifts/view/:id" component={PendingShiftsViewScreen}/>
+      <AppLayoutRoute path="/approvedShifts/list" component={ApprovedShiftsListScreen}/>
+      <AppLayoutRoute path="/approvedShifts/view/:id" component={ApprovedShiftsViewScreen}/>
       <AppLayoutRoute path="/shiftrequirementMaster/list" component={ShiftRequirementListScreen}/>
       <AppLayoutRoute path="/inprogessShifts/list" component={ShiftInprogressListScreen} />
       <AppLayoutRoute path="/employee/list" component={EmployeeManagementScreen} />
@@ -153,6 +152,7 @@ const Navigator = (props: any) => {
       <AppLayoutRoute path="/completedShifts/view/:id" component={ShiftCompletedViewScreen}/>
       <AppLayoutRoute path="/closedShifts/list" component={ClosedShiftsListScreen}/>
       <AppLayoutRoute path="/cancelledShifts/list" component={CancelledShiftsListScreen}/>
+      <AppLayoutRoute path="/pendingShifts/list" component={PendingShiftsListScreen}/>
       <AppLayoutRoute path="/closedShifts/view/:id" component={ClosedShiftsViewScreen}/>
       <AppLayoutRoute path="/cancelledShifts/view/:id" component={CancelledShiftsViewScreen}/>
       <AppLayoutRoute path="/shiftMaster/list" component={ShiftsMasterListScreen} />

@@ -1,20 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, CircularProgress} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { FormikHelpers } from "formik";
-import { useHistory, useParams } from "react-router-dom";
-import { ApiService, CommonService, Communications } from "../../../helpers";
-import FacilityAddComponent from "./FacilityMemberEditComponent/FacilityMemberEditComponent";
-import "./FacilityManagementEditScreen.scss";
-import ShiftAddComponent from "./ShiftEditComponent/ShiftEditComponent";
-import { ENV } from "../../../constants";
+import React, { useCallback, useEffect, useState } from "react";
 import 'react-phone-number-input/style.css';
-import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../classes/ts-file-upload-wrapper.class";
+import { useHistory, useParams } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
-import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../classes/ts-file-upload-wrapper.class";
 import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
-import {  FacilityItemEditType } from "./FacilityInitialAndValidationsComponent";
+import { ENV } from "../../../constants";
+import { ApiService, CommonService, Communications } from "../../../helpers";
 import FacilityEditDetailsComponent from "./BasicDetails/FacilityEditDetailsComponent";
+import { FacilityItemEditType } from "./FacilityInitialAndValidationsComponent";
+import "./FacilityManagementEditScreen.scss";
+import FacilityAddComponent from "./FacilityMemberEditComponent/FacilityMemberEditComponent";
+import ShiftAddComponent from "./ShiftEditComponent/ShiftEditComponent";
 
 const FacilityManagementEditScreen = () => {
   const history = useHistory();
@@ -287,11 +288,7 @@ const FacilityManagementEditScreen = () => {
   }, [isImage])
 
   if (isLoading || regIsLoading) {
-    return <div className="facility-main  screen">
-      <div className="view-loading-indicator">
-        <CircularProgress color="secondary" className="loader" />
-      </div>
-    </div>
+    return <LoaderComponent />
   }
 
   return !isLoading && !regIsLoading ? (
@@ -303,8 +300,8 @@ const FacilityManagementEditScreen = () => {
         <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
       </DialogComponent>
       <FacilityEditDetailsComponent onAdd={onAdd} regions={regions} isImageRemoved={isImageRemoved}
-      facilityDetails={facilityDetails} deleteFacilityImage={deleteFacilityImage} previewFile={previewFile} 
-      fileUpload={fileUpload} OnFileSelected={onFileSelected} deleteFile={deleteFile}/>
+        facilityDetails={facilityDetails} deleteFacilityImage={deleteFacilityImage} previewFile={previewFile}
+        fileUpload={fileUpload} OnFileSelected={onFileSelected} deleteFile={deleteFile} />
 
       <div className="facility-members mrg-top-10  custom-border">
         <p className='card-header'>Facility Members</p>
@@ -349,11 +346,11 @@ const FacilityManagementEditScreen = () => {
           type="submit"
           size="large"
           variant={"contained"}
-          className="pdd-left-30 pdd-right-30"
           color={"primary"}
+          className={facilitySubmitting ? 'has-loading-spinner pdd-left-30 pdd-right-30' : 'pdd-left-30 pdd-right-30'}
           id='btn_facility_edit_submit'
         >
-          Save
+          {facilitySubmitting ? "Saving" : "Save"}
         </Button>
       </div>
       <ScrollToTop smooth color="white" />

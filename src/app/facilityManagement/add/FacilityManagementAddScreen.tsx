@@ -1,21 +1,22 @@
-import {  Button, CircularProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import React, { useCallback, useEffect, useState } from "react";
 import 'react-phone-number-input/style.css';
 import { useHistory } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
+import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../classes/ts-file-upload-wrapper.class";
+import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
+import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import { americanTimeZone, otHours } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
-import FacilityAddComponent from "./FacilityMemberAddComponent/FacilityMemberAddComponent";
-import "./FacilityManagementAddScreen.scss";
-import ShiftAddComponent from "./ShiftAddComponent/ShiftAddComponent";
-import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../classes/ts-file-upload-wrapper.class";
-import DialogComponent from "../../../components/DialogComponent";
-import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
-import ScrollToTop from "react-scroll-to-top";
-import { FacilityItemAddType } from "./FacilityInitialAndValidationsComponent";
 import FacilityAddDetailsComponent from "./BasicDetails/FacilityAddDetailsComponent";
-import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
+import { FacilityItemAddType } from "./FacilityInitialAndValidationsComponent";
+import "./FacilityManagementAddScreen.scss";
+import FacilityAddComponent from "./FacilityMemberAddComponent/FacilityMemberAddComponent";
+import ShiftAddComponent from "./ShiftAddComponent/ShiftAddComponent";
 
 
 const FacilityManagementAddScreen = () => {
@@ -239,11 +240,7 @@ const FacilityManagementAddScreen = () => {
   }, [getRegions]);
 
   if (regIsLoading) {
-    return <div className="facility-main  screen">
-      <div className="view-loading-indicator">
-        <CircularProgress color="secondary" className="loader" />
-      </div>
-    </div>
+    return <LoaderComponent />
   }
   return (
     !regIsLoading && <div className="facility-main  screen">
@@ -254,7 +251,7 @@ const FacilityManagementAddScreen = () => {
         <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
       </DialogComponent>
       <div className="form-container mrg-top-30">
-        <FacilityAddDetailsComponent onAdd={onAdd} regions={regions} americanTimeZone={americanTimeZone} fileUpload={fileUpload} previewFile={previewFile} deleteFile={deleteFile} OnFileSelected={OnFileSelected} otHours={otHours}/>
+        <FacilityAddDetailsComponent onAdd={onAdd} regions={regions} americanTimeZone={americanTimeZone} fileUpload={fileUpload} previewFile={previewFile} deleteFile={deleteFile} OnFileSelected={OnFileSelected} otHours={otHours} />
 
         <div className="facility-members mrg-top-10  custom-border">
           <p className='card-header'>Facility Members</p>
@@ -290,7 +287,7 @@ const FacilityManagementAddScreen = () => {
           type="submit"
           size="large"
           variant={"contained"}
-          className="pdd-left-30 pdd-right-30"
+          className={isFacilitySubmitting ? 'pdd-left-30 pdd-right-30 has-loading-spinner' : 'pdd-left-30 pdd-right-30'}
           color={"primary"}
           id='btn_facility_add_submit'
         >

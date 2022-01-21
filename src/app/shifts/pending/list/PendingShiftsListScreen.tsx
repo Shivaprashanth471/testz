@@ -1,4 +1,5 @@
-import { LinearProgress, TextField } from "@material-ui/core";
+import React, { useCallback, useEffect, useState } from 'react';
+import { LinearProgress, TextField, IconButton } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -10,16 +11,18 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { SearchRounded } from '@material-ui/icons';
 import ClearIcon from '@material-ui/icons/Clear';
+import CancelIcon from "@material-ui/icons/Cancel";
+import CheckIcon from "@material-ui/icons/Check";
 import moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
-import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService, Communications } from '../../../../helpers';
-import ShiftFilter from '../../filters/ShiftFilter';
-import './PendingShiftsListScreen.scss';
+import DialogComponent from '../../../../components/DialogComponent';
+import RejectHcpApplicationComponent from '../rejectHcp/RejectHcpApplicationComponent';
+import CreateShiftScreen from '../createShift/CreateShiftScreen';
+import "./PendingShiftsListScreen.scss";
+import PendingSihftsViewComponent from '../view/PendingShiftsViewComponent';
 
 const CssTextField = withStyles({
     root: {
@@ -30,154 +33,98 @@ const CssTextField = withStyles({
         },
     },
 })(TextField);
+
+
 const PendingShiftsListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
-    const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const [facilityList, setFacilityList] = useState<any | null>(null);
-    const [regions, setRegions] = useState<any>([])
-
-
-    const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
-    const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
-    const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>('selectedFacilities', [])
-    const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>('selectedTimeTypes', [])
-    const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
-
-
-    const classesFunction = useCallback((type: any) => {
-        if (type === "Actions") {
-            return "last-row"
-        } else if (type === "Title") {
-            return 'first-row'
-        }
-    }, [])
-
-
-    const getHcpTypes = useCallback(() => {
-        CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
-            setHcpTypes(resp.data || []);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }, []);
-
-    const getRegions = useCallback(() => {
-        CommonService._api
-            .get(ENV.API_URL + "meta/hcp-regions")
-            .then((resp) => {
-                setRegions(resp.data || []);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
-
-    const getFacilityData = useCallback(() => {
-        let payload: any = {}
-        if (selectedRegion) {
-            payload.regions = [selectedRegion]
-        }
-        ApiService.post(ENV.API_URL + "facility/lite", payload)
-            .then((res) => {
-                setFacilityList(res?.data || []);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [selectedRegion]);
-
-    useEffect(() => getFacilityData(), [selectedRegion, getFacilityData])
-
+    const [isApproveOpen, setIsApproveOpen] = useState<boolean>(false);
+    const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false);
+    const [hcpId, setHcpId] = useState<string>('');
+    const [applicationId, setApplicationId] = useState<string>('')
+    const [requirementId, setRequirementId] = useState<string>('')
+    const [isViewOpen , setIsViewOpen] = useState<boolean>(false);
 
     const init = useCallback(() => {
-        let url = 'shift'
-        let payload: any = {}
-
-        payload.shift_status = 'pending';
-        if (selectedFacilities.length > 0) {
-            payload.facilities = selectedFacilities.map((item: any) => item?._id)
-        }
-
-        if (selectedHcps.length > 0) {
-            payload.hcp_types = selectedHcps
-        }
-
-        if (dateRange[0] || dateRange[1]) {
-            let startDate = moment(dateRange[0]).format('YYYY-MM-DD')
-            let endDate = moment(dateRange[1]).format('YYYY-MM-DD')
-
-            if (!dateRange[1]) {
-                payload.start_date = startDate
-                payload.end_date = startDate
-            } else {
-                payload.start_date = startDate
-                payload.end_date = endDate
-            }
-        }
-
-        if (selectedTimeTypes.length > 0) {
-            payload.shift_types = selectedTimeTypes
-        }
+        let today = moment(new Date()).format("YYYY-MM-DD")
+        let url = 'shift/application?status=pending&new_shifts=' + today
 
         const options = new TsDataListOptions({
-            extraPayload: payload,
-            webMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
-            mobileMatColumns: ['Title', 'Requested On', 'Facility Name', 'Require On', 'HCP Name', 'Type of hcp', 'Time Type', 'Actions'],
-        }, ENV.API_URL + url, setList, ApiService, 'post');
+            webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
+            mobileMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
+        }, ENV.API_URL + url, setList, ApiService, 'get');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
 
-    }, [dateRange, selectedFacilities, selectedHcps, selectedTimeTypes])
+    }, [])
 
-    const clearFilterValues = () => {
-        setSelectedTimeTypes([])
-        setSelectedFacilities([])
-        setSelectedHcps([])
-        setDateRange([null, null])
-        setSelectedRegion('')
+    const openView = useCallback((id:any,hcp_user_id:any) => {
+        setIsViewOpen(true);
+        setRequirementId(id);
+        setHcpId(hcp_user_id)
+    }, [])
 
-    }
+    const cancelView = useCallback(() => {
+        setIsViewOpen(false);
+    }, [])
 
-    const resetFilters = () => {
-        clearFilterValues()
-    }
+    const confirmView = useCallback(() => {
+        setIsViewOpen(false);
+        init()
+    }, [init])
+
+
+    const cancelApprove = useCallback(() => {
+        setIsApproveOpen(false);
+    }, [])
+
+
+    const confirmApprove = useCallback(() => {
+        setIsApproveOpen(false);
+        init()
+    }, [init])
+
+    const openApprove = useCallback((hcpId: string, applicationId: string,requirementId:string) => {
+        setHcpId(hcpId)
+        setApplicationId(applicationId)
+        setIsApproveOpen(true);
+        setRequirementId(requirementId)
+    }, [])
+
+    const openRejectApplication = useCallback((requirementId: any, applicationId: any) => {
+        setApplicationId(applicationId)
+        setRequirementId(requirementId)
+        setIsRejectOpen(true)
+    }, [])
+
+    const cancelRejectApplication = useCallback(() => {
+        setIsRejectOpen(false)
+    }, [])
+
+    const confirmRejectApplication = useCallback(() => {
+        setIsRejectOpen(false)
+        init()
+    }, [init])
 
     useEffect(() => {
         init()
-        getRegions()
-        getHcpTypes()
-        getFacilityData()
-        Communications.pageTitleSubject.next('Shifts Approved');
+        Communications.pageTitleSubject.next('Pending Shifts');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getFacilityData, getRegions, getHcpTypes])
-    return <div className="pending-shifts screen crud-layout pdd-30">
+    }, [init])
+
+    return <div className="pending-hcps-list screen crud-layout pdd-30">
+        <DialogComponent open={isRejectOpen} cancel={cancelRejectApplication}>
+            <RejectHcpApplicationComponent cancel={cancelRejectApplication} confirm={confirmRejectApplication} requirementId={requirementId} applicationId={applicationId} />
+        </DialogComponent>
+        <DialogComponent open={isApproveOpen} cancel={cancelApprove}>
+            <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} requirementId={requirementId} applicationId={applicationId} confirm={confirmApprove} />
+        </DialogComponent>
+        <DialogComponent open={isViewOpen} cancel={cancelView} maxWidth="md">
+            <PendingSihftsViewComponent  cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId}/>
+        </DialogComponent>
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
             <LinearProgress />
         </div>}
-
-        <ShiftFilter
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-            regions={regions}
-            selectedRegion={selectedRegion}
-            setSelectedRegion={setSelectedRegion}
-
-            selectedHcps={selectedHcps}
-            setSelectedHcps={setSelectedHcps}
-            selectedTimeTypes={selectedTimeTypes}
-            setSelectedTimeTypes={setSelectedTimeTypes}
-            selectedFaciltities={selectedFacilities}
-            setSelectedFacilities={setSelectedFacilities}
-
-            noStatus={true}
-            isRequired={true}
-            resetFilters={resetFilters}
-
-            facilityList={facilityList}
-            hcpTypes={hcpTypes}
-        />
-
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
                 <div className="mrg-left-5 filter">
@@ -208,12 +155,6 @@ const PendingShiftsListScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className="actions">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
-
-                </div>
             </div>
             {list && list.table && <>
                 <TableContainer component={Paper} className={'table-responsive'}>
@@ -221,7 +162,7 @@ const PendingShiftsListScreen = () => {
                         <TableHead>
                             <TableRow>
                                 {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                    <TableCell key={'header-col-' + columnIndex} className={classesFunction(column)}
+                                    <TableCell key={'header-col-' + columnIndex}
                                     >
                                         {column}
                                     </TableCell>
@@ -238,30 +179,36 @@ const PendingShiftsListScreen = () => {
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                         <TableCell>
-                                            {row['title']}
-                                        </TableCell>
-                                        <TableCell>
                                             {moment(row['created_at']).format("MM-DD-YYYY")}
                                         </TableCell>
                                         <TableCell>
-                                            {row['facility']?.facility_name}
+                                            {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row['facility_name']}
                                         </TableCell>
                                         <TableCell>
                                             {shift_date}
                                         </TableCell>
                                         <TableCell>
-                                            {row['hcp_user']?.first_name}&nbsp;{row['hcp_user']?.last_name}
-                                        </TableCell>
-                                        <TableCell>
-                                            {row['hcp_user']?.hcp_type}
+                                            {row['hcp_data']?.hcp_type}
                                         </TableCell>
                                         <TableCell>
                                             {row['shift_type']}
                                         </TableCell>
-                                        <TableCell >
-                                            <Link to={'/approvedShifts/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                                {('View Details')}
-                                            </Link>
+                                        <TableCell  className={`captalize ${row['status']}`}>
+                                            {row['status']}
+                                        </TableCell>
+                                        <TableCell className='action-wrapper'>
+                                            <div className="d-flex actions">
+                                                <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'],row['requirement_id'])} disabled={row['status'] !== "pending"}>
+                                                    <CheckIcon className={row['status']==="pending"?"add-icon":""} />
+                                                </IconButton>
+                                                <IconButton onClick={() => openRejectApplication(row['requirement_id'], row['_id'])} disabled={row['status'] !== "pending"}>
+                                                    <CancelIcon className={row['status']==="pending"?"delete-icon":""} />
+                                                </IconButton>
+                                                <p onClick={()=>openView(row['requirement_id'],row['hcp_user_id'])} className='view-details-link'>view details</p>
+                                                </div>
                                         </TableCell>
                                     </TableRow>
                                 );

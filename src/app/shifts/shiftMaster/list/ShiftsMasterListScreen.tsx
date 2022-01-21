@@ -1,4 +1,4 @@
-import { LinearProgress, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -14,6 +14,7 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from '../../../../classes/ts-data-list-wrapper.class';
+import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from '../../../../constants';
@@ -45,6 +46,9 @@ const ShiftsMasterListScreen = () => {
     const [dateRange, setDateRange] = useLocalStorage<any[]>('dateRange', [null, null])
     const [selectedStatusTypes, setSelectedStatusTypes] = useLocalStorage<any[]>('selectedStatusTypes', [])
 
+    const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false)
+
+
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
             return "last-row"
@@ -75,18 +79,24 @@ const ShiftsMasterListScreen = () => {
 
 
     const getFacilityData = useCallback(() => {
+        setIsFacilityListLoading(true)
         let payload: any = {}
-        if (selectedRegion !== "") {
+        if (selectedRegion) {
             payload.regions = [selectedRegion]
         }
         ApiService.post(ENV.API_URL + "facility/lite", payload)
             .then((res) => {
                 setFacilityList(res?.data || []);
+                setIsFacilityListLoading(false)
             })
             .catch((err) => {
                 console.log(err);
+                setIsFacilityListLoading(false)
             });
     }, [selectedRegion]);
+
+    useEffect(() => getFacilityData(), [selectedRegion, getFacilityData])
+
 
 
     const init = useCallback(() => {
@@ -152,18 +162,18 @@ const ShiftsMasterListScreen = () => {
         init()
         getRegions()
         getHcpTypes()
-        getFacilityData()
         Communications.pageTitleSubject.next('Shifts Master');
         Communications.pageBackButtonSubject.next(null);
-    }, [init, getRegions, getHcpTypes, getFacilityData])
+    }, [init, getRegions, getHcpTypes])
 
     return <>
         <div className={'shift-master screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                <LinearProgress />
+                <LoaderComponent />
             </div>}
 
             <ShiftFilter
+                isFacilityListLoading={isFacilityListLoading}
                 dateRange={dateRange}
                 setDateRange={setDateRange}
                 selectedRegion={selectedRegion}
@@ -185,14 +195,13 @@ const ShiftsMasterListScreen = () => {
 
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
+
             />
 
             <div className="header">
                 <div className="filter"></div>
                 <div className="action">
-                    {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                        Download All
-                    </Button> */}
+
                 </div>
             </div>
             <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-20 mrg-top-0">
@@ -270,7 +279,7 @@ const ShiftsMasterListScreen = () => {
                                             <TableCell>
                                                 {row['shift_type']}
                                             </TableCell>
-                                            <TableCell className={row['shift_status']}>
+                                            <TableCell className={`captalize ${row['shift_status']}`}>
                                                 {row['shift_status']}
                                             </TableCell>
                                             <TableCell>

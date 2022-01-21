@@ -1,5 +1,5 @@
 import {
-  Button, CircularProgress, MenuItem,
+  Button, MenuItem,
   Paper, TextField as NormalTextField
 } from "@material-ui/core";
 import { DateRangeOutlined } from "@material-ui/icons";
@@ -15,6 +15,7 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import DialogComponent from "../../../components/DialogComponent";
+import LoaderComponent from "../../../components/LoaderComponent";
 import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
 import {
@@ -313,11 +314,7 @@ const AddShiftsScreen = () => {
 
 
   if (loading || shiftLoading || hcpTypesLoading) {
-    return <div className="pdd-30 screen">
-      <div className="view-loading-indicator">
-        <CircularProgress color="secondary" className="loader" />
-      </div>
-    </div>
+    return <LoaderComponent />
   }
 
 
@@ -616,8 +613,9 @@ const AddShiftsScreen = () => {
               size="large"
               variant={"contained"}
               color={"primary"}
+              className={doubleClick?'has-loading-spinner':""}
             >
-              Save Requirement
+              {doubleClick?"Saving Requirement":"Save Requirement"}
             </Button>
           </div>
         }

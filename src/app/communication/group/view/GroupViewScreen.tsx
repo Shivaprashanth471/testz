@@ -10,7 +10,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import { AddRounded, DeleteForeverOutlined } from "@material-ui/icons";
-import { Button, LinearProgress } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Link, useParams, useHistory } from "react-router-dom";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from "@material-ui/core/IconButton";
@@ -20,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import DialogComponent from '../../../../components/DialogComponent';
 import VitawerksConfirmComponent from '../../../../components/VitawerksConfirmComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const GroupViewScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -27,6 +28,7 @@ const GroupViewScreen = () => {
     const openEditGroupOptions = Boolean(editGroup);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [isGroupOpen, setIsGroupOpen] = useState<boolean>(false);
+    const [isConfirmDelete,setIsConfirmDelete] = useState<boolean>(false);
     const history = useHistory();
     const ITEM_HEIGHT = 48;
     const [groupDetails, setGroupDetails] = useState<any>(null);
@@ -86,8 +88,11 @@ const GroupViewScreen = () => {
     const handleRemove = useCallback(() => {
         CommonService._api.delete(ENV.API_URL + 'group/' + id + '/member/' + removeMemberDetails?._id).then((resp) => {
             onReload(1)
+            setIsConfirmDelete(false)
+            setIsAddOpen(false);
         }).catch((err) => {
             console.log(err)
+            setIsConfirmDelete(false)
         })
     }, [id, onReload, removeMemberDetails?._id])
 
@@ -96,7 +101,9 @@ const GroupViewScreen = () => {
             handleClose()
             history.push('/group/list')
             setIsGroupOpen(false);
+            setIsConfirmDelete(false)
         }).catch((err) => {
+            setIsConfirmDelete(false)
             console.log(err)
         })
     }, [id, history, handleClose])
@@ -119,8 +126,8 @@ const GroupViewScreen = () => {
     }, [])
 
     const confirmAdd = useCallback(() => {
+        setIsConfirmDelete(true)
         handleRemove()
-        setIsAddOpen(false);
         init()
     }, [init, handleRemove])
 
@@ -133,6 +140,7 @@ const GroupViewScreen = () => {
     }, [])
 
     const confirmDeleteGroup = useCallback(() => {
+        setIsConfirmDelete(true)
         handleDeleteGroup()
     }, [handleDeleteGroup])
 
@@ -140,13 +148,13 @@ const GroupViewScreen = () => {
         <>
             <div className={'group-view screen crud-layout pdd-30'}>
                 {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-                    <LinearProgress />
+                    <LoaderComponent />
                 </div>}
                 <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-                    <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Remove' hcpname={removeMemberDetails?.hcp_name} groupname={groupDetails?.title} confirmationText={'from'} notext={"Cancel"} yestext={"Remove"} />
+                    <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Remove' hcpname={removeMemberDetails?.hcp_name} groupname={groupDetails?.title} confirmationText={'from'} notext={"Cancel"} yestext={"Remove"} isConfirm={isConfirmDelete}/>
                 </DialogComponent>
                 <DialogComponent open={isGroupOpen} cancel={cancelDeleteGroup}>
-                    <VitawerksConfirmComponent cancel={cancelDeleteGroup} confirm={confirmDeleteGroup} text1='Delete' hcpname={groupDetails?.title} groupname={''} confirmationText={'Group'} notext={"Cancel"} yestext={"Delete"} />
+                    <VitawerksConfirmComponent cancel={cancelDeleteGroup} confirm={confirmDeleteGroup} text1='Delete' hcpname={groupDetails?.title} groupname={''} confirmationText={'Group'} notext={"Cancel"} yestext={"Delete"}  isConfirm={isConfirmDelete}/>
                 </DialogComponent>
                 <div>
                     <div className="header mrg-bottom-0 custom-border pdd-top-30 pdd-bottom-10">
