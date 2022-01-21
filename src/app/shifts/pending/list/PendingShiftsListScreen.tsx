@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { LinearProgress, TextField, IconButton } from "@material-ui/core";
+import { TextField, IconButton } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -23,6 +23,7 @@ import RejectHcpApplicationComponent from '../rejectHcp/RejectHcpApplicationComp
 import CreateShiftScreen from '../createShift/CreateShiftScreen';
 import "./PendingShiftsListScreen.scss";
 import PendingSihftsViewComponent from '../view/PendingShiftsViewComponent';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 const CssTextField = withStyles({
     root: {
@@ -42,15 +43,15 @@ const PendingShiftsListScreen = () => {
     const [hcpId, setHcpId] = useState<string>('');
     const [applicationId, setApplicationId] = useState<string>('')
     const [requirementId, setRequirementId] = useState<string>('')
-    const [isViewOpen , setIsViewOpen] = useState<boolean>(false);
+    const [isViewOpen, setIsViewOpen] = useState<boolean>(false);
 
     const init = useCallback(() => {
         let today = moment(new Date()).format("YYYY-MM-DD")
         let url = 'shift/application?status=pending&new_shifts=' + today
 
         const options = new TsDataListOptions({
-            webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
-            mobileMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status','Actions'],
+            webMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status', 'Actions'],
+            mobileMatColumns: ['Applied On', 'HCP Name', 'Facility Name', 'Shift Date', 'Type of hcp', 'Time Type', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'get');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -58,7 +59,7 @@ const PendingShiftsListScreen = () => {
 
     }, [])
 
-    const openView = useCallback((id:any,hcp_user_id:any) => {
+    const openView = useCallback((id: any, hcp_user_id: any) => {
         setIsViewOpen(true);
         setRequirementId(id);
         setHcpId(hcp_user_id)
@@ -84,7 +85,7 @@ const PendingShiftsListScreen = () => {
         init()
     }, [init])
 
-    const openApprove = useCallback((hcpId: string, applicationId: string,requirementId:string) => {
+    const openApprove = useCallback((hcpId: string, applicationId: string, requirementId: string) => {
         setHcpId(hcpId)
         setApplicationId(applicationId)
         setIsApproveOpen(true);
@@ -120,10 +121,10 @@ const PendingShiftsListScreen = () => {
             <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} requirementId={requirementId} applicationId={applicationId} confirm={confirmApprove} />
         </DialogComponent>
         <DialogComponent open={isViewOpen} cancel={cancelView} maxWidth="md">
-            <PendingSihftsViewComponent  cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId}/>
+            <PendingSihftsViewComponent cancel={cancelView} requirementId={requirementId} confirm={confirmView} hcpId={hcpId} />
         </DialogComponent>
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
+            <LoaderComponent />
         </div>}
         <div className="custom-border pdd-10 pdd-top-0 pdd-bottom-20 mrg-top-0">
             <div className="header">
@@ -138,7 +139,7 @@ const PendingShiftsListScreen = () => {
                                         if (list && list.table) {
                                             list.table.filter.search = '';
                                             list.table.reload();
-                                            list?.table.pageEvent(0)
+                                            // list?.table.pageEvent(0)
                                         }
 
                                     }} id="clear_shift_search" /></div>}
@@ -147,7 +148,7 @@ const PendingShiftsListScreen = () => {
                                         if (list && list.table) {
                                             list.table.filter.search = event.target.value;
                                             list.table.reload();
-                                            list?.table.pageEvent(0)
+                                            // list?.table.pageEvent(0)
                                         }
                                     }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Shift')} />
                                 </div>
@@ -170,7 +171,7 @@ const PendingShiftsListScreen = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.table.canShowNoData() &&
+                            {!list.table._isDataLoading && list.table?.data.length === 0 &&
                                 <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                             }
                             {list?.table.data.map((row: any, rowIndex: any) => {
@@ -196,19 +197,19 @@ const PendingShiftsListScreen = () => {
                                         <TableCell>
                                             {row['shift_type']}
                                         </TableCell>
-                                        <TableCell  className={`captalize ${row['status']}`}>
+                                        <TableCell className={`captalize ${row['status']}`}>
                                             {row['status']}
                                         </TableCell>
                                         <TableCell className='action-wrapper'>
                                             <div className="d-flex actions">
-                                                <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'],row['requirement_id'])} disabled={row['status'] !== "pending"}>
-                                                    <CheckIcon className={row['status']==="pending"?"add-icon":""} />
+                                                <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'], row['requirement_id'])} disabled={row['status'] !== "pending"}>
+                                                    <CheckIcon className={row['status'] === "pending" ? "add-icon" : ""} />
                                                 </IconButton>
                                                 <IconButton onClick={() => openRejectApplication(row['requirement_id'], row['_id'])} disabled={row['status'] !== "pending"}>
-                                                    <CancelIcon className={row['status']==="pending"?"delete-icon":""} />
+                                                    <CancelIcon className={row['status'] === "pending" ? "delete-icon" : ""} />
                                                 </IconButton>
-                                                <p onClick={()=>openView(row['requirement_id'],row['hcp_user_id'])} className='view-details-link'>view details</p>
-                                                </div>
+                                                <p onClick={() => openView(row['requirement_id'], row['hcp_user_id'])} className='view-details-link'>view details</p>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 );

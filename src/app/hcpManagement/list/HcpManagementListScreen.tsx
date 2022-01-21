@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import AccessControlComponent from '../../../components/AccessControl';
 import LoaderComponent from "../../../components/LoaderComponent";
+import LoaderText from "../../../components/LoaderText";
 import NoDataCardComponent from '../../../components/NoDataCardComponent';
 import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
@@ -143,7 +144,7 @@ const HcpManagementListScreen = () => {
                                                 if (list && list.table) {
                                                     list.table.filter.search = '';
                                                     list.table.reload();
-                                                    list?.table.pageEvent(0)
+                                                    // list?.table.pageEvent(0)
                                                 }
 
                                             }} id="clear_hcp_search" /></div>}
@@ -152,7 +153,7 @@ const HcpManagementListScreen = () => {
                                                 if (list && list.table) {
                                                     list.table.filter.search = event.target.value;
                                                     list.table.reload();
-                                                    list?.table.pageEvent(0)
+                                                    // list?.table.pageEvent(0)
                                                 }
                                             }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search HCP')} />
                                         </div>
@@ -186,8 +187,12 @@ const HcpManagementListScreen = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {list.table.canShowNoData() &&
+                                    {!list.table._isDataLoading && list.table?.data.length === 0 &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
+                                    }
+
+                                    {list.table._isDataLoading &&
+                                        <LoaderText />
                                     }
                                     {list?.table.data.map((row: any, rowIndex: any) => {
                                         return (
