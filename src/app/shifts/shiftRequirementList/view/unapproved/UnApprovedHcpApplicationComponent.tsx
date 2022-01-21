@@ -27,8 +27,8 @@ const UnApprovedHcpApplicationComponent = (props: PropsWithChildren<UnApprovedHc
 
     const init = useCallback(() => {
         const options = new TsDataListOptions({
-            webMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'Rejected By', 'Action'],
-            mobileMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'Rejected By', 'Action'],
+            webMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'Rejected By','Reason' ,'Action'],
+            mobileMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'Rejected By','Reason' , 'Action'],
         }, ENV.API_URL + 'shift/requirement/' + id + '/application?status=rejected', setList, ApiService, 'get');
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
@@ -72,7 +72,10 @@ const UnApprovedHcpApplicationComponent = (props: PropsWithChildren<UnApprovedHc
                                         {row['hcp_data']?.rate}
                                     </TableCell>
                                     <TableCell >
-                                        {row['approved_by']?.first_name} &nbsp;{row['approved_by']?.last_name}
+                                        {row['rejected_by']?.first_name} &nbsp;{row['rejected_by']?.last_name}
+                                    </TableCell>
+                                    <TableCell >
+                                        {row['rejected_reason']}
                                     </TableCell>
                                     <TableCell className='text-right'>
                                         <Link to={'/hcp/user/view/' + row['hcp_user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
