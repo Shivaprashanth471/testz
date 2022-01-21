@@ -83,10 +83,6 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
                             <h4>Email</h4>
                             <p>{hcpUserDetails?.email}</p>
                         </div>
-                        <div className="flex-1">
-                            <h4>HCP Rate (hr)</h4>
-                            <p>{hcpUserDetails?.rate} $</p>
-                        </div>
                     </div>
                 </div>
                 <div className="facility-details mrg-top-10 custom-border">

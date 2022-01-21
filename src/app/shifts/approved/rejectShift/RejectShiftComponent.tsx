@@ -86,7 +86,7 @@ const RejectShiftComponent = (props: PropsWithChildren<RejectShiftComponentProps
           <h2>Rejection Request</h2>
           <Formik initialValues={{ reason: "" }} validateOnChange={true}
               validationSchema={formValidation} onSubmit={onAdd}>
-              {({ isSubmitting, isValid, resetForm }) => (<Form className={'form-holder'}>
+              {({ isSubmitting, isValid, resetForm,dirty }) => (<Form className={'form-holder'}>
                   <DialogContent>
                       <FormLabel component="legend" color={"primary"} className={classes.selectReason}>Select Reason</FormLabel>
                       <Field component={RadioGroup} name="reason" id="radio_reason_reject" className="mrg-top-20">
@@ -123,7 +123,7 @@ const RejectShiftComponent = (props: PropsWithChildren<RejectShiftComponentProps
                       </Button>
                       <Button type={"submit"} id="btn_reject_application"
                          className={isSubmitting ?"submit has-loading-spinner" :"submit"}
-                       disabled={isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
+                       disabled={!dirty || isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
                           {isSubmitting ?"Cancelling Shift":'Cancel Shift'}
                       </Button>
                   </DialogActions>

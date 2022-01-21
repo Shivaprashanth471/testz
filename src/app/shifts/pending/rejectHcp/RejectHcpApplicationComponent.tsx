@@ -83,7 +83,7 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
             <h2>Rejection Request</h2>
             <Formik initialValues={{ reason: "" }} validateOnChange={true}
                 validationSchema={formValidation} onSubmit={onAdd}>
-                {({ isSubmitting, isValid, resetForm }) => (<Form className={'form-holder'}>
+                {({ isSubmitting, isValid,dirty, resetForm }) => (<Form className={'form-holder'}>
                     <DialogContent>
                         <FormLabel component="legend">Select Reason</FormLabel>
                         <Field component={RadioGroup} name="reason" id="radio_reason_reject" className="mrg-top-20">
@@ -118,7 +118,7 @@ const RejectHcpApplicationComponent = (props: PropsWithChildren<RejectHcpApplica
                         <Button onClick={() => cancel(resetForm)} color="secondary" id="btn_reject_application">
                             {'Cancel'}
                         </Button>
-                        <Button type={"submit"} id="btn_reject_application" className={isSubmitting?"has-loading-spinner submit":"submit"} disabled={isSubmitting || !isValid} variant={"contained"} color="secondary" autoFocus>
+                        <Button type={"submit"} id="btn_reject_application" className={isSubmitting?"has-loading-spinner submit":"submit"} disabled={!dirty || isSubmitting || !isValid} variant={"contained"} color="secondary" autoFocus>
                         {isSubmitting ?"Rejecting":'Reject'}
                         </Button>
                     </DialogActions>
