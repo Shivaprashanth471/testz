@@ -35,6 +35,7 @@ const FacilityManagementEditScreen = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<boolean>(false)
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  
   const handleFacilityImageUpload = useCallback(async (link: any) => {
     const file = fileUpload?.wrapper[0]?.file;
     delete file.base64;

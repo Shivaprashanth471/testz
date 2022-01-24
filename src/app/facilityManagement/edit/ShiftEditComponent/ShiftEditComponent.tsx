@@ -57,6 +57,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   };
 
   const handleAddFormSubmit = (event: any) => {
+    setIsShifts(true)
     event.preventDefault();
     if (
       !addFormData.shiftStartTime ||
@@ -79,7 +80,14 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       shift_type: addFormData.shiftType,
     };
 
-    onAddShift(newShiftTimings).then(() => getShiftDetails());
+    onAddShift(newShiftTimings).then(() =>
+    {
+     getShiftDetails()
+     setIsShifts(false)
+    }).catch((err: any)=>{
+      console.log(err)
+
+    })
 
     setAddFormData({
       shiftStartTime: "",
@@ -91,10 +99,8 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
   };
 
   const handleCancelShift = () => {
-    setIsShifts(false);
 
-
-    setAddFormData({
+   setAddFormData({
       shiftStartTime: "",
       shiftEndTime: "",
       shiftType: "",
@@ -109,7 +115,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       .then((resp: any) => {
         CommonService.showToast('Facility Shift Timing Deleted', 'error')
         getShiftDetails();
-        setIsConfirm(true)
+        setIsConfirm(false)
         setIsAddOpen(false);
       })
       .catch((err) => {
@@ -117,12 +123,6 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
         setIsConfirm(false)
       });
   }, [facilityId, getShiftDetails])
-
-  // function formattedTime(time: any) {
-  //   let timeInMins = CommonService.convertHoursToMinutes(time)
-  //   return moment().startOf('day').add(timeInMins, 'minutes')
-  // }
-
 
   const openAdd = useCallback((id: any) => {
     setShiftId(id)
@@ -212,8 +212,8 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
             <Button id='btn_add_shift_cancel' color='primary' variant='outlined' onClick={handleCancelShift}>
               Delete
             </Button>
-            <Button id='btn_add_shift_save' variant='contained' color='primary' type="submit">
-              Save
+            <Button id='btn_add_shift_save' variant='contained' color='primary' type="submit" className={!isShifts?"has-loading-spinner":""} disabled={!isShifts}>
+              {isShifts?"Save":"Saving"}
             </Button>
           </div>
         </form>
