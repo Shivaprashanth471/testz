@@ -12,7 +12,7 @@ export interface HcpEditAttachmentsComponentProps {
     previewFile: any;
     handleExpiryDate: any;
     deleteLocalAttachment: any;
-    openDeleteAttachment:any;
+    openDeleteAttachment: any;
 }
 
 const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachmentsComponentProps>) => {
@@ -28,7 +28,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
 
     function RenderSortedAttachments() {
         let filteredData = required_attachments?.filter((item: any) => !attachmentsDetails?.some((item2: any) => item?.attachment_type === item2?.attachment_type))
-    
+
         return filteredData.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
@@ -100,7 +100,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                                     value={item.expiry_date}
                                 />
                                 <div className="file_actions">
-                                    <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={() => openDeleteAttachment(item)}>Delete</button>
+                                    <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={(e) => openDeleteAttachment(e, item)}>Delete</button>
                                 </div>
                             </div>
                         </div>
