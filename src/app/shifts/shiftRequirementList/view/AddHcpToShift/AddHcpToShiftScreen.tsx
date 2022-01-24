@@ -9,7 +9,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { useSelector } from 'react-redux';
 import { StateParams } from '../../../../../store/reducers';
 import Checkbox from '@material-ui/core/Checkbox';
-import animationData from "../../../../../animations/no_data.json";
+import animationData from "../../../../../assets/animations/NoData.json";
 import './AddHcpToShiftScreen.scss';
 import Lottie from "react-lottie";
 import { SearchRounded } from '@material-ui/icons';

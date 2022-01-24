@@ -11,6 +11,7 @@ import DialogComponent from "../../../components/DialogComponent";
 import LoaderComponent from "../../../components/LoaderComponent";
 import CustomPreviewFile from "../../../components/shared/CustomPreviewFile";
 import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
+import VitawerksConfirmComponent from "../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import { HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
@@ -50,7 +51,9 @@ const EditHcpComponent = () => {
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [isContractDeleted, SetIsContractDeleted] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [isDeleteAttachmentOpen, setIsDeleteAttachmentOpen] = useState<boolean>(false);
+  const [deleteAttachmentDetails,setDeleteAttachmentDetails] =useState<any>(null)
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
     { attachment_type: "Physical Test", index: -1, id: 1 },
@@ -141,7 +144,7 @@ const EditHcpComponent = () => {
     setSpecialities(filteredData.join(','))
   }, [calcExperience])
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleCalcExperience()
     handleCalcSpecialities()
   }, [calcExperience, handleCalcExperience, handleCalcSpecialities]);
@@ -183,7 +186,6 @@ const EditHcpComponent = () => {
     });
   }, [id]);
   const previewFile = useCallback((index: any, type: any) => {
-    console.log(contractFile?.wrapper[0])
     if (type === "contract") {
       setPreviewFile(contractFile?.wrapper[0])
     } else {
@@ -225,7 +227,6 @@ const EditHcpComponent = () => {
       SetIsContractDeleted(false)
     }).catch((err) => {
       console.log(err);
-      //  CommonService.showToast(err?.errors || 'Error', 'error');
     });
   }, [id]);
 
@@ -240,7 +241,6 @@ const EditHcpComponent = () => {
 
   const getAttachmentsDetails = useCallback(() => {
     CommonService._api.get(ENV.API_URL + 'hcp/' + id + '/attachments').then((resp) => {
-      // console.log('api data -all attachments', resp?.data)
       setAttachmentsDetails(resp?.data);
       setIsAttachmentsLoading(false)
     }).catch((err) => {
@@ -256,6 +256,7 @@ const EditHcpComponent = () => {
     }
     CommonService._api.delete(ENV.API_URL + 'hcp/' + id + '/contract', payload).then((resp) => {
       getContractDetails()
+      setIsDeleteOpen(false)
       CommonService.showToast(resp?.msg || "Hcp Contract Deleted", 'info');
     }).catch((err) => {
       SetIsContractDeleted(false)
@@ -269,21 +270,22 @@ const EditHcpComponent = () => {
     return Math.round(sum * 10) / 10
   }
 
-  const deleteAttachment = useCallback((file: any) => {
+  const deleteAttachment = useCallback(() => {
     setIsDeleted(true)
+    setIsDeleteAttachmentOpen(true)
     let payload = {
-      "file_key": file?.file_key
+      "file_key": deleteAttachmentDetails?.file_key
     }
     CommonService._api.delete(ENV.API_URL + 'hcp/' + id + '/attachment', payload).then((resp) => {
-      console.log(resp)
       getAttachmentsDetails()
       CommonService.showToast(resp?.msg || "Hcp Attachment Deleted", 'info');
       setIsDeleted(false)
+      setIsDeleteAttachmentOpen(false)
     }).catch((err) => {
       console.log(err)
       setIsDeleted(false)
     });
-  }, [id, getAttachmentsDetails])
+  }, [id, getAttachmentsDetails,deleteAttachmentDetails?.file_key])
 
   const getHcpTypes = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
@@ -361,14 +363,9 @@ const EditHcpComponent = () => {
   }, [init, getEducationDetails, getContractDetails, getExperienceDetails, getVolunteerExperienceDetails, getReferenceDetails, getSpecialities, getRegions, getHcpTypes, getAttachmentsDetails]);
 
   useEffect(() => {
-    if (hcpDetails?.status === "approved") {
       Communications.pageTitleSubject.next("Edit HCP");
       Communications.pageBackButtonSubject.next(null);
-    } else {
-      Communications.pageTitleSubject.next("Edit HCP");
-      Communications.pageBackButtonSubject.next(null);
-    }
-  }, [hcpDetails?.status]);
+  }, []);
 
   useEffect(() => {
     handleHcpTypeChange(hcpDetails?.hcp_type)
@@ -477,9 +474,7 @@ const EditHcpComponent = () => {
           reject(err);
         });
     });
-  },
-    [id]
-  );
+  },[id]);
 
   const onAddReference = useCallback((reference: any) => {
     return new Promise((resolve, reject) => {
@@ -567,9 +562,6 @@ const EditHcpComponent = () => {
         promArray.push(onHandleAttachmentUpload(fileUpload?.wrapper[value?.index], index, hcpId))
       }
     });
-
-    console.log(promArray)
-
     if (promArray.length > 0) {
       Promise.all(promArray).then(resp => {
         if (hcpDetails?.is_approved === true) {
@@ -589,7 +581,7 @@ const EditHcpComponent = () => {
     }
   }, [fileUpload?.wrapper, history, onHandleAttachmentUpload, hcpDetails?.is_approved, hcpDetails?.user_id, id, required_attachments])
 
-  const onAdd = (hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
+  const onAdd = useCallback((hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
@@ -638,7 +630,7 @@ const EditHcpComponent = () => {
     } else {
       AddHcp()
     }
-  };
+  },[contractFile?.wrapper,expInYears,handleAttachmentsUpload,handleContractUpload,id,specialities])
 
 
   const handleExpiryDate = (event: any, index: any) => {
@@ -670,6 +662,32 @@ const EditHcpComponent = () => {
     setIsAddOpen(false);
   }, [])
 
+  const openDeleteContract = useCallback((event) => {
+    event.stopPropagation();
+    setIsDeleteOpen(true)
+  },[])
+
+  const confirmDeleteContract = useCallback(() => {
+    deleteContractFileApi()
+  },[deleteContractFileApi])
+
+  const cancelDeleteContract = useCallback(() => {
+    setIsDeleteOpen(true)
+  },[])
+
+  const openDeleteAttachment = useCallback((file:any) => {
+    setDeleteAttachmentDetails(file)
+    setIsDeleteAttachmentOpen(true)
+  },[])
+
+  const confirmDeleteAttachment = useCallback((file:any) => {
+  deleteAttachment()
+  },[deleteAttachment])
+
+  const cancelDeleteAttachment = useCallback(() => {
+    setIsDeleteAttachmentOpen(true)
+  },[])
+
   const confirmAdd = useCallback(() => {
     hcpDetails?.is_approved === true ? history.push('/hcp/user/view/' + hcpDetails?.user_id) : history.push('/hcp/view/' + id)
   }, [history, hcpDetails?.is_approved, hcpDetails?.user_id, id])
@@ -690,8 +708,16 @@ const EditHcpComponent = () => {
         <DialogComponent open={isAddOpen} cancel={cancelAdd}>
           <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
         </DialogComponent>
+        <DialogComponent open={isDeleteOpen} cancel={cancelDeleteContract}>
+            <VitawerksConfirmComponent isConfirm={isDeleteOpen} cancel={cancelDeleteContract} confirm={confirmDeleteContract} text1='Want to delete' hcpname={'Contract'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        </DialogComponent>
+        <DialogComponent open={isDeleteAttachmentOpen} cancel={cancelDeleteAttachment}>
+            <VitawerksConfirmComponent isConfirm={isDeleteOpen} cancel={cancelDeleteAttachment} confirm={confirmDeleteAttachment} text1='Want to delete' hcpname={'Attachment'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        </DialogComponent>
         <EditHcpBasicDetailsComponent
+          openDeleteContract={openDeleteContract}
           isContractDeleted={isContractDeleted}
+          openDeleteAttachment={openDeleteAttachment}
           contractFile={contractFile}
           fileUpload={fileUpload}
           onAdd={onAdd}
@@ -704,10 +730,8 @@ const EditHcpComponent = () => {
           OnContractFileUpload={OnContractFileUpload}
           deleteContractFile={deleteContractFile}
           OnFileSelected={OnFileSelected}
-          deleteAttachment={deleteAttachment}
           isDeleted={isDeleted}
           attachmentsDetails={attachmentsDetails}
-          deleteContractFileApi={deleteContractFileApi}
           previewFile={previewFile}
           contractDetails={contractDetails}
           handleExpiryDate={handleExpiryDate}
@@ -723,7 +747,7 @@ const EditHcpComponent = () => {
           />
         </div>
 
-        <div className="mrg-top-0 custom-border ">
+        <div className="mrg-top-0 custom-border">
           <p className='card-header'>Work Experience</p>
           <ExperienceEditComponent
             hcpTypeSpecialities={hcpTypeSpecialities}

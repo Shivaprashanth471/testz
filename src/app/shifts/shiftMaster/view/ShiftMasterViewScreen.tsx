@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
-import { Button, DialogActions } from "@material-ui/core";
+import { Button, DialogActions, Tooltip } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import CustomPreviewFile from '../../../../components/shared/CustomPreviewFile';
@@ -93,7 +93,7 @@ const ShiftMasterViewScreen = () => {
                 }
             };
             uploadWrapper.onProgress = (progress) => {
-               
+
             };
             setFileUpload(prevState => {
                 let state: TsFileUploadWrapperClass[] = [];
@@ -353,6 +353,7 @@ const ShiftMasterViewScreen = () => {
                     </div>
                 </div>
             </div>
+            { basicDetails?.shift_status === "complete" ||  basicDetails?.shift_status === "closed" ?
             <div className="mrg-top-10 custom-border pdd-top-10">
                 <div className="mrg-top-20">
                     {attachmentsList?.length > 0 ? <>
@@ -363,13 +364,16 @@ const ShiftMasterViewScreen = () => {
                                     return (
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
-                                            {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} />}
+                                            <Tooltip title="Preview CDPH 530 A Form">
+                                                {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
+                                            </Tooltip>
                                         </div>
                                     )
                                 })
                             }
                         </div>
-                    </> : <>
+                    </> : <>{
+                        basicDetails?.shift_status === "complete" && <>
                         <h3 className="mrg-top-0">Attachment:</h3>
                         <div className="d-flex" style={{ gap: "50px" }}>
                             {required_attachments?.map((item: any, index: any) => {
@@ -402,13 +406,14 @@ const ShiftMasterViewScreen = () => {
                             })}
                         </div>
                     </>}
+                    </>}
                 </div>
                 <DialogActions className="mrg-top-35">
                     {
                         basicDetails?.shift_status === "complete" &&
                         <Button
                             type={"submit"}
-                            className={isTimeSheetBeingUpdated ?"submit has-loading-spinner" :"submit"}
+                            className={isTimeSheetBeingUpdated ? "submit has-loading-spinner" : "submit"}
                             variant={"contained"}
                             color="primary"
                             autoFocus
@@ -419,6 +424,7 @@ const ShiftMasterViewScreen = () => {
                     }
                 </DialogActions>
             </div>
+            :<></>}
         </>)}
 
     </div>

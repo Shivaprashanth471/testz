@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableCell, TableRow } from "@material-ui/core";
 import Lottie from "react-lottie";
-import animationData from "../animations/no_data.json";
+import animationData from "../assets/animations/NoData.json";
 
 export interface NoDataCardComponentProps {
     tableCellCount?: number

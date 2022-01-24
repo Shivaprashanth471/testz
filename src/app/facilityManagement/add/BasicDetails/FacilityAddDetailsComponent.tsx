@@ -7,6 +7,7 @@ import { ScrollToError } from '../../../../components/ScrollToError';
 import PhoneInputComponent from '../../../../components/phoneInput/PhoneInputComponent';
 import { PdfIcon } from '../../../../constants/ImageConfig';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export interface FacilityAddDetailsComponentProps {
     onAdd: any;
@@ -151,7 +152,9 @@ const FacilityAddDetailsComponent = (props: any) => {
                                 fileUpload?.wrapper && fileUpload?.wrapper?.map((item: any, index: any) => {
                                     return (
                                         <div className="attachments">
-                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px" }} onClick={() => previewFile(index)} />}
+                                            <Tooltip title="Preview Facility Icon">
+                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" ,cursor:"pointer"}} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px",cursor:"pointer" }} onClick={() => previewFile(index)} />}
+                                            </Tooltip>
                                             <div className="d-flex image_actions mrg-top-10">
                                                 <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index)} className="delete-image">View</p>
                                                 <p style={{ cursor: 'pointer' }} onClick={() => deleteFile(index)} className="delete-image mrg-left-20">Delete</p>

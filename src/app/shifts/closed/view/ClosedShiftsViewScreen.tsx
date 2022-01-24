@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import './ClosedShiftsViewScreen.scss';
 import { useParams } from "react-router-dom";
-import { Avatar } from "@material-ui/core";
+import { Avatar, Tooltip } from "@material-ui/core";
 import moment from 'moment';
 import { Button } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
@@ -199,7 +199,9 @@ const ClosedShiftsViewScreen = () => {
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             <div>
+                                            <Tooltip title="Preview CDPH 530 A Form">
                                                 <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
+                                             </Tooltip>
                                                 <div className='d-flex'>
                                                     {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
                                                     <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>

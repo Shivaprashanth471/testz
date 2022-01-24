@@ -4,13 +4,6 @@
 	.flex-1 {
 		flex: 1px !important;
 	}
-	.summary{
-		overflow-wrap: break-word;
-        word-wrap: break-word;
-        hyphens: auto;
-        text-align: left;
-		max-width:calc(80vw - 100px);
-	}
 	.attachments_wrapper {
 		display: flex;
 		flex-wrap: wrap;

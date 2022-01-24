@@ -116,7 +116,6 @@ const GroupViewScreen = () => {
     }, [init, getDetails])
 
     const openAdd = useCallback((id: any, index: any) => {
-        console.log(list?.table?.data[index])
         setRemoveMemberDetails(list?.table?.data[index])
         setIsAddOpen(true);
     }, [list?.table?.data, setRemoveMemberDetails])

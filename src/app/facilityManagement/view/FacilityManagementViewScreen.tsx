@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 
 const FacilityManagementViewScreen = () => {
     const classes = useStyles();
-    // const attachments = { name: "attachments", date: "10-02-2021" }
     const params = useParams<{ id: string }>();
     const { id } = params;
     const [facilityDetails, setFacilityDetails] = useState<any | null>(null);

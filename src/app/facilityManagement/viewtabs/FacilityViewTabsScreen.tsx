@@ -5,21 +5,11 @@ import ComingSoonComponent from '../../../components/ComingSoonComponent';
 import LoaderComponent from '../../../components/LoaderComponent';
 import { ENV } from '../../../constants';
 import { CommonService, Communications } from '../../../helpers';
-//import FacilityActivityComponent from './activity/FacilityActivityComponent';
 import './FacilityViewTabsScreen.scss';
-// import FacilityHcpListComponent from './hcps/FacilityHcpListComponent';
-// import FacilityNotesListComponent from './notes/list/FacilityNotesListComponent';
-// import FacilityShiftsListComponent from './shifts/FacilityShiftsListComponent';
-// import FacilityTaskListComponent from './task/list/FacilityTaskListComponent';
 
 const FacilityViewTabsScreen = () => {
     const params = useParams<any>()
     const { id } = params;
-    // const [tabValue, setTabValue] = useState(0);
-    // const handleTabChange = (event: any, value: any) => {
-    //     setTabValue(value);
-    // }
-
     const [facilityDetails, setFacilityDetails] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const init = useCallback(() => {
@@ -73,50 +63,6 @@ const FacilityViewTabsScreen = () => {
                 </div>
                 <div className="">
                     <ComingSoonComponent />
-                    {/* <div className="tabs_header">
-
-                        <Tabs
-                            value={tabValue}
-                            onChange={handleTabChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="fullWidth"
-                            scrollButtons="auto"
-                        >
-                            <Tab label="Activity" />
-                            <Tab label="Shifts" />
-                            <Tab label="HCP" />
-                            <Tab label="Task" />
-                            <Tab label="Notes" />
-                            <Tab label="Reviews" />
-                        </Tabs>
-
-                    </div> */}
-
-                    {/* <div>
-
-                        <div className={tabValue !== 0 ? 'hidden' : ''}>
-                            <FacilityActivityComponent />
-                        </div>
-
-                        <div className={tabValue !== 1 ? 'hidden' : ''}>
-                            <FacilityShiftsListComponent />
-
-                        </div>
-                        <div className={tabValue !== 2 ? 'hidden' : ''}>
-                            <FacilityHcpListComponent />
-
-                        </div>
-                        <div className={tabValue !== 3 ? 'hidden' : ''}>
-                            <FacilityTaskListComponent />
-
-                        </div>
-                        <div className={tabValue !== 4 ? 'hidden' : ''}>
-                            <FacilityNotesListComponent />
-
-                        </div>
-
-                    </div> */}
                 </div>
 
             </div>
