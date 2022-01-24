@@ -54,7 +54,7 @@ const FacilityMemberEditComponent = ({
   const [fieldType, setFieldType] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [facilityId, setFacilityId] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false)
+  const [isConfirm, setIsConfirm] = useState<boolean>(false)
 
   const onAdd = (
     member: MemberType,
@@ -258,7 +258,7 @@ const FacilityMemberEditComponent = ({
                   >
                     Delete
                   </Button>
-                  <Button id="btn_facility_member_add_submit" color='primary' type="submit" variant='contained'>
+                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color='primary' type="submit" variant='contained'>
                     Save
                   </Button>
                 </div>
