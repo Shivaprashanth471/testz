@@ -15,6 +15,7 @@ import Lottie from "react-lottie";
 import { SearchRounded } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
+import LoaderComponent from '../../../../../components/LoaderComponent';
 
 const CssTextField = withStyles({
     root: {
@@ -68,6 +69,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     const { user } = useSelector((state: StateParams) => state.auth);
     const [isSubmitting, setSubmitting] = useState<boolean>(true);
     const [searchHcp, setSearchHcp] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
 
     const defaultOptions = {
@@ -75,6 +77,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     };
 
     const init = useCallback(() => {
+        setIsLoading(true)
 
         let url = ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type
         if (searchHcp !== '') {
@@ -83,8 +86,10 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
         // config
         CommonService._api.get(url).then((resp) => {
             sethcpList(resp?.data);
+            setIsLoading(false)
         }).catch((err) => {
             console.log(err)
+            setIsLoading(false)
         })
     }, [hcp_type, searchHcp])
 
@@ -121,7 +126,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
         setSelectedHcps(tempHcps);
     };
 
-    console.log(selectedHcps)
+
     const cancel = (resetForm: any) => {
         if (afterCancel) {
             afterCancel();
@@ -132,11 +137,14 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
         init()
     }, [init])
 
+
+
+
     return <div className='add-hcp-requirment'>
         <div className={classes.paper}>
             <h2 className={classes.title}>Add HCP to this Shift</h2>
-            {hcpList && hcpList.length > 0 ? <div id='alert-dialog-title'>
-                <FormLabel component="legend" className="mrg-left-0">List Of HCP'S</FormLabel>
+            <FormLabel component="legend" className="mrg-left-0">List Of HCP'S</FormLabel>
+            <div id='alert-dialog-title'>
                 <div className='mrg-top-20'>
                     <div>
                         <div className="d-flex">
@@ -154,25 +162,38 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
                 </div>
                 <div className="mrg-top-20">
                     {
+                        isLoading &&
+                        <LoaderComponent position='block' />
+                    }
+                    {
                         hcpList?.map((item: any) => {
                             return (<div><FormControlLabel value={item?.user_id} control={<Checkbox />} onChange={(event) => handleChange(event)} label={item?.first_name + " " + item?.last_name} />
                             </div>)
                         })
 
                     }
+
                 </div>
-            </div> : <div className={'display-flex flex-one mrg-top-20 mrg-bottom-20'}>
-                <Lottie
-                    width={700}
-                    height={400}
-                    speed={1}
-                    options={defaultOptions}
-                />
-            </div>}
+            </div>
+
+
+            {
+                !isLoading && hcpList?.length === 0 && <div className={'display-flex flex-one mrg-top-20 mrg-bottom-20'}>
+                    <Lottie
+                        width={400}
+                        height={400}
+                        speed={1}
+                        options={defaultOptions}
+                    />
+                </div>
+            }
+
+
+
             {hcpList && hcpList.length > 0 ?
                 <div className={classes.assignNcActions}>
                     <Button type={'submit'} size='large' variant={"outlined"} className={'normal'} onClick={cancel}>Cancel</Button>
-                    <Button type={'submit'} color={"primary"} size='large' disabled={!isSubmitting} variant={"contained"} className={!isSubmitting?'mrg-left-30 has-loading-spinner':'mrg-left-30'} onClick={() => addAllHcpToshift()}>{ !isSubmitting ? "Adding Hcp" : "Add Hcp" }</Button>
+                    <Button type={'submit'} color={"primary"} size='large' disabled={!isSubmitting} variant={"contained"} className={!isSubmitting ? 'mrg-left-30 has-loading-spinner' : 'mrg-left-30'} onClick={() => addAllHcpToshift()}>{!isSubmitting ? "Adding Hcp" : "Add Hcp"}</Button>
                 </div> : <></>}
         </div>
     </div>;
@@ -180,3 +201,5 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
 
 
 export default AddHcpToShiftScreen;
+
+

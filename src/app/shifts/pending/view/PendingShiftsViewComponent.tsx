@@ -1,15 +1,16 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { ENV } from '../../../../constants';
 import { CommonService } from '../../../../helpers';
-import { Avatar, CircularProgress } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 import moment from 'moment';
 import './PendingShiftsViewComponent.scss';
+import LoaderComponent from '../../../../components/LoaderComponent';
 
 export interface PendingShiftsViewComponentProps {
     cancel: () => void,
     confirm: () => void,
     requirementId: string,
-    hcpId:string,
+    hcpId: string,
 }
 
 const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewComponentProps>) => {
@@ -17,7 +18,7 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
     const hcpId = props?.hcpId;
     const [basicDetails, setBasicDetails] = useState<any>({});
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [hcpUserDetails,setHcpUserDetails] = useState<any>(null);
+    const [hcpUserDetails, setHcpUserDetails] = useState<any>(null);
 
     const getHcpUserDetails = useCallback(() => {
         // config
@@ -47,13 +48,19 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
     useEffect(() => {
         init()
         getHcpUserDetails()
-    }, [init,getHcpUserDetails])
+    }, [init, getHcpUserDetails])
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.shift_timings?.start_time, basicDetails?.shift_timings?.end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
 
-    return <div className='pending-shifts-view screen crud-layout pdd-30'>
+    if (isLoading) {
+        return <div className='pending-shifts-view screen pdd-100'>
+            <LoaderComponent position='block' />
+        </div>
+    }
+
+    return <div className='pending-shifts-view screen crud-layout pdd-50'>
         {
-            !isLoading ? <>
+            !isLoading && <div>
                 <div className="pdd-0 custom-border">
                     <div className="d-flex pdd-20 hcp-photo-details-wrapper">
                         <div className="d-flex">
@@ -130,7 +137,10 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
                     </div>
 
                 </div>
-            </>:<CircularProgress className="circular-progress"/>}
+
+
+            </div>
+        }
     </div>;
 }
 
