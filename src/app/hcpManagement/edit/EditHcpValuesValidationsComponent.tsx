@@ -4,7 +4,7 @@ import * as Yup from "yup";
 const user: any = localStorage.getItem("currentUser");
 let currentUser = JSON.parse(user);
 
-export interface HcpItemAddType {
+export interface HcpEditType {
   first_name: string;
   last_name: string;
   email?: string;
@@ -30,9 +30,11 @@ export interface HcpItemAddType {
     summary: string;
   };
 
-  rate_per_hour: any;
-  signed_on: any;
-  salary_credit_date: any;
+  contract_details?: {
+    rate_per_hour: any;
+    signed_on: any;
+    salary_credit_date: any;
+  };
 
   nc_details?: {
     dnr: string;
@@ -138,10 +140,12 @@ export const hcpFormValidation = Yup.object({
     speciality: Yup.string().typeError(" must be a text").min(2, "invalid"),
     summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(100, 'max limit 100'),
   }),
-  rate_per_hour: Yup.number().moreThan(0, 'must be greater than 0').max(999, 'max limit 999').typeError("must be a number"),
-  signed_on: Yup.string().typeError("must be date").nullable(),
-  salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
-    .max(31, 'Must be less than or equal to 31'),
+  contract_details: Yup.object({
+    rate_per_hour: Yup.number().moreThan(0, 'must be greater than 0').max(999, 'max limit 999').typeError("must be a number"),
+    signed_on: Yup.string().typeError("must be date").nullable(),
+    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
+        .max(31, 'Must be less than or equal to 31'),
+  }),
   nc_details: Yup.object({
     dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30").nullable(),
     shift_type_preference: Yup.string().trim().typeError("must be valid text").nullable(),

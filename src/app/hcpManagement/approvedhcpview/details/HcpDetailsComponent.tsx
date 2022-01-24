@@ -249,7 +249,7 @@ const HcpDetailsComponent = (props: any) => {
             </div>}
 
         <div>
-            <HcpContractComponent id={hcpBasicDetails?._id} />
+            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails}/>
         </div>
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">

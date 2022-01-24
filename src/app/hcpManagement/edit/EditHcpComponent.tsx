@@ -14,13 +14,13 @@ import LeavePageConfirmationComponent from "../../../components/shared/LeavePage
 import VitawerksConfirmComponent from "../../../components/VitawerksConfirmComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
-import { HcpItemAddType } from "../add/AddHcpValuesValidationsComponent";
 import EditHcpBasicDetailsComponent from "./BasicDetails/EditHcpBasicDetailsComponent";
 import "./EditHcpComponent.scss";
 import EducationAddComponent from "./EducationEditComponent/EducationEditComponent";
 import ExperienceEditComponent from "./ExperienceEditComponent/ExperienceEditComponent";
 import ReferenceAddComponent from "./ReferenceEditComponent/ReferenceEditComponent";
 import VolunteerExperienceEditComponent from "./VolunteerExperienceEditComponent/VolunteerExperienceEditComponent";
+import { HcpEditType } from "./EditHcpValuesValidationsComponent";
 
 const EditHcpComponent = () => {
   const user: any = localStorage.getItem("currentUser");
@@ -83,7 +83,7 @@ const EditHcpComponent = () => {
   }, [specialitiesMaster]);
 
 
-  let hcpInitialState: HcpItemAddType = {
+  let hcpInitialState: HcpEditType = {
     first_name: hcpDetails?.first_name,
     last_name: hcpDetails?.last_name,
     email: hcpDetails?.email,
@@ -108,9 +108,11 @@ const EditHcpComponent = () => {
       summary: hcpDetails?.professional_details?.summary,
     },
 
-    rate_per_hour: '',
-    signed_on: null,
-    salary_credit_date: null,
+    contract_details: {
+      rate_per_hour: hcpDetails?.contract_details?.rate_per_hour,
+      signed_on: hcpDetails?.contract_details?.signed_on,
+      salary_credit_date: hcpDetails?.contract_details?.salary_credit_date,
+    },
 
     nc_details: {
       dnr: hcpDetails?.nc_details?.dnr,
@@ -505,14 +507,11 @@ const EditHcpComponent = () => {
     })
   }, [contractFile?.wrapper])
 
-  const handleContractUpload = useCallback((hcpId: any, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors) => {
+  const handleContractUpload = useCallback((hcpId: any, setSubmitting, setErrors) => {
     let payload = {
       "file_name": contractFile?.wrapper[0]?.file?.name,
       "file_type": contractFile?.wrapper[0]?.file?.type,
       "attachment_type": "contract",
-      "rate_per_hour": rate_per_hour,
-      "signed_on": signed_on,
-      "salary_credit_date": salary_credit_date
     }
     CommonService._api.post(ENV.API_URL + 'hcp/' + hcpId + '/contract', payload).then((resp) => {
       handleContractFileUpload(resp?.data)
@@ -583,28 +582,29 @@ const EditHcpComponent = () => {
     }
   }, [fileUpload?.wrapper, history, onHandleAttachmentUpload, hcpDetails?.is_approved, hcpDetails?.user_id, id, required_attachments])
 
-  const onAdd = useCallback((hcp: HcpItemAddType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
+  const onAdd = useCallback((hcp: HcpEditType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
     setIsHcpSubmitting(true)
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
-      let rate_per_hour = hcp?.rate_per_hour;
-      let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-      let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
+      let signed_on = moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD');
+      let salary_credit_date = hcp?.contract_details?.salary_credit_date.toString();
       let payload: any = hcp
-      delete payload[rate_per_hour]
-      delete payload[signed_on]
-      delete payload[salary_credit_date]
 
       payload = {
         ...payload, professional_details: {
           ...payload?.professional_details, experience: expInYears, speciality: specialities
+        },
+        contract_details: {
+          ...payload.contract_details,
+          signed_on,
+          salary_credit_date
         }
       }
       ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
         console.log(resp);
         if (resp && resp.success) {
           if (contractFile?.wrapper[0]?.file) {
-            handleContractUpload(id, rate_per_hour, signed_on, salary_credit_date, setSubmitting, setErrors)
+            handleContractUpload(id, setSubmitting, setErrors)
           }
           handleAttachmentsUpload(id, resp)
 
@@ -622,7 +622,7 @@ const EditHcpComponent = () => {
         });
     }
     if (contractFile?.wrapper[0]?.file) {
-      if (hcp?.signed_on) {
+      if (hcp?.contract_details?.signed_on) {
         AddHcp()
       } else {
         CommonService.showToast("Please fill Signed On", "info")
@@ -762,7 +762,6 @@ const EditHcpComponent = () => {
             onAddExperience={onAddExperience}
             experiences={experiences}
             setExperience={setExperiences}
-
           />
         </div>
 

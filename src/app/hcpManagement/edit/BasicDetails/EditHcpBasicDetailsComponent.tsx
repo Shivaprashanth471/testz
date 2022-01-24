@@ -488,19 +488,18 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                     </Box>
                                 </Box>
                             )}
-                            <div className="input-container mrg-top-30">
-                                <Field variant='outlined' component={TextField} type={"text"} fullWidth
-                                    autoComplete="off" label="Rate / hr" name="rate_per_hour" required={contractFile?.wrapper[0]?.file} />
-                                <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
-                                    placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file}
-                                    label="Signed On" name="signed_on" />
-                                <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit"
-                                    fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file}
-                                    name="salary_credit_date" />
-                            </div>
                         </>}
+                        <div className="input-container mrg-top-30">
+                            <Field variant='outlined' component={TextField} type={"text"} fullWidth
+                                   autoComplete="off" label="Rate / hr" name="contract_details.rate_per_hour" required={contractFile?.wrapper[0]?.file} />
+                            <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
+                                   placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file}
+                                   label="Signed On" name="contract_details.signed_on" />
+                            <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit"
+                                   fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file}
+                                   name="contract_details.salary_credit_date" />
+                        </div>
                     </div>
-
                 </Form>
             )}
         </Formik>

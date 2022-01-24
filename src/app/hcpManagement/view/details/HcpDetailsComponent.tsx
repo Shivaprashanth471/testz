@@ -171,7 +171,7 @@ const HcpDetailsComponent = (props: any) => {
                 <StyledLoader />
             </div>}
         <div>
-            <HcpContractComponent />
+            <HcpContractComponent hcpDetails={hcpBasicDetails}/>
         </div>
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
