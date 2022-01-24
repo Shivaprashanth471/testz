@@ -99,6 +99,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       });
   }, [facilityId, getShiftDetails])
 
+  
   const openAdd = useCallback((id: any) => {
     setShiftId(id)
     setIsAddOpen(true);
