@@ -53,7 +53,8 @@ const EditHcpComponent = () => {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isDeleteAttachmentOpen, setIsDeleteAttachmentOpen] = useState<boolean>(false);
-  const [deleteAttachmentDetails, setDeleteAttachmentDetails] = useState<any>(null)
+  const [deleteAttachmentDetails, setDeleteAttachmentDetails] = useState<any>(null);
+  const [isDeleteAttachment,setIsDeleteAttachment] = useState<boolean>(false);
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
     { attachment_type: "Physical Test", index: -1, id: 1 },
@@ -271,8 +272,7 @@ const EditHcpComponent = () => {
   }
 
   const deleteAttachment = useCallback(() => {
-    setIsDeleted(true)
-    setIsDeleteAttachmentOpen(true)
+    setIsDeleteAttachment(true)
     let payload = {
       "file_key": deleteAttachmentDetails?.file_key
     }
@@ -280,10 +280,12 @@ const EditHcpComponent = () => {
       getAttachmentsDetails()
       CommonService.showToast(resp?.msg || "Hcp Attachment Deleted", 'info');
       setIsDeleted(false)
+      setIsDeleteAttachment(false)
       setIsDeleteAttachmentOpen(false)
     }).catch((err) => {
       console.log(err)
       setIsDeleted(false)
+      setIsDeleteAttachment(false)
     });
   }, [id, getAttachmentsDetails, deleteAttachmentDetails?.file_key])
 
@@ -682,6 +684,7 @@ const EditHcpComponent = () => {
   }, [])
 
   const confirmDeleteAttachment = useCallback((file: any) => {
+    setIsDeleted(true)
     deleteAttachment()
   }, [deleteAttachment])
 
@@ -710,10 +713,10 @@ const EditHcpComponent = () => {
           <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
         </DialogComponent>
         <DialogComponent open={isDeleteOpen} cancel={cancelDeleteContract}>
-          <VitawerksConfirmComponent isConfirm={isDeleteOpen} cancel={cancelDeleteContract} confirm={confirmDeleteContract} text1='Want to delete' hcpname={'Contract'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+          <VitawerksConfirmComponent isConfirm={isContractDeleted} cancel={cancelDeleteContract} confirm={confirmDeleteContract} text1='Want to delete' hcpname={'Contract'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
         </DialogComponent>
         <DialogComponent open={isDeleteAttachmentOpen} cancel={cancelDeleteAttachment}>
-          <VitawerksConfirmComponent isConfirm={isDeleteOpen} cancel={cancelDeleteAttachment} confirm={confirmDeleteAttachment} text1='Want to delete' hcpname={'Attachment'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+          <VitawerksConfirmComponent isConfirm={isDeleteAttachment} cancel={cancelDeleteAttachment} confirm={confirmDeleteAttachment} text1='Want to delete' hcpname={'Attachment'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
         </DialogComponent>
         <EditHcpBasicDetailsComponent
           openDeleteContract={openDeleteContract}

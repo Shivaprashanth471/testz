@@ -99,7 +99,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       });
   }, [facilityId, getShiftDetails])
 
-  
+
   const openAdd = useCallback((id: any) => {
     setShiftId(id)
     setIsAddOpen(true);
@@ -199,8 +199,8 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
                   <Button id='btn_add_shift_cancel' color='primary' variant='outlined' onClick={handleCloseShiftForm}>
                     Delete
                   </Button>
-                  <Button disabled={isSubmitting} id='btn_add_shift_save' variant='contained' color='primary' type="submit">
-                    Save
+                  <Button disabled={isSubmitting} id='btn_add_shift_save' variant='contained' color='primary' type="submit" className={isSubmitting?"has-loading-spinner":""}>
+                  {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>
