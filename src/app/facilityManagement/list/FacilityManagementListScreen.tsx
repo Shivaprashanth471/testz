@@ -247,7 +247,7 @@ const FacilityManagementListScreen = () => {
                     }
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={'mat-tr'}>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={'mat-tr'}>
                           <TableCell className="mat-td mat-td-created-at">
                             {moment(row['created_at']).format("MM-DD-YYYY")}
                           </TableCell>
