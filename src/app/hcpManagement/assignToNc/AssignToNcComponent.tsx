@@ -15,7 +15,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import './AssignToNcComponent.scss';
 import LoaderComponent from '../../../components/LoaderComponent';
 import Lottie from 'react-lottie';
-import animationData from '../../../animations/no_data.json'
+import animationData from '../../../assets/animations/NoData.json'
 
 export interface AssignToNcComponentProps {
     cancel: () => void,
