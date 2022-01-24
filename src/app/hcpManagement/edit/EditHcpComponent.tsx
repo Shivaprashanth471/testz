@@ -674,7 +674,7 @@ const EditHcpComponent = () => {
   }, [deleteContractFileApi])
 
   const cancelDeleteContract = useCallback(() => {
-    setIsDeleteOpen(true)
+    setIsDeleteOpen(false)
   }, [])
 
   const openDeleteAttachment = useCallback((e, file: any) => {
@@ -689,7 +689,7 @@ const EditHcpComponent = () => {
   }, [deleteAttachment])
 
   const cancelDeleteAttachment = useCallback(() => {
-    setIsDeleteAttachmentOpen(true)
+    setIsDeleteAttachmentOpen(false)
   }, [])
 
   const confirmAdd = useCallback(() => {
