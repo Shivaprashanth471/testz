@@ -32,9 +32,9 @@ export interface EditHcpBasicDetailsComponentProps {
     contractDetails: any;
     handleExpiryDate: any;
     deleteLocalAttachment: any;
-    openDeleteAttachment:any;
+    openDeleteAttachment: any;
     hcpInitialState: any;
-    openDeleteContract:any;
+    openDeleteContract: any;
 }
 
 const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetailsComponentProps>) => {
