@@ -108,7 +108,7 @@ const ApprovedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="d-flex facility-details mrg-top-10 custom-border">
+            <div className="d-flex facility-details mrg-top-10 custom-border pdd-bottom-0">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -118,7 +118,7 @@ const ApprovedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={"/facility/view/" + basicDetails?.facility?._id}
+                        to={{pathname:"/facility/view/" + basicDetails?.facility?._id,state : { prevPath: "/approvedShifts/view/"+id }}}
                     >
                         View Details
                     </Button></div>

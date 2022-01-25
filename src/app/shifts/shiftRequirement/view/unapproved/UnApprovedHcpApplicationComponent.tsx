@@ -78,7 +78,7 @@ const UnApprovedHcpApplicationComponent = (props: PropsWithChildren<UnApprovedHc
                                         {row['rejected_reason']}
                                     </TableCell>
                                     <TableCell className='text-right'>
-                                        <Link to={'/hcp/user/view/' + row['hcp_user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                        <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
                                             {('View Details')}
                                         </Link>
                                     </TableCell>
