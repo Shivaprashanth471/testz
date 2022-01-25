@@ -1,6 +1,6 @@
 {
   "name": "vitawerks_admin",
-  "version": "0.1.165",
+  "version": "0.1.166",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "1.x",
