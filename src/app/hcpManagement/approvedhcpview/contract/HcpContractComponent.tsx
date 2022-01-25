@@ -4,6 +4,7 @@ import CustomFile from '../../../../components/shared/CustomFile';
 import moment from 'moment';
 import { CommonService } from '../../../../helpers';
 import { ENV } from '../../../../constants';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
 
 export interface HcpContactComponentProps {
     id: any;
@@ -53,7 +54,11 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
 
                             </div>
                         </div>
-                    </div> : <></>
+                    </div> :<>
+                        <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+                            <h3 className="contract-heading">Contract</h3>
+                            <NoDataToShowCardComponent />
+                        </div></>
             }
         </div>
     </>

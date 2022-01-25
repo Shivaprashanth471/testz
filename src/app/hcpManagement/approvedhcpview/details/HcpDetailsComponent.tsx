@@ -8,6 +8,7 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
 import CustomFile from '../../../../components/shared/CustomFile';
 import { ENV } from '../../../../constants';
 import { CommonService } from '../../../../helpers';
@@ -234,7 +235,7 @@ const HcpDetailsComponent = (props: any) => {
             <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                 <h3>Attachments</h3>
                 {
-                    sortedAttachments?.length === 0 && <p> - </p>
+                    sortedAttachments?.length === 0 && <p>  <NoDataToShowCardComponent /> </p>
                 }
                 <div className="attachments_wrapper">
                     {sortedAttachments?.map((item: any) => {

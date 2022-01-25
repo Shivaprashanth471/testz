@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import LoaderComponent from '../../../components/LoaderComponent';
 import NoDataToShowCardComponent from '../../../components/NoDataToShowCardComponent';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const FacilityManagementViewScreen = () => {
+const FacilityManagementViewScreen = (props:any) => {
     const classes = useStyles();
     let history = useHistory();
     const params = useParams<{ id: string }>();
@@ -68,13 +68,14 @@ const FacilityManagementViewScreen = () => {
         })
     }, [id])
 
+
+ console.log(props?.location.state,"apple")
+
     useEffect(() => {
         let prevLocation:any="/facility/tabs/" + id;
-
-        history.listen(nextLocation => {
-            console.log(prevLocation?.pathname,">>>>>>>>","apple");
-            prevLocation = nextLocation || "/facility/tabs/" + id;
-        });
+        if(props?.location.state){
+            prevLocation=props?.location.state?.prevPath;
+        }
         init();
         getFacilityMembers();
         getShiftDetails();

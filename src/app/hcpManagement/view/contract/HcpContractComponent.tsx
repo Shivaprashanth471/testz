@@ -5,6 +5,7 @@ import { CommonService } from '../../../../helpers';
 import { ENV } from '../../../../constants';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import NoDataToShowCardComponent from "../../../../components/NoDataToShowCardComponent";
 
 export interface HcpContactComponentProps {
     hcpDetails: any;
@@ -12,7 +13,7 @@ export interface HcpContactComponentProps {
 
 const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>) => {
 
-    const hcpDetails  = props?.hcpDetails;
+    const hcpDetails = props?.hcpDetails;
 
     const params = useParams<{ id: string }>();
     const { id } = params;
@@ -57,7 +58,12 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
 
                             </div>
                         </div>
-                    </div> : <></>
+                    </div> : <>
+                        <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+                            <h3 className="contract-heading">Contract</h3>
+                            <NoDataToShowCardComponent />
+                        </div></>
+
             }
         </div>
     </> : <></>

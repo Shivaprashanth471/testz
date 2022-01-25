@@ -109,7 +109,7 @@ const ClosedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="facility-details d-flex custom-border mrg-top-10">
+            <div className="facility-details d-flex custom-border mrg-top-10 pdd-bottom-5">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -119,7 +119,7 @@ const ClosedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={"/facility/view/" + basicDetails?.facility?._id}
+                        to={{pathname:"/facility/view/" + basicDetails?.facility?._id, state : { prevPath: "/closedShifts/view/"+id }}}
                     >
                         View Details
                     </Button></div>
