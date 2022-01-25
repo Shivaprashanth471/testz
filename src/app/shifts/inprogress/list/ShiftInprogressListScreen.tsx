@@ -206,7 +206,7 @@ const ShiftInprogressListScreen = () => {
                                         if (list && list.table) {
                                             list.table.filter.search = '';
                                             list.table.reload();
-                                            list?.table.pageEvent(0)
+                                            // list?.table.pageEvent(0)
                                         }
 
                                     }} id="clear_shift_search" /></div>}
@@ -215,7 +215,7 @@ const ShiftInprogressListScreen = () => {
                                         if (list && list.table) {
                                             list.table.filter.search = event.target.value;
                                             list.table.reload();
-                                            list?.table.pageEvent(0)
+                                            // list?.table.pageEvent(0)
                                         }
                                     }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Shift')} />
                                 </div>
@@ -224,7 +224,7 @@ const ShiftInprogressListScreen = () => {
                     </div>
                 </div>
                 <div className="actions">
-           
+
                 </div>
             </div>
             {list && list.table && <>
@@ -242,7 +242,7 @@ const ShiftInprogressListScreen = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.table.canShowNoData() &&
+                            {!list.table._isDataLoading && list.table?.data.length === 0 &&
                                 <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                             }
                             {list?.table.data.map((row: any, rowIndex: any) => {

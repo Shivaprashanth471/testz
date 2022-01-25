@@ -10,6 +10,12 @@ export const designationNames = [
   { value: "SC", label: "Staffing Coordinator (SC)" },
 ];
 
+export const salaryCredit = [
+  { value:"daily", label:"Daily"},
+  {value:"weekly",label:"Weekly"},
+  {value:"bi_weekly",label:"Bi-Weekly"}
+]
+
 export const otHours = [
   { value: 40, label: "40 Hrs/Week" },
   { value: 8, label: "8 Hrs/Day" },

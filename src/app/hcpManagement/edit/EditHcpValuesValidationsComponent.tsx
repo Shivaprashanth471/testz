@@ -4,7 +4,7 @@ import * as Yup from "yup";
 const user: any = localStorage.getItem("currentUser");
 let currentUser = JSON.parse(user);
 
-export interface HcpItemAddType {
+export interface HcpEditType {
   first_name: string;
   last_name: string;
   email?: string;
@@ -29,11 +29,12 @@ export interface HcpItemAddType {
     experience: number | string;
     summary: string;
   };
-  contract_details : {
-  rate_per_hour: any;
-  signed_on: any;
-  salary_credit: any;
-  },
+
+  contract_details?: {
+    rate_per_hour: any;
+    signed_on: any;
+    salary_credit: any;
+  };
 
   nc_details?: {
     dnr: string;
@@ -56,59 +57,6 @@ export interface HcpItemAddType {
     other_information: any;
   }
 }
-
-export const AddHcpInitialValues = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  contact_number: "",
-  hcp_type: "",
-  gender: "",
-  about: "",
-  experience: "",
-  speciality: "",
-  summary: "",
-  address: {
-    street: "",
-    city: "",
-    state: "",
-    region: "",
-    country: "",
-    zip_code: "",
-  },
-
-  professional_details: {
-    experience: "",
-    speciality: "",
-    summary: "",
-  },
-  contract_details : {
-  rate_per_hour: "",
-  signed_on: null,
-  salary_credit: "",
-  },
-
-  nc_details: {
-    dnr: "",
-    shift_type_preference: "",
-    location_preference: "",
-    more_important_preference: "",
-    family_consideration: "",
-    zone_assignment: "",
-    vaccine: "",
-    covid_facility_preference: "",
-    is_fulltime_job: "",
-    is_supplement_to_income: "",
-    is_studying: "",
-    is_gusto_invited: "",
-    is_gusto_onboarded: "",
-    gusto_type: "",
-    nc_last_updated: `${currentUser?.first_name} ${currentUser?.last_name}`,
-    last_call_date: null,
-    contact_type: "",
-    other_information: "",
-  }
-};
 
 
 export const hcpFormValidation = Yup.object({

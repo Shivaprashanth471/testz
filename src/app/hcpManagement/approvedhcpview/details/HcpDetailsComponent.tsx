@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import "./HcpDetailsComponent.scss";
-import { CommonService } from '../../../../helpers';
-import { ENV } from '../../../../constants';
-import { useParams } from 'react-router-dom';
-import moment from 'moment';
-import CustomFile from '../../../../components/shared/CustomFile';
-import HcpContractComponent from '../contract/HcpContractComponent';
 import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import LoaderComponent from '../../../../components/LoaderComponent';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
+import CustomFile from '../../../../components/shared/CustomFile';
+import { ENV } from '../../../../constants';
+import { CommonService } from '../../../../helpers';
+import HcpContractComponent from '../contract/HcpContractComponent';
 import HcpEducationComponent from '../education/HcpEducationComponent';
 import HcpExperienceComponent from '../experience/HcpExperienceComponent';
-import HcpVolunteerExperienceComponent from '../volunteerExperience/HcpVolunteerExperienceComponent';
 import HcpReferenceComponent from '../reference/HcpReferenceComponent';
-import { CircularProgress } from '@material-ui/core';
+import HcpVolunteerExperienceComponent from '../volunteerExperience/HcpVolunteerExperienceComponent';
+import "./HcpDetailsComponent.scss";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -117,7 +118,7 @@ const HcpDetailsComponent = (props: any) => {
     }, [init])
 
     useEffect(() => {
-        const required_attachments =[{ name: "Physical Test", index: -1 },
+        const required_attachments = [{ name: "Physical Test", index: -1 },
         { name: "TB Test", index: -1 },
         { name: "Chest X-ray", index: -1 },
         { name: "CPR/BLS Card", index: -1 },
@@ -142,8 +143,8 @@ const HcpDetailsComponent = (props: any) => {
     }, [attachmentsDetails])
 
     const StyledLoader = () => {
-        return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <CircularProgress color="secondary" />
+        return <div className='pdd-20' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LoaderComponent position='block' />
         </div>
     }
 
@@ -234,7 +235,7 @@ const HcpDetailsComponent = (props: any) => {
             <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
                 <h3>Attachments</h3>
                 {
-                    sortedAttachments?.length === 0 && <p> - </p>
+                    sortedAttachments?.length === 0 && <p>  <NoDataToShowCardComponent /> </p>
                 }
                 <div className="attachments_wrapper">
                     {sortedAttachments?.map((item: any) => {
@@ -249,7 +250,7 @@ const HcpDetailsComponent = (props: any) => {
             </div>}
 
         <div>
-            <HcpContractComponent id={hcpBasicDetails?._id} />
+            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails}/>
         </div>
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
@@ -289,7 +290,7 @@ const HcpDetailsComponent = (props: any) => {
             <div className="d-flex">
                 <div className="flex-1">
                     <h4>Zone Assignment</h4>
-                    <p>{hcpBasicDetails?.nc_details?.zone_assignment !== "" ? hcpBasicDetails?.nc_details?.zone_assignment:"N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.zone_assignment !== "" ? hcpBasicDetails?.nc_details?.zone_assignment : "N/A"}</p>
                 </div>
                 <div className="flex-1">
                     <h4>Do you have a Full-time Job ?</h4>
@@ -297,7 +298,7 @@ const HcpDetailsComponent = (props: any) => {
                 </div>
                 <div className="flex-1">
                     <h4>What Is More Important for You ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.more_important_preference !== "" ? hcpBasicDetails?.nc_details?.more_important_preference:"N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.more_important_preference !== "" ? hcpBasicDetails?.nc_details?.more_important_preference : "N/A"}</p>
                 </div>
             </div>
 

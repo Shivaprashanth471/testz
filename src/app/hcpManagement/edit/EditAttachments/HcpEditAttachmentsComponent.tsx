@@ -6,13 +6,13 @@ import FileDropZoneComponent from '../../../../components/core/FileDropZoneCompo
 export interface HcpEditAttachmentsComponentProps {
     fileUpload: any;
     required_attachments: any;
-    deleteAttachment: any;
     isDeleted: any;
     OnFileSelected: any;
     attachmentsDetails: any;
     previewFile: any;
     handleExpiryDate: any;
     deleteLocalAttachment: any;
+    openDeleteAttachment: any;
 }
 
 const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachmentsComponentProps>) => {
@@ -22,23 +22,18 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
     const fileUpload = props?.fileUpload;
     const previewFile = props?.previewFile;
     const isDeleted = props?.isDeleted;
-    const deleteAttachment = props?.deleteAttachment;
     const OnFileSelected = props?.OnFileSelected;
     const deleteLocalAttachment = props?.deleteLocalAttachment;
+    const openDeleteAttachment = props?.openDeleteAttachment;
 
     function RenderSortedAttachments() {
         let filteredData = required_attachments?.filter((item: any) => !attachmentsDetails?.some((item2: any) => item?.attachment_type === item2?.attachment_type))
-        // let SortedData = [...filteredData].sort((a: any, b: any) => a?.id - b?.id)
-        // let filteredData = filterAvailableDocs()
-
 
         return filteredData.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
                     <div key={item?.id} className="attachments mrg-top-15">
-                        {/* {JSON.stringify({ index })} */}
                         <br />
-                        {/* {JSON.stringify({ 'id': item.id })} */}
                         <div className="custom_file">
                             <h3 className="mrg-top-10 mrg-bottom-0 file_name file_attachment_title"> {item.attachment_type}</h3>
                             <div className="d-flex">
@@ -105,7 +100,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                                     value={item.expiry_date}
                                 />
                                 <div className="file_actions">
-                                    <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={() => deleteAttachment(item)}>Delete</button>
+                                    <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={(e) => openDeleteAttachment(e, item)}>Delete</button>
                                 </div>
                             </div>
                         </div>

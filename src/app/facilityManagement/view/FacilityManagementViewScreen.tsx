@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import LoaderComponent from '../../../components/LoaderComponent';
 import NoDataToShowCardComponent from '../../../components/NoDataToShowCardComponent';
@@ -14,6 +14,7 @@ import { ENV } from '../../../constants';
 import { CommonService, Communications } from '../../../helpers';
 import FacilityBasicDetailsComponent from './basicDetails/FacilityBasicDetailsComponent';
 import './FacilityManagementViewScreen.scss';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const FacilityManagementViewScreen = () => {
+const FacilityManagementViewScreen = (props:any) => {
     const classes = useStyles();
-    // const attachments = { name: "attachments", date: "10-02-2021" }
+    let history = useHistory();
     const params = useParams<{ id: string }>();
     const { id } = params;
     const [facilityDetails, setFacilityDetails] = useState<any | null>(null);
@@ -38,7 +39,7 @@ const FacilityManagementViewScreen = () => {
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
+    
     const init = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'facility/' + id).then((resp) => {
@@ -66,13 +67,18 @@ const FacilityManagementViewScreen = () => {
             console.log(err)
         })
     }, [id])
+
     useEffect(() => {
+        let prevLocation:any="/facility/tabs/" + id;
+        if(props?.location.state){
+            prevLocation=props?.location.state?.prevPath;
+        }
         init();
         getFacilityMembers();
-        getShiftDetails()
+        getShiftDetails();
         Communications.pageTitleSubject.next('Facility Details');
-        Communications.pageBackButtonSubject.next("/facility/tabs/" + id);
-    }, [init, getFacilityMembers, getShiftDetails, id])
+        Communications.pageBackButtonSubject.next(prevLocation);
+    }, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
 
 
     if (isLoading) {

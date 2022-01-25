@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Communications } from '../../helpers';
 import './DashboardScreen.scss';
 import Lottie from "react-lottie";
-import animationData from "../../animations/coming_soon.json";
+import animationData from "../../assets/animations/ComingSoon.json";
 
 const DashboardScreen = () => {
     const defaultOptions = {

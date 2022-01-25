@@ -1,18 +1,19 @@
 
 import {
-  Button, Table,
+  Button, MenuItem, Table,
   TableBody,
   TableHead,
   TableRow
 } from "@material-ui/core";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { TextField } from "formik-material-ui";
 import { nanoid } from 'nanoid';
 import React, { useState } from "react";
-import CustomSelect from "../../../../components/shared/CustomSelect";
-import CustomTextField from "../../../../components/shared/CustomTextField";
 import { shiftType } from "../../../../constants/data";
 import { CommonService } from "../../../../helpers";
 import ReadOnlyRow from "./ReadOnlyRow";
 import "./ShiftAddComponent.scss";
+import { shiftFormValidation } from "./ShiftTimingFormValidation";
 
 
 type ShiftAddComponentProps = {
@@ -20,17 +21,24 @@ type ShiftAddComponentProps = {
   setShiftTimings: any;
 };
 
+interface ShiftAddType {
+  shift_start_time: string;
+  shift_end_time: string;
+  shift_type: string;
+}
+
+const shiftInitalState: ShiftAddType = {
+  shift_start_time: "",
+  shift_end_time: "",
+  shift_type: "",
+}
+
+
 const ShiftAddComponent = ({
   shiftTimings,
   setShiftTimings,
 }: ShiftAddComponentProps) => {
   const [isShifts, setIsShifts] = useState<boolean>(false);
-  const [addFormData, setAddFormData] = useState<any>({
-    shift_start_time: "",
-    shift_end_time: "",
-    shift_type: "",
-  });
-
   const showDropDownBelowField = {
     MenuProps: {
       anchorOrigin: {
@@ -41,65 +49,28 @@ const ShiftAddComponent = ({
     }
   }
 
-  const handleAddFormChange = (event: any) => {
-    const fieldName = event.target.name;
-    const fieldValue = event.target.value;
 
-    const newFormData: any = { ...addFormData };
-    newFormData[fieldName] = fieldValue;
+  const onAdd = (shift: ShiftAddType, { setSubmitting, setErrors, resetForm }: FormikHelpers<ShiftAddType>) => {
 
-    setAddFormData(newFormData);
-  };
-
-  const handleAddFormSubmit = (event: any) => {
-    event.preventDefault();
-
-    if (
-      !addFormData.shift_start_time ||
-      !addFormData.shift_end_time ||
-      !addFormData.shift_type
-    ) {
-      CommonService.showToast('Please provide shift timings')
-      return;
-    }
-
-    let isSameTime = CommonService.convertHoursToMinutes(addFormData.shift_start_time) === CommonService.convertHoursToMinutes(addFormData.shift_end_time)
-    if (isSameTime) {
-      CommonService.showToast('Shift start time and Shift end time can not be same')
-      return
-    }
-
+    console.log(shift);
     const newShiftTimings = {
       id: nanoid(),
-      shift_start_time: CommonService.convertHoursToMinutes(addFormData.shift_start_time),
-      shift_end_time: CommonService.convertHoursToMinutes(addFormData.shift_end_time),
-      shift_type: addFormData.shift_type,
+      shift_start_time: CommonService.convertHoursToMinutes(shift?.shift_start_time),
+      shift_end_time: CommonService.convertHoursToMinutes(shift?.shift_end_time),
+      shift_type: shift?.shift_type,
     };
 
 
     const newShifts = [...shiftTimings, newShiftTimings];
     setShiftTimings(newShifts);
 
-    //clear state
-    setAddFormData({
-      shift_start_time: "",
-      shift_end_time: "",
-      shift_type: "",
-    });
-
-    handleCancelShift()
+    resetForm()
+    handleCloseShiftForm()
     CommonService.showToast('Shift Timing added', 'info')
   };
 
-  const handleCancelShift = () => {
+  const handleCloseShiftForm = () => {
     setIsShifts(false);
-
-    //clear state after cancel
-    setAddFormData({
-      shift_start_time: "",
-      shift_end_time: "",
-      shift_type: "",
-    });
   };
 
   const handleDeleteClick = (shiftId: number) => {
@@ -109,14 +80,10 @@ const ShiftAddComponent = ({
     );
     newShiftTimings.splice(index, 1);
     setShiftTimings(newShiftTimings);
-    CommonService.showToast('Shift Timing deleted', 'error')
+    CommonService.showToast('Shift Timing deleted', 'success')
   };
 
 
-  // function formattedTime(time: any) {
-  //   let timeInMins = CommonService.convertHoursToMinutes(time)
-  //   return moment().startOf('day').add(timeInMins, 'minutes')
-  // }
 
   return (
     <div className="shift-add-container">
@@ -132,10 +99,10 @@ const ShiftAddComponent = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {shiftTimings.map((member: any) => (
+            {shiftTimings.map((shiftTiming: any) => (
               <ReadOnlyRow
-                key={member.id}
-                shiftTimings={member}
+                key={shiftTiming.id}
+                shiftTimings={shiftTiming}
                 handleDeleteClick={handleDeleteClick}
               />
             ))}
@@ -144,53 +111,70 @@ const ShiftAddComponent = ({
       )}
 
       {isShifts ? (
-        <form onSubmit={handleAddFormSubmit}>
-          <div className="shift-add-input">
-            <CustomTextField
-              required
-              type="time"
-              value={addFormData.shift_start_time}
-              name="shift_start_time"
-              label="Shift Start Time"
-              InputLabelProps={{ shrink: true }}
-              onChange={handleAddFormChange}
-              id="input_shift_add_shift_start_time"
-            />
-            <CustomTextField
-              required
-              type="time"
-              value={addFormData.shift_end_time}
-              name="shift_end_time"
-              label="Shift End Time"
-              InputLabelProps={{ shrink: true }}
-              onChange={handleAddFormChange}
-              id="input_shift_add_shift_end_time"
-            />
-            <CustomSelect
-              SelectProps={showDropDownBelowField}
-              variant='outlined'
-              required
-              name="shift_type"
-              label="Shift Type"
-              value={addFormData.shift_type}
-              options={shiftType.map(({ value, label }) => ({
-                value,
-                label,
-              }))}
-              onChange={handleAddFormChange}
-              id="input_shift_add_shift_type"
+        <Formik
+          initialValues={shiftInitalState}
+          validateOnChange={true}
+          validationSchema={shiftFormValidation}
+          onSubmit={onAdd}
+        >
+          {
+            ({ isSubmitting, handleSubmit, isValid, resetForm }) => (
+              <Form className={"form-holder"} >
+                <div className="shift-add-input">
+                  <Field
+                    fullWidth
+                    variant="outlined"
+                    type="time"
+                    component={TextField}
+                    name="shift_start_time"
+                    label="Shift Start Time"
+                    InputLabelProps={{ shrink: true }}
+                    id="input_shift_add_shift_start_time"
+                  />
+                  <Field
+                    fullWidth
+                    variant="outlined"
+                    type="time"
+                    component={TextField}
+                    name="shift_end_time"
+                    label="Shift End Time"
+                    InputLabelProps={{ shrink: true }}
+                    id="input_shift_add_shift_end_time"
+                  />
+                  <Field
+                    select
+                    fullWidth
+                    SelectProps={showDropDownBelowField}
+                    variant='outlined'
+                    component={TextField}
+                    name="shift_type"
+                    label="Shift Type"
+                    id="input_shift_add_shift_type"
 
-            />
-          </div>
-          <div className='shift-add-btn-grp'>
-            <Button id='btn_add_shift_cancel' color='primary' variant='outlined' onClick={handleCancelShift}>
-              Delete
-            </Button>
-            <Button id='btn_add_shift_save' variant='contained' color='primary' type="submit">
-              Save
-            </Button>
-          </div>
-        </form>
+                  >
+                    <MenuItem value="" >
+                      Select Shift Type
+                    </MenuItem>
+                    {shiftType.length > 0 &&
+                      shiftType.map((item: any, index) => (
+                        <MenuItem value={item.value} key={index}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                  </Field>
+                </div>
+                <div className='shift-add-btn-grp'>
+                  <Button id='btn_add_shift_cancel' color='primary' variant='outlined' onClick={handleCloseShiftForm}>
+                    Delete
+                  </Button>
+                  <Button id='btn_add_shift_save' variant='contained' color='primary' type="submit">
+                    Save
+                  </Button>
+                </div>
+              </Form>
+            )
+          }
+        </Formik>
       ) : (
         <div className="shift-add-action">
 

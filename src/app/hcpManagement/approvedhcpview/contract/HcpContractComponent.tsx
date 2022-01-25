@@ -1,12 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import './HcpContractComponent.scss';
 import CustomFile from '../../../../components/shared/CustomFile';
 import moment from 'moment';
 import { CommonService } from '../../../../helpers';
 import { ENV } from '../../../../constants';
+import NoDataToShowCardComponent from '../../../../components/NoDataToShowCardComponent';
 
-const HcpContractComponent = (props: any) => {
+export interface HcpContactComponentProps {
+    id: any;
+    hcpDetails: any;
+}
+
+const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>) => {
+
+    const hcpDetails  = props?.hcpDetails;
     const id = props?.id;
+
     const [contractDetails, setContractDetails] = useState<any | null>(null)
     const init = useCallback(() => {
         // config
@@ -22,33 +31,40 @@ const HcpContractComponent = (props: any) => {
     }, [init])
     return <>
         <div className="hcp_contract_details mrg-top-10">
-            {
-                contractDetails ?
-                    <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+            <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+                {
+                    contractDetails !== undefined ?
                         <div>
                             <CustomFile data={contractDetails} />
-                        </div>
+                        </div> : <h3 className="contract-heading">Contract</h3>
+                }
+                {
+                    hcpDetails?.contract_details ?
                         <div className="d-flex">
                             <div className="flex-1">
                                 <h4>Rate/hr</h4>
-                                <p>{contractDetails?.rate_per_hour}$</p>
+                                <p>{hcpDetails?.contract_details?.rate_per_hour}&nbsp;$</p>
                             </div>
                             <div className="flex-1">
                                 <h4>Signed On</h4>
-                                <p>{moment(contractDetails?.signed_on).format('MMMM, YYYY')}</p>
+                                <p>{hcpDetails?.contract_details?.signed_on?moment(hcpDetails?.contract_details?.signed_on).format("MMMM Do YYYY"):"N/A"}</p>
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit Date</h4>
-                                <p>{contractDetails?.salary_credit_date}</p>
+                                <p>{hcpDetails?.contract_details?.salary_credit}</p>
                             </div>
                             <div className="flex-1">
 
                             </div>
                         </div>
-                    </div> : <></>
-            }
+                        : <>
+                            <NoDataToShowCardComponent />
+                        </>
+
+                }
+            </div>
         </div>
-    </>
+        </>
 }
 
 

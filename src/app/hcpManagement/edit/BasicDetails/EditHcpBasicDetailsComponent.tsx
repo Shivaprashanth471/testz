@@ -5,7 +5,7 @@ import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine } from "../../../../constants/data";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, vaccine } from "../../../../constants/data";
 import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
 import { hcpFormValidation } from '../../add/AddHcpValuesValidationsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
@@ -22,19 +22,19 @@ export interface EditHcpBasicDetailsComponentProps {
     specialities: any;
     expInYears: any;
     required_attachments: any;
-    deleteAttachment: any;
     OnContractFileUpload: any;
     deleteContractFile: any;
     isDeleted: any;
     OnFileSelected: any;
     attachmentsDetails: any;
     isContractDeleted: any;
-    deleteContractFileApi: any;
     previewFile: any;
     contractDetails: any;
     handleExpiryDate: any;
     deleteLocalAttachment: any;
-    hcpInitialState: any
+    openDeleteAttachment: any;
+    hcpInitialState: any;
+    openDeleteContract: any;
 }
 
 const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetailsComponentProps>) => {
@@ -47,18 +47,18 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
     const specialities = props?.specialities;
     const expInYears = props?.expInYears;
     const required_attachments = props?.required_attachments;
-    const deleteAttachment = props?.deleteAttachment;
     const OnContractFileUpload = props?.OnContractFileUpload;
     const deleteContractFile = props?.deleteContractFile;
     const isDeleted = props?.isDeleted;
     const OnFileSelected = props?.OnFileSelected;
     const attachmentsDetails = props?.attachmentsDetails;
     const isContractDeleted = props?.isContractDeleted;
-    const deleteContractFileApi = props?.deleteContractFileApi;
     const previewFile = props?.previewFile;
     const contractDetails = props?.contractDetails;
     const handleExpiryDate = props?.handleExpiryDate;
     const deleteLocalAttachment = props?.deleteLocalAttachment;
+    const openDeleteContract = props?.openDeleteContract;
+    const openDeleteAttachment = props?.openDeleteAttachment;
 
     const showDropDownBelowField = {
         MenuProps: {
@@ -197,238 +197,238 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         </div>
                     </div>
                     <div className="nc-section custom-border mrg-top-10" >
-                    <p className="card-header">NC Section</p>
-                            <div className="input-container">
-                                <Field variant='outlined' name="nc_details.dnr" type={"text"} component={TextField}
-                                    label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
-                                <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.vaccine" type={"text"} component={TextField}
-                                    id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
-                                    <MenuItem value="" >Select Value</MenuItem>
-                                    {vaccine.map((item: any, index: any) => (
-                                        <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>{item.label}</MenuItem>
-                                    ))}
-                                </Field>
-                            </div>
+                        <p className="card-header">NC Section</p>
+                        <div className="input-container">
+                            <Field variant='outlined' name="nc_details.dnr" type={"text"} component={TextField}
+                                label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
+                            <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.vaccine" type={"text"} component={TextField}
+                                id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
+                                {vaccine.map((item: any, index: any) => (
+                                    <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>{item.label}</MenuItem>
+                                ))}
+                            </Field>
+                        </div>
 
-                            <div className="input-container">
-                                <Field variant='outlined' name="nc_details.location_preference" type={"text"} component={TextField}
-                                    label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
-                                <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.contact_type" type={"text"}
-                                    component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
-                                    <MenuItem value="" >Select Value</MenuItem>
-                                    {contactType.map((item: any, index: any) => (
-                                        <MenuItem value={item.value} id={"menu_hcp_add_contact_type" + index}>{item.label}</MenuItem>
-                                    ))}
-                                </Field>
-                            </div>
+                        <div className="input-container">
+                            <Field variant='outlined' name="nc_details.location_preference" type={"text"} component={TextField}
+                                label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
+                            <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.contact_type" type={"text"}
+                                component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
+                                {contactType.map((item: any, index: any) => (
+                                    <MenuItem value={item.value} id={"menu_hcp_add_contact_type" + index}>{item.label}</MenuItem>
+                                ))}
+                            </Field>
+                        </div>
 
-                            <div className="input-container">
-                                <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.shift_type_preference" type={"text"}
-                                    component={TextField} id="input_hcp_add_shift_type_preference" label="Preference Shift Type" fullWidth autoComplete="off">
-                                    <MenuItem value="" >Select Value</MenuItem>
-                                    {shiftTypePreference.map((item: any, index: any) => (
-                                        <MenuItem value={item.value} id={"menu_hcp_add_shift_type_preference" + index}>{item.label}</MenuItem>
-                                    ))}
-                                </Field>
-                                <Field variant='outlined' name="nc_details.zone_assignment" type={"text"} component={TextField}
-                                        id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
+                        <div className="input-container">
+                            <Field SelectProps={showDropDownBelowField} select variant='outlined' name="nc_details.shift_type_preference" type={"text"}
+                                component={TextField} id="input_hcp_add_shift_type_preference" label="Preference Shift Type" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
+                                {shiftTypePreference.map((item: any, index: any) => (
+                                    <MenuItem value={item.value} id={"menu_hcp_add_shift_type_preference" + index}>{item.label}</MenuItem>
+                                ))}
+                            </Field>
+                            <Field variant='outlined' name="nc_details.zone_assignment" type={"text"} component={TextField}
+                                id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
 
 
-                            </div>
+                        </div>
 
-                            <div className="input-container">
-                                <Field variant="inline" openTo="date" inputVariant='outlined' component={DateTimePicker} placeholder="MM/DD/YYYY HH:MM "
-                                    fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Last Call Date" name="nc_details.last_call_date" />
-                                <Field variant='outlined' name="nc_details.family_consideration" type={"text"} component={TextField}
-                                    id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off" />
-                            </div>
-                            <div className='input-container d-flex'>
-                                <div className='flex-1'>
-                                    <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Do you have a Full-time Job?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup} name="nc_details.is_fulltime_job">
-                                            <div className='d-flex'>
-                                                {boolAcknowledge.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'full-time' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                        name="nc_details.is_fulltime_job"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
-                                </div>
-                                <div className='flex-1'>
+                        <div className="input-container">
+                            <Field variant="inline" openTo="date" inputVariant='outlined' component={DateTimePicker} placeholder="MM/DD/YYYY HH:MM "
+                                fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Last Call Date" name="nc_details.last_call_date" />
+                            <Field variant='outlined' name="nc_details.family_consideration" type={"text"} component={TextField}
+                                id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off" />
+                        </div>
+                        <div className='input-container d-flex'>
+                            <div className='flex-1'>
                                 <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Covid (or) Non Covid Facility?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup} name="nc_details.covid_facility_preference">
-                                            <div className='d-flex'>
-                                                {covidPreference.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'full-time' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                        name="nc_details.covid_facility_preference"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
+                                    <FormLabel className={'form-label'}>{('Do you have a Full-time Job?')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_fulltime_job">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'full-time' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_fulltime_job"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
                                 </div>
                             </div>
-                            <div className="input-container d-flex">
-                                <div className='flex-1'>
-                                    <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('What is more important for you?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup} name="nc_details.more_important_preference">
-                                            <div className='d-flex'>
-                                                {moreImportant.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                        name="nc_details.more_important_preference"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('Covid (or) Non Covid Facility?')}</FormLabel>
                                 </div>
-                                <div className='flex-1'>
-                                <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{("Is this a Supplement to your Income ?")}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup}  name="nc_details.is_supplement_to_income">
-                                            <div className='d-flex'>
-                                                {boolAcknowledge.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                         name="nc_details.is_supplement_to_income"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.covid_facility_preference">
+                                        <div className='d-flex'>
+                                            {covidPreference.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'full-time' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.covid_facility_preference"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
                                 </div>
-                            </div>
-
-                            <div className="input-container d-flex">
-                                <div className='flex-1'>
-                                <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Are you Studying?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup}  name="nc_details.is_studying">
-                                            <div className='d-flex'>
-                                                {boolAcknowledge.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                         name="nc_details.is_studying"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
-                                </div>
-                                <div className='flex-1'>
-                                <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Gusto')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup}  name="nc_details.gusto_type">
-                                            <div className='d-flex'>
-                                                {gustoType.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                         name="nc_details.gusto_type"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
-                                </div>                              
-                            </div>
-
-                            <div className="input-container d-flex">
-                                <div className='flex-1'>
-                                <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Is Gusto Invited ?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup}  name="nc_details.is_gusto_invited">
-                                            <div className='d-flex'>
-                                                {boolAcknowledge.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                         name="nc_details.is_gusto_invited"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
-                                </div>        
-                                
-                                <div className='flex-1'>
-                                <div className='pdd-top-10'>
-                                        <FormLabel className={'form-label'}>{('Is Gusto Onboarded ?')}</FormLabel>
-                                    </div>
-                                    <div className='mrg-top-10'>
-                                        <Field component={RadioGroup}  name="nc_details.is_gusto_onboarded">
-                                            <div className='d-flex'>
-                                                {boolAcknowledge.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel
-                                                        key={'input_hcp_add_more_important_preference' + index}
-                                                        value={item.value}
-                                                        control={<Radio disabled={isSubmitting} />}
-                                                        disabled={isSubmitting}
-                                                         name="nc_details.is_gusto_onboarded"
-                                                        label={item.label} />
-                                                    </div>)
-                                                })}
-                                            </div>
-                                        </Field>
-                                    </div>
-                                </div>
-                            </div>
-                            
-
-                            <div className="input-container">
-                                <Field multiline rows={2} variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
-                                    id="input_hcp_add_other_information" label="Other Information Gathered" fullWidth autoComplete="off" />
                             </div>
                         </div>
-                
+                        <div className="input-container d-flex">
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('What is more important for you?')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.more_important_preference">
+                                        <div className='d-flex'>
+                                            {moreImportant.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.more_important_preference"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{("Is this a Supplement to your Income ?")}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_supplement_to_income">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_supplement_to_income"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="input-container d-flex">
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('Are you Studying?')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_studying">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_studying"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('Gusto')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.gusto_type">
+                                        <div className='d-flex'>
+                                            {gustoType.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.gusto_type"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="input-container d-flex">
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('Is Gusto Invited ?')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_gusto_invited">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_gusto_invited"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>{('Is Gusto Onboarded ?')}</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_gusto_onboarded">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_more_important_preference' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_gusto_onboarded"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="input-container">
+                            <Field multiline rows={2} variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
+                                id="input_hcp_add_other_information" label="Other Information Gathered" fullWidth autoComplete="off" />
+                        </div>
+                    </div>
+
 
                     <div className="custom-border mrg-top-10 pdd-top-10 pdd-left-40 pdd-right-40 pdd-bottom-40">
                         <h3 className="card-header">Documents/Attachments</h3>
@@ -440,7 +440,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                 fileUpload={fileUpload}
                                 previewFile={previewFile}
                                 isDeleted={isDeleted}
-                                deleteAttachment={deleteAttachment}
+                                openDeleteAttachment={openDeleteAttachment}
                                 OnFileSelected={OnFileSelected}
                                 deleteLocalAttachment={deleteLocalAttachment} />
                         </div>
@@ -456,7 +456,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                     </div>
                                 </div>
                                 <div className="contract_actions mrg-left-5 mrg-top-10 ">
-                                    <button style={{ cursor: "pointer", width: '50px' }} disabled={isContractDeleted} onClick={deleteContractFileApi} className="delete-button mrg-left-10">Delete</button>
+                                    <button style={{ cursor: "pointer", width: '50px' }} disabled={isContractDeleted} onClick={openDeleteContract} className="delete-button mrg-left-10">Delete</button>
                                 </div>
                             </div>
                         </div> : <>
@@ -488,19 +488,22 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                     </Box>
                                 </Box>
                             )}
-                            <div className="input-container mrg-top-30">
-                                <Field variant='outlined' component={TextField} type={"text"} fullWidth
-                                    autoComplete="off" label="Rate / hr" name="rate_per_hour" required={contractFile?.wrapper[0]?.file} />
-                                <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
-                                    placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file}
-                                    label="Signed On" name="signed_on" />
-                                <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit"
-                                    fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file}
-                                    name="salary_credit_date" />
-                            </div>
                         </>}
+                        <div className="input-container mrg-top-30">
+                            <Field variant='outlined' component={TextField} type={"text"} fullWidth
+                                   autoComplete="off" label="Rate / hr" name="contract_details.rate_per_hour" />
+                            <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
+                                   placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }}
+                                   label="Signed On" name="contract_details.signed_on" />
+                              <Field SelectProps={showDropDownBelowField} select variant='outlined' name="contract_details.salary_credit" type={"text"} component={TextField}
+                                    id="input_hcp_add_salary_credit" label="Salary Credit Date" fullWidth autoComplete="off">
+                                    <MenuItem value="" >Select Value</MenuItem>
+                                    {salaryCredit.map((item: any, index: any) => (
+                                        <MenuItem value={item.value} id={"menu_hcp_add_salary_credit_" + index}>{item.label}</MenuItem>
+                                    ))}
+                           </Field>
+                        </div>
                     </div>
-
                 </Form>
             )}
         </Formik>

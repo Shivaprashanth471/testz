@@ -95,7 +95,7 @@ const GroupListScreen = () => {
                                                 if (list && list.table) {
                                                     list.table.filter.search = '';
                                                     list.table.reload();
-                                                    list?.table.pageEvent(0)
+                                                    // list?.table.pageEvent(0)
                                                 }
 
                                             }} id="clear_group_search" /></div>}
@@ -104,7 +104,7 @@ const GroupListScreen = () => {
                                                 if (list && list.table) {
                                                     list.table.filter.search = event.target.value;
                                                     list.table.reload();
-                                                    list?.table.pageEvent(0)
+                                                    // list?.table.pageEvent(0)
                                                 }
                                             }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Group')} />
                                         </div>
@@ -135,7 +135,7 @@ const GroupListScreen = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {list.table.canShowNoData() &&
+                                    {!list.table._isDataLoading && list.table?.data.length === 0 &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }
                                     {list?.table.data.map((row: any, rowIndex: any) => {

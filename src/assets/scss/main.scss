@@ -9,6 +9,13 @@ body {
 	background-color: $background-color;
 	scrollbar-width: thin;
 }
+.summary{
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	hyphens: auto;
+	text-align: left;
+	max-width:calc(75vw - 100px);
+}
 .MuiDialogActions-root {
 	justify-content: center !important;
 }

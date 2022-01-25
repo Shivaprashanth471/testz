@@ -54,7 +54,7 @@ const FacilityMemberEditComponent = ({
   const [fieldType, setFieldType] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [facilityId, setFacilityId] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false)
+  const [isConfirm, setIsConfirm] = useState<boolean>(false)
 
   const onAdd = (
     member: MemberType,
@@ -81,7 +81,7 @@ const FacilityMemberEditComponent = ({
     setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
       .then((resp: any) => {
-        CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'error')
+        CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'success')
         getFacilityMembers();
         setIsAddOpen(false);
         setIsConfirm(false)
@@ -258,8 +258,9 @@ const FacilityMemberEditComponent = ({
                   >
                     Delete
                   </Button>
-                  <Button id="btn_facility_member_add_submit" color='primary' type="submit" variant='contained'>
-                    Save
+                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color='primary' type="submit" 
+                  variant='contained'  className={isSubmitting?"has-loading-spinner":""}>
+                  {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>

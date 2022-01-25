@@ -5,7 +5,7 @@ import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine } from "../../../../constants/data";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine,salaryCredit } from "../../../../constants/data";
 import { AddHcpInitialValues, hcpFormValidation, HcpItemAddType } from '../AddHcpValuesValidationsComponent';
 import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
 import HcpAddAttachmentsComponent from '../AddAtachments/HcpAddAttachmentsComponent';
@@ -193,14 +193,22 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                                     </Box>
                                 </div>
                             )}
+                            
                             <div className="input-container mrg-top-30">
                                 <Field placeholder="Rate/hr" variant='outlined' component={TextField} type={"text"} fullWidth
-                                    autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file} label="Rate/hr" name="rate_per_hour" />
+                                    autoComplete="off" InputLabelProps={{ shrink: true }}  label="Rate/hr" name="contract_details.rate_per_hour" />
                                 <Field variant="inline" orientation="landscape" openTo="date" format="MM/dd/yyyy" views={["year", "month", "date"]}
-                                    inputVariant='outlined' component={DatePicker} required={contractFile?.wrapper[0]?.file} placeholder="MM/DD/YYYY" fullWidth
-                                    autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="signed_on" />
-                                <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit" fullWidth autoComplete="off"
-                                    InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file} name="salary_credit_date" />
+                                    inputVariant='outlined' component={DatePicker}  placeholder="MM/DD/YYYY" fullWidth
+                                    autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="contract_details.signed_on" />
+                           <Field SelectProps={showDropDownBelowField} select variant='outlined' name="contract_details.salary_credit" type={"text"} component={TextField}
+                                    id="input_hcp_add_salary_credit" label="Salary Credit Date" fullWidth autoComplete="off">
+                                    <MenuItem value="" >Select Value</MenuItem>
+                                    {salaryCredit.map((item: any, index: any) => (
+                                        <MenuItem value={item.value} id={"menu_hcp_add_salary_credit_" + index}>{item.label}</MenuItem>
+                                    ))}
+                           </Field>
+                           
+                           
                             </div>
                         </div>
 

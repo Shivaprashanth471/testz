@@ -1,14 +1,15 @@
-import { Button, CircularProgress, Paper } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-material-ui';
 import moment from 'moment';
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as Yup from "yup";
+import LoaderComponent from '../../../../components/LoaderComponent';
 import { ENV } from '../../../../constants';
 import { ApiService, CommonService } from '../../../../helpers';
 import { StateParams } from '../../../../store/reducers';
-import './CreateShiftScreen.scss'
+import './CreateShiftScreen.scss';
 
 
 export interface AddHcpToShiftComponentProps {
@@ -16,7 +17,7 @@ export interface AddHcpToShiftComponentProps {
     confirm: () => void,
     hcpId: string,
     applicationId: string,
-    requirementId:string
+    requirementId: string
 }
 
 interface CreateShiftItem {
@@ -48,7 +49,7 @@ const hcpFormValidation = Yup.object({
 })
 
 const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>) => {
-    const  requirementId  = props?.requirementId;
+    const requirementId = props?.requirementId;
     const afterCancel = props?.cancel;
     const afterConfirm = props?.confirm;
     const [data, setData] = useState<any>({})
@@ -150,10 +151,8 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
 
     if (isLoading) {
         return <Paper>
-            <div className="pdd-30 screen" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div className="view-loading-indicator">
-                    <CircularProgress color="secondary" className="loader" />
-                </div>
+            <div className="pdd-100" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <LoaderComponent position='block' />
             </div>
         </Paper>
     }
@@ -226,8 +225,8 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
                                     size="large"
                                     id="btn_hcp_edit_submit"
                                     variant={"contained"}
-                                    className={isSubmitting ?"normal has-loading-spinner":"normal"}
-                                    color={"primary"}>{!isSubmitting?"CREATE":"CREATING"}</Button>
+                                    className={isSubmitting ? "normal has-loading-spinner" : "normal"}
+                                    color={"primary"}>{!isSubmitting ? "CREATE" : "CREATING"}</Button>
                             </div>
                         </Form>)}
                 </Formik>

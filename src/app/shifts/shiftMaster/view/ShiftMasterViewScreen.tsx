@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
-import { Button, DialogActions } from "@material-ui/core";
+import { Button, DialogActions, Tooltip } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import DialogComponent from '../../../../components/DialogComponent';
 import CustomPreviewFile from '../../../../components/shared/CustomPreviewFile';
@@ -93,7 +93,7 @@ const ShiftMasterViewScreen = () => {
                 }
             };
             uploadWrapper.onProgress = (progress) => {
-               
+
             };
             setFileUpload(prevState => {
                 let state: TsFileUploadWrapperClass[] = [];
@@ -296,12 +296,11 @@ const ShiftMasterViewScreen = () => {
                 </div>
                 <div className="d-flex shift-details">
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
-                    </div>
-                    <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
                         <p>{basicDetails?.payments?.hourly_ot}</p>
+                    </div>
+                    <div className="flex-1">
+
                     </div>
                     <div className="flex-1">
 
@@ -353,72 +352,78 @@ const ShiftMasterViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="mrg-top-10 custom-border pdd-top-10">
-                <div className="mrg-top-20">
-                    {attachmentsList?.length > 0 ? <>
-                        <h3>Attachment:</h3>
-                        <div className="d-flex" style={{ gap: "50px" }}>
-                            {
-                                attachmentsList?.map((item: any, index: any) => {
-                                    return (
-                                        <div className="attachments">
-                                            <p className="mrg-left-10">{item?.attachment_type}</p>
-                                            {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} />}
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </> : <>
-                        <h3 className="mrg-top-0">Attachment:</h3>
-                        <div className="d-flex" style={{ gap: "50px" }}>
-                            {required_attachments?.map((item: any, index: any) => {
-                                if (item.index !== -1) {
-                                    return (<>
-                                        <div className="attachments">
-                                            <div className="custom_file mrg-top-0">
-                                                <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}</h3>
-                                                <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
+            {basicDetails?.shift_status === "complete" || basicDetails?.shift_status === "closed" ?
+                <div className="mrg-top-10 custom-border pdd-top-10">
+                    <div className="mrg-top-20">
+                        {attachmentsList?.length > 0 ? <>
+                            <h3>Attachment:</h3>
+                            <div className="d-flex" style={{ gap: "50px" }}>
+                                {
+                                    attachmentsList?.map((item: any, index: any) => {
+                                        return (
+                                            <div className="attachments">
+                                                <p className="mrg-left-10">{item?.attachment_type}</p>
+                                                <Tooltip title="Preview CDPH 530 A Form">
+                                                    {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
+                                                </Tooltip>
                                             </div>
-                                            <div className="d-flex file_actions">
-                                                <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>View</p>
-                                                <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>Delete</p>
-                                            </div>
-                                        </div>
-                                    </>
-                                    )
-                                } else {
-                                    return (
-                                        <div className="attachments">
-                                            <div className="">
-                                                <h3 className="attachement_name file_attachment_title">{item?.name}</h3>
-                                                <FileDropZoneComponent
-                                                    OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"}
-                                                />
-                                            </div>
-                                        </div>
-                                    )
+                                        )
+                                    })
                                 }
-                            })}
-                        </div>
-                    </>}
+                            </div>
+                        </> : <>{
+                            basicDetails?.shift_status === "complete" && <>
+                                <h3 className="mrg-top-0">Attachment:</h3>
+                                <div className="d-flex" style={{ gap: "50px" }}>
+                                    {required_attachments?.map((item: any, index: any) => {
+                                        if (item.index !== -1) {
+                                            return (<>
+                                                <div className="attachments">
+                                                    <div className="custom_file mrg-top-0">
+                                                        <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}</h3>
+                                                        <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
+                                                    </div>
+                                                    <div className="d-flex file_actions">
+                                                        <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>View</p>
+                                                        <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>Delete</p>
+                                                    </div>
+                                                </div>
+                                            </>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="attachments">
+                                                    <div className="">
+                                                        <h3 className="attachement_name file_attachment_title">{item?.name}</h3>
+                                                        <FileDropZoneComponent
+                                                            OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    })}
+                                </div>
+                            </>}
+                        </>}
+                    </div>
+                    <DialogActions className="mrg-top-35">
+                        {
+                            basicDetails?.shift_status === "complete" &&
+                            <Button
+                                type={"submit"}
+                                className={isTimeSheetBeingUpdated ? "submit has-loading-spinner" : "submit"}
+                                variant={"contained"}
+                                color="primary"
+                                autoFocus
+                                disabled={fileUpload?.wrapper?.length <= 0 || isTimeSheetBeingUpdated}
+                                onClick={handlegetUrlForUpload}>
+                                {isTimeSheetBeingUpdated ? 'Saving' : 'Save'}
+                            </Button>
+                        }
+                    </DialogActions>
                 </div>
-                <DialogActions className="mrg-top-35">
-                    {
-                        basicDetails?.shift_status === "complete" &&
-                        <Button
-                            type={"submit"}
-                            className={isTimeSheetBeingUpdated ?"submit has-loading-spinner" :"submit"}
-                            variant={"contained"}
-                            color="primary"
-                            autoFocus
-                            disabled={fileUpload?.wrapper?.length <= 0 || isTimeSheetBeingUpdated}
-                            onClick={handlegetUrlForUpload}>
-                            {isTimeSheetBeingUpdated ? 'Saving' : 'Save'}
-                        </Button>
-                    }
-                </DialogActions>
-            </div>
+                : <></>}
         </>)}
 
     </div>

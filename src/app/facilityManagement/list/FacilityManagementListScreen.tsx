@@ -1,4 +1,4 @@
-import { Button, LinearProgress, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from '@material-ui/core/styles';
@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../classes/ts-data-list-wrapper.class";
 import AccessControlComponent from "../../../components/AccessControl";
+import LoaderComponent from "../../../components/LoaderComponent";
 import NoDataCardComponent from "../../../components/NoDataCardComponent";
 import { useLocalStorage } from "../../../components/useLocalStorage";
 import { ENV } from "../../../constants";
@@ -153,7 +154,7 @@ const FacilityManagementListScreen = () => {
       <div className={"facility-list screen crud-layout pdd-30 pdd-top-10"}>
         {list && list.table?._isDataLoading && (
           <div className="table-loading-indicator">
-            <LinearProgress />
+            <LoaderComponent />
           </div>
         )}
 
@@ -168,6 +169,7 @@ const FacilityManagementListScreen = () => {
           status={status}
         />
 
+
         <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
           <div className="header">
             <div className="mrg-left-5 filter">
@@ -181,7 +183,7 @@ const FacilityManagementListScreen = () => {
                         if (list && list.table) {
                           list.table.filter.search = '';
                           list.table.reload();
-                          list?.table.pageEvent(0)
+                          // list?.table.pageEvent(0)
                         }
 
                       }} id="clear_facility_search" /></div>}
@@ -190,7 +192,7 @@ const FacilityManagementListScreen = () => {
                         if (list && list.table) {
                           list.table.filter.search = event.target.value;
                           list.table.reload();
-                          list?.table.pageEvent(0)
+                          // list?.table.pageEvent(0)
                         }
 
                       }} value={list?.table.filter.search} variant={"outlined"} size={"small"} type={'text'} placeholder={('Search Facility')} />
@@ -233,10 +235,12 @@ const FacilityManagementListScreen = () => {
                       )}
                     </TableRow>
                   </TableHead>
+
                   <TableBody>
-                    {list.table.canShowNoData() &&
+                    {!list.table._isDataLoading && list.table?.data.length === 0 &&
                       <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                     }
+
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
                         <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>

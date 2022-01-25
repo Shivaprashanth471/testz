@@ -177,9 +177,7 @@ const AddHcpComponent = () => {
     setIsHcpSubmitting(true)
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
-      let rate_per_hour = hcp?.rate_per_hour;
-      let signed_on = moment(hcp?.signed_on).format('YYYY-MM-DD');
-      let salary_credit_date = hcp?.salary_credit_date < 10 ? "0" + hcp?.salary_credit_date?.toString() : hcp?.salary_credit_date?.toString();
+      hcp.contract_details.signed_on = hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD') : null;
       let payload: any = {}
       payload = hcp
 
@@ -192,9 +190,7 @@ const AddHcpComponent = () => {
         }
       }
 
-      delete payload[rate_per_hour]
-      delete payload[signed_on]
-      delete payload[salary_credit_date]
+
       ApiService.post(ENV.API_URL + "hcp", payload).then((resp: any) => {
         if (resp && resp.success) {
           const hcpId = resp.data._id;
@@ -202,7 +198,7 @@ const AddHcpComponent = () => {
           addReferences(hcpId);
           addExperiences(hcpId);
           addVolunteerExperiences(hcpId);
-          handleContractUpload(hcpId, rate_per_hour, signed_on, salary_credit_date)
+          handleContractUpload(hcpId)
           handleAttachmentsUpload(hcpId, resp)
         } else {
           setSubmitting(false);
@@ -216,18 +212,7 @@ const AddHcpComponent = () => {
           CommonService.showToast(err?.msg || "Error", "error");
         });
     }
-    if (contractFile?.wrapper[0]?.file) {
-      if (hcp?.signed_on) {
-        AddHcp()
-      } else {
-        CommonService.showToast("Please fill Signed On", "info")
-        setSubmitting(false);
-        setIsHcpSubmitting(false)
-      }
-    } else {
       AddHcp()
-    }
-
   };
 
   const handleHcpTypeChange = (hcp_type: string) => {
@@ -300,14 +285,11 @@ const AddHcpComponent = () => {
 
   }, [fileUpload?.wrapper, onHandleAttachmentUpload, history, required_attachments])
 
-  const handleContractUpload = useCallback((hcpId: any, rate_per_hour, signed_on, salary_credit_date) => {
+  const handleContractUpload = useCallback((hcpId: any) => {
     let payload = {
       "file_name": contractFile?.wrapper[0]?.file?.name,
       "file_type": contractFile?.wrapper[0]?.file?.type,
-      "attachment_type": "contract",
-      "rate_per_hour": rate_per_hour,
-      "signed_on": signed_on,
-      "salary_credit_date": salary_credit_date
+      "attachment_type": "contract"
     }
     CommonService._api.post(ENV.API_URL + 'hcp/' + hcpId + '/contract', payload).then((resp) => {
       handleContractFileUpload(resp?.data)

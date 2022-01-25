@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import './ClosedShiftsViewScreen.scss';
 import { useParams } from "react-router-dom";
-import { Avatar } from "@material-ui/core";
+import { Avatar, Tooltip } from "@material-ui/core";
 import moment from 'moment';
 import { Button } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
@@ -109,7 +109,7 @@ const ClosedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="facility-details d-flex custom-border mrg-top-10">
+            <div className="facility-details d-flex custom-border mrg-top-10 pdd-bottom-5">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -119,7 +119,7 @@ const ClosedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={"/facility/view/" + basicDetails?.facility?._id}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -158,12 +158,11 @@ const ClosedShiftsViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
-                    </div>
-                    <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
                         <p>{basicDetails?.payments?.hourly_ot}</p>
+                    </div>
+                    <div className="flex-1">
+
                     </div>
                     <div className="flex-1">
 
@@ -199,7 +198,9 @@ const ClosedShiftsViewScreen = () => {
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             <div>
-                                                <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
+                                                <Tooltip title="Preview CDPH 530 A Form">
+                                                    <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
+                                                </Tooltip>
                                                 <div className='d-flex'>
                                                     {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
                                                     <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>

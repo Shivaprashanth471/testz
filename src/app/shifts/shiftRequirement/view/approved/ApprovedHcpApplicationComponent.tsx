@@ -60,7 +60,7 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
                         }
                         {list?.table.data.map((row: any, rowIndex: any) => {
                             return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={'row-'}>
+                                <TableRow hover role="checkbox" tabIndex={-1} key={'row-'+rowIndex}>
                                     <TableCell>
                                         {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
                                     </TableCell>
@@ -74,7 +74,7 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
                                         {row['approved_by']?.first_name} &nbsp;{row['approved_by']?.last_name}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Link to={'/hcp/user/view/' + row['hcp_user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                        <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
                                             {('View Details')}
                                         </Link>
                                     </TableCell>

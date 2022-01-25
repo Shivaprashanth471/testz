@@ -84,7 +84,7 @@ const EducationAddComponent = ({
     )
       .then((resp: any) => {
         getEducationDetails();
-        CommonService.showToast(resp?.msg || 'hcp education deleted', 'error')
+        CommonService.showToast(resp?.msg || 'hcp education deleted', 'success')
         setIsConfirm(false)
         setIsAddOpen(false);
       })
