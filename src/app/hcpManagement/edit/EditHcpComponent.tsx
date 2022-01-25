@@ -111,7 +111,7 @@ const EditHcpComponent = () => {
     contract_details: {
       rate_per_hour: hcpDetails?.contract_details?.rate_per_hour,
       signed_on: hcpDetails?.contract_details?.signed_on,
-      salary_credit_date: hcpDetails?.contract_details?.salary_credit_date,
+      salary_credit: hcpDetails?.contract_details?.salary_credit,
     },
 
     nc_details: {
@@ -587,7 +587,6 @@ const EditHcpComponent = () => {
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
       let signed_on = moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD');
-      let salary_credit_date = hcp?.contract_details?.salary_credit_date.toString();
       let payload: any = hcp
 
       payload = {
@@ -596,8 +595,7 @@ const EditHcpComponent = () => {
         },
         contract_details: {
           ...payload.contract_details,
-          signed_on,
-          salary_credit_date
+          signed_on
         }
       }
       ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {

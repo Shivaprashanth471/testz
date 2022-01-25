@@ -33,7 +33,7 @@ export interface HcpEditType {
   contract_details?: {
     rate_per_hour: any;
     signed_on: any;
-    salary_credit_date: any;
+    salary_credit: any;
   };
 
   nc_details?: {
@@ -57,58 +57,6 @@ export interface HcpEditType {
     other_information: any;
   }
 }
-
-export const AddHcpInitialValues = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  contact_number: "",
-  hcp_type: "",
-  gender: "",
-  about: "",
-  experience: "",
-  speciality: "",
-  summary: "",
-  address: {
-    street: "",
-    city: "",
-    state: "",
-    region: "",
-    country: "",
-    zip_code: "",
-  },
-
-  professional_details: {
-    experience: "",
-    speciality: "",
-    summary: "",
-  },
-
-  rate_per_hour: "",
-  signed_on: null,
-  salary_credit_date: null,
-
-  nc_details: {
-    dnr: "",
-    shift_type_preference: "",
-    location_preference: "",
-    more_important_preference: "",
-    family_consideration: "",
-    zone_assignment: "",
-    vaccine: "",
-    covid_facility_preference: "",
-    is_fulltime_job: "",
-    is_supplement_to_income: "",
-    is_studying: "",
-    is_gusto_invited: "",
-    is_gusto_onboarded: "",
-    gusto_type: "",
-    nc_last_updated: `${currentUser?.first_name} ${currentUser?.last_name}`,
-    last_call_date: null,
-    contact_type: "",
-    other_information: "",
-  }
-};
 
 
 export const hcpFormValidation = Yup.object({
@@ -143,8 +91,7 @@ export const hcpFormValidation = Yup.object({
   contract_details: Yup.object({
     rate_per_hour: Yup.number().moreThan(0, 'must be greater than 0').max(999, 'max limit 999').typeError("must be a number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
-    salary_credit_date: Yup.number().nullable().min(1, 'Must be greater than 0')
-      .max(31, 'Must be less than or equal to 31'),
+    salary_credit: Yup.string(),
   }),
   nc_details: Yup.object({
     dnr: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(30, "max limit 30").nullable(),

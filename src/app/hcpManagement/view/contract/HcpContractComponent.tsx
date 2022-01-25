@@ -35,12 +35,15 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
 
     return !isContractLoading ? <>
         <div className="hcp_contract_details mrg-top-10">
-            {
-                contractDetails !== undefined ?
-                    <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+            <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+                {
+                    contractDetails !== undefined ?
                         <div>
                             <CustomFile data={contractDetails} />
-                        </div>
+                        </div> : <h3 className="contract-heading">Contract</h3>
+                }
+                {
+                    hcpDetails?.contract_details ?
                         <div className="d-flex">
                             <div className="flex-1">
                                 <h4>Rate/hr</h4>
@@ -52,19 +55,18 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit Date</h4>
-                                <p>{hcpDetails?.contract_details?.salary_credit_date}</p>
+                                <p>{hcpDetails?.contract_details?.salary_credit}</p>
                             </div>
                             <div className="flex-1">
 
                             </div>
                         </div>
-                    </div> : <>
-                        <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
-                            <h3 className="contract-heading">Contract</h3>
+                        : <>
                             <NoDataToShowCardComponent />
-                        </div></>
+                        </>
 
-            }
+                }
+            </div>
         </div>
     </> : <></>
 }

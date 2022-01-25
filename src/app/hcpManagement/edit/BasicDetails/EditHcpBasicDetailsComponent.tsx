@@ -5,7 +5,7 @@ import { Field, FieldProps, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine } from "../../../../constants/data";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, vaccine } from "../../../../constants/data";
 import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
 import { hcpFormValidation } from '../../add/AddHcpValuesValidationsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
@@ -495,9 +495,13 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
                                    placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file}
                                    label="Signed On" name="contract_details.signed_on" />
-                            <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit"
-                                   fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file}
-                                   name="contract_details.salary_credit_date" />
+                              <Field SelectProps={showDropDownBelowField} select variant='outlined' name="contract_details.salary_credit" type={"text"} component={TextField}
+                                    id="input_hcp_add_salary_credit" label="Salary Credit Date" fullWidth autoComplete="off">
+                                    <MenuItem value="" >Select Value</MenuItem>
+                                    {salaryCredit.map((item: any, index: any) => (
+                                        <MenuItem value={item.value} id={"menu_hcp_add_salary_credit_" + index}>{item.label}</MenuItem>
+                                    ))}
+                           </Field>
                         </div>
                     </div>
                 </Form>
