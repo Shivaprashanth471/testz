@@ -193,6 +193,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                                     </Box>
                                 </div>
                             )}
+                            
                             <div className="input-container mrg-top-30">
                                 <Field placeholder="Rate/hr" variant='outlined' component={TextField} type={"text"} fullWidth
                                     autoComplete="off" InputLabelProps={{ shrink: true }}  label="Rate/hr" name="contract_details.rate_per_hour" />
