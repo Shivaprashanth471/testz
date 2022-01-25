@@ -39,7 +39,7 @@ const HcpManagementListScreen = () => {
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
 
     const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any[]>('hcpSelectedTypes', [])
-    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "");
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "pending");
     const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
 
     const classesFunction = useCallback((type: any) => {
@@ -58,9 +58,13 @@ const HcpManagementListScreen = () => {
         });
     }, []);
 
+    console.log(status)
+
     const init = useCallback(() => {
         let url = "hcp/list"
-        let payload: any = {}
+        let payload: any = {
+            status:status
+        }
         payload.is_approved = 0;
 
         if (selectedHcpTypes.length > 0) {
@@ -88,8 +92,8 @@ const HcpManagementListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
-            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
+            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For','Status', 'Actions'],
+            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For','Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -207,6 +211,9 @@ const HcpManagementListScreen = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     {row['hcp_type']}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row['status']}
                                                 </TableCell>
                                                 <TableCell >
                                                     <Link to={'/hcp/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >

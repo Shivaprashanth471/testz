@@ -366,6 +366,7 @@ const ShiftMasterViewScreen = () => {
                                                 <Tooltip title="Preview CDPH 530 A Form">
                                                     {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
                                                 </Tooltip>
+                                                {/* <a download href={item?.url}>download</a> */}
                                             </div>
                                         )
                                     })
