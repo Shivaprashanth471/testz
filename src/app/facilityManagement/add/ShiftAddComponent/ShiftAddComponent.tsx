@@ -80,7 +80,7 @@ const ShiftAddComponent = ({
     );
     newShiftTimings.splice(index, 1);
     setShiftTimings(newShiftTimings);
-    CommonService.showToast('Shift Timing deleted', 'error')
+    CommonService.showToast('Shift Timing deleted', 'success')
   };
 
 

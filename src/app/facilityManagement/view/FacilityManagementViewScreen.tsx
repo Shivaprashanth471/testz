@@ -14,6 +14,7 @@ import { ENV } from '../../../constants';
 import { CommonService, Communications } from '../../../helpers';
 import FacilityBasicDetailsComponent from './basicDetails/FacilityBasicDetailsComponent';
 import './FacilityManagementViewScreen.scss';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FacilityManagementViewScreen = () => {
     const classes = useStyles();
+    let history = useHistory();
     const params = useParams<{ id: string }>();
     const { id } = params;
     const [facilityDetails, setFacilityDetails] = useState<any | null>(null);
@@ -37,7 +39,7 @@ const FacilityManagementViewScreen = () => {
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
+    
     const init = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'facility/' + id).then((resp) => {
@@ -65,13 +67,20 @@ const FacilityManagementViewScreen = () => {
             console.log(err)
         })
     }, [id])
+
     useEffect(() => {
+        let prevLocation:any="/facility/tabs/" + id;
+
+        history.listen(nextLocation => {
+            console.log(prevLocation?.pathname,">>>>>>>>","apple");
+            prevLocation = nextLocation || "/facility/tabs/" + id;
+        });
         init();
         getFacilityMembers();
-        getShiftDetails()
+        getShiftDetails();
         Communications.pageTitleSubject.next('Facility Details');
-        Communications.pageBackButtonSubject.next("/facility/tabs/" + id);
-    }, [init, getFacilityMembers, getShiftDetails, id])
+        Communications.pageBackButtonSubject.next(prevLocation);
+    }, [init, getFacilityMembers, getShiftDetails, id,history])
 
 
     if (isLoading) {

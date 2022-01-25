@@ -55,7 +55,7 @@ const FacilityMemberAddComponent = ({
     const index = members.findIndex((member: any) => member?.tempId === memberId);
     newMembers.splice(index, 1);
     setMembers(newMembers);
-    CommonService.showToast('Facility member deleted', 'error')
+    CommonService.showToast('Facility member deleted', 'success')
   };
 
   const onAdd = (

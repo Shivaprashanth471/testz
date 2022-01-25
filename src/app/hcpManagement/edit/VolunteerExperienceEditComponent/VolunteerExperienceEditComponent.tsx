@@ -108,7 +108,7 @@ const VolunteerExperienceAddComponent = ({
         getExperienceDetails();
         setIsConfirm(false)
         setIsAddOpen(false);
-        CommonService.showToast(resp?.msg || 'hcp volunteer experience deleted', 'error')
+        CommonService.showToast(resp?.msg || 'hcp volunteer experience deleted', 'success')
       })
       .catch((err) => {
         console.log(err);

@@ -82,7 +82,7 @@ const ReferenceAddComponent = ({
       .then((resp: any) => {
         getReferenceDetails();
 
-        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'error');
+        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'success');
         setIsConfirm(false)
         setIsAddOpen(false);
       })

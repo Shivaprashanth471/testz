@@ -72,7 +72,7 @@ const ReferenceAddComponent = ({
     );
     newReferences.splice(index, 1);
     setReference(newReferences);
-    CommonService.showToast('HCP reference deleted', 'error')
+    CommonService.showToast('HCP reference deleted', 'success')
   };
 
   return (

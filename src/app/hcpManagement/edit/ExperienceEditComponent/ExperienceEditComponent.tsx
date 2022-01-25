@@ -99,7 +99,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
     setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "hcp/" + hcpId + "/experience/" + experienceId).then((resp: any) => {
       getExperienceDetails()
-      CommonService.showToast(resp?.msg || 'hcp experience deleted', 'error')
+      CommonService.showToast(resp?.msg || 'hcp experience deleted', 'success')
       setIsConfirm(false)
       setIsAddOpen(false);
     })

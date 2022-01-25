@@ -333,8 +333,8 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             <Button color="secondary" onClick={afterCancel}>
                 {'Cancel'}
             </Button>
-            <Button type={"submit"} onClick={handleBreakTimings} disabled={isSubmitting} className={"submit"} variant={"contained"} color="secondary" autoFocus>
-                {'Save'}
+            <Button type={"submit"} onClick={handleBreakTimings} disabled={isSubmitting}   className={isSubmitting ? "has-loading-spinner submit" : "submit"} variant={"contained"} color="secondary" autoFocus>
+            {isSubmitting?"Saving":"Save"}
             </Button>
         </DialogActions>
     </div >;

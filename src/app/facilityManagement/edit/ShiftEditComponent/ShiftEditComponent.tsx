@@ -88,7 +88,7 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
       ENV.API_URL + "facility/" + facilityId + "/shift/" + shiftId
     )
       .then((resp: any) => {
-        CommonService.showToast('Facility Shift Timing Deleted', 'error')
+        CommonService.showToast('Facility Shift Timing Deleted', 'success')
         getShiftDetails();
         setIsConfirm(false)
         setIsAddOpen(false);
