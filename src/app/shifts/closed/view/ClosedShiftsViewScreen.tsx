@@ -119,7 +119,7 @@ const ClosedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={{pathname:"/facility/view/" + basicDetails?.facility?._id, state : { prevPath: "/closedShifts/view/"+id }}}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -158,12 +158,11 @@ const ClosedShiftsViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
-                    </div>
-                    <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
                         <p>{basicDetails?.payments?.hourly_ot}</p>
+                    </div>
+                    <div className="flex-1">
+
                     </div>
                     <div className="flex-1">
 
@@ -199,9 +198,9 @@ const ClosedShiftsViewScreen = () => {
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             <div>
-                                            <Tooltip title="Preview CDPH 530 A Form">
-                                                <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
-                                             </Tooltip>
+                                                <Tooltip title="Preview CDPH 530 A Form">
+                                                    <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
+                                                </Tooltip>
                                                 <div className='d-flex'>
                                                     {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
                                                     <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>

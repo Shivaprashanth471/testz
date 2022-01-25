@@ -16,7 +16,7 @@ const ApprovedShiftsViewScreen = () => {
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isRejectShiftOpen, setRejectShiftOpen] = useState<boolean>(false);
-     
+
     const getShiftDetails = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
@@ -118,7 +118,7 @@ const ApprovedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={{pathname:"/facility/view/" + basicDetails?.facility?._id,state : { prevPath: "/approvedShifts/view/"+id }}}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/approvedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -157,12 +157,11 @@ const ApprovedShiftsViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
-                    </div>
-                    <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
                         <p>{basicDetails?.payments?.hourly_ot}</p>
+                    </div>
+                    <div className="flex-1">
+                       
                     </div>
                     <div className="flex-1">
 

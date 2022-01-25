@@ -88,7 +88,7 @@ const ShiftCompletedViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={{pathname:"/facility/view/" + basicDetails?.facility?._id,state : { prevPath: "/completedShifts/view/"+id}}}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/completedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -127,12 +127,11 @@ const ShiftCompletedViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
-                    </div>
-                    <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
                         <p>{basicDetails?.payments?.hourly_ot}</p>
+                    </div>
+                    <div className="flex-1">
+
                     </div>
                     <div className="flex-1">
 
