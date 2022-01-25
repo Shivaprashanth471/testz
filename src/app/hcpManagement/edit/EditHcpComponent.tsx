@@ -619,17 +619,7 @@ const EditHcpComponent = () => {
 
         });
     }
-    if (contractFile?.wrapper[0]?.file) {
-      if (hcp?.contract_details?.signed_on) {
-        AddHcp()
-      } else {
-        CommonService.showToast("Please fill Signed On", "info")
-        setSubmitting(false);
-        setIsHcpSubmitting(false)
-      }
-    } else {
       AddHcp()
-    }
   }, [contractFile?.wrapper, expInYears, handleAttachmentsUpload, handleContractUpload, id, specialities])
 
 

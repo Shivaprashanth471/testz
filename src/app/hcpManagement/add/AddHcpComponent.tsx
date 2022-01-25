@@ -212,18 +212,7 @@ const AddHcpComponent = () => {
           CommonService.showToast(err?.msg || "Error", "error");
         });
     }
-    if (contractFile?.wrapper[0]?.file) {
-      if (hcp?.contract_details?.signed_on) {
-        AddHcp()
-      } else {
-        CommonService.showToast("Please fill Signed On", "info")
-        setSubmitting(false);
-        setIsHcpSubmitting(false)
-      }
-    } else {
       AddHcp()
-    }
-
   };
 
   const handleHcpTypeChange = (hcp_type: string) => {
