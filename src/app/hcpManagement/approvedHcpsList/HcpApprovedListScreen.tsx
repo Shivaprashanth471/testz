@@ -151,11 +151,11 @@ const HcpApprovedListScreen = () => {
                 </div>}
 
                 <HcpFiltersComponent
-                    showStatus={true}
+
                     selectedHcpTypes={selectedHcpTypes}
                     setSelectedHcpTypes={setSelectedHcpTypes}
                     resetFilters={resetFilters}
-
+                    isApprovedList={true}
                     hcpTypes={hcpTypes}
                     status={status}
                     setStatus={setStatus}

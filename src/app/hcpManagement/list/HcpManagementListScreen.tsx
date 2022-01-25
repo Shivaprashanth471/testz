@@ -68,7 +68,7 @@ const HcpManagementListScreen = () => {
         }
 
         if (status !== "") {
-            payload.is_active = status?.code
+            payload.status = status?.code
         }
 
 
