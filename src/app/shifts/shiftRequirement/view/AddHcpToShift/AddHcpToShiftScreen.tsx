@@ -78,13 +78,20 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
 
     const init = useCallback(() => {
         setIsLoading(true)
-
-        let url = ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type
+        let payload:any = {
+            is_approved: 1,
+            hcp_type: hcp_type
+        }
         if (searchHcp !== '') {
-            url = ENV.API_URL + 'hcp/lite?is_approved=1&hcp_type=' + hcp_type + '&search=' + searchHcp
+
+            payload = {
+                is_approved: 1,
+                hcp_type: hcp_type,
+                search: searchHcp,
+            }
         }
         // config
-        CommonService._api.get(url).then((resp) => {
+        CommonService._api.post(ENV.API_URL + 'hcp/lite', payload).then((resp) => {
             sethcpList(resp?.data);
             setIsLoading(false)
         }).catch((err) => {

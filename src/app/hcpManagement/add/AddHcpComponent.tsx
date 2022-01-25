@@ -177,7 +177,7 @@ const AddHcpComponent = () => {
     setIsHcpSubmitting(true)
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
-      hcp.contract_details.signed_on = moment(hcp?.contract_details.signed_on).format('YYYY-MM-DD');
+      hcp.contract_details.signed_on = hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD') : null;
       let payload: any = {}
       payload = hcp
 

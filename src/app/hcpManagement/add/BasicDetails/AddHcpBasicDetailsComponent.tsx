@@ -195,9 +195,9 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             )}
                             <div className="input-container mrg-top-30">
                                 <Field placeholder="Rate/hr" variant='outlined' component={TextField} type={"text"} fullWidth
-                                    autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file} label="Rate/hr" name="contract_details.rate_per_hour" />
+                                    autoComplete="off" InputLabelProps={{ shrink: true }}  label="Rate/hr" name="contract_details.rate_per_hour" />
                                 <Field variant="inline" orientation="landscape" openTo="date" format="MM/dd/yyyy" views={["year", "month", "date"]}
-                                    inputVariant='outlined' component={DatePicker} required={contractFile?.wrapper[0]?.file} placeholder="MM/DD/YYYY" fullWidth
+                                    inputVariant='outlined' component={DatePicker}  placeholder="MM/DD/YYYY" fullWidth
                                     autoComplete="off" InputLabelProps={{ shrink: true }} label="Signed On" name="contract_details.signed_on" />
                            <Field SelectProps={showDropDownBelowField} select variant='outlined' name="contract_details.salary_credit" type={"text"} component={TextField}
                                     id="input_hcp_add_salary_credit" label="Salary Credit Date" fullWidth autoComplete="off">

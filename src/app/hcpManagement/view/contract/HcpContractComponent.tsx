@@ -51,7 +51,7 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
                             </div>
                             <div className="flex-1">
                                 <h4>Signed On</h4>
-                                <p>{moment(hcpDetails?.contract_details?.signed_on).format("MMMM Do YYYY")}</p>
+                                <p>{hcpDetails?.contract_details?.signed_on?moment(hcpDetails?.contract_details?.signed_on).format("MMMM Do YYYY"):"N/A"}</p>
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit Date</h4>
