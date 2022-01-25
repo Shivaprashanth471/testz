@@ -120,11 +120,11 @@ export const hcpFormValidation = Yup.object({
   gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
   about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(255, 'max limit 255'),
   address: Yup.object({
-    street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
-    city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
-    state: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
-    region: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
-    country: Yup.string().typeError(" must be a text").min(2, "invalid").required("required").trim("empty space not allowed").max(30, 'max limit 30').required("required"),
+    street: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
+    city: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
+    state: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
+    region: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
+    country: Yup.string().typeError(" must be a text").min(2, "invalid").required("required").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
     zip_code: Yup.string()
       .typeError(" must be a text")
       .matches(/^[0-9]+$/, "Must be only digits")
