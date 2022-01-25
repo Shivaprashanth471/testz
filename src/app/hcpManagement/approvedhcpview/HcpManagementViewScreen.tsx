@@ -37,7 +37,7 @@ const HcpManagementViewScreen = (props:any) => {
         init();
         Communications.pageTitleSubject.next('HCP Details');
         Communications.pageBackButtonSubject.next(prevLocation);
-    }, [init])
+    }, [init,props?.location.state])
 
     if (isLoading && isAttachmentsLoading) {
         return <LoaderComponent />
