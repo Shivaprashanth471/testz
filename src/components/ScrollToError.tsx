@@ -8,13 +8,10 @@ export function ScrollToError() {
     useEffect(() => {
         const el = document.querySelector('.Mui-error, [data-error],.form-error');
         if (el?.id === 'input_facility_add_extension_number-label') {
-            console.log(true);
             (el?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement)?.scrollIntoView();
         }
         else {
-            console.log(false);
-
-            (el?.parentElement?.parentElement?.parentElement)?.scrollIntoView();
+            (el?.parentElement?.parentElement?.parentElement)?.scrollIntoView({ behavior: "smooth", block: "start", inline: "start" });
         }
     }, [submitting]);
     return null;

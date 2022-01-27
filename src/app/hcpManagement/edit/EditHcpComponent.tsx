@@ -54,7 +54,7 @@ const EditHcpComponent = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isDeleteAttachmentOpen, setIsDeleteAttachmentOpen] = useState<boolean>(false);
   const [deleteAttachmentDetails, setDeleteAttachmentDetails] = useState<any>(null);
-  const [isDeleteAttachment,setIsDeleteAttachment] = useState<boolean>(false);
+  const [isDeleteAttachment, setIsDeleteAttachment] = useState<boolean>(false);
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
     { attachment_type: "Physical Test", index: -1, id: 1 },
@@ -75,13 +75,6 @@ const EditHcpComponent = () => {
   const [expInYears, setExpInYears] = useState<number>(0)
   const [specialities, setSpecialities] = useState<string>('');
   const [calcExperience, setCalcExperience] = useState<any>([])
-
-
-  const handleHcpTypeChange = useCallback((hcp_type: string) => {
-    const selectedSpeciality = specialitiesMaster[hcp_type];
-    setHcpTypeSpecialities(selectedSpeciality);
-  }, [specialitiesMaster]);
-
 
   let hcpInitialState: HcpEditType = {
     first_name: hcpDetails?.first_name,
@@ -133,8 +126,18 @@ const EditHcpComponent = () => {
       last_call_date: hcpDetails?.nc_details?.last_call_date,
       contact_type: hcpDetails?.nc_details?.contact_type,
       other_information: hcpDetails?.nc_details?.other_information,
+      travel_preferences: hcpDetails?.nc_details.travel_preferences,
+      is_authorized_to_work: hcpDetails?.nc_details.is_authorized_to_work,
+      is_require_employment_sponsorship: hcpDetails?.nc_details.is_require_employment_sponsorship,
     }
   };
+
+
+  const handleHcpTypeChange = useCallback((hcp_type: string) => {
+    const selectedSpeciality = specialitiesMaster[hcp_type];
+    setHcpTypeSpecialities(selectedSpeciality);
+  }, [specialitiesMaster]);
+
 
   const handleCalcExperience = useCallback(() => {
     const res = calculateExperience(calcExperience)
@@ -586,7 +589,7 @@ const EditHcpComponent = () => {
     setIsHcpSubmitting(true)
     const AddHcp = () => {
       hcp.contact_number = hcp?.contact_number?.toLowerCase();
-      let signed_on =hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD') : null;
+      let signed_on = hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format('YYYY-MM-DD') : null;
       let payload: any = hcp
 
       payload = {
@@ -619,7 +622,7 @@ const EditHcpComponent = () => {
 
         });
     }
-      AddHcp()
+    AddHcp()
   }, [contractFile?.wrapper, expInYears, handleAttachmentsUpload, handleContractUpload, id, specialities])
 
 

@@ -121,6 +121,18 @@ export const shiftTypePreference = [
   },
 ];
 
+export const travelDistancePreference = [
+
+  { value: "<20", label: "<20 miles" },
+
+  { value: "20-40", label: "20-40 miles" },
+
+  { value: "40-60", label: "40-60 miles" },
+
+  { value: ">60", label: ">60 miles" },
+
+]
+
 export const moreImportant = [
   {
     value: "money",

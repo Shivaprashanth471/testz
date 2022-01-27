@@ -172,7 +172,17 @@ const HcpDetailsComponent = (props: any) => {
                 <StyledLoader />
             </div>}
         <div>
-            <HcpContractComponent hcpDetails={hcpBasicDetails}/>
+            <HcpContractComponent hcpDetails={hcpBasicDetails} />
+        </div>
+
+        <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
+            <h3>Travel Preference</h3>
+            <div className="d-flex mrg-top-20">
+                {
+                    hcpBasicDetails?.nc_details?.travel_preferences && hcpBasicDetails?.nc_details?.travel_preferences.length > 0 ?
+                        hcpBasicDetails?.nc_details?.travel_preferences.map((item: any) => <p className='flex-1'>{item} Miles</p>) : <p>N/A</p>
+                }
+            </div>
         </div>
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
@@ -219,7 +229,7 @@ const HcpDetailsComponent = (props: any) => {
                 </div>
                 <div className="flex-1">
                     <h4>Do you have a Full-time Job ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.is_fulltime_job !== "" ? hcpBasicDetails?.nc_details?.is_fulltime_job === true ? "Yes" : "No" : "N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.is_fulltime_job !== "" ? hcpBasicDetails?.nc_details?.is_fulltime_job === "true" ? "Yes" : "No" : "N/A"}</p>
                 </div>
             </div>
 
@@ -234,14 +244,14 @@ const HcpDetailsComponent = (props: any) => {
                 </div>
                 <div className="flex-1">
                     <h4>Is this a Supplement to your Income ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.is_supplement_to_income !== "" ? hcpBasicDetails?.nc_details?.is_supplement_to_income === true ? "Yes" : "No" : "N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.is_supplement_to_income !== "" ? hcpBasicDetails?.nc_details?.is_supplement_to_income === "true" ? "Yes" : "No" : "N/A"}</p>
                 </div>
             </div>
 
             <div className="d-flex">
                 <div className="flex-1">
                     <h4>Are you Studying ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.is_studying !== "" ? hcpBasicDetails?.nc_details?.is_studying === true ? "Yes" : "No" : "N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.is_studying !== "" ? hcpBasicDetails?.nc_details?.is_studying === "true" ? "Yes" : "No" : "N/A"}</p>
                 </div>
                 <div className="flex-1">
                     <h4>Gusto</h4>
@@ -249,17 +259,27 @@ const HcpDetailsComponent = (props: any) => {
                 </div>
                 <div className="flex-1">
                     <h4>Is Gusto Invited ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.is_gusto_invited !== "" ? hcpBasicDetails?.nc_details?.is_gusto_invited === true ? "Yes" : "No" : "N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.is_gusto_invited !== "" ? hcpBasicDetails?.nc_details?.is_gusto_invited === "true" ? "Yes" : "No" : "N/A"}</p>
                 </div>
             </div>
-            <div>
+
+            <div className='d-flex'>
                 <div className="flex-1">
                     <h4>Is Gusto Onboarded ?</h4>
-                    <p>{hcpBasicDetails?.nc_details?.is_gusto_onboarded !== "" ? hcpBasicDetails?.nc_details?.is_gusto_onboarded === true ? "Yes" : "No" : "N/A"}</p>
+                    <p>{hcpBasicDetails?.nc_details?.is_gusto_onboarded !== "" ? hcpBasicDetails?.nc_details?.is_gusto_onboarded === "true" ? "Yes" : "No" : "N/A"}</p>
+                </div>
+
+                <div className="flex-1">
+                    <h4>Legally Authorised to work in United States ?</h4>
+                    <p>{hcpBasicDetails?.nc_details?.is_authorized_to_work !== "" ? hcpBasicDetails?.nc_details?.is_authorized_to_work === "true" ? "Yes" : "No" : "N/A"}</p>
+                </div>
+                <div className="flex-1">
+                    <h4>Require Sponsorship for Employment in United States?</h4>
+                    <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No" : "N/A"}</p>
                 </div>
             </div>
-            <div className="d-flex">
 
+            <div className="d-flex">
                 <div className="flex-1">
                     <h4>Other Information Gathered</h4>
                     <p>{hcpBasicDetails?.nc_details?.other_information}</p>
