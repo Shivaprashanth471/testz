@@ -1,4 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
+import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from '@material-ui/core/styles';
@@ -204,6 +205,7 @@ const FacilityManagementListScreen = () => {
             <div className="action pdd-right-5 d-flex">
               <div className="mrg-left-20">
                 <AccessControlComponent role={[ACCOUNTMANAGER, ADMIN]}>
+                <Tooltip title="Add New Facility">
                   <Button
                     variant={"contained"}
                     color={"primary"}
@@ -213,7 +215,7 @@ const FacilityManagementListScreen = () => {
                     <AddRounded />
                     &nbsp;&nbsp;Add Facility&nbsp;&nbsp;
                   </Button>
-
+                  </Tooltip>
                 </AccessControlComponent>
               </div>
             </div>
@@ -251,12 +253,16 @@ const FacilityManagementListScreen = () => {
                           <TableCell>{row?.address["region_name"]}</TableCell>
                           <TableCell>{row["phone_number"]}</TableCell>
                           {
-                            role === "super_admin" ? <TableCell style={{ textAlign: "center" }}> <FormControlLabel
+                            role === "super_admin" ? <TableCell style={{ textAlign: "center" }}> 
+                            <Tooltip title={'Enable / Disable'}>
+                            <FormControlLabel
                               control={<Switch checked={row['is_active']} onChange={() => handletoggleStatus(row['_id'], row['is_active'])} />}
                               label={''}
-                            /> </TableCell> : <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
+                            /></Tooltip>
+                             </TableCell> : <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
                           }
                           <TableCell className="text-right mrg-right-10 position-sticky">
+                            <Tooltip title={`${row["facility_name"]} view details`}>
                             <Link
                               to={"/facility/tabs/" + row?._id}
                               className="info-link "
@@ -264,6 +270,7 @@ const FacilityManagementListScreen = () => {
                             >
                               {"View Details"}
                             </Link>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       );

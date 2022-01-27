@@ -3,7 +3,8 @@ import {
   Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import BackspaceIcon from "@material-ui/icons/Backspace";
@@ -249,13 +250,15 @@ const FacilityMemberAddComponent = ({
         </div>
       ) : (
         <div className="facility-add-action">
-          <p
-            id="btn_facility_member_add_open"
-            onClick={() => setIsMembers(true)}
-            className="generic-add-multiple"
-          >
-            + Add a Facility Member
-          </p>
+          <Tooltip title={"Add New Facility Member"}>
+            <p
+              id="btn_facility_member_add_open"
+              onClick={() => setIsMembers(true)}
+              className="generic-add-multiple"
+            >
+              + Add a Facility Member
+            </p>
+          </Tooltip>
         </div>
       )}
 

@@ -2,7 +2,8 @@ import {
   Button, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -195,13 +196,15 @@ const EducationAddComponent = ({
         </Formik>
       ) : (
         <div className="edu-add-action">
-          <p
-            id='btn_hcp_add_education'
-            onClick={() => setIsEducation(true)}
-            className="generic-add-multiple"
-          >
-            + Add Education
-          </p>
+          <Tooltip title={"Add New Education"}>
+            <p
+              id='btn_hcp_add_education'
+              onClick={() => setIsEducation(true)}
+              className="generic-add-multiple"
+            >
+              + Add Education
+            </p>
+          </Tooltip>
         </div>
       )}
 

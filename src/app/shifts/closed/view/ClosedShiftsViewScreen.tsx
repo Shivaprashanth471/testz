@@ -19,6 +19,7 @@ const ClosedShiftsViewScreen = () => {
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [attachmentsList, seAttachmentsList] = useState<any | null>(null);
+    const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [previewFileData, setPreviewFile] = useState<any | null>(null);
 
@@ -35,8 +36,16 @@ const ClosedShiftsViewScreen = () => {
     }, [])
 
     const getShiftAttachments = useCallback(() => {
-        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments?is_preview=true").then((resp) => {
             seAttachmentsList(resp.data);
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [id])
+
+    const getShiftAttachmentsDownload = useCallback(() => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+            downloadSeAttachmentsList(resp.data);
         }).catch((err) => {
             console.log(err)
         })
@@ -44,6 +53,7 @@ const ClosedShiftsViewScreen = () => {
 
     const getShiftDetails = useCallback(() => {
         // config
+        setIsLoading(true)
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
             setBasicDetails(resp.data);
             setIsLoading(false)
@@ -55,7 +65,8 @@ const ClosedShiftsViewScreen = () => {
     useEffect(() => {
         getShiftDetails()
         getShiftAttachments()
-    }, [getShiftDetails, getShiftAttachments])
+        getShiftAttachmentsDownload()
+    }, [getShiftDetails, getShiftAttachments,getShiftAttachmentsDownload])
     useEffect(() => {
         Communications.pageTitleSubject.next('Shifts Closed');
         Communications.pageBackButtonSubject.next('/closedShifts/list');
@@ -202,8 +213,12 @@ const ClosedShiftsViewScreen = () => {
                                                     <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
                                                 </Tooltip>
                                                 <div className='d-flex'>
-                                                    {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
-                                                    <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
+                                                    <Tooltip title="Preview CDPH 530 A Form">
+                                                        <p onClick={() => previewFile(index)} className='file-actions'>Preview</p>
+                                                    </Tooltip>
+                                                    <Tooltip title="Download CDPH 530 A Form">
+                                                        <a href={downloadAttachmentsList[index]?.url} download className='file-actions  mrg-left-20'>Download</a>
+                                                    </Tooltip>
                                                 </div>
                                             </div>
                                         </div>

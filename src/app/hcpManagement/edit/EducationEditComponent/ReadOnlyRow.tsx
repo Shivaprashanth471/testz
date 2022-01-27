@@ -1,4 +1,4 @@
-import { IconButton, TableRow, TextField } from "@material-ui/core";
+import { IconButton, TableRow, TextField, Tooltip } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import React from "react";
@@ -64,10 +64,11 @@ const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
         {/* <IconButton onClick={(event) => handleEditClick(event, education)}>
 					<CreateIcon className='edit-icon' />
 				</IconButton> */}
-
-        <IconButton onClick={() => openAdd(education?._id)}>
-          <DeleteIcon className="delete-icon" />
-        </IconButton>
+        <Tooltip title={`Delete Education`}>
+          <IconButton onClick={() => openAdd(education?._id)}>
+            <DeleteIcon className="delete-icon" />
+          </IconButton>
+        </Tooltip>
       </td>
     </TableRow>
   );

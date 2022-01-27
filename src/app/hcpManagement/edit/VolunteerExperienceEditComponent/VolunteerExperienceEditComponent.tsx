@@ -3,7 +3,8 @@ import {
   Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -62,7 +63,7 @@ const VolunteerExperienceAddComponent = ({
   const [showEndDate, setShowEndDate] = useState<boolean>(true);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [vExperienceId, setVExperience] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     experience: ExperienceItem,
@@ -86,11 +87,11 @@ const VolunteerExperienceAddComponent = ({
     onAddExperience(newExperience).then((resp: any) => {
       getExperienceDetails();
       CommonService.showToast(resp?.msg || 'HCP volunteer experience added', 'info')
-        //clear state
+      //clear state
       resetForm();
 
       //close form
-       handleCancelExperience()
+      handleCancelExperience()
     }).catch((err: any) => console.log(err));
 
   };
@@ -300,8 +301,8 @@ const VolunteerExperienceAddComponent = ({
                     color='primary'
                     variant='contained'
                     type="submit" id="btn_hcp_edit_Vexperience_submit"
-                    className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
-                     {isSubmitting?"Saving":"Save"}
+                    className={isSubmitting ? "has-loading-spinner" : ""} disabled={isSubmitting}>
+                    {isSubmitting ? "Saving" : "Save"}
                   </Button>
                 </div>
               </Form>
@@ -310,13 +311,15 @@ const VolunteerExperienceAddComponent = ({
         </div>
       ) : (
         <div className="vol-add-action">
-          <p
-            id='btn_hcp_add_vol_experience'
-            onClick={() => setIsExperiences(true)}
-            className="generic-add-multiple"
-          >
-            + Add Volunteer Experience
-          </p>
+          <Tooltip title={"Add New Volunteer Experience"}>
+            <p
+              id='btn_hcp_add_vol_experience'
+              onClick={() => setIsExperiences(true)}
+              className="generic-add-multiple"
+            >
+              + Add Volunteer Experience
+            </p>
+          </Tooltip>
         </div>
       )}
 

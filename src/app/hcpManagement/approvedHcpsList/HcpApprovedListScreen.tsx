@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core";
+import { TextField, Tooltip } from "@material-ui/core";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -232,15 +232,20 @@ const HcpApprovedListScreen = () => {
                                                     {row['hcp_type']}
                                                 </TableCell>
                                                 {
-                                                    role === "super_admin" ? <TableCell style={{ textAlign: "center" }}> <FormControlLabel
+                                                    role === "super_admin" ? 
+                                                    <TableCell style={{ textAlign: "center" }}>
+                                                        <Tooltip title={"ACTIVE / INACTIVE"}>
+                                                        <FormControlLabel
                                                         control={<Switch checked={row['is_active']} onChange={() => handletoggleStatus(row['_id'], row['is_active'])} />}
                                                         label={''}
-                                                    /> </TableCell> : row['is_active'] ? <TableCell style={{ color: "#41D6C3" }}>Active</TableCell> : <TableCell style={{ color: "#808080" }}> Inactive</TableCell>
+                                                    /></Tooltip> </TableCell> : row['is_active'] ? <TableCell style={{ color: "#41D6C3" }}>Active</TableCell> : <TableCell style={{ color: "#808080" }}> Inactive</TableCell>
                                                 }
                                                 <TableCell >
+                                                <Tooltip title={`${row['first_name']} ${row['last_name']} view details`}>
                                                     <Link to={'/hcp/user/view/' + row['user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
                                                         {('View Details')}
                                                     </Link>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         );

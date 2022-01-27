@@ -1,4 +1,4 @@
-import { Button, TablePagination, TextField } from "@material-ui/core";
+import { Button, TablePagination, TextField, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -225,9 +225,11 @@ const ShiftRequirementListScreen = () => {
                         <div>
                         </div>
                         <div className="mrg-left-20">
-                            <Button component={Link} to={'/shift/add'} variant={"contained"} color={"primary"} >
-                                <AddRounded />&nbsp;&nbsp;Add New&nbsp;&nbsp;
-                            </Button>
+                            <Tooltip title={"Add New Shift Requirement"}>
+                                <Button component={Link} to={'/shift/add'} variant={"contained"} color={"primary"} >
+                                    <AddRounded />&nbsp;&nbsp;Add New&nbsp;&nbsp;
+                                </Button>
+                            </Tooltip>
                         </div>
                     </div>
                 </div>
@@ -252,8 +254,6 @@ const ShiftRequirementListScreen = () => {
                                 {list?.table.data.map((row: any, rowIndex: any) => {
                                     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(row['shift_timings']?.start_time, row['shift_timings']?.end_time)
                                     const shift_date = CommonService.getUtcDate(row['shift_date'])
-
-
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                             <TableCell>
@@ -281,9 +281,11 @@ const ShiftRequirementListScreen = () => {
                                                 {row['status']}
                                             </TableCell>
                                             <TableCell >
-                                                <Link to={'/shiftsRequirements/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                                    {('View Details')}
-                                                </Link>
+                                                <Tooltip title={`${row['title']} view details`}>
+                                                    <Link to={'/shiftsRequirements/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                        {('View Details')}
+                                                    </Link>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     );

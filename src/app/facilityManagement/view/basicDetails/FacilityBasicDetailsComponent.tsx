@@ -136,14 +136,14 @@ const FacilityBasicDetailsComponent = (props: any) => {
         <div className="custom-border mrg-top-10 pdd-top-10">
             <h3 className="card-header">Facility Image</h3>
             <div className="d-flex" style={{ gap: "50px" }}>
-            <Tooltip title="Preview Facility Icon">
                 {
                     facilityDetails?.image_url ?
-                        <div className="attachments" onClick={previewFile} style={{cursor:"pointer"}}>            
-                        <img src={facilityDetails?.image_url} alt="" style={{ height: "100px", width: "100px" }} />
-                    </div> : <div style={{ width: '100%' }}><NoDataToShowCardComponent /></div>
+                        <div className="attachments" onClick={previewFile} style={{ cursor: "pointer" }}>
+                            <Tooltip title="Preview Facility Icon">
+                                <img src={facilityDetails?.image_url} alt="" style={{ height: "100px", width: "100px" }} />
+                            </Tooltip>
+                        </div> : <div style={{ width: '100%' }}><NoDataToShowCardComponent /></div>
                 }
-            </Tooltip>
             </div>
         </div>
         <div className="basic_details custom-border mrg-top-10">

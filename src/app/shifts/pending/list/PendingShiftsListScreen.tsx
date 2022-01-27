@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TextField, IconButton } from "@material-ui/core";
+import { TextField, IconButton, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -203,12 +203,18 @@ const PendingShiftsListScreen = () => {
                                         <TableCell className='action-wrapper'>
                                             <div className="d-flex actions">
                                                 <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'], row['requirement_id'])} disabled={row['status'] !== "pending"}>
-                                                    <CheckIcon className={row['status'] === "pending" ? "add-icon" : ""} />
+                                                    <Tooltip title={`Approve ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Shift Requirement Application`}>
+                                                        <CheckIcon className={row['status'] === "pending" ? "add-icon" : ""} />
+                                                    </Tooltip>
                                                 </IconButton>
                                                 <IconButton onClick={() => openRejectApplication(row['requirement_id'], row['_id'])} disabled={row['status'] !== "pending"}>
-                                                    <CancelIcon className={row['status'] === "pending" ? "delete-icon" : ""} />
+                                                    <Tooltip title={`Reject ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Shift Requirement Application`}>
+                                                        <CancelIcon className={row['status'] === "pending" ? "delete-icon" : ""} />
+                                                    </Tooltip>
                                                 </IconButton>
+                                                <Tooltip title={`${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} shift Requirement view details`}>
                                                 <p onClick={() => openView(row['requirement_id'], row['hcp_user_id'])} className='view-details-link'>view details</p>
+                                           </Tooltip>
                                             </div>
                                         </TableCell>
                                     </TableRow>

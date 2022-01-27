@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -63,7 +63,7 @@ const HcpManagementListScreen = () => {
     const init = useCallback(() => {
         let url = "hcp/list"
         let payload: any = {
-            status:status
+            status: status
         }
         payload.is_approved = 0;
 
@@ -92,8 +92,8 @@ const HcpManagementListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For','Status', 'Actions'],
-            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For','Status', 'Actions'],
+            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Status', 'Actions'],
+            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -168,9 +168,11 @@ const HcpManagementListScreen = () => {
 
                             <div className='mrg-left-20'>
                                 <AccessControlComponent role={[HUMANRESOURCE, ADMIN]} >
-                                    <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/add`}>
-                                        <AddRounded />&nbsp;&nbsp;Add HCP&nbsp;&nbsp;
-                                    </Button>
+                                    <Tooltip title="Add New Hcp">
+                                        <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/add`}>
+                                            <AddRounded />&nbsp;&nbsp;Add HCP&nbsp;&nbsp;
+                                        </Button>
+                                    </Tooltip>
                                 </AccessControlComponent>
                             </div>
                         </div>
@@ -216,9 +218,11 @@ const HcpManagementListScreen = () => {
                                                     {row['status']}
                                                 </TableCell>
                                                 <TableCell >
-                                                    <Link to={'/hcp/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                                        {('View Details')}
-                                                    </Link>
+                                                    <Tooltip title={`${row['first_name']} ${row['last_name']} view details`}>
+                                                        <Link to={'/hcp/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                            {('View Details')}
+                                                        </Link>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         );

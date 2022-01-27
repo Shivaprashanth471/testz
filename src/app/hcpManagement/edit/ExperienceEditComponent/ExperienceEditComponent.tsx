@@ -2,7 +2,8 @@ import {
   Button, MenuItem, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -63,7 +64,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   const [showEndDate, setShowEndDate] = useState<boolean>(true)
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [experienceId, setExperienceId] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     experience: ExperienceItem,
@@ -138,7 +139,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
   return (
     <div className="add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent  isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Work Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent isConfirm={isConfirm} cancel={cancelAdd} confirm={confirmAdd} text1='Want to delete' hcpname={'Work Experience'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {experiences.length > 0 && (
         <Table className="mrg-top-50">
@@ -319,8 +320,8 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                   >
                     Delete
                   </Button>
-                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit" className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
-                  {isSubmitting?"Saving":"Save"}
+                  <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_experience_submit" className={isSubmitting ? "has-loading-spinner" : ""} disabled={isSubmitting}>
+                    {isSubmitting ? "Saving" : "Save"}
                   </Button>
                 </div>
               </Form>
@@ -329,13 +330,15 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
         </Formik>
       ) : (
         <div className="exp-add-action">
-          <p
-            id='btn_hcp_add_experience'
-            onClick={() => setIsExperiences(true)}
-            className="generic-add-multiple"
-          >
-            + Add Work Experience
-          </p>
+          <Tooltip title={"Add New Work Experience"}>
+            <p
+              id='btn_hcp_add_experience'
+              onClick={() => setIsExperiences(true)}
+              className="generic-add-multiple"
+            >
+              + Add Work Experience
+            </p>
+          </Tooltip>
         </div>
       )}
 
