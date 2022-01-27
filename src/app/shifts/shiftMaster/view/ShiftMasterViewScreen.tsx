@@ -75,7 +75,7 @@ const ShiftMasterViewScreen = () => {
                 file: file,
                 fileFieldName: 'Data',
                 uploadUrl: ENV.API_URL + 'facility/add',
-                allowed_types: ['jpg', 'png', 'csv', 'pdf'],
+                allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
                 extraPayload: { file_type: required_attachments[index]?.name }
             };
             const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
@@ -184,11 +184,12 @@ const ShiftMasterViewScreen = () => {
             CommonService.showToast(resp?.msg || "Success", "success")
             getShiftAttachments()
             getShiftDetails()
+            getShiftAttachmentsDownload()
         }).catch((err) => {
             console.log(err)
             CommonService.showToast(err || "Error", "error");
         })
-    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails])
+    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails,getShiftAttachmentsDownload])
 
     const handlegetUrlForUpload = useCallback(() => {
         setIsTimeSheetBeingUpdated(true)
