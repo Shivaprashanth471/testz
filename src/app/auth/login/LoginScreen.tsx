@@ -14,10 +14,7 @@ import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 import EmailIcon from '@material-ui/icons/Email';
 
-let isEmail=new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,63}$')
-
 const loginFormValidation = Yup.object({
-  email: Yup.string().matches(isEmail,"Email is required").required("Required"),
   password: Yup.string().required("Required").min(6, "Password should be minimum 6 characters"),
 });
 
@@ -36,12 +33,9 @@ const LoginScreen = (props: any) => {
       .then((resp) => {
         setSubmitting(false);
         dispatch(loginUser(resp.data.user, resp.data.token));
-        // dispatch(setImageUrl(resp.data.info.logo));
       })
       .catch((err) => {
         CommonService.handleErrors(setErrors, err);
-        // console.log(err);
-        //CommonService.showToast(err.error || 'Error', 'error');
         setSubmitting(false);
       });
   };
@@ -53,6 +47,8 @@ const LoginScreen = (props: any) => {
     event.preventDefault();
   };
 
+
+
   return (
     <div className="main-auth-wrapper login-screen screen pdd-0">
       <div className="">
@@ -62,17 +58,33 @@ const LoginScreen = (props: any) => {
       <Formik
         initialValues={{ email: "", password: "" }}
         validateOnChange={true}
+        validate={(values) => {
+         
+          const errors: { email?: string; password?: string } = {};
+          if (!values.email) {
+            errors.email = 'Required';
+          } else {
+            try {
+              const email = Number(values.email);
+              if (isNaN(email)) {
+                  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                      errors.email = 'Invalid email address';
+                  }
+              }
+            } catch (e) { }
+          }
+          return errors;
+        }}
         validationSchema={loginFormValidation}
         onSubmit={onLogin}
       >
         {({ isSubmitting, isValid }) => (
-
           <Form className={"loginFormHolder form-holder"}>
             <div className="form-field position-relative">
               <FormLabel className={"form-label"}>Email</FormLabel>
               <Field
                 name="email"
-                type={"email"}
+                type={"text"}
                 component={TextField}
                 size={"small"}
                 variant={"outlined"}
@@ -128,7 +140,7 @@ const LoginScreen = (props: any) => {
                 size={"medium"}
                 className={isSubmitting ? 'login-button has-loading-spinner' : 'login-button'}
               >
-                  { isSubmitting ? "Logging in" : "Login" }
+                {isSubmitting ? "Logging in" : "Login"}
               </Button>
             </div>
           </Form>

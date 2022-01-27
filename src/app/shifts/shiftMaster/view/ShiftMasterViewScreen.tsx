@@ -371,19 +371,19 @@ const ShiftMasterViewScreen = () => {
                                 {
                                     attachmentsList?.map((item: any, index: any) => {
                                         return (
-                                            <div className="attachments pdd-left-10">
+                                            <div className="attachments">
                                                 <div>
                                                     <p className="">{item?.attachment_type}</p>
                                                     <Tooltip title="Preview CDPH 530 A Form">
                                                         {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
                                                     </Tooltip>
                                                 </div>
-                                                <div className='mrg-left-15'>
+                                                <div className='d-flex'>
                                                 <Tooltip title="Download CDPH 530 A Form">
-                                                        <p onClick={() => previewFile(index, "api")} className='download-cdph'>Preview</p>
+                                                        <p onClick={() => previewFile(index, "api")} className='file-actions'>Preview</p>
                                                     </Tooltip>
                                                     <Tooltip title="Download CDPH 530 A Form">
-                                                        <a download href={downloadAttachmentsList[index]?.url} className='download-cdph'>Download</a>
+                                                        <a download href={downloadAttachmentsList[index]?.url} className='file-actions mrg-left-10'>Download</a>
                                                     </Tooltip>
                                                 </div>
                                             </div>

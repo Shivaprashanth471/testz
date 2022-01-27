@@ -39,7 +39,7 @@ const HcpManagementListScreen = () => {
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
 
     const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any[]>('hcpSelectedTypes', [])
-    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "pending");
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', {name:"Pending",code:"pending"});
     const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
 
     const classesFunction = useCallback((type: any) => {

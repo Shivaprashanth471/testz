@@ -8,9 +8,12 @@
 			text-align: end;
 		}
 	}
-	.download-cdph{
-		color: $primary-color;
-	}
+	.file-actions{
+        color: $primary-color !important;
+        margin-top: 0px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 	.delete-cdhp {
 		color: $primary-color;
 		text-decoration: underline;
