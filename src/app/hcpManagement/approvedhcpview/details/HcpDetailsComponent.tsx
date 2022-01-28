@@ -250,8 +250,19 @@ const HcpDetailsComponent = (props: any) => {
             </div>}
 
         <div>
-            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails}/>
+            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails} />
         </div>
+
+        <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
+            <h3>Travel Preference</h3>
+            <div className="d-flex mrg-top-20">
+                {
+                    hcpBasicDetails?.nc_details?.travel_preferences && hcpBasicDetails?.nc_details?.travel_preferences.length > 0 ?
+                        hcpBasicDetails?.nc_details?.travel_preferences.map((item: any) => <p className='flex-1'>{item} Miles</p>) : <p>N/A</p>
+                }
+            </div>
+        </div>
+
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
             <h3>NC Section</h3>

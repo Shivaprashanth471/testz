@@ -48,7 +48,6 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
     }
 
     return <div className="hcp-filters mrg-bottom-20">
-        {JSON.stringify(status)}
         <div className="form-field-wrapper">
             <div className={`form-field-left`}>
                 <div className="form-field-left-items">
