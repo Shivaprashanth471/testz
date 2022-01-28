@@ -235,6 +235,7 @@ export const approvedListStatus = [
 export const onboardedListStatus = [
   { name: "Pending", code: "pending" },
   { name: "Rejected", code: "rejected" },
+  { name: "All", code: "all" }
 ];
 
 

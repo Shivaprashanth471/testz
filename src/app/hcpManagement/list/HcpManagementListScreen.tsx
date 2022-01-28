@@ -39,7 +39,7 @@ const HcpManagementListScreen = () => {
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
 
     const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any[]>('hcpSelectedTypes', [])
-    const [status, setStatus] = useLocalStorage<any>('hcpStatus', {name:"Pending",code:"pending"});
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', { name: "Pending", code: "pending" });
     const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
 
     const classesFunction = useCallback((type: any) => {
@@ -58,12 +58,16 @@ const HcpManagementListScreen = () => {
         });
     }, []);
 
-    console.log(status)
+    useEffect(() => {
+        if (status === null) {
+            setStatus({ name: "Pending", code: "pending" })
+        }
+    }, [setStatus, status])
 
     const init = useCallback(() => {
         let url = "hcp/list"
         let payload: any = {
-            status: status
+            
         }
         payload.is_approved = 0;
 
@@ -71,8 +75,8 @@ const HcpManagementListScreen = () => {
             payload.hcp_type = selectedHcpTypes.map((item: any) => item?.name)
         }
 
-        if (status !== "") {
-            payload.status = status?.code
+        if (status !== "" && status?.code !== "all") {
+                payload.status = status?.code
         }
 
 
@@ -102,7 +106,7 @@ const HcpManagementListScreen = () => {
 
     const clearFilterValues = () => {
         setDateRange([null, null])
-        setStatus("")
+        setStatus({ name: "Pending", code: "pending" })
         setSelectedHcpTypes([])
     }
 
