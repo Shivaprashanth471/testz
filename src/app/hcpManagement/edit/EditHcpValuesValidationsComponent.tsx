@@ -36,7 +36,7 @@ export interface HcpEditType {
     salary_credit: any;
   };
 
-  nc_details?: {
+  nc_details: {
     dnr: string;
     shift_type_preference: string;
     location_preference: string;
@@ -59,9 +59,9 @@ export interface HcpEditType {
     last_call_date: any;
     contact_type: any;
     other_information: any;
-    is_authorized_to_work?: any;
-    is_require_employment_sponsorship?: any;
-    travel_preferences?: any[];
+    is_authorized_to_work: any;
+    is_require_employment_sponsorship: any;
+    travel_preferences: any[];
   }
 }
 
