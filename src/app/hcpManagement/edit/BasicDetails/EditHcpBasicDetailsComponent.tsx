@@ -229,6 +229,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         </div>
 
                         <div className="input-container">
+
                             <Field variant='outlined' name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField}
                                 label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
                             <Field variant='outlined' name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField}

@@ -272,13 +272,25 @@ const HcpDetailsComponent = (props: any) => {
                     <p>{hcpBasicDetails?.nc_details?.dnr}</p>
                 </div>
                 <div className="flex-1">
+                    <h4>Preferred Location to Work</h4>
+                    <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+                </div>
+                <div className="flex-1"></div>
+            </div>
+
+            <div className="d-flex">
+                <div className="flex-1">
                     <h4>Vaccine</h4>
                     <p>{hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
                 </div>
+                <div className="flex-1">
+                    <h4>First Shot Date</h4>
+                    <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot : "N/A"}</p>
+                </div>
 
                 <div className="flex-1">
-                    <h4>Preferred Location to Work</h4>
-                    <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+                    <h4>Latest Shot Date</h4>
+                    <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.latest_shot : "N/A"}</p>
                 </div>
             </div>
 

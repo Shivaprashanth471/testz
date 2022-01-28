@@ -129,6 +129,11 @@ const EditHcpComponent = () => {
       travel_preferences: hcpDetails?.nc_details.travel_preferences,
       is_authorized_to_work: hcpDetails?.nc_details.is_authorized_to_work,
       is_require_employment_sponsorship: hcpDetails?.nc_details.is_require_employment_sponsorship,
+      vaccination_dates: {
+        first_shot: hcpDetails?.nc_details?.vaccination_dates?.first_shot,
+        latest_shot: hcpDetails?.nc_details?.vaccination_dates?.latest_shot,
+
+      }
     }
   };
 

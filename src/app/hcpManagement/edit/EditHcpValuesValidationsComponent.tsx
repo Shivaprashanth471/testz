@@ -61,7 +61,7 @@ export interface HcpEditType {
     other_information: any;
     is_authorized_to_work: any;
     is_require_employment_sponsorship: any;
-    travel_preferences: any[];
+    travel_preferences: any;
   }
 }
 
@@ -124,7 +124,6 @@ export const hcpFormValidation = Yup.object({
       first_shot: Yup.string().trim().typeError('must be valid').matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
       latest_shot: Yup.string().trim().typeError('must be valid').matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
     }),
-    travel_preferences: Yup.array().nullable()
   })
 
 });
