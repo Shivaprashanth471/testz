@@ -127,7 +127,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                         <Field component={RadioGroup} name="gender" id="radio_doctor_add_gender">
                                             <div className='d-flex'>
                                                 {genderTypes.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
+                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio required disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
                                                     </div>)
                                                 })}
                                             </div>
