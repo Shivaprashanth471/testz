@@ -116,11 +116,12 @@ const FacilityManagementListScreen = () => {
             webMatColumns: role === "super_admin" ?
                 ['Created On', "Facility Name", "Region", "Contact Number", 'Active / Inactive', "Actions"] : ['Created On', "Facility Name", "Region", "Contact Number", 'Status', "Actions"],
             mobileMatColumns: role === "super_admin" ? ['Created On', "Facility Name", "Region", "Contact Number", 'Active / Inactive', "Actions"] :
-                ['Created On', "Facility Name", "Region", "Contact Number", 'Status', "Actions"],
+                ['Created On', "Facility Name", "Region", "Contact Number", 'Status', "Actions"]
         },
             ENV.API_URL + url, setList, ApiService, "post");
         let tableWrapperObj = new TsDataListWrapperClass(options);
         setList({table: tableWrapperObj});
+        // eslint-disable-next-line
     }, []);
 
     const getList = useCallback(() => {
@@ -157,6 +158,7 @@ const FacilityManagementListScreen = () => {
             list?.table.getList(1);
             return list
         });
+        // eslint-disable-next-line
     }, [role, selectedRegions, status, dateRange]);
 
     const clearFilterValues = () => {
