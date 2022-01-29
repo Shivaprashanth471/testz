@@ -1,4 +1,4 @@
-import { IconButton, TableRow, TextField } from "@material-ui/core";
+import { IconButton, TableRow, TextField, Tooltip } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import React from "react";
@@ -82,9 +82,11 @@ const ReadOnlyRow = ({ experience, openAdd }: VExperienceReadOnlyRowProps) => {
         </td>
 
         <td>
-          <IconButton onClick={() => openAdd(experience?._id)}>
-            <DeleteIcon className="delete-icon" />
-          </IconButton>
+          <Tooltip title={`Delete Volunteer Experience`}>
+            <IconButton onClick={() => openAdd(experience?._id)}>
+              <DeleteIcon className="delete-icon" />
+            </IconButton>
+          </Tooltip>
         </td>
       </TableRow>
     </>

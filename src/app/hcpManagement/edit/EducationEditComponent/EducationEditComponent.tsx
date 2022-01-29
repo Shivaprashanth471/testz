@@ -2,7 +2,8 @@ import {
   Button, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -52,7 +53,7 @@ const EducationAddComponent = ({
   const [isEducation, setIsEducation] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [educationId, setEducationId] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const onAdd = (
     education: EducationItem,
     { setSubmitting, setErrors, resetForm }: FormikHelpers<EducationItem>
@@ -230,8 +231,8 @@ const EducationAddComponent = ({
                   Delete
                 </Button>
 
-                <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_education_submit" className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
-                  {isSubmitting?"Saving":"Save"}
+                <Button color='primary' variant='contained' type="submit" id="btn_hcp_edit_education_submit" className={isSubmitting ? "has-loading-spinner" : ""} disabled={isSubmitting}>
+                  {isSubmitting ? "Saving" : "Save"}
                 </Button>
               </div>
 
@@ -240,13 +241,15 @@ const EducationAddComponent = ({
         </Formik>
       ) : (
         <div className="edu-add-action">
-          <p
-            id='btn_hcp_add_education'
-            onClick={() => setIsEducation(true)}
-            className="generic-add-multiple"
-          >
-            + Add Education
-          </p>
+          <Tooltip title={"Add New Education"}>
+            <p
+              id='btn_hcp_add_education'
+              onClick={() => setIsEducation(true)}
+              className="generic-add-multiple"
+            >
+              + Add Education
+            </p>
+          </Tooltip>
         </div>
       )}
 

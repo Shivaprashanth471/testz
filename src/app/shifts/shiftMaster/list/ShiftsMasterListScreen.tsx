@@ -1,4 +1,4 @@
-import { TextField } from "@material-ui/core";
+import { TextField, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -283,9 +283,11 @@ const ShiftsMasterListScreen = () => {
                                                 {row['shift_status']}
                                             </TableCell>
                                             <TableCell>
-                                                <Link to={'/shiftMaster/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                                    {('View Details')}
-                                                </Link>
+                                                <Tooltip title={`${row['title']} view details`}>
+                                                    <Link to={'/shiftMaster/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                        {('View Details')}
+                                                    </Link>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     );

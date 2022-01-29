@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Chip, Divider,
-  InputAdornment, TextField as NormalTextField, Typography
+  InputAdornment, TextField as NormalTextField, Tooltip, Typography
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -273,9 +273,11 @@ const SendSmsBlastScreen = (props: any) => {
         <h3>{!showBlastHistory ? "Send SMS Blast" : "Blast History"}</h3>
       </div>
       <div className="send-sms-toggle-btn">
-        <Button color='primary' size='large' onClick={handleToggle} variant='contained'>
-          {!showBlastHistory ? "Blast History" : "Send SMS Blast"}
-        </Button>
+        <Tooltip title={!showBlastHistory ? "Show Blast History" : "Send SMS Blast"}>
+          <Button color='primary' size='large' onClick={handleToggle} variant='contained'>
+            {!showBlastHistory ? "Blast History" : "Send SMS Blast"}
+          </Button>
+        </Tooltip>
       </div>
     </div>
     <div className="sms-blast-container">
@@ -396,7 +398,6 @@ const SMSBlastMessages = (props: any) => {
     <>
       <div className="sms-blast-recipients">
         <h3>To</h3>
-
         <div className="selected-recipients">
           {props.selectedGroups.length > 0 ? (
             props.selectedGroups.map((data: any) => {
@@ -445,18 +446,20 @@ const SMSBlastMessages = (props: any) => {
                 variant="outlined"
                 placeholder="Type in your message*"
               />
-              <div className="sms-blast-btn mrg-top-20  ">
-                <Button
-                  disabled={isSubmitting || !isValid}
-                  color={"primary"}
-                  variant={"contained"}
-                  id="sms_blast_button"
-                  className={isSubmitting ? "has-loading-spinner" : ""}
-                  type="submit"
-                  size={"large"}
-                >
-                  {isSubmitting ? "Sending Blast" : "Send Blast"}
-                </Button>
+              <div className="sms-blast-btn mrg-top-20">
+                <Tooltip title={isSubmitting ? "Sending Blast" : "Send Blast" }>
+                  <Button
+                    disabled={isSubmitting || !isValid}
+                    color={"primary"}
+                    variant={"contained"}
+                    id="sms_blast_button"
+                    className={isSubmitting ? "has-loading-spinner" : ""}
+                    type="submit"
+                    size={"large"}
+                  >
+                    {isSubmitting ? "Sending Blast" : "Send Blast"}
+                  </Button>
+                </Tooltip>
               </div>
             </Form>
           )}

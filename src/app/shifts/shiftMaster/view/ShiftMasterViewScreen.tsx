@@ -29,6 +29,7 @@ const ShiftMasterViewScreen = () => {
     const [checkOutOpen, setCheckOutOpen] = useState<boolean>(false);
     const [fileUpload, setFileUpload] = useState<{ wrapper: any } | null>(null);
     const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
+    const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
     const [isTimeSheetBeingUpdated, setIsTimeSheetBeingUpdated] = useState<boolean>(false);
 
     const previewFile = useCallback((index: any, type: any) => {
@@ -40,6 +41,14 @@ const ShiftMasterViewScreen = () => {
         setOpen(true)
     }, [attachmentsList, fileUpload?.wrapper])
 
+    const getShiftAttachmentsDownload = useCallback(() => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+            downloadSeAttachmentsList(resp.data);
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [id])
+
     const cancelPreviewFile = useCallback(() => {
         setOpen(false)
     }, [])
@@ -48,7 +57,7 @@ const ShiftMasterViewScreen = () => {
     }, [])
 
     const getShiftAttachments = useCallback(() => {
-        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments?is_preview=true").then((resp) => {
             seAttachmentsList(resp.data);
         }).catch((err) => {
             console.log(err)
@@ -66,7 +75,7 @@ const ShiftMasterViewScreen = () => {
                 file: file,
                 fileFieldName: 'Data',
                 uploadUrl: ENV.API_URL + 'facility/add',
-                allowed_types: ['jpg', 'png', 'csv', 'pdf'],
+                allowed_types: ['jpg', 'png', 'csv', 'pdf', 'jpeg'],
                 extraPayload: { file_type: required_attachments[index]?.name }
             };
             const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
@@ -111,11 +120,10 @@ const ShiftMasterViewScreen = () => {
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
             setBasicDetails(resp.data);
             setIsLoading(false);
-            getShiftAttachments()
         }).catch((err) => {
             console.log(err)
         })
-    }, [id, getShiftAttachments])
+    }, [id])
 
     const openTimeBreak = useCallback(() => {
         setcheckInOpen(true)
@@ -176,11 +184,12 @@ const ShiftMasterViewScreen = () => {
             CommonService.showToast(resp?.msg || "Success", "success")
             getShiftAttachments()
             getShiftDetails()
+            getShiftAttachmentsDownload()
         }).catch((err) => {
             console.log(err)
             CommonService.showToast(err || "Error", "error");
         })
-    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails])
+    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails, getShiftAttachmentsDownload])
 
     const handlegetUrlForUpload = useCallback(() => {
         setIsTimeSheetBeingUpdated(true)
@@ -212,9 +221,11 @@ const ShiftMasterViewScreen = () => {
 
     useEffect(() => {
         getShiftDetails()
+        getShiftAttachments()
+        getShiftAttachmentsDownload()
         Communications.pageTitleSubject.next('Shifts Master');
         Communications.pageBackButtonSubject.next('/shiftMaster/list');
-    }, [getShiftDetails])
+    }, [getShiftDetails, getShiftAttachmentsDownload, getShiftAttachments])
 
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
@@ -297,7 +308,7 @@ const ShiftMasterViewScreen = () => {
                 <div className="d-flex shift-details">
                     <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
 
@@ -341,10 +352,10 @@ const ShiftMasterViewScreen = () => {
                                 {basicDetails?.time_breakup?.check_in_time && basicDetails?.time_breakup?.check_out_time && CommonService.durationFromHHMM(moment(basicDetails?.time_breakup?.check_in_time).format("HH:mm"), moment(basicDetails?.time_breakup?.check_out_time).format("HH:mm"))}
                             </p>
                         </div>
-                        <div className="flex-1 flex-container shift-ot-time">
+                        {/* <div className="flex-1 flex-container shift-ot-time">
                             <h3>OT Hours:</h3>
                             <p className="attended-date mrg-left-20">--</p>
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="pdd-bottom-55">
@@ -362,10 +373,20 @@ const ShiftMasterViewScreen = () => {
                                     attachmentsList?.map((item: any, index: any) => {
                                         return (
                                             <div className="attachments">
-                                                <p className="mrg-left-10">{item?.attachment_type}</p>
-                                                <Tooltip title="Preview CDPH 530 A Form">
-                                                    {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
-                                                </Tooltip>
+                                                <div>
+                                                    <p className="">{item?.attachment_type}</p>
+                                                    <Tooltip title="Preview CDPH 530 A Form">
+                                                        {<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}
+                                                    </Tooltip>
+                                                </div>
+                                                <div className='d-flex'>
+                                                    <Tooltip title="Download CDPH 530 A Form">
+                                                        <p onClick={() => previewFile(index, "api")} className='file-actions'>Preview</p>
+                                                    </Tooltip>
+                                                    <Tooltip title="Download CDPH 530 A Form">
+                                                        <a download href={downloadAttachmentsList[index]?.url} className='file-actions mrg-left-10'>Download</a>
+                                                    </Tooltip>
+                                                </div>
                                             </div>
                                         )
                                     })

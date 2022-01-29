@@ -1,4 +1,4 @@
-import { IconButton, TableRow, TextField } from "@material-ui/core";
+import { IconButton, TableRow, TextField, Tooltip } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 
@@ -50,13 +50,11 @@ const ReadOnlyRow = ({ reference, openAdd }: ReferenceReadOnlyRowProps) => {
       </td>
 
       <td>
-        {/* <IconButton onClick={(event) => handleEditClick(event, reference)}>
-					<CreateIcon />
-				</IconButton> */}
-
+      <Tooltip title={`Delete References`}>
         <IconButton onClick={() => openAdd(reference?._id)}>
           <DeleteIcon className="delete-icon" />
         </IconButton>
+        </Tooltip>
       </td>
     </TableRow>
   );

@@ -2,7 +2,8 @@ import {
   Button, MenuItem, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -199,8 +200,8 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
                   <Button id='btn_add_shift_cancel' color='primary' variant='outlined' onClick={handleCloseShiftForm}>
                     Delete
                   </Button>
-                  <Button disabled={isSubmitting} id='btn_add_shift_save' variant='contained' color='primary' type="submit" className={isSubmitting?"has-loading-spinner":""}>
-                  {isSubmitting?"Saving":"Save"}
+                  <Button disabled={isSubmitting} id='btn_add_shift_save' variant='contained' color='primary' type="submit" className={isSubmitting ? "has-loading-spinner" : ""}>
+                    {isSubmitting ? "Saving" : "Save"}
                   </Button>
                 </div>
               </Form>
@@ -209,13 +210,15 @@ const ShiftEditComponent = ({ timezone, facilityId, getShiftDetails, shiftTiming
         </Formik>
       ) : (
         <div className="shift-add-action">
-          <p
-            onClick={() => setIsShifts(true)}
-            id="btn_add_shift_submit"
-            className="generic-add-multiple"
-          >
-            + Add a Shift
-          </p>
+          <Tooltip title={"Add New Shift Timing"}>
+            <p
+              onClick={() => setIsShifts(true)}
+              id="btn_add_shift_submit"
+              className="generic-add-multiple"
+            >
+              + Add a Shift
+            </p>
+          </Tooltip>
         </div>
       )}
 

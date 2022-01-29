@@ -250,8 +250,19 @@ const HcpDetailsComponent = (props: any) => {
             </div>}
 
         <div>
-            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails}/>
+            <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails} />
         </div>
+
+        <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
+            <h3>Travel Preference</h3>
+            <div className="d-flex mrg-top-20">
+                {
+                    hcpBasicDetails?.nc_details?.travel_preferences && hcpBasicDetails?.nc_details?.travel_preferences.length > 0 ?
+                        hcpBasicDetails?.nc_details?.travel_preferences.map((item: any) => <p className='flex-1'>{item} Miles</p>) : <p>N/A</p>
+                }
+            </div>
+        </div>
+
 
         <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
             <h3>NC Section</h3>
@@ -261,13 +272,25 @@ const HcpDetailsComponent = (props: any) => {
                     <p>{hcpBasicDetails?.nc_details?.dnr}</p>
                 </div>
                 <div className="flex-1">
+                    <h4>Preferred Location to Work</h4>
+                    <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+                </div>
+                <div className="flex-1"></div>
+            </div>
+
+            <div className="d-flex">
+                <div className="flex-1">
                     <h4>Vaccine</h4>
                     <p>{hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
                 </div>
+                <div className="flex-1">
+                    <h4>First Shot Date</h4>
+                    <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot : "N/A"}</p>
+                </div>
 
                 <div className="flex-1">
-                    <h4>Preferred Location to Work</h4>
-                    <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+                    <h4>Latest Shot Date</h4>
+                    <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.latest_shot : "N/A"}</p>
                 </div>
             </div>
 

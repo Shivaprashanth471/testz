@@ -4,7 +4,8 @@ import {
   Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -270,6 +271,7 @@ const FacilityMemberEditComponent = ({
       ) : (
         <>
           <div className="facility-add-action">
+          <Tooltip title={"Add New Facility Member"}>
             <p
               id="btn_facility_member_add_open"
               onClick={() => setIsMembers(true)}
@@ -277,6 +279,7 @@ const FacilityMemberEditComponent = ({
             >
               + Add a Facility Member
             </p>
+            </Tooltip>
           </div>
         </>
       )}

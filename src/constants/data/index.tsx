@@ -11,9 +11,9 @@ export const designationNames = [
 ];
 
 export const salaryCredit = [
-  { value:"daily", label:"Daily"},
-  {value:"weekly",label:"Weekly"},
-  {value:"bi_weekly",label:"Bi-Weekly"}
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "bi_weekly", label: "Bi-Weekly" }
 ]
 
 export const otHours = [
@@ -121,6 +121,18 @@ export const shiftTypePreference = [
   },
 ];
 
+export const travelDistancePreference = [
+
+  { value: "<20", label: "<20 miles" },
+
+  { value: "20-40", label: "20-40 miles" },
+
+  { value: "40-60", label: "40-60 miles" },
+
+  { value: ">60", label: ">60 miles" },
+
+]
+
 export const moreImportant = [
   {
     value: "money",
@@ -211,8 +223,20 @@ export const AllShiftStatusList = [
 export const OpenShiftsStatusList = [
   { name: "Open", code: "open" },
   { name: "Cancelled", code: "cancelled" },
+  { name: "Unfilled", code: "unfilled" },
+
 ]
 
+
+export const approvedListStatus = [
+  { name: "Active", code: true },
+  { name: "Inactive", code: false },
+];
+export const onboardedListStatus = [
+  { name: "Pending", code: "pending" },
+  { name: "Rejected", code: "rejected" },
+  { name: "All", code: "all" }
+];
 
 
 export const americanTimeZone = [

@@ -5,6 +5,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import React, { PropsWithChildren } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { approvedListStatus, onboardedListStatus } from '../../../constants/data';
 import { localStore } from '../../../helpers';
 import './HcpFiltersComponents.scss';
 export interface HcpFiltersComponentProps {
@@ -15,21 +16,20 @@ export interface HcpFiltersComponentProps {
     selectedHcpTypes?: any;
     setSelectedHcpTypes?: any;
     resetFilters: any;
-    showStatus?: boolean
     dateRange: any;
     setDateRange: any;
+    isApprovedList?: boolean;
 }
 
 const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>) => {
 
-    const statusList = [{ name: "Active", code: true }, { name: "Inactive", code: false }];
+    const statusList = props?.isApprovedList ? approvedListStatus : onboardedListStatus;
     const hcpTypes = props?.hcpTypes ? props?.hcpTypes : [];
     const status = props?.status;
     const setStatus = props?.setStatus;
     const selectedHcpTypes = props?.selectedHcpTypes
     const setSelectedHcpTypes = props?.setSelectedHcpTypes
     const resetFilters = props?.resetFilters;
-    const showStatus = props?.showStatus;
 
     const dateRange = props?.dateRange
     const setDateRange = props?.setDateRange
@@ -49,7 +49,7 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
 
     return <div className="hcp-filters mrg-bottom-20">
         <div className="form-field-wrapper">
-            <div className={`form-field-left ${!showStatus && 'width-minor'}`}>
+            <div className={`form-field-left`}>
                 <div className="form-field-left-items">
                     <div className="form-field-item">
                         <Autocomplete
@@ -82,34 +82,34 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
                     </div>
 
 
-                    {
-                        showStatus && <div className="form-field-item">
-                            <Autocomplete
-                                PaperComponent={({ children }) => (
-                                    <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-                                )}
-                                value={status}
-                                options={statusList}
-                                getOptionLabel={(option: any) => option.name}
-                                placeholder={"Select Status"}
-                                id="input_select_status"
-                                className="mrg-top-10"
-                                onChange={($event, value) =>
-                                    setStatus(value)
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        id='select_status'
-                                        variant='outlined'
-                                        value={status}
-                                        placeholder={"Select Status"}
-                                        fullWidth
-                                    />
-                                )}
-                            />
-                        </div>
-                    }
+
+                    <div className="form-field-item">
+                        <Autocomplete
+                            PaperComponent={({ children }) => (
+                                <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
+                            )}
+                            value={status}
+                            options={statusList}
+                            getOptionLabel={(option: any) => option.name}
+                            placeholder={"Select Status"}
+                            id="input_select_status"
+                            className="mrg-top-10"
+                            onChange={($event, value) =>
+                                setStatus(value)
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    id='select_status'
+                                    variant='outlined'
+                                    value={status}
+                                    placeholder={"Select Status"}
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </div>
+
                 </div>
             </div>
             <div className="form-field-right">
