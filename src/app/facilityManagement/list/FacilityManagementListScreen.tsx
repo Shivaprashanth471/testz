@@ -46,13 +46,13 @@ const CssTextField = withStyles({
 const FacilityManagementListScreen = () => {
 
     const [list, setList] = useState<TsDataListState | null>(null);
-    const {role} = useSelector((state: StateParams) => state?.auth?.user);
+    const { role } = useSelector((state: StateParams) => state?.auth?.user);
     const [regionList, setRegionList] = useState<any | null>(null);
 
     const [selectedRegions, setSelectedRegions] = useLocalStorage<any>('facilityRegions', [])
     const [status, setStatus] = useLocalStorage<any>('facilityStatus', "");
     const [dateRange, setDateRange] = useLocalStorage('facilityDateRange', [null, null]);
-
+    const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>('facilityPageSizeIndex', 10)
 
     const classesFunction = useCallback((type: any) => {
         if (type === "Actions") {
@@ -111,16 +111,24 @@ const FacilityManagementListScreen = () => {
             }
         }
 
+
+
         const options = new TsDataListOptions({
+            // @ts-ignore
+            pagination: {
+                ...list?.table?.pagination,
+                pageSize: pageSizeIndex,
+            },
             extraPayload: payload,
             webMatColumns: role === "super_admin" ?
                 ['Created On', "Facility Name", "Region", "Contact Number", 'Active / Inactive', "Actions"] : ['Created On', "Facility Name", "Region", "Contact Number", 'Status', "Actions"],
             mobileMatColumns: role === "super_admin" ? ['Created On', "Facility Name", "Region", "Contact Number", 'Active / Inactive', "Actions"] :
                 ['Created On', "Facility Name", "Region", "Contact Number", 'Status', "Actions"]
         },
+
             ENV.API_URL + url, setList, ApiService, "post");
         let tableWrapperObj = new TsDataListWrapperClass(options);
-        setList({table: tableWrapperObj});
+        setList({ table: tableWrapperObj });
         // eslint-disable-next-line
     }, []);
 
@@ -153,7 +161,7 @@ const FacilityManagementListScreen = () => {
                 payload.end_date = endDate
             }
         }
-        setList( (list)=>{
+        setList((list) => {
             list?.table?.setExtraPayload(payload);
             list?.table.getList(1);
             return list
@@ -198,7 +206,7 @@ const FacilityManagementListScreen = () => {
             <div className={"facility-list screen crud-layout pdd-30 pdd-top-10"}>
                 {list && list.table?._isDataLoading && (
                     <div className="table-loading-indicator">
-                        <LoaderComponent/>
+                        <LoaderComponent />
                     </div>
                 )}
 
@@ -221,7 +229,7 @@ const FacilityManagementListScreen = () => {
                                     <div className="d-flex position-relative">
                                         {!list?.table.filter.search ?
                                             <div className={"search_icon"}>
-                                                <SearchRounded/>
+                                                <SearchRounded />
                                             </div> : <div className={"search_icon"}><ClearIcon onClick={event => {
                                                 if (list && list.table) {
                                                     list.table.filter.search = '';
@@ -229,18 +237,18 @@ const FacilityManagementListScreen = () => {
                                                     // list?.table.pageEvent(0)
                                                 }
 
-                                            }} id="clear_facility_search"/></div>}
+                                            }} id="clear_facility_search" /></div>}
                                         <div>
                                             <CssTextField defaultValue={''} className="search-cursor searchField"
-                                                          id="input_search_facility" onChange={event => {
-                                                if (list && list.table) {
-                                                    list.table.filter.search = event.target.value;
-                                                    list.table.reload();
-                                                    // list?.table.pageEvent(0)
-                                                }
+                                                id="input_search_facility" onChange={event => {
+                                                    if (list && list.table) {
+                                                        list.table.filter.search = event.target.value;
+                                                        list.table.reload();
+                                                        // list?.table.pageEvent(0)
+                                                    }
 
-                                            }} value={list?.table.filter.search} variant={"outlined"} size={"small"}
-                                                          type={'text'} placeholder={('Search Facility')}/>
+                                                }} value={list?.table.filter.search} variant={"outlined"} size={"small"}
+                                                type={'text'} placeholder={('Search Facility')} />
                                         </div>
                                     </div>
                                 </div>
@@ -271,20 +279,20 @@ const FacilityManagementListScreen = () => {
                                     <TableHead>
                                         <TableRow>
                                             {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                                    <TableCell
-                                                        className={classesFunction(column)}
-                                                        key={"header-col-" + columnIndex}
-                                                    >
-                                                        {column}
-                                                    </TableCell>
-                                                )
+                                                <TableCell
+                                                    className={classesFunction(column)}
+                                                    key={"header-col-" + columnIndex}
+                                                >
+                                                    {column}
+                                                </TableCell>
+                                            )
                                             )}
                                         </TableRow>
                                     </TableHead>
 
                                     <TableBody>
                                         {!list.table._isDataLoading && list.table?.data.length === 0 &&
-                                            <NoDataCardComponent tableCellCount={list.table.matColumns.length}/>
+                                            <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                         }
 
                                         {list?.table.data.map((row: any, rowIndex: any) => {
@@ -298,9 +306,9 @@ const FacilityManagementListScreen = () => {
                                                     <TableCell>{row["phone_number"]}</TableCell>
                                                     {
                                                         role === "super_admin" ?
-                                                            <TableCell style={{textAlign: "center"}}> <FormControlLabel
+                                                            <TableCell style={{ textAlign: "center" }}> <FormControlLabel
                                                                 control={<Switch checked={row['is_active']}
-                                                                                 onChange={() => handletoggleStatus(row['_id'], row['is_active'])}/>}
+                                                                    onChange={() => handletoggleStatus(row['_id'], row['is_active'])} />}
                                                                 label={''}
                                                             /> </TableCell> :
                                                             <TableCell>{row['is_active'] ? 'Active' : 'Inactive'}</TableCell>
@@ -326,7 +334,10 @@ const FacilityManagementListScreen = () => {
                                     rowsPerPage={list?.table.pagination.pageSize}
                                     page={list?.table.pagination.pageIndex}
                                     onPageChange={(event, page) => list.table.pageEvent(page)}
-                                    onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
+                                    onRowsPerPageChange={event => {
+                                        setPageSizeIndex(event.target.value)
+                                        list.table?.pageEvent(0, +event.target.value)
+                                    }}
                                 />
                             </TableContainer>
                         </>
