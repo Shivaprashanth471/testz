@@ -2,10 +2,10 @@ import React, { PropsWithChildren } from "react";
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import { Field, FieldProps, Form, Formik } from "formik";
-import { TextField } from "formik-material-ui";
+import { CheckboxWithLabel, TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, shiftTypePreference, vaccine } from "../../../../constants/data";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, travelDistancePreference, vaccine } from "../../../../constants/data";
 import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
 import { hcpFormValidation } from '../../add/AddHcpValuesValidationsComponent';
 import { ScrollToError } from '../../../../components/ScrollToError';
@@ -76,7 +76,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
             validationSchema={hcpFormValidation}
             onSubmit={onAdd}
         >
-            {({ isSubmitting, isValid, resetForm, setFieldValue }) => (
+            {({ isSubmitting, isValid, resetForm, setFieldValue, values }) => (
                 <Form id="hcp-edit-form" className={"form-holder"}>
                     <ScrollToError />
                     <div className="hcp-basic-details">
@@ -127,12 +127,13 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                         <Field component={RadioGroup} name="gender" id="radio_doctor_add_gender">
                                             <div className='d-flex'>
                                                 {genderTypes.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
+                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio required disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
                                                     </div>)
                                                 })}
                                             </div>
                                         </Field>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -196,6 +197,23 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             </div>
                         </div>
                     </div>
+
+                    <div className="travel-preferences custom-border mrg-top-10">
+                        <p className="card-header">Travel Preferences</p>
+                        <div className="travel-preferences-container">
+                            {
+                                travelDistancePreference.map(item => <Field
+                                    type="checkbox"
+                                    component={CheckboxWithLabel}
+                                    name="nc_details.travel_preferences"
+                                    key={item.value}
+                                    value={item.value}
+                                    Label={{ label: item.label }}
+                                />)
+                            }
+                        </div>
+                    </div>
+
                     <div className="nc-section custom-border mrg-top-10" >
                         <p className="card-header">NC Section</p>
                         <div className="input-container">
@@ -208,6 +226,14 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                     <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>{item.label}</MenuItem>
                                 ))}
                             </Field>
+                        </div>
+
+                        <div className="input-container">
+
+                            <Field variant='outlined' name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField}
+                                label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
+                            <Field variant='outlined' name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField}
+                                label="Latest Shot Date (MM-DD-YYYY" id="input_hcp_add_vaccination_dates_latest_shot" fullWidth autoComplete="off" />
                         </div>
 
                         <div className="input-container">
@@ -422,6 +448,53 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             </div>
                         </div>
 
+                        <div className="input-container d-flex">
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>Require Sponsorship for Employment in United States?</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_require_employment_sponsorship">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_is_require_employment_sponsorship' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_require_employment_sponsorship"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+
+                            <div className='flex-1'>
+                                <div className='pdd-top-10'>
+                                    <FormLabel className={'form-label'}>Legally Authorised to work in United States?</FormLabel>
+                                </div>
+                                <div className='mrg-top-10'>
+                                    <Field component={RadioGroup} name="nc_details.is_authorized_to_work">
+                                        <div className='d-flex'>
+                                            {boolAcknowledge.map((item: any, index) => {
+                                                return (<div ><FormControlLabel
+                                                    key={'input_hcp_add_is_authorized_to_work' + index}
+                                                    value={item.value}
+                                                    control={<Radio disabled={isSubmitting} />}
+                                                    disabled={isSubmitting}
+                                                    name="nc_details.is_authorized_to_work"
+                                                    label={item.label} />
+                                                </div>)
+                                            })}
+                                        </div>
+                                    </Field>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                         <div className="input-container">
                             <Field multiline rows={2} variant='outlined' name="nc_details.other_information" type={"text"} component={TextField}
@@ -491,13 +564,17 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         </>}
                         <div className="input-container mrg-top-30">
                             <Field variant='outlined' component={TextField} type={"text"} fullWidth
-                                   autoComplete="off" label="Rate / hr" name="contract_details.rate_per_hour" required={contractFile?.wrapper[0]?.file} />
+                                autoComplete="off" label="Rate / hr" name="contract_details.rate_per_hour" />
                             <Field orientation='landscape' variant="inline" openTo="date" views={["year", "month", "date"]} inputVariant='outlined' component={DatePicker}
-                                   placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} required={contractFile?.wrapper[0]?.file}
-                                   label="Signed On" name="contract_details.signed_on" />
-                            <Field variant='outlined' type={"number"} component={TextField} placeholder="Enter the date of salary credit"
-                                   fullWidth autoComplete="off" InputLabelProps={{ shrink: true }} label="Salary Credit Date" required={contractFile?.wrapper[0]?.file}
-                                   name="contract_details.salary_credit_date" />
+                                placeholder="MM/DD/YYYY" format="MM/dd/yyyy" fullWidth autoComplete="off" InputLabelProps={{ shrink: true }}
+                                label="Signed On" name="contract_details.signed_on" />
+                            <Field SelectProps={showDropDownBelowField} select variant='outlined' name="contract_details.salary_credit" type={"text"} component={TextField}
+                                id="input_hcp_add_salary_credit" label="Salary Credit Date" fullWidth autoComplete="off">
+                                <MenuItem value="" >Select Value</MenuItem>
+                                {salaryCredit.map((item: any, index: any) => (
+                                    <MenuItem value={item.value} id={"menu_hcp_add_salary_credit_" + index}>{item.label}</MenuItem>
+                                ))}
+                            </Field>
                         </div>
                     </div>
                 </Form>

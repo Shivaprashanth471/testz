@@ -2,7 +2,8 @@ import {
   Button, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -48,7 +49,7 @@ const ReferenceAddComponent = ({
   const [isReference, setIsReference] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [referenceId, setReferenceId] = useState<any>(null);
-  const [isConfirm,setIsConfirm] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
 
   const onAdd = (
     reference: ReferenceItem,
@@ -82,7 +83,7 @@ const ReferenceAddComponent = ({
       .then((resp: any) => {
         getReferenceDetails();
 
-        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'error');
+        CommonService.showToast(resp?.msg || 'hcp reference deleted', 'success');
         setIsConfirm(false)
         setIsAddOpen(false);
       })
@@ -208,8 +209,8 @@ const ReferenceAddComponent = ({
                     variant='contained'
                     type="submit"
                     id="btn_hcp_edit_reference_submit"
-                    className={isSubmitting?"has-loading-spinner":""} disabled={isSubmitting}>
-                     {isSubmitting?"Saving":"Save"}
+                    className={isSubmitting ? "has-loading-spinner" : ""} disabled={isSubmitting}>
+                    {isSubmitting ? "Saving" : "Save"}
                   </Button>
                 </div>
               </Form>
@@ -218,13 +219,15 @@ const ReferenceAddComponent = ({
         </div>
       ) : (
         <div className="ref-add-action">
-          <p
-            id='btn_hcp_add_reference'
-            onClick={() => setIsReference(true)}
-            className="generic-add-multiple"
-          >
-            + Add Reference
-          </p>
+          <Tooltip title={"Add New Reference"}>
+            <p
+              id='btn_hcp_add_reference'
+              onClick={() => setIsReference(true)}
+              className="generic-add-multiple"
+            >
+              + Add Reference
+            </p>
+          </Tooltip>
         </div>
       )}
 

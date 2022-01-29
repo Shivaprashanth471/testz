@@ -14,11 +14,12 @@ import RelatedShiftsComponent from './relatedShifts/RelatedShiftsComponent';
 import { AddRounded } from '@material-ui/icons';
 import RejectShiftRequirementComponent from '../rejectShiftRequirement/RejectShiftRequirementComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import PendingHcpApplicationComponent from './pending/PendingHcpApplicationComponent';
 
 const RequirementsShiftsViewScreen = () => {
     const param = useParams<any>()
     const { id } = param;
-    const [tabValue, setTabValue] = useState("approved");
+    const [tabValue, setTabValue] = useState("pending");
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
@@ -185,13 +186,15 @@ const RequirementsShiftsViewScreen = () => {
                         textColor="primary"
                         variant="fullWidth"
                         scrollButtons="auto"
-                    >
+                    >   
+                        <Tab label="HCP's Pending" value={'pending'} />
                         <Tab label="HCP's Approved" value={"approved"} />
                         <Tab label="HCP's Unapproved" value={"rejected"} />
                         <Tab label="Related Shifts" value={"relatedShifts"} />
                     </Tabs>
                 </div>
                 <div className="mrg-top-10">
+                    {tabValue === "pending" && <PendingHcpApplicationComponent isAddOpen={isAddOpen} status={basicDetails?.status} />}
                     {tabValue === "approved" && <ApprovedHcpApplicationComponent isAddOpen={isAddOpen} />}
                     {tabValue === "rejected" && <UnApprovedHcpApplicationComponent isAddOpen={isAddOpen} />}
                     {tabValue === "relatedShifts" && <RelatedShiftsComponent isAddOpen={isAddOpen} />}

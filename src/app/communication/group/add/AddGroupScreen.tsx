@@ -56,6 +56,7 @@ const AddGroupScreen = () => {
         setSelectedHcps(selectedHcps)
         setAllSelected(event.target.checked)
     }
+    
     const AddHcpsToGroup = useCallback((hcp: any, group_id: any) => {
         delete hcp["checked"];
         return new Promise((resolve, reject) => {
@@ -99,7 +100,7 @@ const AddGroupScreen = () => {
             }
         }).catch((err) => {
             console.log(err)
-            setIsGroupAdded(true)
+            setIsGroupAdded(false)
         })
     }
     useEffect(() => {

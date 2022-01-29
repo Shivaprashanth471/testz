@@ -11,7 +11,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, Communications } from "../../../../helpers";
 import { AddRounded } from "@material-ui/icons";
-import { Button, TablePagination } from "@material-ui/core";
+import { Button, TablePagination, Tooltip } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './GroupListScreen.scss';
 import { SearchRounded } from "@material-ui/icons";
@@ -114,9 +114,11 @@ const GroupListScreen = () => {
                         </div>
                         <div className="action pdd-right-5">
                             <div>
-                                <Button variant={"contained"} color={"primary"} component={Link} to={`/group/add`} id="btn-add-group">
-                                    <AddRounded />&nbsp;&nbsp;Create New&nbsp;&nbsp;
-                                </Button>
+                                <Tooltip title={'Create New Group'}>
+                                    <Button variant={"contained"} color={"primary"} component={Link} to={`/group/add`} id="btn-add-group">
+                                        <AddRounded />&nbsp;&nbsp;Create New&nbsp;&nbsp;
+                                    </Button>
+                                </Tooltip>
                             </div>
                         </div>
                     </div>
@@ -151,14 +153,18 @@ const GroupListScreen = () => {
                                                     {row['members_count']}
                                                 </TableCell>
                                                 <TableCell>
+                                                <Tooltip title={`Send SMS Blast to ${row['title']}`}>
                                                     <div className="d-flex message-wrapper" onClick={() => handleSmsBlast(row)} id={"sms-blast_" + rowIndex}>
                                                         <QuestionAnswerIcon className={"sms-blast-icon"} /> &nbsp; <span className="sms-blast">SMS Blast</span>
                                                     </div>
+                                                    </Tooltip>
                                                 </TableCell>
                                                 <TableCell className='text-right'>
-                                                    <Link to={'/group/view/' + row._id} className="info-link" id={"link_group_details_" + rowIndex} >
-                                                        {('View Details')}
-                                                    </Link>
+                                                    <Tooltip title={`${row['title']} view details`}>
+                                                        <Link to={'/group/view/' + row._id} className="info-link" id={"link_group_details_" + rowIndex} >
+                                                            {('View Details')}
+                                                        </Link>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         );

@@ -1,4 +1,4 @@
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -39,7 +39,7 @@ const HcpManagementListScreen = () => {
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
 
     const [selectedHcpTypes, setSelectedHcpTypes] = useLocalStorage<any[]>('hcpSelectedTypes', [])
-    const [status, setStatus] = useLocalStorage<any>('hcpStatus', "");
+    const [status, setStatus] = useLocalStorage<any>('hcpStatus', { name: "Pending", code: "pending" });
     const [dateRange, setDateRange] = useLocalStorage<any[]>('hcpDateRange', [null, null]);
 
     const classesFunction = useCallback((type: any) => {
@@ -58,17 +58,25 @@ const HcpManagementListScreen = () => {
         });
     }, []);
 
+    useEffect(() => {
+        if (status === null) {
+            setStatus({ name: "Pending", code: "pending" })
+        }
+    }, [setStatus, status])
+
     const init = useCallback(() => {
         let url = "hcp/list"
-        let payload: any = {}
+        let payload: any = {
+            
+        }
         payload.is_approved = 0;
 
         if (selectedHcpTypes.length > 0) {
             payload.hcp_type = selectedHcpTypes.map((item: any) => item?.name)
         }
 
-        if (status !== "") {
-            payload.is_active = status?.code
+        if (status !== "" && status?.code !== "all") {
+                payload.status = status?.code
         }
 
 
@@ -88,8 +96,8 @@ const HcpManagementListScreen = () => {
 
         const options = new TsDataListOptions({
             extraPayload: payload,
-            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
-            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Actions'],
+            webMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Status', 'Actions'],
+            mobileMatColumns: ['Created On', 'Name', 'Contact Number', 'Email', 'Applied For', 'Status', 'Actions'],
         }, ENV.API_URL + url, setList, ApiService, 'post');
 
         let tableWrapperObj = new TsDataListWrapperClass(options)
@@ -98,7 +106,7 @@ const HcpManagementListScreen = () => {
 
     const clearFilterValues = () => {
         setDateRange([null, null])
-        setStatus("")
+        setStatus({ name: "Pending", code: "pending" })
         setSelectedHcpTypes([])
     }
 
@@ -164,9 +172,11 @@ const HcpManagementListScreen = () => {
 
                             <div className='mrg-left-20'>
                                 <AccessControlComponent role={[HUMANRESOURCE, ADMIN]} >
-                                    <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/add`}>
-                                        <AddRounded />&nbsp;&nbsp;Add HCP&nbsp;&nbsp;
-                                    </Button>
+                                    <Tooltip title="Add New Hcp">
+                                        <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/add`}>
+                                            <AddRounded />&nbsp;&nbsp;Add HCP&nbsp;&nbsp;
+                                        </Button>
+                                    </Tooltip>
                                 </AccessControlComponent>
                             </div>
                         </div>
@@ -208,10 +218,15 @@ const HcpManagementListScreen = () => {
                                                 <TableCell>
                                                     {row['hcp_type']}
                                                 </TableCell>
+                                                <TableCell>
+                                                    {row['status']}
+                                                </TableCell>
                                                 <TableCell >
-                                                    <Link to={'/hcp/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                                        {('View Details')}
-                                                    </Link>
+                                                    <Tooltip title={`${row['first_name']} ${row['last_name']} view details`}>
+                                                        <Link to={'/hcp/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                            {('View Details')}
+                                                        </Link>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         );

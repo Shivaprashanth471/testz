@@ -19,6 +19,7 @@ const ClosedShiftsViewScreen = () => {
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [attachmentsList, seAttachmentsList] = useState<any | null>(null);
+    const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [previewFileData, setPreviewFile] = useState<any | null>(null);
 
@@ -35,8 +36,16 @@ const ClosedShiftsViewScreen = () => {
     }, [])
 
     const getShiftAttachments = useCallback(() => {
-        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments?is_preview=true").then((resp) => {
             seAttachmentsList(resp.data);
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [id])
+
+    const getShiftAttachmentsDownload = useCallback(() => {
+        CommonService._api.get(ENV.API_URL + 'shift/' + id + "/attachments").then((resp) => {
+            downloadSeAttachmentsList(resp.data);
         }).catch((err) => {
             console.log(err)
         })
@@ -44,6 +53,7 @@ const ClosedShiftsViewScreen = () => {
 
     const getShiftDetails = useCallback(() => {
         // config
+        setIsLoading(true)
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
             setBasicDetails(resp.data);
             setIsLoading(false)
@@ -55,7 +65,8 @@ const ClosedShiftsViewScreen = () => {
     useEffect(() => {
         getShiftDetails()
         getShiftAttachments()
-    }, [getShiftDetails, getShiftAttachments])
+        getShiftAttachmentsDownload()
+    }, [getShiftDetails, getShiftAttachments, getShiftAttachmentsDownload])
     useEffect(() => {
         Communications.pageTitleSubject.next('Shifts Closed');
         Communications.pageBackButtonSubject.next('/closedShifts/list');
@@ -109,7 +120,7 @@ const ClosedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="facility-details d-flex custom-border mrg-top-10">
+            <div className="facility-details d-flex custom-border mrg-top-10 pdd-bottom-5">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -119,7 +130,7 @@ const ClosedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={"/facility/view/" + basicDetails?.facility?._id}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -158,12 +169,11 @@ const ClosedShiftsViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
+                        <h3>HCP OT Hourly Rate</h3>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+
                     </div>
                     <div className="flex-1">
 
@@ -183,10 +193,10 @@ const ClosedShiftsViewScreen = () => {
                         <h3>Attended On:</h3>
                         <p className="attended-date mrg-left-15">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : moment(basicDetails?.expected?.shift_start_time).format("MM-DD-YYYY")}</p>
                     </div>
-                    <div className="flex-1 d-flex shift-ot-time">
+                    {/* <div className="flex-1 d-flex shift-ot-time">
                         <h3>OT Hours:</h3>
                         <p className="attended-date mrg-left-15">--</p>
-                    </div>
+                    </div> */}
                 </div>
                 <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                 <div className="mrg-top-70">
@@ -199,12 +209,16 @@ const ClosedShiftsViewScreen = () => {
                                         <div className="attachments">
                                             <p className="mrg-left-10">{item?.attachment_type}</p>
                                             <div>
-                                            <Tooltip title="Preview CDPH 530 A Form">
-                                                <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
-                                             </Tooltip>
+                                                <Tooltip title="Preview CDPH 530 A Form">
+                                                    <InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index)} />
+                                                </Tooltip>
                                                 <div className='d-flex'>
-                                                    {/* <p onClick={handleDownloadCdhp} className='file-actions'>Download</p> */}
-                                                    <p onClick={() => previewFile(index)} className='file-actions mrg-left-20'>View</p>
+                                                    <Tooltip title="Preview CDPH 530 A Form">
+                                                        <p onClick={() => previewFile(index)} className='file-actions'>Preview</p>
+                                                    </Tooltip>
+                                                    <Tooltip title="Download CDPH 530 A Form">
+                                                        <a href={downloadAttachmentsList[index]?.url} download className='file-actions  mrg-left-20'>Download</a>
+                                                    </Tooltip>
                                                 </div>
                                             </div>
                                         </div>

@@ -2,7 +2,8 @@ import {
   Button, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -72,7 +73,7 @@ const ReferenceAddComponent = ({
     );
     newReferences.splice(index, 1);
     setReference(newReferences);
-    CommonService.showToast('HCP reference deleted', 'error')
+    CommonService.showToast('HCP reference deleted', 'success')
   };
 
   return (
@@ -179,11 +180,13 @@ const ReferenceAddComponent = ({
         </div>
       ) : (
         <div className="ref-add-action">
-          <p
-            id='btn_hcp_add_reference'
-            onClick={() => setIsReference(true)}
-            className="generic-add-multiple"
-          > + Add Reference</p>
+          <Tooltip title={"Add New Reference"}>
+            <p
+              id='btn_hcp_add_reference'
+              onClick={() => setIsReference(true)}
+              className="generic-add-multiple"
+            > + Add Reference</p>
+          </Tooltip>
         </div>
       )}
 

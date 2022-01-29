@@ -5,6 +5,7 @@ import { CommonService } from '../../../../helpers';
 import { ENV } from '../../../../constants';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import NoDataToShowCardComponent from "../../../../components/NoDataToShowCardComponent";
 
 export interface HcpContactComponentProps {
     hcpDetails: any;
@@ -12,7 +13,7 @@ export interface HcpContactComponentProps {
 
 const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>) => {
 
-    const hcpDetails  = props?.hcpDetails;
+    const hcpDetails = props?.hcpDetails;
 
     const params = useParams<{ id: string }>();
     const { id } = params;
@@ -34,12 +35,15 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
 
     return !isContractLoading ? <>
         <div className="hcp_contract_details mrg-top-10">
-            {
-                contractDetails !== undefined ?
-                    <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+            <div className="custom-border pdd-20 pdd-left-40 pdd-right-40">
+                {
+                    contractDetails !== undefined ?
                         <div>
                             <CustomFile data={contractDetails} />
-                        </div>
+                        </div> : <h3 className="contract-heading">Contract</h3>
+                }
+                {
+                    hcpDetails?.contract_details ?
                         <div className="d-flex">
                             <div className="flex-1">
                                 <h4>Rate/hr</h4>
@@ -47,18 +51,22 @@ const HcpContractComponent = (props: PropsWithChildren<HcpContactComponentProps>
                             </div>
                             <div className="flex-1">
                                 <h4>Signed On</h4>
-                                <p>{moment(hcpDetails?.contract_details?.signed_on).format("MMMM Do YYYY")}</p>
+                                <p>{hcpDetails?.contract_details?.signed_on?moment(hcpDetails?.contract_details?.signed_on).format("MMMM Do YYYY"):"N/A"}</p>
                             </div>
                             <div className="flex-1">
                                 <h4>Salary Credit Date</h4>
-                                <p>{hcpDetails?.contract_details?.salary_credit_date}</p>
+                                <p>{hcpDetails?.contract_details?.salary_credit}</p>
                             </div>
                             <div className="flex-1">
 
                             </div>
                         </div>
-                    </div> : <></>
-            }
+                        : <>
+                            <NoDataToShowCardComponent />
+                        </>
+
+                }
+            </div>
         </div>
     </> : <></>
 }

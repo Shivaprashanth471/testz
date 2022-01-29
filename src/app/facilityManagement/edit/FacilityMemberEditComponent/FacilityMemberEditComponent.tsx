@@ -4,7 +4,8 @@ import {
   Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -81,7 +82,7 @@ const FacilityMemberEditComponent = ({
     setIsConfirm(true)
     ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
       .then((resp: any) => {
-        CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'error')
+        CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'success')
         getFacilityMembers();
         setIsAddOpen(false);
         setIsConfirm(false)
@@ -258,8 +259,9 @@ const FacilityMemberEditComponent = ({
                   >
                     Delete
                   </Button>
-                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color='primary' type="submit" variant='contained'>
-                    Save
+                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color='primary' type="submit" 
+                  variant='contained'  className={isSubmitting?"has-loading-spinner":""}>
+                  {isSubmitting?"Saving":"Save"}
                   </Button>
                 </div>
               </Form>
@@ -269,6 +271,7 @@ const FacilityMemberEditComponent = ({
       ) : (
         <>
           <div className="facility-add-action">
+          <Tooltip title={"Add New Facility Member"}>
             <p
               id="btn_facility_member_add_open"
               onClick={() => setIsMembers(true)}
@@ -276,6 +279,7 @@ const FacilityMemberEditComponent = ({
             >
               + Add a Facility Member
             </p>
+            </Tooltip>
           </div>
         </>
       )}

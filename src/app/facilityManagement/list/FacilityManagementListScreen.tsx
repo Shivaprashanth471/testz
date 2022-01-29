@@ -1,4 +1,5 @@
 import { Button, TextField } from "@material-ui/core";
+import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from '@material-ui/core/styles';
@@ -43,10 +44,10 @@ const CssTextField = withStyles({
 })(TextField);
 
 const FacilityManagementListScreen = () => {
+
     const [list, setList] = useState<TsDataListState | null>(null);
     const {role} = useSelector((state: StateParams) => state?.auth?.user);
     const [regionList, setRegionList] = useState<any | null>(null);
-
 
     const [selectedRegions, setSelectedRegions] = useLocalStorage<any>('facilityRegions', [])
     const [status, setStatus] = useLocalStorage<any>('facilityStatus', "");
@@ -210,7 +211,6 @@ const FacilityManagementListScreen = () => {
                     status={status}
                 />
 
-
                 <div className="custom-border pdd-10 pdd-top-20 pdd-bottom-0">
                     <div className="header">
                         <div className="mrg-left-5 filter">
@@ -247,16 +247,17 @@ const FacilityManagementListScreen = () => {
                         <div className="action pdd-right-5 d-flex">
                             <div className="mrg-left-20">
                                 <AccessControlComponent role={[ACCOUNTMANAGER, ADMIN]}>
-                                    <Button
-                                        variant={"contained"}
-                                        color={"primary"}
-                                        component={Link}
-                                        to={`/facility/add`}
-                                    >
-                                        <AddRounded/>
-                                        &nbsp;&nbsp;Add Facility&nbsp;&nbsp;
-                                    </Button>
-
+                                    <Tooltip title="Add New Facility">
+                                        <Button
+                                            variant={"contained"}
+                                            color={"primary"}
+                                            component={Link}
+                                            to={`/facility/add`}
+                                        >
+                                            <AddRounded />
+                                            &nbsp;&nbsp;Add Facility&nbsp;&nbsp;
+                                        </Button>
+                                    </Tooltip>
                                 </AccessControlComponent>
                             </div>
                         </div>

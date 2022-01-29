@@ -31,10 +31,10 @@ import RemoveHcpsScreen from "../app/communication/group/removeHcps/RemoveHcpsSc
 import AddHcpToExistingGroupScreen from "../app/communication/group/addHcptoExistingGroup/AddHcpToExistingGroupScreen";
 import HcpUserViewScreen from "../app/hcpManagement/approvedhcpview/HcpManagementViewScreen";
 import ShiftCompletedViewScreen from "../app/shifts/completed/view/ShiftCompletedViewScreen";
-import RequirementsShiftsViewScreen from "../app/shifts/shiftRequirementList/view/RequirementsShiftsViewScreen";
+import RequirementsShiftsViewScreen from "../app/shifts/shiftRequirement/view/RequirementsShiftsViewScreen";
 import ShiftInprogressListScreen from '../app/shifts/inprogress/list/ShiftInprogressListScreen'; 
 import SendSmsBlastScreen from "../app/communication/smsBlast/SendSmsBlastScreen";
-import ShiftRequirementListScreen from "../app/shifts/shiftRequirementList/list/ShiftRequirementListScreen";
+import ShiftRequirementListScreen from "../app/shifts/shiftRequirement/list/ShiftRequirementListScreen";
 import ApprovedShiftsViewScreen from "../app/shifts/approved/view/ApprovedShiftsViewScreen";
 import ShiftInprogressViewScreen from "../app/shifts/inprogress/view/ShiftInprogressViewScreen";
 import ShiftMasterViewScreen from "../app/shifts/shiftMaster/view/ShiftMasterViewScreen";

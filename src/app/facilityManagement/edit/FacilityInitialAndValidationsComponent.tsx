@@ -108,7 +108,7 @@ export const facilityFormEditValidation = Yup.object({
   address: Yup.object({
     street: Yup.string()
       .typeError(" must be a text")
-      .min(2, "min 2 letters")
+      .min(3, "min 3 letters")
       .max(30, 'max limit 30')
       .trim("empty space not allowed")
       .required("required"),

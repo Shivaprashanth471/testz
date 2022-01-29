@@ -153,7 +153,7 @@ const FacilityAddDetailsComponent = (props: any) => {
                                     return (
                                         <div className="attachments">
                                             <Tooltip title="Preview Facility Icon">
-                                            {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px" ,cursor:"pointer"}} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px",cursor:"pointer" }} onClick={() => previewFile(index)} />}
+                                                {item?.file?.type === "image/jpg" || item?.file?.type === "image/png" || item?.file?.type === "image/jpeg" ? <img src={item?.file?.base64} alt="" style={{ height: "100px", width: "100px", cursor: "pointer" }} onClick={() => previewFile(index)} /> : <img src={PdfIcon} alt="" style={{ height: "100px", width: "100px", cursor: "pointer" }} onClick={() => previewFile(index)} />}
                                             </Tooltip>
                                             <div className="d-flex image_actions mrg-top-10">
                                                 <p style={{ cursor: 'pointer' }} onClick={() => previewFile(index)} className="delete-image">View</p>
@@ -171,7 +171,9 @@ const FacilityAddDetailsComponent = (props: any) => {
                             <div>
                                 <Box display="flex" gridGap="10px">
                                     <Box width="250px" className="mrg-top-10">
-                                        <FileDropZoneComponent OnFileSelected={OnFileSelected} allowedTypes={".jpg,.png,.jpeg"} />
+                                        <Tooltip title={"Upload Facility Image"}>
+                                            <FileDropZoneComponent OnFileSelected={OnFileSelected} allowedTypes={".jpg,.png,.jpeg"} />
+                                        </Tooltip>
                                     </Box>
                                 </Box>
                             </div>

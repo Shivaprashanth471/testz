@@ -3,7 +3,8 @@ import {
   Button, MenuItem, Table,
   TableBody,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -80,7 +81,7 @@ const ShiftAddComponent = ({
     );
     newShiftTimings.splice(index, 1);
     setShiftTimings(newShiftTimings);
-    CommonService.showToast('Shift Timing deleted', 'error')
+    CommonService.showToast('Shift Timing deleted', 'success')
   };
 
 
@@ -177,14 +178,15 @@ const ShiftAddComponent = ({
         </Formik>
       ) : (
         <div className="shift-add-action">
-
-          <p
-            onClick={() => setIsShifts(true)}
-            id="btn_add_shift_submit"
-            className="generic-add-multiple"
-          >
-            + Add a Shift
-          </p>
+          <Tooltip title={"Add New Shift Timing"}>
+            <p
+              onClick={() => setIsShifts(true)}
+              id="btn_add_shift_submit"
+              className="generic-add-multiple"
+            >
+              + Add a Shift
+            </p>
+          </Tooltip>
         </div>
       )}
 

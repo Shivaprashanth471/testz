@@ -8,6 +8,12 @@
 			text-align: end;
 		}
 	}
+	.file-actions{
+        color: $primary-color !important;
+        margin-top: 0px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 	.delete-cdhp {
 		color: $primary-color;
 		text-decoration: underline;

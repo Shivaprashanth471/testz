@@ -16,7 +16,7 @@ const ApprovedShiftsViewScreen = () => {
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isRejectShiftOpen, setRejectShiftOpen] = useState<boolean>(false);
-     
+
     const getShiftDetails = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'shift/' + id).then((resp) => {
@@ -108,7 +108,7 @@ const ApprovedShiftsViewScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="d-flex facility-details mrg-top-10 custom-border">
+            <div className="d-flex facility-details mrg-top-10 custom-border pdd-bottom-0">
                 <div className="flex-1">
                     <h2>{basicDetails?.facility?.facility_name}</h2>
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
@@ -118,7 +118,7 @@ const ApprovedShiftsViewScreen = () => {
                         component={Link}
                         color={"primary"}
                         variant={"outlined"}
-                        to={"/facility/view/" + basicDetails?.facility?._id}
+                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/approvedShifts/view/" + id } }}
                     >
                         View Details
                     </Button></div>
@@ -157,12 +157,11 @@ const ApprovedShiftsViewScreen = () => {
                         <p>{basicDetails?.payments?.differential}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_hcp}</p>
+                        <h3>HCP OT Hourly Rate</h3>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
-                        <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+
                     </div>
                     <div className="flex-1">
 
@@ -181,10 +180,10 @@ const ApprovedShiftsViewScreen = () => {
                             <h3>Attended On:</h3>
                             <p className="attended-date mrg-left-20">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : "--"}</p>
                         </div>
-                        <div className="flex-1 d-flex shift-ot-time">
+                        {/* <div className="flex-1 d-flex shift-ot-time">
                             <h3>OT Hours:</h3>
                             <p className="attended-date mrg-left-20">--</p>
-                        </div>
+                        </div> */}
                     </div >
                     <div className="pdd-bottom-20">
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />

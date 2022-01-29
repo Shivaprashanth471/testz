@@ -1,4 +1,4 @@
-import { IconButton, TableRow, TextField } from "@material-ui/core";
+import { IconButton, TableRow, TextField, Tooltip } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
 
@@ -61,9 +61,11 @@ const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
       </td>
 
       <td>
+      <Tooltip title={`Delete ${member.name} Facility Member`}>
         <IconButton onClick={() => handleDeleteClick(member?.tempId)}>
           <DeleteIcon className="delete-icon" />
         </IconButton>
+        </Tooltip>
       </td>
     </TableRow>
   );

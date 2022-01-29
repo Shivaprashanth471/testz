@@ -12,7 +12,7 @@ import HcpDetailsComponent from "./details/HcpDetailsComponent";
 import './HcpManagementViewScreen.scss';
 
 
-const HcpManagementViewScreen = () => {
+const HcpManagementViewScreen = (props:any) => {
     const param = useParams<any>()
     const { id } = param
     const [hcpBasicDetails, setBasicDetails] = useState<any | null>(null)
@@ -30,19 +30,14 @@ const HcpManagementViewScreen = () => {
     }, [id])
 
     useEffect(() => {
+        let prevLocation:any="/hcp/user/list";
+        if(props?.location.state){
+            prevLocation=props?.location.state?.prevPath;
+        }
         init();
         Communications.pageTitleSubject.next('HCP Details');
-        Communications.pageBackButtonSubject.next("/hcp/user/list");
-    }, [init])
-
-    // const handleDelete = () => {
-    //     CommonService._api.delete(ENV.API_URL + 'hcp/user/' + id).then((resp) => {
-    //         setBasicDetails(resp.data);
-    //         setIsLoading(false)
-    //     }).catch((err) => {
-    //         console.log(err)
-    //     })
-    // }
+        Communications.pageBackButtonSubject.next(prevLocation);
+    }, [init,props?.location.state])
 
     if (isLoading && isAttachmentsLoading) {
         return <LoaderComponent />
