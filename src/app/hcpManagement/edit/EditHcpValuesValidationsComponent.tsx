@@ -117,7 +117,7 @@ export const hcpFormValidation = Yup.object({
     is_gusto_onboarded: Yup.string().trim().typeError("must be valid ").nullable(),
     gusto_type: Yup.string().trim().typeError("must be valid text").nullable(),
     nc_last_updated: Yup.string().trim().typeError("must be valid text").nullable(),
-    last_call_date: Yup.string().typeError("must be date").nullable().nullable(),
+    last_call_date: Yup.string().typeError("must be date").nullable(),
     contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),
     vaccination_dates: Yup.object({

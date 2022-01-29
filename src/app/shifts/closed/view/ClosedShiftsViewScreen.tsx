@@ -66,7 +66,7 @@ const ClosedShiftsViewScreen = () => {
         getShiftDetails()
         getShiftAttachments()
         getShiftAttachmentsDownload()
-    }, [getShiftDetails, getShiftAttachments,getShiftAttachmentsDownload])
+    }, [getShiftDetails, getShiftAttachments, getShiftAttachmentsDownload])
     useEffect(() => {
         Communications.pageTitleSubject.next('Shifts Closed');
         Communications.pageBackButtonSubject.next('/closedShifts/list');
@@ -170,7 +170,7 @@ const ClosedShiftsViewScreen = () => {
                     </div>
                     <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
 
@@ -193,10 +193,10 @@ const ClosedShiftsViewScreen = () => {
                         <h3>Attended On:</h3>
                         <p className="attended-date mrg-left-15">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : moment(basicDetails?.expected?.shift_start_time).format("MM-DD-YYYY")}</p>
                     </div>
-                    <div className="flex-1 d-flex shift-ot-time">
+                    {/* <div className="flex-1 d-flex shift-ot-time">
                         <h3>OT Hours:</h3>
                         <p className="attended-date mrg-left-15">--</p>
-                    </div>
+                    </div> */}
                 </div>
                 <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
                 <div className="mrg-top-70">

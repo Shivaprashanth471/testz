@@ -158,10 +158,10 @@ const ApprovedShiftsViewScreen = () => {
                     </div>
                     <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
-                       
+
                     </div>
                     <div className="flex-1">
 
@@ -180,10 +180,10 @@ const ApprovedShiftsViewScreen = () => {
                             <h3>Attended On:</h3>
                             <p className="attended-date mrg-left-20">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : "--"}</p>
                         </div>
-                        <div className="flex-1 d-flex shift-ot-time">
+                        {/* <div className="flex-1 d-flex shift-ot-time">
                             <h3>OT Hours:</h3>
                             <p className="attended-date mrg-left-20">--</p>
-                        </div>
+                        </div> */}
                     </div >
                     <div className="pdd-bottom-20">
                         <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />

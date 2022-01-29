@@ -75,7 +75,7 @@ const ShiftMasterViewScreen = () => {
                 file: file,
                 fileFieldName: 'Data',
                 uploadUrl: ENV.API_URL + 'facility/add',
-                allowed_types: ['jpg', 'png', 'csv', 'pdf','jpeg'],
+                allowed_types: ['jpg', 'png', 'csv', 'pdf', 'jpeg'],
                 extraPayload: { file_type: required_attachments[index]?.name }
             };
             const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
@@ -189,7 +189,7 @@ const ShiftMasterViewScreen = () => {
             console.log(err)
             CommonService.showToast(err || "Error", "error");
         })
-    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails,getShiftAttachmentsDownload])
+    }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails, getShiftAttachmentsDownload])
 
     const handlegetUrlForUpload = useCallback(() => {
         setIsTimeSheetBeingUpdated(true)
@@ -225,7 +225,7 @@ const ShiftMasterViewScreen = () => {
         getShiftAttachmentsDownload()
         Communications.pageTitleSubject.next('Shifts Master');
         Communications.pageBackButtonSubject.next('/shiftMaster/list');
-    }, [getShiftDetails,getShiftAttachmentsDownload,getShiftAttachments])
+    }, [getShiftDetails, getShiftAttachmentsDownload, getShiftAttachments])
 
     const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.expected?.shift_start_time, basicDetails?.expected?.shift_end_time)
     const shift_date = CommonService.getUtcDate(basicDetails?.shift_date)
@@ -308,7 +308,7 @@ const ShiftMasterViewScreen = () => {
                 <div className="d-flex shift-details">
                     <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
                     <div className="flex-1">
 
@@ -352,10 +352,10 @@ const ShiftMasterViewScreen = () => {
                                 {basicDetails?.time_breakup?.check_in_time && basicDetails?.time_breakup?.check_out_time && CommonService.durationFromHHMM(moment(basicDetails?.time_breakup?.check_in_time).format("HH:mm"), moment(basicDetails?.time_breakup?.check_out_time).format("HH:mm"))}
                             </p>
                         </div>
-                        <div className="flex-1 flex-container shift-ot-time">
+                        {/* <div className="flex-1 flex-container shift-ot-time">
                             <h3>OT Hours:</h3>
                             <p className="attended-date mrg-left-20">--</p>
-                        </div>
+                        </div> */}
 
                     </div>
                     <div className="pdd-bottom-55">
@@ -380,7 +380,7 @@ const ShiftMasterViewScreen = () => {
                                                     </Tooltip>
                                                 </div>
                                                 <div className='d-flex'>
-                                                <Tooltip title="Download CDPH 530 A Form">
+                                                    <Tooltip title="Download CDPH 530 A Form">
                                                         <p onClick={() => previewFile(index, "api")} className='file-actions'>Preview</p>
                                                     </Tooltip>
                                                     <Tooltip title="Download CDPH 530 A Form">
