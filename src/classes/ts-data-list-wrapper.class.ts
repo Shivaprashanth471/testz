@@ -136,6 +136,10 @@ export class TsDataListWrapperClass {
         }
     }
 
+    setExtraPayload(payload: any): void {
+        this.extraPayload = payload;
+    }
+
     updateColumnShow(isMobile: boolean) {
         if (isMobile) {
             this.showMobileList();

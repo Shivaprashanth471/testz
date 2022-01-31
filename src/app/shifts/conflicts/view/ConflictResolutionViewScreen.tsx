@@ -106,7 +106,7 @@ const ConflictResolutionViewScreen = () => {
                     </div>
                     <div className="flex-1">
                         <h3>HCP OT Hourly Rate</h3>
-                        <p>{basicDetails?.payments?.hourly_ot}</p>
+                        <p>{basicDetails?.facility?.conditional_rates?.overtime?.rate}</p>
                     </div>
 
                     <div className="flex-1">

@@ -103,7 +103,7 @@ const EditHcpComponent = () => {
 
     contract_details: {
       rate_per_hour: hcpDetails?.contract_details?.rate_per_hour,
-      signed_on: hcpDetails?.contract_details?.signed_on,
+      signed_on: hcpDetails?.contract_details?.signed_on === "" ? null : hcpDetails?.contract_details?.signed_on,
       salary_credit: hcpDetails?.contract_details?.salary_credit,
     },
 
@@ -123,12 +123,17 @@ const EditHcpComponent = () => {
       is_gusto_onboarded: hcpDetails?.nc_details?.is_gusto_onboarded,
       gusto_type: hcpDetails?.nc_details?.gusto_type,
       nc_last_updated: hcpDetails?.nc_details?.nc_last_updated ? hcpDetails?.nc_details?.nc_last_updated : `${currentUser?.first_name} ${currentUser?.last_name}`,
-      last_call_date: hcpDetails?.nc_details?.last_call_date,
+      last_call_date: hcpDetails?.nc_details?.last_call_date === "" ? null : hcpDetails?.nc_details?.last_call_date,
       contact_type: hcpDetails?.nc_details?.contact_type,
       other_information: hcpDetails?.nc_details?.other_information,
       travel_preferences: hcpDetails?.nc_details.travel_preferences,
       is_authorized_to_work: hcpDetails?.nc_details.is_authorized_to_work,
       is_require_employment_sponsorship: hcpDetails?.nc_details.is_require_employment_sponsorship,
+      vaccination_dates: {
+        first_shot: hcpDetails?.nc_details?.vaccination_dates?.first_shot,
+        latest_shot: hcpDetails?.nc_details?.vaccination_dates?.latest_shot,
+
+      }
     }
   };
 

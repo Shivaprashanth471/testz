@@ -127,7 +127,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                                         <Field component={RadioGroup} name="gender" id="radio_doctor_add_gender">
                                             <div className='d-flex'>
                                                 {genderTypes.map((item: any, index) => {
-                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
+                                                    return (<div ><FormControlLabel key={'gender_type_' + index} value={item.value} control={<Radio required disabled={isSubmitting} />} disabled={isSubmitting} label={item.label} />
                                                     </div>)
                                                 })}
                                             </div>
@@ -229,6 +229,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         </div>
 
                         <div className="input-container">
+
                             <Field variant='outlined' name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField}
                                 label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
                             <Field variant='outlined' name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField}
