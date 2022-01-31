@@ -6,13 +6,13 @@ import React from "react";
 interface readOnlyRowProps {
   experience: any;
   handleDeleteClick: any;
-  index?: number
+  index?: number;
 }
 
 const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowProps) => {
   return (
     <>
-      <TableRow >
+      <TableRow>
         <td>
           <TextField
             InputProps={{
@@ -55,7 +55,7 @@ const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowPro
             InputProps={{
               disableUnderline: true,
             }}
-            value={moment(experience.start_date).format('MM-YYYY')}
+            value={moment(experience.start_date).format("MM-YYYY")}
             disabled
           />
         </td>
@@ -65,7 +65,7 @@ const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowPro
             InputProps={{
               disableUnderline: true,
             }}
-            value={experience.end_date ? moment(experience.end_date).format('MM-YYYY') : "Present"}
+            value={experience.end_date ? moment(experience.end_date).format("MM-YYYY") : "Present"}
             disabled
           />
         </td>
@@ -80,14 +80,13 @@ const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowPro
           />
         </td>
         <td>
-        <Tooltip title={`Delete Volunteer Experience`}>
-          <IconButton onClick={() => handleDeleteClick(experience.tempId)}>
-            <DeleteIcon className="delete-icon" />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title={`Delete Volunteer Experience`}>
+            <IconButton onClick={() => handleDeleteClick(experience.tempId)}>
+              <DeleteIcon className="delete-icon" />
+            </IconButton>
+          </Tooltip>
         </td>
       </TableRow>
-
     </>
   );
 };

@@ -6,7 +6,7 @@ import React from "react";
 interface EducationReadOnlyProps {
   education: any;
   openAdd: any;
-  index: number
+  index: number;
 }
 
 const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
@@ -45,7 +45,7 @@ const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.start_date).format('MM-YYYY')}
+          value={moment(education.start_date).format("MM-YYYY")}
           disabled
         />
       </td>
@@ -55,7 +55,7 @@ const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.graduation_date).format('MM-YYYY')}
+          value={moment(education.graduation_date).format("MM-YYYY")}
           disabled
         />
       </td>

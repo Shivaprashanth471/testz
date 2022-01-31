@@ -7,7 +7,7 @@ import React from "react";
 interface ExperienceReadOnlyRowProps {
   experience: any;
   openAdd: any;
-  index?: number
+  index?: number;
 }
 
 const ReadOnlyRow = ({ experience, openAdd }: ExperienceReadOnlyRowProps) => {
@@ -56,7 +56,7 @@ const ReadOnlyRow = ({ experience, openAdd }: ExperienceReadOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(experience.start_date).format('MM-YYYY')}
+          value={moment(experience.start_date).format("MM-YYYY")}
           disabled
         />
       </td>
@@ -66,7 +66,7 @@ const ReadOnlyRow = ({ experience, openAdd }: ExperienceReadOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={experience.end_date ? moment(experience.end_date).format('MM-YYYY') : "Present"}
+          value={experience.end_date ? moment(experience.end_date).format("MM-YYYY") : "Present"}
           disabled
         />
       </td>
