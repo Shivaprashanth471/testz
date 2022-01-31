@@ -3,6 +3,9 @@
 .shift-master {
 	margin: auto;
 	text-align: center;
+	.disabled-link{
+		pointer-events: none;
+	}
 	.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
 		padding: 2px !important;
 	}

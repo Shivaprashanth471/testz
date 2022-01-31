@@ -225,7 +225,7 @@ const HcpDetailsComponent = (props: any) => {
                 </div>
                 <div className="flex-1">
                     <h4>Family Considerations</h4>
-                    <p>{hcpBasicDetails?.nc_details?.family_consideration}</p>
+                    <p className='summary'>{hcpBasicDetails?.nc_details?.family_consideration}</p>
                 </div>
                 <div className="flex-1">
                     <h4>Do you have a Full-time Job ?</h4>

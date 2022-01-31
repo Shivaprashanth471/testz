@@ -1,8 +1,13 @@
 @import "src/assets/scss/common";
 
 .hcp_details {
+	.d-flex {
+		display: flex;
+		gap: 15px;
+	}
 	.flex-1 {
 		flex: 1px !important;
+		max-width: 32% !important;
 	}
 	.MuiPaper-elevation1{
 		box-shadow: none !important;
@@ -42,6 +47,10 @@
 	p{
 		color:$light-black;
 		margin-top: -10px;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		hyphens: auto;
+		text-align: left;
 	}
 	.title-count{
 		color:$light-black;

@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import { ENV } from "../../../constants";
 import IconButton from "@material-ui/core/IconButton";
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import {  Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 import EmailIcon from '@material-ui/icons/Email';
@@ -117,6 +117,13 @@ const LoginScreen = (props: any) => {
                 </IconButton>
               </div>
             </div>
+            {/* <div className="form-link">
+              <div className="forgot-password-holder" id="link_forgot_password">
+                <Link className="forgot-password-wrapper" to="/forgot-password">
+                  Forgot Password ?
+                </Link>
+              </div>
+            </div> */}
             <div className="form-field mrg-top-40 position-relative">
               <Button
                 disabled={isSubmitting || !isValid}

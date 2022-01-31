@@ -35,8 +35,8 @@ const ShiftTimeline = (props: any) => {
                         <span className='dot-time'>{props?.timeBreakup?.check_in_time ? dateFormat(props?.timeBreakup?.check_in_time.slice(0, 10)) : "--"} <br />{props?.timeBreakup?.check_in_time ? tConvert((props?.timeBreakup?.check_in_time).slice(11, 16)) : '--'}</span>
                     </div>
                     {
-                        props?.timeBreakup?.break_timings.map((item: any, index: number) => {
-                            return <>
+                        props?.timeBreakup?.break_timings?.map((item: any, index: number) => {
+                            return <div key={"shift-timeline-"+index}>
                                 <div className="small-dot">
                                     <span className='small-dot-title'>Break In</span>
                                     <span className='small-dot-time'>{item?.break_in_time ? dateFormat((item?.break_in_time).slice(0, 10)) : "--"}<br />{item?.break_in_time ? tConvert((item?.break_in_time).slice(11, 16)) : '--'}</span>
@@ -46,7 +46,7 @@ const ShiftTimeline = (props: any) => {
                                     <span className='small-dot-time'>{item?.break_out_time ? dateFormat((item?.break_out_time).slice(0, 10)) : "--"}<br />{item?.break_out_time ? tConvert((item?.break_out_time).slice(11, 16)) : '--'}</span>
 
                                 </div>
-                            </>
+                            </div>
                         })
                     }
                     <div className="dot">

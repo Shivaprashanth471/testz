@@ -1,4 +1,4 @@
-import { TextField, Tooltip } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -37,7 +37,8 @@ const ShiftsMasterListScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
     const [facilityList, setFacilityList] = useState<any | null>(null);
     const [hcpTypes, setHcpTypes] = useState<any | null>(null);
-    const [regions, setRegions] = useState<any>([])
+    const [regions, setRegions] = useState<any>([]);
+    const [isDownloading, setIsDownloading] = useState<boolean>(false);
 
     const [selectedRegion, setSelectedRegion] = useLocalStorage<string>('selectedRegion', '')
     const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>('selectedHcps', [])
@@ -57,12 +58,50 @@ const ShiftsMasterListScreen = () => {
         }
     }, [])
 
+    const handleDownload = useCallback(() => {
+        setIsDownloading(true);
+        let payload: any = {}
+        if (selectedFacilities.length > 0) {
+            payload.facilities = selectedFacilities.map((item: any) => item?._id);
+        }
+        if (selectedHcps.length > 0) {
+            payload.hcp_types = selectedHcps;
+        }
+        if (selectedStatusTypes.length > 0) {
+            payload.status = selectedStatusTypes;
+        }
+        if (dateRange[0] || dateRange[1]) {
+            let startDate = moment(dateRange[0]).format('YYYY-MM-DD');
+            let endDate = moment(dateRange[1]).format('YYYY-MM-DD');
+            if (!dateRange[1]) {
+                payload.start_date = startDate;
+                payload.end_date = startDate;
+            } else {
+                payload.start_date = startDate;
+                payload.end_date = endDate;
+            }
+        }
+        if (selectedTimeTypes.length > 0) {
+            payload.shift_types = selectedTimeTypes;
+        }
+        ApiService.post(ENV.API_URL + "shift/download", payload).then((res) => {
+            const link = document.createElement('a');
+            link?.setAttribute('href', res?.data);
+            document.body.appendChild(link);
+            link.click();
+            setIsDownloading(false);
+        })
+            .catch((err) => {
+                console.log(err);
+                setIsDownloading(false);
+            });
+
+    }, [dateRange, selectedFacilities, selectedHcps, selectedStatusTypes, selectedTimeTypes])
+
     const getRegions = useCallback(() => {
-        CommonService._api
-            .get(ENV.API_URL + "meta/hcp-regions")
-            .then((resp) => {
-                setRegions(resp.data || []);
-            })
+        CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
+            setRegions(resp.data || []);
+        })
             .catch((err) => {
                 console.log(err);
             });
@@ -96,8 +135,6 @@ const ShiftsMasterListScreen = () => {
     }, [selectedRegion]);
 
     useEffect(() => getFacilityData(), [selectedRegion, getFacilityData])
-
-
 
     const init = useCallback(() => {
 
@@ -179,7 +216,6 @@ const ShiftsMasterListScreen = () => {
                 selectedRegion={selectedRegion}
                 setSelectedRegion={setSelectedRegion}
                 regions={regions}
-
                 selectedHcps={selectedHcps}
                 setSelectedHcps={setSelectedHcps}
                 selectedTimeTypes={selectedTimeTypes}
@@ -188,14 +224,11 @@ const ShiftsMasterListScreen = () => {
                 setSelectedFacilities={setSelectedFacilities}
                 selectedStatusTypes={selectedStatusTypes}
                 setSelectedStatusTypes={setSelectedStatusTypes}
-
                 isMaster={true}
                 noStatus={false}
                 resetFilters={resetFilters}
-
                 facilityList={facilityList}
                 hcpTypes={hcpTypes}
-
             />
 
             <div className="header">
@@ -234,8 +267,10 @@ const ShiftsMasterListScreen = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="actions">
-
+                    <div className="actions pdd-right-5">
+                        <Tooltip title="Download Shifts List">
+                            <Button variant={"contained"} color="primary" onClick={handleDownload} className={!isDownloading ? "" : "has-loading-spinner"} disabled={isDownloading}>&nbsp;Download</Button>
+                        </Tooltip>
                     </div>
                 </div>
                 {list && list.table && <>
@@ -284,7 +319,7 @@ const ShiftsMasterListScreen = () => {
                                             </TableCell>
                                             <TableCell>
                                                 <Tooltip title={`${row['title']} view details`}>
-                                                    <Link to={'/shiftMaster/view/' + row['_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                    <Link to={'/shiftMaster/view/' + row['_id']} className={isDownloading?"info-link disabled-link":"info-link"} id={"link_hospital_details" + rowIndex}  >
                                                         {('View Details')}
                                                     </Link>
                                                 </Tooltip>
