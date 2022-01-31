@@ -24,7 +24,7 @@ const restPasswordFormValidation = Yup.object({
 const ForgotPasswordScreen = (props: any) => {
   const history = useHistory();
   const [email, setEmail] = useState("");
-  const [mode, setMode] = useState<"reset" | "password">("password");
+  const [mode, setMode] = useState<"reset" | "password">("reset");
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [seconds, setSeconds] = useState<any>(0);
