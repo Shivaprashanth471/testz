@@ -161,11 +161,8 @@ const FacilityManagementListScreen = () => {
                 payload.end_date = endDate
             }
         }
-        setList((list) => {
-            list?.table?.setExtraPayload(payload);
-            list?.table.getList(1);
-            return list
-        });
+        list?.table?.setExtraPayload(payload);
+        list?.table?.getList(1);
         // eslint-disable-next-line
     }, [role, selectedRegions, status, dateRange]);
 
@@ -204,12 +201,11 @@ const FacilityManagementListScreen = () => {
     return (
         <>
             <div className={"facility-list screen crud-layout pdd-30 pdd-top-10"}>
-                {list && list.table?._isDataLoading && (
+                {list && list?.table?._isDataLoading && (
                     <div className="table-loading-indicator">
                         <LoaderComponent />
                     </div>
                 )}
-
                 <FacilityFiltersComponent
                     dateRange={dateRange}
                     setDateRange={setDateRange}
