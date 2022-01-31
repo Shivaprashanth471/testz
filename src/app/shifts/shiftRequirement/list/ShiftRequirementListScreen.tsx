@@ -45,6 +45,7 @@ const ShiftRequirementListScreen = () => {
   const [dateRange, setDateRange] = useLocalStorage<any[]>("dateRange", [null, null]);
 
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
+  const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftReqPageSizeIndex", 10);
 
   const classesFunction = useCallback((type: any) => {
     if (type === "Actions") {
@@ -131,6 +132,11 @@ const ShiftRequirementListScreen = () => {
 
     const options = new TsDataListOptions(
       {
+        // @ts-ignore
+        pagination: {
+          ...list?.table?.pagination,
+          pageSize: pageSizeIndex,
+        },
         extraPayload: payload,
         webMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "Status", "Actions"],
         mobileMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "Status", "Actions"],
@@ -143,6 +149,51 @@ const ShiftRequirementListScreen = () => {
 
     let tableWrapperObj = new TsDataListWrapperClass(options);
     setList({ table: tableWrapperObj });
+    // eslint-disable-next-line
+  }, []);
+
+  const getList = useCallback(() => {
+    if (!list) {
+      init();
+      return;
+    }
+    let url = "shift/requirement/list?";
+    let payload: any = {};
+
+    if (selectedFacilities.length > 0) {
+      payload.facilities = selectedFacilities.map((item: any) => item?._id);
+    }
+    if (selectedHcps.length > 0) {
+      payload.hcp_types = selectedHcps;
+    }
+    if (statusType) {
+      // eslint-disable-next-line
+      url = url + "&status=" + statusType;
+      payload.status = statusType;
+    }
+
+    if (dateRange[0] || dateRange[1]) {
+      let startDate = moment(dateRange[0]).format("YYYY-MM-DD");
+      let endDate = moment(dateRange[1]).format("YYYY-MM-DD");
+
+      if (!dateRange[1]) {
+        payload.start_date = startDate;
+        payload.end_date = startDate;
+      } else {
+        payload.start_date = startDate;
+        payload.end_date = endDate;
+      }
+    } else {
+      let today = moment(new Date()).format("YYYY-MM-DD");
+      payload.new_shifts = today;
+    }
+    if (selectedTimeTypes.length > 0) {
+      payload.shift_types = selectedTimeTypes;
+    }
+
+    list?.table?.setExtraPayload(payload);
+    list?.table?.getList(1);
+    // eslint-disable-next-line
   }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType]);
 
   const clearFilterValues = () => {
@@ -159,12 +210,15 @@ const ShiftRequirementListScreen = () => {
   };
 
   useEffect(() => {
-    init();
     getRegions();
     getHcpTypes();
     Communications.pageTitleSubject.next("Open Shifts");
     Communications.pageBackButtonSubject.next(null);
-  }, [init, getHcpTypes, getRegions]);
+  }, [getHcpTypes, getRegions]);
+
+  useEffect(() => {
+    getList();
+  }, [getList]);
   return (
     <>
       <div className={"shift-requirment-list screen crud-layout pdd-30"}>
@@ -301,7 +355,10 @@ const ShiftRequirementListScreen = () => {
                   rowsPerPage={list?.table.pagination.pageSize}
                   page={list?.table.pagination.pageIndex}
                   onPageChange={(event, page) => list.table.pageEvent(page)}
-                  onRowsPerPageChange={(event) => list.table?.pageEvent(0, +event.target.value)}
+                  onRowsPerPageChange={(event) => {
+                    setPageSizeIndex(event.target.value);
+                    list.table?.pageEvent(0, +event.target.value);
+                  }}
                 />
               </TableContainer>
             </>
