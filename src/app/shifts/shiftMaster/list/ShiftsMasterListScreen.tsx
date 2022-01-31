@@ -93,6 +93,7 @@ const ShiftsMasterListScreen = () => {
         })
             .catch((err) => {
                 console.log(err);
+                CommonService.showToast(err?.msg || "Error","error");
                 setIsDownloading(false);
             });
 
@@ -269,7 +270,7 @@ const ShiftsMasterListScreen = () => {
                     </div>
                     <div className="actions pdd-right-5">
                         <Tooltip title="Download Shifts List">
-                            <Button variant={"contained"} color="primary" onClick={handleDownload} className={!isDownloading ? "" : "has-loading-spinner"} disabled={isDownloading}>&nbsp;Download</Button>
+                            <Button variant={"contained"} color="primary" onClick={handleDownload} className={!isDownloading ? "" : "has-loading-spinner"} disabled={isDownloading}>&nbsp;{isDownloading?"Downloading":"Download"}</Button>
                         </Tooltip>
                     </div>
                 </div>

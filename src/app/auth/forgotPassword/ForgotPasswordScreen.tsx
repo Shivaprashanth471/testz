@@ -1,39 +1,36 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { TextField } from "formik-material-ui";
 import Button from "@material-ui/core/Button";
 import CommonService from "../../../helpers/common-service";
 import { ENV } from "../../../constants";
-import { Link } from "react-router-dom";
-import ErrorComponent from "../../../components/core/ErrorComponent";
-import { CheckCircle } from "@material-ui/icons";
+import { Link, useHistory } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
-import './ForgotPasswordScreen.scss'
+import './ForgotPasswordScreen.scss';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { FormLabel } from "@material-ui/core";
 
 const forgotPasswordFormValidation = Yup.object({
   email: Yup.string().required("Required"),
 });
 
 const restPasswordFormValidation = Yup.object({
-  password: Yup.string()
-    .required("Required")
-    .min(4, "Invalid")
-    .max(16, "Invalid"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
+  password: Yup.string().required("Required").min(6, "Invalid").max(16, "Invalid"),
+  confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match").required("Required"),
   code: Yup.string().required("Required").min(4, "Invalid").max(4, "Invalid"),
 });
 
 const ForgotPasswordScreen = (props: any) => {
-  // const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = useState("");
-  const [mode, setMode] = useState<"reset" | "password" | "changed">("reset");
-  const [showNewPassword, setShowNewPassword] = React.useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    React.useState<boolean>(false);
+  const [mode, setMode] = useState<"reset" | "password">("password");
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [seconds, setSeconds] = useState<any>(0);
+  const [isSeconds, setIsSeconds] = useState<boolean>(false);
+  const [isResendOtp, setIsResendOtp] = useState<boolean>(false)
+
   const onSendResetLink = useCallback((payload: any, { setSubmitting, setErrors }: FormikHelpers<any>) => {
     CommonService._api.post(ENV.API_URL + "forgotPassword", payload).then((resp) => {
       // console.log(resp);
@@ -41,50 +38,80 @@ const ForgotPasswordScreen = (props: any) => {
       if (resp.success) {
         setEmail(payload.email);
         setMode("password");
+        setSeconds(60)
         CommonService.showToast(resp.msg || "Reset Code Sent");
       } else {
         CommonService.showToast(
           resp.error || "Oops.. Something went wrong!"
         );
       }
-    })
-      .catch((err) => {
-        CommonService.handleErrors(setErrors, err);
-        setSubmitting(false);
-      });
+    }).catch((err) => {
+      CommonService.handleErrors(setErrors, err);
+      setSubmitting(false);
+    });
   }, []);
+
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        clearInterval(myInterval)
+        setSeconds(60);
+        setIsSeconds(false)
+      }
+    }, 1000)
+    return () => {
+      clearInterval(myInterval);
+    };
+  }, [seconds]);
+
+  const ResendOTP = useCallback(() => {
+    setIsResendOtp(true)
+    let payload: any = {
+      email: email
+    }
+    CommonService._api.post(ENV.API_URL + "forgotPassword", payload).then((resp) => {
+      CommonService.showToast(resp.msg || "Reset Code Sent");
+      setIsSeconds(true);
+      setIsResendOtp(false);
+      setSeconds(60);
+    }).catch((err) => {
+      CommonService.showToast(err.msg || "Error", "error");
+      setSeconds(60);
+      setIsSeconds(false);
+      setIsResendOtp(false);
+    });
+  }, [email])
 
   const onSetPassword = useCallback((payload: any, { setSubmitting, setErrors }: FormikHelpers<any>) => {
     payload.email = email;
-    console.log(payload)
-    CommonService._api
-      .post(ENV.API_URL + "resetPassword", payload)
+    CommonService._api.post(ENV.API_URL + "resetPassword", payload)
       .then((resp) => {
-        // console.log(resp);
         setSubmitting(false);
         if (resp.success) {
-          setMode("changed");
+          CommonService.showToast(resp.msg || "Success", "success");
+          history.push("/login");
         } else {
-          CommonService.showToast(
-            resp.error || "Oops.. Something went wrong!"
-          );
+          CommonService.showToast(resp.error || "Oops.. Something went wrong!");
         }
       })
       .catch((err) => {
         CommonService.handleErrors(setErrors, err);
         setSubmitting(false);
       });
-  },[email]);
+  }, [email, history]);
 
   const handleMouseDownPassword = (event: any) => {
     event.preventDefault();
   };
 
   return (
-    <div className="main-auth-wrapper forgotPassword-screen screen">
+    <div className="main-auth-wrapper forgotPassword-screen screen pdd-0">
       {mode === "reset" && (
         <>
-          <div className="mrg-left-20">
+          <div className="">
             <div className="auth-header">Forgot Your Password ?</div>
             <p className={"form-label"}>
               Please enter the email address associated with your account and we
@@ -100,6 +127,7 @@ const ForgotPasswordScreen = (props: any) => {
             {({ isSubmitting, values, isValid }) => (
               <Form className={"forgot-password-holder form-holder"}>
                 <div className="form-field">
+                  <FormLabel className={"form-label"}>Email*</FormLabel>
                   <Field
                     variant={"outlined"}
                     color={"primary"}
@@ -111,21 +139,17 @@ const ForgotPasswordScreen = (props: any) => {
                     name="email"
                   />
                 </div>
-
-                <div
-                  className="form-field btns-holder"
-                  style={{ justifyContent: "center" }}
-                >
+                <div className="form-field btns-holder" style={{ justifyContent: "center" }}>
                   <Button
                     size="medium"
                     fullWidth
                     style={{ width: "100%" }}
-                    className="otp-btn"
+                    className={isSubmitting ? "otp-btn has-loading-spinner" : "otp-btn"}
                     disabled={isSubmitting || !isValid}
                     variant={"contained"}
                     type={"submit"}
                   >
-                    Send OTP
+                    {isSubmitting ? "Sending OTP" : "Send OTP"}
                   </Button>
                 </div>
 
@@ -141,7 +165,7 @@ const ForgotPasswordScreen = (props: any) => {
       )}
       {mode === "password" && (
         <>
-          <div className="mrg-left-20">
+          <div className="">
             <div className="auth-header">Forgot Your Password ?</div>
             <p className={"form-label"}>
               Please enter the email address associated with your account and we
@@ -149,14 +173,34 @@ const ForgotPasswordScreen = (props: any) => {
             </p>
           </div>
           <Formik
-            initialValues={{ code: "", password: "", confirmPassword: "" }}
+            initialValues={{ email: email, code: "", password: "", confirmPassword: "" }}
             validateOnChange={true}
             validationSchema={restPasswordFormValidation}
             onSubmit={onSetPassword}
           >
             {({ isSubmitting, isValid }) => (
               <Form className={"forgot-password-holder form-holder"}>
-                <div className="form-field">
+                <div className="form-field position-relative email-wrapper">
+                  <FormLabel className={"form-label"}>Email*</FormLabel>
+                  <p className="change-email-wrapper" onClick={() => setMode("reset")}>Change Email</p>
+                  <Field
+                    variant={"outlined"}
+                    color={"primary"}
+                    placeholder={"Enter Email Address"}
+                    component={TextField}
+                    type={"email"}
+                    fullWidth
+                    autoComplete="off"
+                    name="email"
+                    disabled
+                  />
+
+                </div>
+                <div className="form-field position-relative email-wrapper">
+                  <FormLabel className={"form-label"}>OTP*</FormLabel>
+                  {isResendOtp ? <p className="change-email-wrapper">Resend OTP</p> :
+                    <p className="change-email-wrapper" onClick={ResendOTP}>{isSeconds ? `Resend otp in ${seconds} seconds` : "Resend OTP"}</p>
+                  }
                   <Field
                     variant={"outlined"}
                     color={"primary"}
@@ -166,9 +210,11 @@ const ForgotPasswordScreen = (props: any) => {
                     fullWidth
                     autoComplete="off"
                     name="code"
+                    inputProps={{ maxLength: 4 }}
                   />
                 </div>
-                <div className="form-field position-relative">
+                <div className="form-field position-relative ">
+                  <FormLabel className={"form-label"}>Password*</FormLabel>
                   <Field
                     name="password"
                     type={showNewPassword ? "text" : "password"}
@@ -178,6 +224,7 @@ const ForgotPasswordScreen = (props: any) => {
                     autoComplete="off"
                     id="input_new_password"
                     placeholder={"Enter New Password"}
+                    inputProps={{ maxLength: 16 }}
                   />
                   <div className={"eye_btn_wrapper"}>
                     <IconButton
@@ -187,11 +234,12 @@ const ForgotPasswordScreen = (props: any) => {
                       onMouseDown={handleMouseDownPassword}
                       id="btn_new_password_show"
                     >
-                      {showNewPassword ? "Hide" : "Show"}
+                      {showNewPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </div>
                 </div>
-                <div className="form-field position-relative">
+                <div className="form-field position-relative ">
+                  <FormLabel className={"form-label"}>Confirm Password*</FormLabel>
                   <Field
                     name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
@@ -201,6 +249,7 @@ const ForgotPasswordScreen = (props: any) => {
                     autoComplete="off"
                     id="input_confirm_password"
                     placeholder={"Confirm Password"}
+                    inputProps={{ maxLength: 16 }}
                   />
                   <div className={"eye_btn_wrapper"}>
                     <IconButton
@@ -212,11 +261,10 @@ const ForgotPasswordScreen = (props: any) => {
                       }
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showConfirmPassword ? "Hide" : "Show"}
+                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </div>
                 </div>
-                <p className="resend-otp">Resend OTP</p>
                 <div
                   className="form-field btns-holder"
                   style={{ justifyContent: "center" }}
@@ -225,43 +273,18 @@ const ForgotPasswordScreen = (props: any) => {
                     size="medium"
                     fullWidth
                     style={{ width: "100%" }}
-                    className="otp-btn"
+                    className={isSubmitting ? "otp-btn has-loading-spinner" : "otp-btn"}
                     disabled={isSubmitting || !isValid}
                     variant={"contained"}
                     type={"submit"}
                   >
-                    Reset Password
+                    {isSubmitting ? "Reseting Password" : "  Reset Password"}
                   </Button>
                 </div>
               </Form>
             )}
           </Formik>
         </>
-      )}
-      {mode === "changed" && (
-        <div style={{ marginTop: 10 }}>
-          <ErrorComponent
-            icon={
-              <CheckCircle
-                color={"primary"}
-                style={{ fontSize: 120, color: "green" }}
-              />
-            }
-            text={"Password Reset Complete!"}
-          />
-          <div className="form-link">
-            <div className="forgot-password-holder">
-              <Button
-                component={Link}
-                color={"primary"}
-                variant={"contained"}
-                to="/login"
-              >
-                Back To Log In
-              </Button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

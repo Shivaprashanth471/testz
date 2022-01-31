@@ -2,22 +2,23 @@ import React from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import "./LoginScreen.scss";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormLabel from "@material-ui/core/FormLabel";
 import { TextField } from "formik-material-ui";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import { ENV } from "../../../constants";
 import IconButton from "@material-ui/core/IconButton";
-import {  Visibility, VisibilityOff } from '@material-ui/icons';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import CommonService from "../../../helpers/common-service";
 import { loginUser } from "../../../store/actions/auth.action";
 import EmailIcon from '@material-ui/icons/Email';
+import { Tooltip } from "@material-ui/core";
 
-let isEmail=new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,63}$')
+let isEmail = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,63}$')
 
 const loginFormValidation = Yup.object({
-  email: Yup.string().email().matches(isEmail,"Invalid Email").required("Required"),
+  email: Yup.string().email().matches(isEmail, "Invalid Email").required("Required"),
   password: Yup.string().required("Required").min(6, "Password should be minimum 6 characters"),
 });
 
@@ -117,13 +118,15 @@ const LoginScreen = (props: any) => {
                 </IconButton>
               </div>
             </div>
-            {/* <div className="form-link">
+            <div className="form-link">
               <div className="forgot-password-holder" id="link_forgot_password">
-                <Link className="forgot-password-wrapper" to="/forgot-password">
-                  Forgot Password ?
-                </Link>
+                <Tooltip title="Forgot Password?">
+                  <Link className="forgot-password-wrapper" to="/forgot-password">
+                    Forgot Password ?
+                  </Link>
+                </Tooltip>
               </div>
-            </div> */}
+            </div>
             <div className="form-field mrg-top-40 position-relative">
               <Button
                 disabled={isSubmitting || !isValid}
@@ -135,7 +138,7 @@ const LoginScreen = (props: any) => {
                 size={"medium"}
                 className={isSubmitting ? 'login-button has-loading-spinner' : 'login-button'}
               >
-                  { isSubmitting ? "Logging in" : "Login" }
+                {isSubmitting ? "Logging in" : "Login"}
               </Button>
             </div>
           </Form>
