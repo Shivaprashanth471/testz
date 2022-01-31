@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 
-
 const user: any = localStorage.getItem("currentUser");
 let currentUser = JSON.parse(user);
 
@@ -45,10 +44,10 @@ export interface HcpEditType {
     zone_assignment: string;
     vaccine: string;
     vaccination_dates?: {
-      first_shot: string,
-      latest_shot: string,
+      first_shot: string;
+      latest_shot: string;
     };
-    covid_facility_preference: string,
+    covid_facility_preference: string;
     is_fulltime_job: any;
     is_supplement_to_income: any;
     is_studying: any;
@@ -62,42 +61,50 @@ export interface HcpEditType {
     is_authorized_to_work: any;
     is_require_employment_sponsorship: any;
     travel_preferences: any;
-  }
+  };
 }
 
-
-
 export const hcpFormValidation = Yup.object({
-  first_name: Yup.string().typeError(" must be a text").min(3, "min 3 letters").trim("empty space not allowed").required("required").max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
-  last_name: Yup.string().typeError(" must be a text").min(3, "min 3 letters").trim("empty space not allowed").required("required").max(50, 'max limit 50').matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
-  email: Yup.string().min(3, "invalid").trim("empty space not allowed").typeError(" must be a text").email("invalid").required("required").max(50, 'max limit 50'),
-  contact_number: Yup.string()
-    .min(12, "min 10 digits")
-    .required("required"),
+  first_name: Yup.string()
+    .typeError(" must be a text")
+    .min(3, "min 3 letters")
+    .trim("empty space not allowed")
+    .required("required")
+    .max(50, "max limit 50")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+  last_name: Yup.string()
+    .typeError(" must be a text")
+    .min(3, "min 3 letters")
+    .trim("empty space not allowed")
+    .required("required")
+    .max(50, "max limit 50")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+  email: Yup.string().min(3, "invalid").trim("empty space not allowed").typeError(" must be a text").email("invalid").required("required").max(50, "max limit 50"),
+  contact_number: Yup.string().min(12, "min 10 digits").required("required"),
   hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
   gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(255, 'max limit 255'),
+  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(255, "max limit 255"),
   address: Yup.object({
-    street: Yup.string().typeError(" must be a text").min(3, "min 3 letters").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
-    city: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
-    state: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
-    region: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
-    country: Yup.string().typeError(" must be a text").min(2, "min 2 letters").required("required").trim("empty space not allowed").max(150, 'max limit 150').required("required"),
+    street: Yup.string().typeError(" must be a text").min(3, "min 3 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
+    city: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
+    state: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
+    region: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
+    country: Yup.string().typeError(" must be a text").min(2, "min 2 letters").required("required").trim("empty space not allowed").max(150, "max limit 150").required("required"),
     zip_code: Yup.string()
       .typeError(" must be a text")
       .matches(/^[0-9]+$/, "Must be only digits")
       .trim("empty space not allowed")
-      .min(5, 'min 5 digits')
-      .max(6, 'max 6 digits allowed')
+      .min(5, "min 5 digits")
+      .max(6, "max 6 digits allowed")
       .required("required"),
   }),
   professional_details: Yup.object({
     experience: Yup.number().positive(),
     speciality: Yup.string().typeError(" must be a text").min(2, "invalid"),
-    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(100, 'max limit 100'),
+    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(100, "max limit 100"),
   }),
   contract_details: Yup.object({
-    rate_per_hour: Yup.number().moreThan(0, 'must be greater than 0').max(999, 'max limit 999').typeError("must be a number"),
+    rate_per_hour: Yup.number().moreThan(0, "must be greater than 0").max(999, "max limit 999").typeError("must be a number"),
     signed_on: Yup.string().typeError("must be date").nullable(),
     salary_credit: Yup.string(),
   }),
@@ -121,9 +128,14 @@ export const hcpFormValidation = Yup.object({
     contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),
     vaccination_dates: Yup.object({
-      first_shot: Yup.string().trim().typeError('must be valid').matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
-      latest_shot: Yup.string().trim().typeError('must be valid').matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
+      first_shot: Yup.string()
+        .trim()
+        .typeError("must be valid")
+        .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
+      latest_shot: Yup.string()
+        .trim()
+        .typeError("must be valid")
+        .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
     }),
-  })
-
+  }),
 });

@@ -3,11 +3,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import React from "react";
 
-
 interface VExperienceReadOnlyRowProps {
   experience: any;
   openAdd: any;
-  index?: number
+  index?: number;
 }
 
 const ReadOnlyRow = ({ experience, openAdd }: VExperienceReadOnlyRowProps) => {
@@ -56,7 +55,7 @@ const ReadOnlyRow = ({ experience, openAdd }: VExperienceReadOnlyRowProps) => {
             InputProps={{
               disableUnderline: true,
             }}
-            value={moment(experience.start_date).format('MM-YYYY')}
+            value={moment(experience.start_date).format("MM-YYYY")}
             disabled
           />
         </td>
@@ -66,7 +65,7 @@ const ReadOnlyRow = ({ experience, openAdd }: VExperienceReadOnlyRowProps) => {
             InputProps={{
               disableUnderline: true,
             }}
-            value={experience.end_date ? moment(experience.end_date).format('MM-YYYY') : "Present"}
+            value={experience.end_date ? moment(experience.end_date).format("MM-YYYY") : "Present"}
             disabled
           />
         </td>
