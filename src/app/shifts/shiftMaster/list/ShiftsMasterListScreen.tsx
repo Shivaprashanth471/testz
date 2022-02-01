@@ -94,6 +94,7 @@ const ShiftsMasterListScreen = () => {
       .catch((err) => {
         console.log(err);
         setIsDownloading(false);
+        CommonService.showToast(err?.msg || "Error", "error");
       });
   }, [dateRange, selectedFacilities, selectedHcps, selectedStatusTypes, selectedTimeTypes]);
 
