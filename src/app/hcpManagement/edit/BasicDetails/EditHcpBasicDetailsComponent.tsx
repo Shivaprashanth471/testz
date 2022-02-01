@@ -174,14 +174,14 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                 <div className="facility-about mrg-top-10">
                   <p className="card-header">About the HCP</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" id="input_hcp_edit_about" name="about" multiline rows={2} />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" id="input_hcp_edit_about" name="about" multiline  />
                 </div>
               </div>
 
               <div className="custom-border">
                 <div className="professional-summary mrg-top-10 ">
                   <p className="card-header">Professional Summary</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_edit_summary" multiline rows={2} />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_edit_summary" multiline  />
                 </div>
               </div>
 

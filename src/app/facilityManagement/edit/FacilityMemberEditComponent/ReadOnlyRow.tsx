@@ -30,7 +30,7 @@ const ReadOnlyRow = ({ member, openAdd }: readOnlyRowProps) => {
         />
       </td>
 
-      <td >
+      <td>
         <TextField
           InputProps={{
             disableUnderline: true,

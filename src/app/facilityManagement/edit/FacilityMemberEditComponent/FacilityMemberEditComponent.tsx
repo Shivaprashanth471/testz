@@ -1,12 +1,4 @@
-import {
-  Button, InputAdornment,
-  MenuItem,
-  Table,
-  TableBody,
-  TableHead,
-  TableRow,
-  Tooltip
-} from "@material-ui/core";
+import { Button, InputAdornment, MenuItem, Table, TableBody, TableHead, TableRow, Tooltip } from "@material-ui/core";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { TextField } from "formik-material-ui";
@@ -44,23 +36,14 @@ const memberInitialState: MemberType = {
   email: "",
 };
 
-
-const FacilityMemberEditComponent = ({
-  onAddMember,
-  hcpId,
-  members,
-  getFacilityMembers,
-}: FacilityMemberEditComponentProps) => {
+const FacilityMemberEditComponent = ({ onAddMember, hcpId, members, getFacilityMembers }: FacilityMemberEditComponentProps) => {
   const [isMembers, setIsMembers] = useState<boolean>(false);
   const [fieldType, setFieldType] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [facilityId, setFacilityId] = useState<any>(null);
-  const [isConfirm, setIsConfirm] = useState<boolean>(false)
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
 
-  const onAdd = (
-    member: MemberType,
-    { setSubmitting, setErrors, resetForm }: FormikHelpers<MemberType>
-  ) => {
+  const onAdd = (member: MemberType, { setSubmitting, setErrors, resetForm }: FormikHelpers<MemberType>) => {
     const newMember = {
       name: member.name,
       email: member.email,
@@ -75,51 +58,56 @@ const FacilityMemberEditComponent = ({
         setIsMembers(false);
         resetForm();
       })
-      .catch((err: any) => { console.log(err) });
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
-  const handleDeleteClick = useCallback((memberId: number) => {
-    setIsConfirm(true)
-    ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
-      .then((resp: any) => {
-        CommonService.showToast(resp?.msg || 'Facility Member Deleted', 'success')
-        getFacilityMembers();
-        setIsAddOpen(false);
-        setIsConfirm(false)
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsConfirm(false)
-      });
-  }, [getFacilityMembers, hcpId])
+  const handleDeleteClick = useCallback(
+    (memberId: number) => {
+      setIsConfirm(true);
+      ApiService.delete(ENV.API_URL + "facility/" + hcpId + "/member/" + memberId)
+        .then((resp: any) => {
+          CommonService.showToast(resp?.msg || "Facility Member Deleted", "success");
+          getFacilityMembers();
+          setIsAddOpen(false);
+          setIsConfirm(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsConfirm(false);
+        });
+    },
+    [getFacilityMembers, hcpId]
+  );
 
   const showDropDownBelowField = {
     MenuProps: {
       anchorOrigin: {
         vertical: "bottom",
-        horizontal: "left"
+        horizontal: "left",
       },
-      getContentAnchorEl: null
-    }
-  }
+      getContentAnchorEl: null,
+    },
+  };
 
   const openAdd = useCallback((id: any) => {
-    setFacilityId(id)
+    setFacilityId(id);
     setIsAddOpen(true);
-  }, [])
+  }, []);
 
   const cancelAdd = useCallback(() => {
     setIsAddOpen(false);
-  }, [])
+  }, []);
 
   const confirmAdd = useCallback(() => {
-    handleDeleteClick(facilityId)
-  }, [facilityId, handleDeleteClick])
+    handleDeleteClick(facilityId);
+  }, [facilityId, handleDeleteClick]);
 
   return (
     <div className="facility-add-container">
       <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} isConfirm={isConfirm} text1='Want to delete' hcpname={'Facility Member'} groupname={''} confirmationText={''} notext={"Back"} yestext={"Delete"} />
+        <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} isConfirm={isConfirm} text1="Want to delete" hcpname={"Facility Member"} groupname={""} confirmationText={""} notext={"Back"} yestext={"Delete"} />
       </DialogComponent>
       {members.length > 0 && (
         <Table className="mrg-top-50">
@@ -135,11 +123,7 @@ const FacilityMemberEditComponent = ({
           </TableHead>
          <TableBody className={"mat-tbody"}>
             {members.map((member: any) => (
-              <ReadOnlyRow
-                key={member?._id}
-                member={member}
-                openAdd={openAdd}
-              />
+              <ReadOnlyRow key={member?._id} member={member} openAdd={openAdd} />
             ))}
           </TableBody>
         </Table>
@@ -147,42 +131,17 @@ const FacilityMemberEditComponent = ({
 
       {isMembers ? (
         <div>
-          <Formik
-            initialValues={memberInitialState}
-            validateOnChange={true}
-            validationSchema={memberFormValidation}
-            onSubmit={onAdd}
-          >
+          <Formik initialValues={memberInitialState} validateOnChange={true} validationSchema={memberFormValidation} onSubmit={onAdd}>
             {({ isSubmitting, handleSubmit, isValid, resetForm }) => (
               <Form className={"form-holder"}>
                 <div className="facility-add-input">
-                  <Field
-                    variant="outlined"
-                    name="name"
-                    type={"text"}
-                    component={TextField}
-                    label="Name"
-                    fullWidth
-                    autoComplete="off"
-                    id="input_facility_member_add_name"
-                  />
+                  <Field variant="outlined" name="name" type={"text"} component={TextField} label="Name" fullWidth autoComplete="off" id="input_facility_member_add_name" />
 
                   <Field
                     SelectProps={showDropDownBelowField}
                     variant="outlined"
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {fieldType && (
-                            <BackspaceIcon
-                              style={{ cursor: "pointer" }}
-                              onClick={() =>
-                                setFieldType((prevState) => !prevState)
-                              }
-                            />
-                          )}
-                        </InputAdornment>
-                      ),
+                      endAdornment: <InputAdornment position="end">{fieldType && <BackspaceIcon style={{ cursor: "pointer" }} onClick={() => setFieldType((prevState) => !prevState)} />}</InputAdornment>,
                     }}
                     select={fieldType ? false : true}
                     name="designation"
@@ -192,9 +151,7 @@ const FacilityMemberEditComponent = ({
                     fullWidth
                     autoComplete="off"
                     id="input_facility_member_add_designation"
-
                   >
-
                     {!fieldType &&
                       designationNames &&
                       designationNames.map((item: any, index) => (
@@ -202,18 +159,14 @@ const FacilityMemberEditComponent = ({
                           {item.label}
                         </MenuItem>
                       ))}
-                    <MenuItem
-                      onClick={() => setFieldType((prevState) => !prevState)}
-                    >
-                      Other
-                    </MenuItem>
+                    <MenuItem onClick={() => setFieldType((prevState) => !prevState)}>Other</MenuItem>
                   </Field>
                 </div>
                 <div className="facility-add-input">
                   <div className="number-container">
                     <Field
                       inputProps={{ maxLength: 10 }}
-                      className='phone_number'
+                      className="phone_number"
                       variant="outlined"
                       name="phone_number"
                       type={"text"}
@@ -226,7 +179,7 @@ const FacilityMemberEditComponent = ({
 
                     <Field
                       inputProps={{ maxLength: 10 }}
-                      className='extension_number'
+                      className="extension_number"
                       variant="outlined"
                       name="extension_number"
                       type={"text"}
@@ -236,20 +189,11 @@ const FacilityMemberEditComponent = ({
                       id="input_facility_member_add_extension_number"
                     />
                   </div>
-                  <Field
-                    variant="outlined"
-                    name="email"
-                    type={"email"}
-                    component={TextField}
-                    label="Email"
-                    fullWidth
-                    autoComplete="off"
-                    id="input_facility_member_add_email"
-                  />
+                  <Field variant="outlined" name="email" type={"email"} component={TextField} label="Email" fullWidth autoComplete="off" id="input_facility_member_add_email" />
                 </div>
                 <div className="facility-add-btn-grp">
                   <Button
-                    variant='outlined'
+                    variant="outlined"
                     id="btn_facility_member_add_cancel"
                     type="reset"
                     onClick={() => {
@@ -259,9 +203,8 @@ const FacilityMemberEditComponent = ({
                   >
                     Delete
                   </Button>
-                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color='primary' type="submit" 
-                  variant='contained'  className={isSubmitting?"has-loading-spinner":""}>
-                  {isSubmitting?"Saving":"Save"}
+                  <Button disabled={isSubmitting} id="btn_facility_member_add_submit" color="primary" type="submit" variant="contained" className={isSubmitting ? "has-loading-spinner" : ""}>
+                    {isSubmitting ? "Saving" : "Save"}
                   </Button>
                 </div>
               </Form>
@@ -271,19 +214,14 @@ const FacilityMemberEditComponent = ({
       ) : (
         <>
           <div className="facility-add-action">
-          <Tooltip title={"Add New Facility Member"}>
-            <p
-              id="btn_facility_member_add_open"
-              onClick={() => setIsMembers(true)}
-              className="generic-add-multiple"
-            >
-              + Add a Facility Member
-            </p>
+            <Tooltip title={"Add New Facility Member"}>
+              <p id="btn_facility_member_add_open" onClick={() => setIsMembers(true)} className="generic-add-multiple">
+                + Add a Facility Member
+              </p>
             </Tooltip>
           </div>
         </>
       )}
-
     </div>
   );
 };

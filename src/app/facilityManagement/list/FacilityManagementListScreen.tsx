@@ -158,7 +158,7 @@ const FacilityManagementListScreen = () => {
   const clearFilterValues = () => {
     setDateRange([null, null]);
     setStatus("");
-    selectedRegions.length = 0;
+    setSelectedRegions([]);
   };
 
   const resetFilters = () => {

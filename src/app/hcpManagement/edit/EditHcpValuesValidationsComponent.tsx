@@ -83,7 +83,7 @@ export const hcpFormValidation = Yup.object({
   contact_number: Yup.string().min(12, "min 10 digits").required("required"),
   hcp_type: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
   gender: Yup.string().typeError(" must be a text").min(2, "invalid").trim("empty space not allowed").required("required"),
-  about: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(255, "max limit 255"),
+  about: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
   address: Yup.object({
     street: Yup.string().typeError(" must be a text").min(3, "min 3 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
     city: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
@@ -101,7 +101,7 @@ export const hcpFormValidation = Yup.object({
   professional_details: Yup.object({
     experience: Yup.number().positive(),
     speciality: Yup.string().typeError(" must be a text").min(2, "invalid"),
-    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed").max(100, "max limit 100"),
+    summary: Yup.string().typeError(" must be a text").trim("empty space not allowed"),
   }),
   contract_details: Yup.object({
     rate_per_hour: Yup.number().moreThan(0, "must be greater than 0").max(999, "max limit 999").typeError("must be a number"),
