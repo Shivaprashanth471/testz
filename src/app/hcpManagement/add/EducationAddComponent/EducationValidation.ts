@@ -23,11 +23,11 @@ export const educationValidation = Yup.object({
         .max(255, 'max limit 255')
         .required(" required"),
     start_date: Yup.date()
-        .required("required").nullable(),
+        .nullable(),
     graduation_date: Yup.date().min(
         Yup.ref('start_date'),
         "End Date can not be lesser than Start Date"
-    ).nullable().required('required').test('grad_date', 'Start Date can not be same as End Date', function (item) {
+    ).nullable().test('grad_date', 'Start Date can not be same as End Date', function (item) {
         let end_date, start_date
         if (this.parent.graduation_date) {
             end_date = moment(this.parent.graduation_date).format('L')

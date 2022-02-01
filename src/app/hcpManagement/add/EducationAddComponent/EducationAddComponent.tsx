@@ -40,8 +40,8 @@ const EducationAddComponent = ({ educations, setEducation }: EducationAddCompone
       institute_name: education.institute_name,
       degree: education.degree,
       location: education.location,
-      start_date: moment(education.start_date).format("YYYY-MM"),
-      graduation_date: moment(education.graduation_date).format("YYYY-MM"),
+      start_date: education.start_date ?  moment(education.start_date).format("YYYY-MM") : null,
+      graduation_date: education.graduation_date ? moment(education.graduation_date).format("YYYY-MM") : null,
     };
 
     const newEducations = [...educations, newEducation];
@@ -94,12 +94,12 @@ const EducationAddComponent = ({ educations, setEducation }: EducationAddCompone
             <Form className={"form-name form-holder"}>
               <div className="add-input">
                 <div className="input-container">
-                  <Field variant="outlined" fullWidth component={TextField} name="institute_name" label="Institution Name" id="input_hcp_add_education_institution_name" />
-                  <Field variant="outlined" fullWidth component={TextField} name="location" id="input_hcp_add_education_location" label="Location" />
+                  <Field variant="outlined" fullWidth component={TextField} name="institute_name" label="Institution Name*" id="input_hcp_add_education_institution_name" />
+                  <Field variant="outlined" fullWidth component={TextField} name="location" id="input_hcp_add_education_location" label="Location*" />
                 </div>
 
                 <div className="input-container">
-                  <Field variant="outlined" fullWidth component={TextField} name="degree" label="Degree" />
+                  <Field variant="outlined" fullWidth component={TextField} name="degree" label="Degree*" />
 
                   <Field
                     variant="inline"

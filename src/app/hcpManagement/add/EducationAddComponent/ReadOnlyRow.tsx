@@ -45,7 +45,7 @@ const ReadOnlyRow = ({ education, handleDeleteClick }: readOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.start_date).format('MM-YYYY')}
+          value={education.start_date ? moment(education.start_date).format('MM-YYYY') : "NA"}
           disabled
         />
       </td>
@@ -55,7 +55,7 @@ const ReadOnlyRow = ({ education, handleDeleteClick }: readOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.graduation_date).format('MM-YYYY')}
+          value={education.graduation_date ? moment(education.graduation_date).format('MM-YYYY') : "NA"}
           disabled
         />
       </td>
