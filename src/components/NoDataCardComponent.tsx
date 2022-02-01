@@ -15,12 +15,12 @@ const NoDataCardComponent = (props: NoDataCardComponentProps) => {
     };
 
     return (
-        <TableRow>
+         <TableRow className={"mat-tr"}>
             <TableCell colSpan={tableCellCount}>
                 <div className={'display-flex flex-one mrg-top-20'}>
                     <Lottie
                         width={700}
-                        height={350}
+                        height={300}
                         speed={1}
                         options={defaultOptions}
                     />

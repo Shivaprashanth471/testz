@@ -10,7 +10,7 @@ interface ReferenceReadOnlyRowProps {
 
 const ReadOnlyRow = ({ reference, openAdd }: ReferenceReadOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

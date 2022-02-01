@@ -1,20 +1,56 @@
 @import "src/assets/scss/common";
 
 .shift-inprogress {
-  .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
-    padding: 2px !important;
-  }
-  .MuiPaper-elevation1 {
-    box-shadow: none !important;
-  }
-  .filter-icon {
-    font-size: 2rem;
-    color: $light-black;
-  }
-  .last-row {
-    border-radius: 0px 5px 5px 0px;
-  }
-  .first-row {
-    border-radius: 5px 0px 0px 5px;
-  }
+	.MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+		padding: 2px !important;
+	}
+	.MuiPaper-elevation1 {
+		box-shadow: none !important;
+	}
+	.filter-icon {
+		font-size: 2rem;
+		color: $light-black;
+	}
+	.shifts-inprogress-list-table {
+		.mat-td-title {
+			min-width: 250px;
+			max-width: 250px;
+		}
+		.mat-td-hcp-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+		.mat-td-shift-timings {
+			min-width: 160px;
+			max-width: 160px;
+		}
+		.mat-td-differential {
+			min-width: 150px;
+			max-width: 150px;
+		}
+
+		.mat-td-facility-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-shift-date {
+			min-width: 120px;
+			max-width: 120px;
+		}
+		.mat-td-shift-type {
+			min-width: 80px;
+			max-width: 80px;
+		}
+
+		.mat-td-hcp-type {
+			min-width: 100px;
+			max-width: 100px;
+		}
+
+		.mat-td-actions {
+			min-width: 120px;
+			max-width: 120px;
+		}
+	}
 }

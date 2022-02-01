@@ -177,7 +177,7 @@ const RequirementsShiftsViewScreen = () => {
                     </Button>
                 </div>
             </div>
-            <div className="hcp_tabs mrg-top-10 custom-border">
+            <div className="hcp_tabs mrg-top-10 custom-border pdd-10">
                 <div className="tabs_header">
                     <Tabs
                         value={tabValue}

@@ -47,14 +47,6 @@ const ShiftRequirementListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftReqPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Title") {
-      return "pdd-left-20 first-row";
-    }
-  }, []);
-
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
@@ -309,34 +301,34 @@ const ShiftRequirementListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table" className="table">
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table shift-requirement-list-table">
+                  <TableHead className={"mat-thead"}>
+                    <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                        <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
                         </TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       const { start_time, end_time } = CommonService.getUtcTimeInAMPM(row["shift_timings"]?.start_time, row["shift_timings"]?.end_time);
                       const shift_date = CommonService.getUtcDate(row["shift_date"]);
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell>{row["title"]}</TableCell>
-                          <TableCell>{row["facility"]?.facility_name}</TableCell>
-                          <TableCell>{shift_date}</TableCell>
-                          <TableCell>{row["hcp_type"]}</TableCell>
-                          <TableCell>{row["hcp_count"]}</TableCell>
-                          <TableCell>
+                        <TableRow  role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
+                          <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
+                          <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-type">{row["hcp_type"]}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-count">{row["hcp_count"]}</TableCell>
+                          <TableCell className="mat-td mat-td-shift-timings">
                             {start_time}&nbsp;-&nbsp;{end_time}
                           </TableCell>
-                          <TableCell>{row["shift_type"]}</TableCell>
-                          <TableCell className={row["status"]}>{row["status"]}</TableCell>
-                          <TableCell>
+                          <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                          <TableCell className={`${row["status"]} mat-td mat-td-status`}>{row["status"]}</TableCell>
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["title"]} view details`}>
                               <Link to={"/shiftsRequirements/view/" + row["_id"]} className="info-link" id={"link_hospital_details" + rowIndex}>
                                 {"View Details"}
@@ -348,7 +340,8 @@ const ShiftRequirementListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component="div"
                   count={list?.table.pagination.totalItems}
@@ -360,7 +353,6 @@ const ShiftRequirementListScreen = () => {
                     list.table?.pageEvent(0, +event.target.value);
                   }}
                 />
-              </TableContainer>
             </>
           )}
         </div>

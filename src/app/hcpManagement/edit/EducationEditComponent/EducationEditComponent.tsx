@@ -101,8 +101,8 @@ const EducationAddComponent = ({ onAddEducation, getEducationDetails, education,
       </DialogComponent>
       {education.length > 0 && (
         <Table className="mrg-top-50 border">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Institution Name</th>
               <th>Degree</th>
               <th>Location</th>
@@ -110,7 +110,7 @@ const EducationAddComponent = ({ onAddEducation, getEducationDetails, education,
               <th>End Date</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {sortedEducationData.map((education: any, index: number) => (
               <>
                 <ReadOnlyRow index={index} key={index} education={education} openAdd={openAdd} />

@@ -86,8 +86,8 @@ const FacilityShiftsListComponent = () => {
                     <>
                         <TableContainer className={"table-responsive"}>
                             <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
+                                <TableHead className={"mat-thead"}>
+                                     <TableRow className={"mat-tr"}>
                                         {list?.table.matColumns.map(
                                             (column: any, columnIndex: any) => (
                                                 <TableCell
@@ -102,7 +102,7 @@ const FacilityShiftsListComponent = () => {
                                         )}
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
+                               <TableBody className={"mat-tbody"}>
                                     {list.table.canShowNoData() &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }

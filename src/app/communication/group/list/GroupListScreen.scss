@@ -35,4 +35,30 @@
 	.first-row {
 		border-radius: 5px 0px 0px 5px;
 	}
+	.group-list-table{
+		.mat-td-created-at{
+			min-width: 100px;
+			max-width: 100px;
+		  }
+	  
+		  .mat-td-title{
+			min-width: 250px;
+			max-width: 250px;
+		  }
+	  
+		  .mat-td-members-count{
+			min-width: 100px;
+			max-width: 100px;
+		  }
+	  
+		  .mat-td-sms-blast{
+			min-width: 150px;
+			max-width: 150px;
+		  }
+	  
+		  .mat-td-actions{
+			min-width: 120px;
+			max-width: 120px;
+		  }
+	}
 }

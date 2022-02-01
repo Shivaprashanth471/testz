@@ -204,14 +204,14 @@ const GroupViewScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className="mrg-top-40 custom-border pdd-0">
+                <div className="mrg-top-40 custom-border pdd-15">
                     {list && list.table && <>
                         <TableContainer component={Paper} className={'table-responsive'}>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
+                            <Table stickyHeader className="mat-table table group-members-list-table">
+                                <TableHead className={"mat-thead"}>
+                                     <TableRow className={"mat-tr"}>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                            <TableCell className={(column === 'HCP Name') ? 'pdd-left-20' : ''}
+                                            <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} 
                                                 key={'header-col-' + columnIndex}
                                             >
                                                 {column}
@@ -219,26 +219,26 @@ const GroupViewScreen = () => {
                                         ))}
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
+                               <TableBody className={"mat-tbody"}>
                                     {list.table.canShowNoData() &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }
                                     {list?.table.data.map((row: any, rowIndex: any) => {
 
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + 1}>
-                                                <TableCell className="pdd-left-20">
+                                            <TableRow className={"mat-tr"} role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
+                                                <TableCell className="mat-td mat-td-hcp-name">
                                                     {row['hcp_name']}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="mat-td mat-td-hcp-type">
                                                     {row['hcp_type']}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="mat-td mat-td-remove-hcp">
                                                     <div className="d-flex message-wrapper" onClick={() => openAdd(row._id, rowIndex)} id={"btn-remove-hcp-" + rowIndex}>
                                                         <DeleteForeverOutlined className="remove" /> &nbsp; <span className="remove">Remove</span>
                                                     </div>
                                                 </TableCell>
-                                                <TableCell >
+                                                <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                                     <Link to={'/hcp/user/view/' + row?.hcp_user_id} className="info-link" id={"link_hcp_details_" + rowIndex} >
                                                         {('View Details')}
                                                     </Link>

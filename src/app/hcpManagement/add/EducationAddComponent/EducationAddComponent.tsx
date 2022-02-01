@@ -69,8 +69,8 @@ const EducationAddComponent = ({ educations, setEducation }: EducationAddCompone
     <div className="education-add-container">
       {educations.length > 0 && (
         <Table className="mrg-top-50 border">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Institution Name</th>
               <th>Degree</th>
               <th>Location</th>
@@ -78,7 +78,7 @@ const EducationAddComponent = ({ educations, setEducation }: EducationAddCompone
               <th>End Date</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {sortedEducationData.map((education: any, index: number) => (
               <>
                 <ReadOnlyRow key={index} education={education} handleDeleteClick={handleDeleteClick} />

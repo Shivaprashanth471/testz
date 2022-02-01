@@ -46,14 +46,6 @@ const ApprovedShiftsListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftApprovePageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Title") {
-      return "first-row";
-    }
-  }, []);
-
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
@@ -136,8 +128,8 @@ const ApprovedShiftsListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title", "Requested On", "Facility Name", "Require On", "HCP Name", "Type of hcp", "Time Type", "Actions"],
-        mobileMatColumns: ["Title", "Requested On", "Facility Name", "Require On", "HCP Name", "Type of hcp", "Time Type", "Actions"],
+        webMatColumns: ["Title","Facility Name","HCP Name",  "Requested On", "Require On","Type of hcp", "Time Type", "Actions"],
+        mobileMatColumns: ["Title","Facility Name","HCP Name",  "Requested On", "Require On","Type of hcp", "Time Type", "Actions"],
       },
       ENV.API_URL + url,
       setList,
@@ -293,33 +285,33 @@ const ApprovedShiftsListScreen = () => {
         {list && list.table && (
           <>
             <TableContainer component={Paper} className={"table-responsive"}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
+              <Table stickyHeader className="mat-table table shifts-approved-list-table">
+                <TableHead className={"mat-thead"}>
+                   <TableRow className={"mat-tr"}>
                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                      <TableCell key={"header-col-" + columnIndex} className={classesFunction(column)}>
+                      <TableCell key={"header-col-" + columnIndex} className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}>
                         {column}
                       </TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>
+               <TableBody className={"mat-tbody"}>
                   {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                   {list?.table.data.map((row: any, rowIndex: any) => {
                     const shift_date = CommonService.getUtcDate(row["shift_date"]);
 
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                        <TableCell>{row["title"]}</TableCell>
-                        <TableCell>{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
-                        <TableCell>{row["facility"]?.facility_name}</TableCell>
-                        <TableCell>{shift_date}</TableCell>
-                        <TableCell>
+                      <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className="mat-tr">
+                        <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
+                        <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-name">
                           {row["hcp_user"]?.first_name}&nbsp;{row["hcp_user"]?.last_name}
                         </TableCell>
-                        <TableCell>{row["hcp_user"]?.hcp_type}</TableCell>
-                        <TableCell>{row["shift_type"]}</TableCell>
-                        <TableCell>
+                        <TableCell className="mat-td mat-td-created-at">{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-type">{row["hcp_user"]?.hcp_type}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                        <TableCell className="mat-td mat-td-sticky mat-td-actions">
                           <Tooltip title={`${row["title"]} shift view details`}>
                             <Link to={"/approvedShifts/view/" + row["_id"]} className="info-link" id={"link_hospital_details" + rowIndex}>
                               {"View Details"}
@@ -331,7 +323,8 @@ const ApprovedShiftsListScreen = () => {
                   })}
                 </TableBody>
               </Table>
-              <TablePagination
+            </TableContainer>
+            <TablePagination
                 rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                 component="div"
                 count={list?.table.pagination.totalItems}
@@ -343,7 +336,6 @@ const ApprovedShiftsListScreen = () => {
                   list.table?.pageEvent(0, +event.target.value);
                 }}
               />
-            </TableContainer>
           </>
         )}
       </div>

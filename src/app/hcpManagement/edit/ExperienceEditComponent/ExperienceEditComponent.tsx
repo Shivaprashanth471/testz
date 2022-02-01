@@ -128,8 +128,8 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
       </DialogComponent>
       {experiences.length > 0 && (
         <Table className="mrg-top-50">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Facility Name</th>
               <th>Location</th>
               <th>Position Title</th>
@@ -139,7 +139,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
               <th>Skills</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {sortedExpData.map((experience: any, index: any) => {
               return <ReadOnlyRow key={index} experience={experience} openAdd={openAdd} />;
             })}

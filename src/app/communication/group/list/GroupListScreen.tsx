@@ -38,14 +38,6 @@ const GroupListScreen = () => {
   const [list, setList] = React.useState<TsDataListState | null>(null);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("groupListPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "text-right last-row";
-    } else if (type === "Created On") {
-      return "pdd-left-20 first-row";
-    }
-  }, []);
-
   if (list?.table?.data) {
     list?.table?.data?.sort((a: any, b: any) => {
       return Date.parse(b.created_at) - Date.parse(a.created_at);
@@ -164,32 +156,32 @@ const GroupListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table" style={{ tableLayout: "fixed" }}>
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table group-list-table">
+                  <TableHead className={"mat-thead"}>
+                    <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                        <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
                         </TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell>{moment(row["created_at"])?.format("MM-DD-YYYY")}</TableCell>
-                          <TableCell>{row["title"]}</TableCell>
-                          <TableCell>{row["members_count"]}</TableCell>
-                          <TableCell>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-created-at">{moment(row["created_at"])?.format("MM-DD-YYYY")}</TableCell>
+                          <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
+                          <TableCell className="mat-td mat-td-members-count">{row["members_count"]}</TableCell>
+                          <TableCell className="mat-td mat-td-sms-blast">
                             <Tooltip title={`Send SMS Blast to ${row["title"]}`}>
                               <div className="d-flex message-wrapper" onClick={() => handleSmsBlast(row)} id={"sms-blast_" + rowIndex}>
                                 <QuestionAnswerIcon className={"sms-blast-icon"} /> &nbsp; <span className="sms-blast">SMS Blast</span>
                               </div>
                             </Tooltip>
                           </TableCell>
-                          <TableCell className="text-right">
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["title"]} view details`}>
                               <Link to={"/group/view/" + row._id} className="info-link" id={"link_group_details_" + rowIndex}>
                                 {"View Details"}
@@ -201,7 +193,8 @@ const GroupListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component="div"
                   count={list?.table.pagination.totalItems}
@@ -213,7 +206,6 @@ const GroupListScreen = () => {
                     list.table?.pageEvent(0, +event.target.value);
                   }}
                 />
-              </TableContainer>
             </>
           )}
         </div>

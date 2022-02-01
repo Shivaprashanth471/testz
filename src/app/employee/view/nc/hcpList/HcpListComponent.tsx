@@ -80,8 +80,8 @@ const HcpListComponent = (props: any) => {
                     {list && list.table && <>
                         <TableContainer component={Paper} className={'table-responsive'}>
                             <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
+                                <TableHead className={"mat-thead"}>
+                                     <TableRow className={"mat-tr"}>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
                                             <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
                                                 key={'header-col-' + columnIndex}
@@ -91,7 +91,7 @@ const HcpListComponent = (props: any) => {
                                         ))}
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
+                               <TableBody className={"mat-tbody"}>
                                     {list.table.canShowNoData() &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }

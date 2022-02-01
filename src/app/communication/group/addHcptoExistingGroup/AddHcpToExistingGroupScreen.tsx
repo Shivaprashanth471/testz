@@ -13,6 +13,7 @@ import { Button, TextField } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import "./AddHcpToExistingGroupScreen.scss";
 
 const AddHcpToExistingGroupScreen = () => {
     const params = useParams<{ id: string }>();
@@ -162,7 +163,7 @@ const AddHcpToExistingGroupScreen = () => {
     }, [list?.table?.data, groupHcps])
 
     return (<>
-        <div className={'add-group screen crud-layout pdd-30'}>
+        <div className={'add-member-group screen crud-layout pdd-30'}>
             {list && list.table?._isDataLoading && <div className="table-loading-indicator">
                 <LoaderComponent />
             </div>}
@@ -182,18 +183,18 @@ const AddHcpToExistingGroupScreen = () => {
                     </div>
                 </div>
             </div>
-            <div className="custom-border pdd-0 mrg-top-20">
+            <div className="mrg-top-20 custom-border padding">
                 {list && list.table && <>
                     <TableContainer component={Paper} className={'table-responsive'}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell padding="checkbox">
+                        <Table stickyHeader className="mat-table table add-members-group-list-table">
+                            <TableHead className={"mat-thead"}>
+                                 <TableRow className={"mat-tr"}>
+                                    <TableCell padding="checkbox" className="mat-th">
                                         <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                                     </TableCell>
 
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                             key={'header-col-' + columnIndex}
                                         >
                                             {column}
@@ -201,23 +202,23 @@ const AddHcpToExistingGroupScreen = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                           <TableBody className={"mat-tbody"}>
                                 {list.table.canShowNoData() &&
                                     <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                 }
                                 {finalHcps && finalHcps?.map((row: any, rowIndex: any) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
-                                            <TableCell>
+                                        <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
+                                            <TableCell className="mat-td mat-td-checkbox">
                                                 <input type={"checkbox"} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-name">
                                                 {row['first_name']} &nbsp; {row['last_name']}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-type">
                                                 {row['hcp_type']}
                                             </TableCell>
-                                            <TableCell >
+                                            <TableCell  className="mat-td mat-td-sticky mat-td-actions">
                                                 <Link to={'/hcp/view/' + row?._id} className="info-link" id={"link_facility_details" + rowIndex} >
                                                     {('View Details')}
                                                 </Link>
