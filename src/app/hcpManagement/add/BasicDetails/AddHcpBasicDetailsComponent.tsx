@@ -140,13 +140,13 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                 </div>
                 <div className="facility-about mrg-top-50">
                   <p className="card-header">About the HCP</p>
-                  <Field placeholder="About the Hcp" variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline rows={2} />
+                  <Field placeholder="About the Hcp" variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline  />
                 </div>
               </div>
               <div className="custom-border">
                 <div className="professional-summary mrg-top-10 ">
                   <p className="card-header">Professional Summary</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_add_summary" multiline rows={2} placeholder="Enter Professional Summary" />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_add_summary" multiline  placeholder="Enter Professional Summary" />
                 </div>
               </div>
               <div className="hcp-profession-details  mrg-top-10 custom-border">

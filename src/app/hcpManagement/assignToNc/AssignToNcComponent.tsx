@@ -1,21 +1,18 @@
-import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
-import { ENV } from "../../../constants";
-import { CommonService } from "../../../helpers";
-import { useParams } from "react-router";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import { Button, TextField } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
-import { withStyles } from "@material-ui/core/styles";
-import { TextField } from "@material-ui/core";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import { SearchRounded } from "@material-ui/icons";
 import ClearIcon from "@material-ui/icons/Clear";
-import "./AssignToNcComponent.scss";
+import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import LoaderComponent from "../../../components/LoaderComponent";
-import Lottie from "react-lottie";
-import animationData from "../../../assets/animations/NoData.json";
+import NoDataCardComponent from "../../../components/NoDataCardComponent";
+import { ENV } from "../../../constants";
+import { CommonService } from "../../../helpers";
+import "./AssignToNcComponent.scss";
 
 export interface AssignToNcComponentProps {
   cancel: () => void;
@@ -54,10 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const defaultOptions = {
-  animationData,
-};
 
 const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>) => {
   const params = useParams<{ id: string }>();
@@ -184,7 +177,7 @@ const AssignToNcComponent = (props: PropsWithChildren<AssignToNcComponentProps>)
         </RadioGroup>
         {!isLoading && ncList?.length === 0 && (
           <div>
-            <Lottie options={defaultOptions} width={300} height={300} speed={1} />
+            <NoDataCardComponent height={300} width={300} isNotTable={true}/>
           </div>
         )}
         <div className={classes.assignNcActions}>
