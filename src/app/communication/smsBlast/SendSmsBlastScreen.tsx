@@ -1,16 +1,17 @@
-import { Avatar, Box, Button, Chip, Divider, InputAdornment, TextField as NormalTextField, Tooltip, Typography } from "@material-ui/core";
+import { Button, InputAdornment, TextField as NormalTextField, Tooltip } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/SearchOutlined";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { TextField } from "formik-material-ui";
+import { FormikHelpers } from "formik";
 import React, { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
-import DialogComponent from "../../../components/DialogComponent";
 import LoaderComponent from "../../../components/LoaderComponent";
 import NoDataCardComponent from "../../../components/NoDataCardComponent";
 import { ENV } from "../../../constants";
 import { ApiService, CommonService, Communications } from "../../../helpers";
+import BlastHistoryComponent from "./BlastHistoryComponent";
 import GroupDetailsCardComponent from "./groupdetailsCard/GroupDetailsCardComponent";
+import GroupMembersDialogComponent from "./GroupMembersDialogComponent";
 import "./SendSmsBlastScreen.scss";
+import SMSBlastComponent from "./SMSBlastComponent";
 
 interface smsBlast {
   message: string;
@@ -27,6 +28,7 @@ const SendSmsBlastScreen = (props: any) => {
   const [highlightId, setHighlightId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isBlastLoading, setisBlastLoading] = useState<boolean>(false);
+  const [isSelectedBlastGroupsLoading, setIsSelectedBlastGroupsLoading] = useState<boolean>(false);
   const [isMembersLoading, setIsMembersLoading] = useState<boolean>(false);
   const [isAddOpen, setIsAddOpen] = React.useState<boolean>(false);
   const [groupName, setGroupName] = React.useState<string>("");
@@ -41,7 +43,7 @@ const SendSmsBlastScreen = (props: any) => {
     CommonService._api
       .get(ENV.API_URL + "group/" + groupId + "/member")
       .then((resp) => {
-        setMembers(resp.data);
+        setMembers(resp.data || []);
         setIsMembersLoading(false);
       })
       .catch((err) => {
@@ -237,13 +239,16 @@ const SendSmsBlastScreen = (props: any) => {
 
   const handleBlastGroupSelect = useCallback((group: any) => {
     const { _id } = group;
+    setIsSelectedBlastGroupsLoading(true);
     CommonService._api
       .get(ENV.API_URL + "app/blast/" + _id + "/group")
       .then((resp) => {
         setSelectedBlastGroups(resp.data);
+        setIsSelectedBlastGroupsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsSelectedBlastGroupsLoading(false);
       });
   }, []);
 
@@ -352,111 +357,21 @@ const SendSmsBlastScreen = (props: any) => {
         </div>
         <div className="sms-blast-right">
           {!showBlastHistory ? (
-            <SMSBlastMessages selectedGroups={selectedGroups} handleDelete={handleDelete} smsValidation={smsValidation} onAdd={onAdd} />
+            <SMSBlastComponent selectedGroups={selectedGroups} handleDelete={handleDelete} smsValidation={smsValidation} onAdd={onAdd} />
           ) : (
-            <BlastHistoryMessages openAdd={openAdd} selectedBlastGroups={selectedBlastGroups} selectedBlastMessage={selectedBlastMessage} />
+            <BlastHistoryComponent isSelectedBlastGroupsLoading={isSelectedBlastGroupsLoading} openAdd={openAdd} selectedBlastGroups={selectedBlastGroups} selectedBlastMessage={selectedBlastMessage} />
           )}
         </div>
       </div>
-      <GroupMembersDialog groupName={groupName} isAddOpen={isAddOpen} cancelAdd={cancelAdd} isMembersLoading={isMembersLoading} members={members} />
+      <GroupMembersDialogComponent groupName={groupName} isAddOpen={isAddOpen} cancelAdd={cancelAdd} isMembersLoading={isMembersLoading} members={members} />
     </div>
   );
 };
 
 export default SendSmsBlastScreen;
 
-const BlastHistoryMessages = (props: any) => {
-  return (
-    <>
-      <h3>Groups</h3>
-      <div className="blast-history-messages">
-        <div className="selected-groups">
-          {props?.selectedBlastGroups && props?.selectedBlastGroups.length > 0 ? (
-            props?.selectedBlastGroups.map((data: any) => <Chip style={{ background: "#E3FFF4" }} onClick={(e: any) => props.openAdd(e, data)} key={data?._id} label={data.group_name} />)
-          ) : (
-            <p> No Available Groups</p>
-          )}
-        </div>
-        <div className="msg-container">
-          <div>{props?.selectedBlastMessage && <p className="message">{props?.selectedBlastMessage}</p>}</div>
-        </div>
-      </div>
-    </>
-  );
-};
 
-const SMSBlastMessages = (props: any) => {
-  return (
-    <>
-      <div className="sms-blast-recipients">
-        <h3>To</h3>
-        <div className="selected-recipients">
-          {props.selectedGroups.length > 0 ? (
-            props.selectedGroups.map((data: any) => {
-              return <Chip style={{ background: "#E3FFF4" }} key={data?._id} label={data.title} onDelete={() => props.handleDelete(data)} />;
-            })
-          ) : (
-            <p>No Recipients Added</p>
-          )}
-        </div>
-      </div>
-      <div className="sms-blast-message pdd-right-20">
-        <Formik
-          initialValues={{
-            message: "",
-            title: "",
-          }}
-          validateOnChange={true}
-          validationSchema={props.smsValidation}
-          onSubmit={props.onAdd}
-        >
-          {({ isSubmitting, isValid }) => (
-            <Form className="form-holder">
-              <Field component={TextField} fullWidth name="title" variant="outlined" placeholder="Type a Title*" autoComplete="off" />
-              <Field autoComplete="off" className="mrg-top-20" component={TextField} fullWidth multiline name="message" rows={6} variant="outlined" placeholder="Type in your message*" />
-              <div className="sms-blast-btn mrg-top-20">
-                <Tooltip title={isSubmitting ? "Sending Blast" : "Send Blast"}>
-                  <Button disabled={isSubmitting || !isValid} color={"primary"} variant={"contained"} id="sms_blast_button" className={isSubmitting ? "has-loading-spinner" : ""} type="submit" size={"large"}>
-                    {isSubmitting ? "Sending Blast" : "Send Blast"}
-                  </Button>
-                </Tooltip>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </>
-  );
-};
 
-const GroupMembersDialog = (props: any) => {
-  return (
-    <DialogComponent class={"dialog-side-wrapper"} open={props?.isAddOpen} cancel={props?.cancelAdd}>
-      <div className="mrg-top-30 pdd-30">
-        <div className="d-flex" style={{ justifyContent: "space-between", alignItems: "center" }}>
-          <Box display="flex" flexDirection="column" justifyContent="center">
-            <Typography variant="h4" color="textPrimary">
-              {props?.groupName}
-            </Typography>
-            <Typography color="primary">Group Members</Typography>
-          </Box>
-          <Avatar style={{ height: "60px", width: "60px" }}>{props?.groupName.toUpperCase().charAt("0")}</Avatar>
-        </div>
-        {!props?.isMembersLoading &&
-          props?.members.length > 0 &&
-          props?.members.map((item: any) => (
-            <>
-              <div className="d-flex mrg-top-20" style={{ justifyContent: "space-between", alignItems: "center" }}>
-                <Box display="flex" alignItems="center" justifyContent="space-between" gridGap={10}>
-                  <Avatar sizes="small">{item?.hcp_name.toUpperCase().charAt("0")}</Avatar>
-                  <span>{item?.hcp_name}</span>
-                </Box>
-                <span>{item?.hcp_type}</span>
-              </div>
-              <Divider className="mrg-top-5" style={{ color: "lightgray" }} />
-            </>
-          ))}
-      </div>
-    </DialogComponent>
-  );
-};
+
+
+
