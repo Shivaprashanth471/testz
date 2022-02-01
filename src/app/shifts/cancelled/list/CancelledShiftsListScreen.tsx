@@ -47,14 +47,6 @@ const CancelledShiftsListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftCancelledPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Title") {
-      return "first-row";
-    }
-  }, []);
-
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
@@ -213,7 +205,7 @@ const CancelledShiftsListScreen = () => {
   }, [getList]);
 
   return (
-    <div className="completed-shifts screen crud-layout pdd-30">
+    <div className="cancelled-shifts screen crud-layout pdd-30">
       {list && list.table?._isDataLoading && (
         <div className="table-loading-indicator">
           <LoaderComponent />
@@ -287,41 +279,38 @@ const CancelledShiftsListScreen = () => {
             </div>
           </div>
           <div className="actions">
-            {/* <Button variant={"contained"} className={'normal'} color={"secondary"} >
-                    Download All
-                </Button> */}
           </div>
         </div>
         {list && list.table && (
           <>
             <TableContainer component={Paper} className={"table-responsive"}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
+              <Table stickyHeader className="mat-table table shifts-cancelled-list-table">
+                <TableHead className={"mat-thead"}>
+                   <TableRow className={"mat-tr"}>
                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                      <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                      <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                         {column}
                       </TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>
+               <TableBody className={"mat-tbody"}>
                   {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                   {list?.table.data.map((row: any, rowIndex: any) => {
                     const shift_date = CommonService.getUtcDate(row["shift_date"]);
 
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                        <TableCell>{row["title"]}</TableCell>
-                        <TableCell>
+                      <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className="mat-tr">
+                        <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-name">
                           {row["hcp_user"]?.first_name}&nbsp;{row["hcp_user"]?.last_name}
                         </TableCell>
-                        <TableCell>{row["facility"]?.facility_name}</TableCell>
-                        <TableCell>{shift_date}</TableCell>
-                        <TableCell>{row["shift_type"]}</TableCell>
-                        <TableCell>{row["hcp_user"]?.hcp_type}</TableCell>
-                        <TableCell>{row["payments"]?.differential}</TableCell>
-                        <TableCell>
+                        <TableCell className="mat-td mat-td-facility">{row["facility"]?.facility_name}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-type">{row["hcp_user"]?.hcp_type}</TableCell>
+                        <TableCell className="mat-td mat-td-differential">{row["payments"]?.differential}</TableCell>
+                        <TableCell className="mat-td mat-td-sticky mat-td-actions">
                           <Tooltip title={`${row["title"]} shift view details`}>
                             <Link to={"/cancelledShifts/view/" + row["_id"]} className="info-link" id={"link_hospital_details" + rowIndex}>
                               {"View Details"}
@@ -333,7 +322,8 @@ const CancelledShiftsListScreen = () => {
                   })}
                 </TableBody>
               </Table>
-              <TablePagination
+            </TableContainer>
+            <TablePagination
                 rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                 component="div"
                 count={list?.table.pagination.totalItems}
@@ -345,7 +335,6 @@ const CancelledShiftsListScreen = () => {
                   list.table?.pageEvent(0, +event.target.value);
                 }}
               />
-            </TableContainer>
           </>
         )}
       </div>

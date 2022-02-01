@@ -49,14 +49,6 @@ const ShiftsMasterListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftMasterPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Title") {
-      return "pdd-left-20 first-row";
-    }
-  }, []);
-
   const handleDownload = useCallback(() => {
     setIsDownloading(true);
     let payload: any = {};
@@ -83,8 +75,7 @@ const ShiftsMasterListScreen = () => {
     if (selectedTimeTypes.length > 0) {
       payload.shift_types = selectedTimeTypes;
     }
-    ApiService.post(ENV.API_URL + "shift/download", payload)
-      .then((res) => {
+    ApiService.post(ENV.API_URL + "shift/download", payload).then((res) => {
         const link = document.createElement("a");
         link?.setAttribute("href", res?.data);
         document.body.appendChild(link);
@@ -92,7 +83,6 @@ const ShiftsMasterListScreen = () => {
         setIsDownloading(false);
       })
       .catch((err) => {
-        console.log(err);
         setIsDownloading(false);
         CommonService.showToast(err?.msg || "Error", "error");
       });
@@ -180,8 +170,8 @@ const ShiftsMasterListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title", "Facility Name", "Shift Date", "HCP Name", "HCP Type", "Time Type", "Status", "Actions"],
-        mobileMatColumns: ["Title", "Facility Name", "Shift Date", "HCP Name", "HCP Type", "Time Type", "Status", "Actions"],
+        webMatColumns: ["Title", "Facility Name", "HCP Name", "Shift Date", "HCP Type", "Time Type", "Status", "Actions"],
+        mobileMatColumns: ["Title", "Facility Name", "HCP Name", "Shift Date", "HCP Type", "Time Type", "Status", "Actions"],
       },
       ENV.API_URL + url,
       setList,
@@ -354,33 +344,33 @@ const ShiftsMasterListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table shift-master-list-table">
+                  <TableHead className={"mat-thead"}>
+                     <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                        <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
                         </TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                 <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       const shift_date = CommonService.getUtcDate(row["shift_date"]);
 
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell>{row["title"]}</TableCell>
-                          <TableCell>{row["facility"]?.facility_name}</TableCell>
-                          <TableCell>{shift_date}</TableCell>
-                          <TableCell>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
+                          <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-name">
                             {row["hcp_user"]?.first_name}&nbsp;{row["hcp_user"]?.last_name}
                           </TableCell>
-                          <TableCell>{row["hcp_user"]?.hcp_type}</TableCell>
-                          <TableCell>{row["shift_type"]}</TableCell>
-                          <TableCell className={`captalize ${row["shift_status"]}`}>{row["shift_status"]}</TableCell>
-                          <TableCell>
+                          <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-type">{row["hcp_user"]?.hcp_type}</TableCell>
+                          <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                          <TableCell className={`captalize ${row["shift_status"]} mat-td mat-td-status`}>{row["shift_status"]}</TableCell>
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["title"]} view details`}>
                               <Link to={"/shiftMaster/view/" + row["_id"]} className={isDownloading ? "info-link disabled-link" : "info-link"} id={"link_hospital_details" + rowIndex}>
                                 {"View Details"}
@@ -392,7 +382,8 @@ const ShiftsMasterListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component="div"
                   count={list?.table.pagination.totalItems}
@@ -404,7 +395,6 @@ const ShiftsMasterListScreen = () => {
                     list.table?.pageEvent(0, +event.target.value);
                   }}
                 />
-              </TableContainer>
             </>
           )}
         </div>

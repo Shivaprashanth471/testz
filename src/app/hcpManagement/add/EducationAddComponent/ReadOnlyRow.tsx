@@ -11,7 +11,7 @@ interface readOnlyRowProps {
 
 const ReadOnlyRow = ({ education, handleDeleteClick }: readOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

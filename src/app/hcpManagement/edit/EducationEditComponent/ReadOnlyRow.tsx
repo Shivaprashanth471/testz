@@ -11,7 +11,7 @@ interface EducationReadOnlyProps {
 
 const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

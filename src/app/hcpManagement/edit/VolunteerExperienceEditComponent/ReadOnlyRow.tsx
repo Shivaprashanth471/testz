@@ -12,7 +12,7 @@ interface VExperienceReadOnlyRowProps {
 const ReadOnlyRow = ({ experience, openAdd }: VExperienceReadOnlyRowProps) => {
   return (
     <>
-      <TableRow>
+       <TableRow className={"mat-tr"}>
         <td>
           <TextField
             InputProps={{

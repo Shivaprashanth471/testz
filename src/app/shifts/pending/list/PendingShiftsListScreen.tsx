@@ -191,31 +191,31 @@ const PendingShiftsListScreen = () => {
         {list && list.table && (
           <>
             <TableContainer component={Paper} className={"table-responsive"}>
-              <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                  <TableRow>
+              <Table stickyHeader className="mat-table table shift-pending-list-table">
+                <TableHead className="mat-thead">
+                  <TableRow className="mat-tr">
                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                      <TableCell key={"header-col-" + columnIndex}>{column}</TableCell>
+                      <TableCell key={"header-col-" + columnIndex} className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}>{column}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="mat-tbody">
                   {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                   {list?.table.data.map((row: any, rowIndex: any) => {
                     const shift_date = CommonService.getUtcDate(row["shift_date"]);
 
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                        <TableCell>{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
-                        <TableCell>
+                      <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className="mat-tr">
+                        <TableCell className="mat-td mat-td-applied-on">{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-name">
                           {row["hcp_data"]?.first_name}&nbsp;{row["hcp_data"]?.last_name}
                         </TableCell>
-                        <TableCell>{row["facility_name"]}</TableCell>
-                        <TableCell>{shift_date}</TableCell>
-                        <TableCell>{row["hcp_data"]?.hcp_type}</TableCell>
-                        <TableCell>{row["shift_type"]}</TableCell>
-                        <TableCell className={`captalize ${row["status"]}`}>{row["status"]}</TableCell>
-                        <TableCell className="action-wrapper">
+                        <TableCell className="mat-td mat-td-facility-name">{row["facility_name"]}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
+                        <TableCell className="mat-td mat-td-hcp-type">{row["hcp_data"]?.hcp_type}</TableCell>
+                        <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                        <TableCell className={`mat-td mat-td-status captalize ${row["status"]}`}>{row["status"]}</TableCell>
+                        <TableCell className="mat-td mat-td-sticky mat-td-actions action-wrapper">
                           <div className="d-flex actions">
                             <IconButton onClick={() => openApprove(row["hcp_user_id"], row["_id"], row["requirement_id"])} disabled={row["status"] !== "pending"}>
                               <Tooltip title={`Approve ${row["hcp_data"]?.first_name} ${row["hcp_data"]?.last_name} Shift Requirement Application`}>
@@ -239,7 +239,8 @@ const PendingShiftsListScreen = () => {
                   })}
                 </TableBody>
               </Table>
-              <TablePagination
+            </TableContainer>
+            <TablePagination
                 rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                 component="div"
                 count={list?.table.pagination.totalItems}
@@ -251,7 +252,6 @@ const PendingShiftsListScreen = () => {
                   list.table?.pageEvent(0, +event.target.value);
                 }}
               />
-            </TableContainer>
           </>
         )}
       </div>

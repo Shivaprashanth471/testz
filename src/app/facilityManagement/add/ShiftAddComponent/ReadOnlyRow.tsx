@@ -23,7 +23,7 @@ const ReadOnlyRow = ({ shiftTimings, handleDeleteClick }: readOnlyRowProps) => {
   }
 
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

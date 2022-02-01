@@ -17,7 +17,6 @@ const NoDataCardComponent = (props: NoDataCardComponentProps) => {
   const defaultOptions = {
     animationData,
   };
-
   return props?.isNotTable ? (
     <div>
       <div className={"display-flex flex-one mrg-top-20"}>

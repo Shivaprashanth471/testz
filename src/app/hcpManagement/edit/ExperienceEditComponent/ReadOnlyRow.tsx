@@ -12,7 +12,7 @@ interface ExperienceReadOnlyRowProps {
 
 const ReadOnlyRow = ({ experience, openAdd }: ExperienceReadOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

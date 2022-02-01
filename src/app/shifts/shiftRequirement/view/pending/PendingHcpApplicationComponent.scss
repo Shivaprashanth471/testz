@@ -1,0 +1,33 @@
+.pending-shift-applications-hcps-list {
+    .shifts-requirment-pending-list-table {
+		.mat-td-facility-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+        .mat-td-hcp-name{
+            min-width: 250px;
+			max-width: 250px;
+        }
+
+		.mat-td-hcp-email {
+			min-width: 160px;
+			max-width: 160px;
+		}
+
+		.mat-td-created-at {
+			min-width: 160px;
+			max-width: 160px;
+		}
+
+		.mat-td-hcp-type {
+			min-width: 100px;
+			max-width: 100px;
+		}
+
+		.mat-td-actions {
+			min-width: 120px;
+			max-width: 120px;
+		}
+	}
+}

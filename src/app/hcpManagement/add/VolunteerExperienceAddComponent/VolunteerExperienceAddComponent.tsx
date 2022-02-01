@@ -82,8 +82,8 @@ const VolunteerExperienceAddComponent = ({ experiences, setExperience }: Volunte
     <div className="add-container">
       {experiences.length > 0 && (
         <Table className="mrg-top-50">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Organisation Name</th>
               <th>Location</th>
               <th>Position Title</th>
@@ -93,7 +93,7 @@ const VolunteerExperienceAddComponent = ({ experiences, setExperience }: Volunte
               <th>Skills</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {sortedExpData.map((experience: any, index: number) => (
               <>
                 <ReadOnlyRow key={index} experience={experience} handleDeleteClick={handleDeleteClick} />

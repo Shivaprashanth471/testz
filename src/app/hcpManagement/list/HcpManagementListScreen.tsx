@@ -46,14 +46,6 @@ const HcpManagementListScreen = () => {
   const [dateRange, setDateRange] = useLocalStorage<any[]>("hcpDateRange", [null, null]);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("hcpPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Created On") {
-      return "pdd-left-20 first-row";
-    }
-  }, []);
-
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
@@ -247,31 +239,31 @@ const HcpManagementListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table" style={{ tableLayout: "fixed" }}>
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table hcp-list-table">
+                  <TableHead className={"mat-thead"}>
+                    <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                        <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
                         </TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
 
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell>{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
-                          <TableCell>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-created-at">{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-name">
                             {row["first_name"]}&nbsp;{row["last_name"]}
                           </TableCell>
-                          <TableCell>{row["contact_number"]}</TableCell>
-                          <TableCell>{row["email"]}</TableCell>
-                          <TableCell>{row["hcp_type"]}</TableCell>
-                          <TableCell>{row["status"]}</TableCell>
-                          <TableCell>
+                          <TableCell className="mat-td mat-td-contact-number">{row["contact_number"]}</TableCell>
+                          <TableCell className="mat-td mat-td-email">{row["email"]}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-type">{row["hcp_type"]}</TableCell>
+                          <TableCell className="mat-td mat-td-status">{row["status"]}</TableCell>
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["first_name"]} ${row["last_name"]} view details`}>
                               <Link to={"/hcp/view/" + row["_id"]} className="info-link" id={"link_hospital_details" + rowIndex}>
                                 {"View Details"}
@@ -283,7 +275,8 @@ const HcpManagementListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component="div"
                   count={list?.table.pagination.totalItems}
@@ -295,7 +288,6 @@ const HcpManagementListScreen = () => {
                     list.table?.pageEvent(0, +event.target.value);
                   }}
                 />
-              </TableContainer>
             </>
           )}
         </div>

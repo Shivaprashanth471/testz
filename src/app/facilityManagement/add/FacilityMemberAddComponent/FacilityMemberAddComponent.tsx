@@ -80,8 +80,8 @@ const FacilityMemberAddComponent = ({ members, setMembers }: FacilityMemberAddCo
     <div className="facility-add-container">
       {members.length > 0 && (
         <Table className="mrg-top-50">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Name</th>
               <th>Phone Number</th>
               <th>Extension Number</th>
@@ -90,7 +90,7 @@ const FacilityMemberAddComponent = ({ members, setMembers }: FacilityMemberAddCo
               <th>Actions</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {members.map((member: any, index: any) => (
               <ReadOnlyRow key={member?.tempId} member={member} handleDeleteClick={handleDeleteClick} />
             ))}

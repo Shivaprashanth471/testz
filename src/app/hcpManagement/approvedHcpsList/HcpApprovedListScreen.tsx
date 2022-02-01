@@ -46,16 +46,6 @@ const HcpApprovedListScreen = () => {
   const [status, setStatus] = useLocalStorage<any>("hcpStatus", "");
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("hcpApprovedPageSizeIndex", 10);
 
-  const classesFunction = useCallback((type: any) => {
-    if (type === "Actions") {
-      return "last-row";
-    } else if (type === "Active/Inactive") {
-      return "text-align";
-    } else if (type === "Created On") {
-      return "pdd-left-20 first-row";
-    }
-  }, []);
-
   const onReload = useCallback(
     (page = 1) => {
       if (list) {
@@ -272,40 +262,40 @@ const HcpApprovedListScreen = () => {
           {list && list.table && (
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
-                <Table stickyHeader aria-label="sticky table" style={{ tableLayout: "fixed" }}>
-                  <TableHead>
-                    <TableRow>
+                <Table stickyHeader className="mat-table table hcp-list-table">
+                  <TableHead className={"mat-thead"}>
+                    <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                        <TableCell className={classesFunction(column)} key={"header-col-" + columnIndex}>
+                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
                         </TableCell>
                       ))}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                     {list?.table.data.map((row: any, rowIndex: any) => {
                       return (
-                        <TableRow hover role="checkbox" tabIndex={-1} key={"row-" + rowIndex}>
-                          <TableCell>{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
-                          <TableCell>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-created-at">{moment(row["created_at"]).format("MM-DD-YYYY")}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-name">
                             {row["first_name"]}&nbsp;{row["last_name"]}
                           </TableCell>
-                          <TableCell>{row["contact_number"]}</TableCell>
-                          <TableCell>{row["email"]}</TableCell>
-                          <TableCell>{row["hcp_type"]}</TableCell>
+                          <TableCell className="mat-td mat-td-contact-number">{row["contact_number"]}</TableCell>
+                          <TableCell className="mat-td mat-td-email">{row["email"]}</TableCell>
+                          <TableCell className="mat-td mat-td-hcp-type">{row["hcp_type"]}</TableCell>
                           {role === "super_admin" ? (
-                            <TableCell style={{ textAlign: "center" }}>
+                            <TableCell style={{ textAlign: "center" }} className="mat-td mat-td-status">
                               <Tooltip title={"ACTIVE / INACTIVE"}>
                                 <FormControlLabel control={<Switch checked={row["is_active"]} onChange={() => handletoggleStatus(row["_id"], row["is_active"])} />} label={""} />
-                              </Tooltip>{" "}
+                              </Tooltip>
                             </TableCell>
                           ) : row["is_active"] ? (
-                            <TableCell style={{ color: "#41D6C3" }}>Active</TableCell>
+                            <TableCell style={{ color: "#41D6C3" }} className="mat-td mat-td-status">Active</TableCell>
                           ) : (
-                            <TableCell style={{ color: "#808080" }}> Inactive</TableCell>
+                            <TableCell style={{ color: "#808080" }} className="mat-td mat-td-status"> Inactive</TableCell>
                           )}
-                          <TableCell>
+                          <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["first_name"]} ${row["last_name"]} view details`}>
                               <Link to={"/hcp/user/view/" + row["user_id"]} className="info-link" id={"link_hospital_details" + rowIndex}>
                                 {"View Details"}
@@ -317,7 +307,8 @@ const HcpApprovedListScreen = () => {
                     })}
                   </TableBody>
                 </Table>
-                <TablePagination
+              </TableContainer>
+              <TablePagination
                   rowsPerPageOptions={list.table.pagination.pageSizeOptions}
                   component="div"
                   count={list?.table.pagination.totalItems}
@@ -329,7 +320,6 @@ const HcpApprovedListScreen = () => {
                     list.table?.pageEvent(0, +event.target.value);
                   }}
                 />
-              </TableContainer>
             </>
           )}
         </div>

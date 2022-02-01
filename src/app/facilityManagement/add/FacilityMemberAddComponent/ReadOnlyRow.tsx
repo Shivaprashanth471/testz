@@ -9,7 +9,7 @@ interface readOnlyRowProps {
 
 const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

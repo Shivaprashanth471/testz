@@ -1,27 +1,26 @@
 @import "src/assets/scss/common";
 
-.pending-hcps-list{
-  .MuiTableCell-body {
-      padding: 10px 8px 10px 10px !important;
-  }
-    .text-right{
-        text-align: right !important;
-        padding-right: 40px !important;
-    }
-    .action-wrapper{
-        margin: auto;
-        .actions{
-            gap: 5px;
-        }
-    }
-    .add-icon{
-        color: green;
-    }
-    .delete-icon{
-            color: #f10000 !important;
-        
-    }
-    .captalize{
+.pending-hcps-list {
+	.MuiTableCell-body {
+		padding: 10px 8px 10px 10px !important;
+	}
+	.text-right {
+		text-align: right !important;
+		padding-right: 40px !important;
+	}
+	.action-wrapper {
+		margin: auto;
+		.actions {
+			gap: 5px;
+		}
+	}
+	.add-icon {
+		color: green;
+	}
+	.delete-icon {
+		color: #f10000 !important;
+	}
+	.captalize {
 		text-transform: capitalize;
 		font-weight: 500;
 	}
@@ -34,12 +33,50 @@
 	.pending {
 		color: #454545 !important;
 	}
-    .approved {
-        color: #0c80e3 !important;
-    }
-    .view-details-link{
-        text-decoration: underline;
-        color: $primary-color !important;
-        cursor: pointer;
-    }
+	.approved {
+		color: #0c80e3 !important;
+	}
+	.view-details-link {
+		text-decoration: underline;
+		color: $primary-color !important;
+		cursor: pointer;
+	}
+	.shift-pending-list-table {
+        .mat-td-applied-on{
+            min-width: 100px;
+			max-width: 100px;
+        }
+		.mat-td-hcp-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-facility-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-shift-date {
+			min-width: 120px;
+			max-width: 120px;
+		}
+		.mat-td-status {
+			min-width: 100px;
+			max-width: 100px;
+		}
+		.mat-td-shift-type {
+			min-width: 80px;
+			max-width: 80px;
+		}
+
+		.mat-td-hcp-type {
+			min-width: 100px;
+			max-width: 100px;
+		}
+
+		.mat-td-actions {
+			min-width: 230px;
+			max-width: 230px;
+		}
+	}
 }

@@ -25,7 +25,7 @@ const ReadOnlyRow = ({ timezone, shiftTimings, openAdd }: readOnlyRowProps) => {
   }
 
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{

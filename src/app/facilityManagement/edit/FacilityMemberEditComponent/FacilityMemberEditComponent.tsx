@@ -111,8 +111,8 @@ const FacilityMemberEditComponent = ({ onAddMember, hcpId, members, getFacilityM
       </DialogComponent>
       {members.length > 0 && (
         <Table className="mrg-top-50">
-          <TableHead>
-            <TableRow>
+          <TableHead className={"mat-thead"}>
+             <TableRow className={"mat-tr"}>
               <th>Name</th>
               <th>Phone Number</th>
               <th>Extension Number</th>
@@ -121,7 +121,7 @@ const FacilityMemberEditComponent = ({ onAddMember, hcpId, members, getFacilityM
               <th>Actions</th>
             </TableRow>
           </TableHead>
-          <TableBody>
+         <TableBody className={"mat-tbody"}>
             {members.map((member: any) => (
               <ReadOnlyRow key={member?._id} member={member} openAdd={openAdd} />
             ))}
