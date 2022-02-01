@@ -54,7 +54,7 @@ const ExperienceAddComponent = ({ handleCalcSpecialities, handleCalcExperience, 
       specialisation: experience.speciality,
       unit: experience.speciality,
       location: experience.location,
-      start_date: moment(experience.startDate).format("YYYY-MM"),
+      start_date: experience.startDate ? moment(experience.startDate).format("YYYY-MM") : "",
       end_date: experience.endDate ? moment(experience.endDate).format("YYYY-MM") : "",
       exp_type: "fulltime",
       position_title: experience.hcpType,
@@ -129,9 +129,9 @@ const ExperienceAddComponent = ({ handleCalcSpecialities, handleCalcExperience, 
             {({ isSubmitting, handleSubmit, isValid, setFieldValue, resetForm }) => (
               <Form className={"form-holder"}>
                 <div className="input-container">
-                  <Field variant="outlined" component={TextField} fullWidth name="facilityName" label="Facility Name" id="input_hcp_add_experience_facility_name" />
+                  <Field variant="outlined" component={TextField} fullWidth name="facilityName" label="Facility Name*" id="input_hcp_add_experience_facility_name" />
 
-                  <Field variant="outlined" component={TextField} fullWidth name="location" label="Location" id="input_hcp_add_experience_location" />
+                  <Field variant="outlined" component={TextField} fullWidth name="location" label="Location*" id="input_hcp_add_experience_location" />
                 </div>
 
                 <div className="input-container">
@@ -147,7 +147,7 @@ const ExperienceAddComponent = ({ handleCalcSpecialities, handleCalcExperience, 
                     component={TextField}
                     fullWidth
                     name="hcpType"
-                    label="Position Title"
+                    label="Position Title*"
                     id="input_hcp_add_experience_position_title"
                   >
                     {hcpTypes.map((item: any, index: number) => (
@@ -157,7 +157,7 @@ const ExperienceAddComponent = ({ handleCalcSpecialities, handleCalcExperience, 
                     ))}
                   </Field>
 
-                  <Field SelectProps={showDropDownBelowField} select variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality" id="input_hcp_add_experience_speciality">
+                  <Field SelectProps={showDropDownBelowField} select variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality*" id="input_hcp_add_experience_speciality">
                     {hcpTypeSpecialities &&
                       hcpTypeSpecialities.map((item: any, index: any) => (
                         <MenuItem value={item.code} key={"hcp_type_specialities_" + index} id={"input_hcp_add_speciality_" + index}>
@@ -179,7 +179,7 @@ const ExperienceAddComponent = ({ handleCalcSpecialities, handleCalcExperience, 
                     select
                     component={TextField}
                     name="stillWorkingHere"
-                    label="Still Working ?"
+                    label="Still Working ?*"
                     id="input_hcp_add_Vexperience_working_here"
                     onChange={(e: any) => {
                       const isWorking = e.target.value;

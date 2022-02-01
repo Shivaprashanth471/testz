@@ -92,7 +92,6 @@ export const hcpFormValidation = Yup.object({
     country: Yup.string().typeError(" must be a text").min(2, "min 2 letters").required("required").trim("empty space not allowed").max(150, "max limit 150").required("required"),
     zip_code: Yup.string()
       .typeError(" must be a text")
-      .matches(/^[0-9]+$/, "Must be only digits")
       .trim("empty space not allowed")
       .min(5, "min 5 digits")
       .max(6, "max 6 digits allowed")

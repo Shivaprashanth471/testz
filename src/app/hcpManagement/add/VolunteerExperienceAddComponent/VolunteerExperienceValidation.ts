@@ -23,7 +23,7 @@ export const volunteerExperienceValidation = Yup.object({
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .required("required"),
   location: Yup.string().typeError("must be date").trim().max(50, "max limit 50").required("required"),
-  startDate: Yup.date().required("required").nullable(),
+  startDate: Yup.date().nullable(),
   endDate: Yup.date()
     .min(Yup.ref("startDate"), "End Date can not be less than Start Date")
     .nullable()

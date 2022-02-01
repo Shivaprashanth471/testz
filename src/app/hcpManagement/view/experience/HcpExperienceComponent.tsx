@@ -36,7 +36,7 @@ const HcpExperienceComponent = (props: PropsWithChildren<HcpExperienceComponentP
                 <div className="flex-1">
                   <h4>Start and End Date</h4>
                   <p>
-                    {moment(item?.start_date).format("MMMM, YYYY")}&nbsp;-&nbsp;{item?.end_date !== "" ? moment(item?.end_date).format("MMMM, YYYY") : "N/A"}
+                    {item?.start_date ? moment(item?.start_date).format("MMMM, YYYY") : "N/A"}&nbsp;-&nbsp;{item?.end_date !== "" ? moment(item?.end_date).format("MMMM, YYYY") : "N/A"}
                   </p>
                 </div>
                 <div className="flex-1">

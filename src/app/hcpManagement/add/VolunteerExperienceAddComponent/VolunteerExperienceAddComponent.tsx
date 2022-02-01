@@ -49,8 +49,8 @@ const VolunteerExperienceAddComponent = ({ experiences, setExperience }: Volunte
       unit: experience.speciality,
       still_working_here: experience.stillWorkingHere,
       location: experience.location,
-      start_date: moment(experience.startDate).format("YYYY-MM"),
-      end_date: experience.endDate ? moment(experience.endDate).format("YYYY-MM") : "",
+      start_date: experience.startDate ? moment(experience.startDate).format("YYYY-MM") : null,
+      end_date: experience.endDate ? moment(experience.endDate).format("YYYY-MM") : null,
       position_title: experience.positionTitle,
       exp_type: "volunteer",
       skills: experience.skills,
@@ -109,14 +109,14 @@ const VolunteerExperienceAddComponent = ({ experiences, setExperience }: Volunte
             {({ isSubmitting, handleSubmit, isValid, resetForm, setFieldValue }) => (
               <Form className={"form-holder"}>
                 <div className="input-container">
-                  <Field variant="outlined" component={TextField} fullWidth name="organisation" label="Organisation" id="input_hcp_add_Vexperience_name" />
+                  <Field variant="outlined" component={TextField} fullWidth name="organisation" label="Organisation*" id="input_hcp_add_Vexperience_name" />
 
-                  <Field variant="outlined" component={TextField} fullWidth name="location" label="Location" id="input_hcp_add_Vexperience_location" />
+                  <Field variant="outlined" component={TextField} fullWidth name="location" label="Location*" id="input_hcp_add_Vexperience_location" />
                 </div>
 
                 <div className="input-container">
-                  <Field variant="outlined" component={TextField} fullWidth name="positionTitle" label="Position Title" id="input_hcp_add_Vexperience_position" />
-                  <Field variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality" id="input_hcp_add_Vexperience_speciality" />
+                  <Field variant="outlined" component={TextField} fullWidth name="positionTitle" label="Position Title*" id="input_hcp_add_Vexperience_position" />
+                  <Field variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality*" id="input_hcp_add_Vexperience_speciality" />
                 </div>
 
                 <div className="input-container">
@@ -130,7 +130,7 @@ const VolunteerExperienceAddComponent = ({ experiences, setExperience }: Volunte
                     select
                     component={TextField}
                     name="stillWorkingHere"
-                    label="Still Working ?"
+                    label="Still Working ?*"
                     id="input_hcp_add_Vexperience_working_here"
                     onChange={(e: any) => {
                       const isWorking = e.target.value;

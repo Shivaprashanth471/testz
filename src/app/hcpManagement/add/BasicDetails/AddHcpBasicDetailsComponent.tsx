@@ -135,7 +135,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                   <Field variant="outlined" name="address.state" id="input_hcp_add_state" type={"text"} component={TextField} label="State*" fullWidth autoComplete="off" />
                 </div>
                 <div className="input-container">
-                  <Field inputProps={{ maxLength: 6 }} variant="outlined" fullWidth name="address.zip_code" type={"number"} component={TextField} id="input_hcp_add_zip" label="Zip*" autoComplete="off" />
+                  <Field  variant="outlined" fullWidth name="address.zip_code" type={"number"} component={TextField} id="input_hcp_add_zip" label="Zip*" autoComplete="off" />
                   <Field variant="outlined" name="address.country" type={"text"} component={TextField} id="input_hcp_add_country" label="Country*" fullWidth autoComplete="off" />
                 </div>
                 <div className="facility-about mrg-top-50">

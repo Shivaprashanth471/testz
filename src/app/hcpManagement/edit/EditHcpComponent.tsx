@@ -308,7 +308,9 @@ const EditHcpComponent = () => {
 
   const calculateExperience = (experiences: any[]) => {
     let expArr = experiences.map((item: any) => CommonService.getYearsDiff(item.start_date, item.end_date));
-    const sum = expArr.reduce((partial_sum, a) => partial_sum + a, 0);
+    let checkArrForNaNs = expArr.map(value => isNaN(value) ? 0 : value);
+
+    const sum = checkArrForNaNs.reduce((partial_sum, a) => partial_sum + a, 0);
     return Math.round(sum * 10) / 10;
   };
 

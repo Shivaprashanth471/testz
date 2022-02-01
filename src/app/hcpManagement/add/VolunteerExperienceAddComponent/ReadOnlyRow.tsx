@@ -55,7 +55,7 @@ const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowPro
             InputProps={{
               disableUnderline: true,
             }}
-            value={moment(experience.start_date).format("MM-YYYY")}
+            value={experience.start_date ? moment(experience.start_date).format("MM-YYYY") : "NA"}
             disabled
           />
         </td>
@@ -65,7 +65,7 @@ const ReadOnlyRow = ({ experience, handleDeleteClick, ...props }: readOnlyRowPro
             InputProps={{
               disableUnderline: true,
             }}
-            value={experience.end_date ? moment(experience.end_date).format("MM-YYYY") : "Present"}
+            value={experience.end_date ? moment(experience.end_date).format("MM-YYYY") : "NA"}
             disabled
           />
         </td>

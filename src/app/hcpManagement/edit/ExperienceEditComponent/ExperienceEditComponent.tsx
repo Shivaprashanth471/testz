@@ -59,8 +59,8 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
       specialisation: experience.speciality,
       unit: experience.speciality,
       location: experience.location,
-      start_date: moment(experience.startDate).format("YYYY-MM"),
-      end_date: experience.endDate ? moment(experience.endDate).format("YYYY-MM") : "",
+      start_date: experience.startDate ? moment(experience.startDate).format("YYYY-MM") : null,
+      end_date: experience.endDate ? moment(experience.endDate).format("YYYY-MM") : null,
       position_title: experience.hcpType,
       still_working_here: experience.stillWorkingHere,
       exp_type: "fulltime",
@@ -153,9 +153,9 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
             <div className="add-input">
               <Form className={"form-holder"}>
                 <div className="input-container">
-                  <Field variant="outlined" fullWidth component={TextField} name="facilityName" id="input_hcp_edit_experience_facility_name" label="Facility Name" />
+                  <Field variant="outlined" fullWidth component={TextField} name="facilityName" id="input_hcp_edit_experience_facility_name" label="Facility Name*" />
 
-                  <Field variant="outlined" fullWidth component={TextField} name="location" id="input_hcp_edit_experience_location" label="Location" />
+                  <Field variant="outlined" fullWidth component={TextField} name="location" id="input_hcp_edit_experience_location" label="Location*" />
                 </div>
 
                 <div className="input-container">
@@ -171,7 +171,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                     component={TextField}
                     fullWidth
                     name="hcpType"
-                    label="Position Title"
+                    label="Position Title*"
                     id="input_hcp_edit_experience_position_title"
                   >
                     {hcpTypes.map((item: any, index: number) => (
@@ -180,7 +180,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                       </MenuItem>
                     ))}
                   </Field>
-                  <Field SelectProps={showDropDownBelowField} select variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality" id="input_hcp_edit_experience_speciality">
+                  <Field SelectProps={showDropDownBelowField} select variant="outlined" component={TextField} fullWidth name="speciality" label="Speciality*" id="input_hcp_edit_experience_speciality">
                     {hcpTypeSpecialities &&
                       hcpTypeSpecialities.map((item: any, index: any) => (
                         <MenuItem value={item.code} key={"hcp_type_specialities_" + index} id={"input_hcp_add_speciality_" + index}>
@@ -202,7 +202,7 @@ const ExperienceAddComponent = ({ hcpTypeSpecialities, hcpTypes, handleHcpTypeCh
                     select
                     component={TextField}
                     name="stillWorkingHere"
-                    label="Still Working ?"
+                    label="Still Working ?*"
                     id="input_hcp_edit_experience_working_here"
                     onChange={(e: any) => {
                       const isWorking = e.target.value;
