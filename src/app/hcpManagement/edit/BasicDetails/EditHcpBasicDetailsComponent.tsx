@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useState, useEffect } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import { Field, FieldProps, Form, Formik } from "formik";
@@ -38,6 +38,10 @@ export interface EditHcpBasicDetailsComponentProps {
 }
 
 const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetailsComponentProps>) => {
+  const [vaccineStatus, setVaccineStatus] = useState<string>("");
+  const [isFirstShotVisible, setIsFirstShotVisible] = useState<boolean>(false);
+  const [isLastShotVisible, setIsLastShotVisible] = useState<boolean>(false);
+
   const hcpInitialState = props?.hcpInitialState;
   const contractFile = props?.contractFile;
   const fileUpload = props?.fileUpload;
@@ -69,6 +73,30 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
       getContentAnchorEl: null,
     },
   };
+
+  useEffect(() => {
+    setVaccineStatus(hcpInitialState?.nc_details?.vaccine);
+  }, [hcpInitialState?.nc_details?.vaccine]);
+
+  useEffect(() => {
+    if (vaccineStatus === "full") {
+      setIsFirstShotVisible(true);
+      setIsLastShotVisible(true);
+    }
+    if (vaccineStatus === "half") {
+      setIsFirstShotVisible(true);
+      setIsLastShotVisible(false);
+    }
+    if (vaccineStatus === "exempted") {
+      setIsFirstShotVisible(false);
+      setIsLastShotVisible(false);
+    }
+    if (vaccineStatus === "") {
+      setIsFirstShotVisible(false);
+      setIsLastShotVisible(false);
+    }
+  }, [vaccineStatus]);
+
   return (
     <div>
       <Formik initialValues={hcpInitialState} validateOnChange={true} validationSchema={hcpFormValidation} onSubmit={onAdd}>
@@ -174,14 +202,14 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                 <div className="facility-about mrg-top-10">
                   <p className="card-header">About the HCP</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" id="input_hcp_edit_about" name="about" multiline  />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" id="input_hcp_edit_about" name="about" multiline />
                 </div>
               </div>
 
               <div className="custom-border">
                 <div className="professional-summary mrg-top-10 ">
                   <p className="card-header">Professional Summary</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_edit_summary" multiline  />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_edit_summary" multiline />
                 </div>
               </div>
 
@@ -211,23 +239,6 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               <p className="card-header">NC Section</p>
               <div className="input-container">
                 <Field variant="outlined" name="nc_details.dnr" type={"text"} component={TextField} label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
-                <Field SelectProps={showDropDownBelowField} select variant="outlined" name="nc_details.vaccine" type={"text"} component={TextField} id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
-                  <MenuItem value="">Select Value</MenuItem>
-                  {vaccine.map((item: any, index: any) => (
-                    <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Field>
-              </div>
-
-              <div className="input-container">
-                <Field variant="outlined" name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField} label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
-                <Field variant="outlined" name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField} label="Latest Shot Date (MM-DD-YYYY" id="input_hcp_add_vaccination_dates_latest_shot" fullWidth autoComplete="off" />
-              </div>
-
-              <div className="input-container">
-                <Field variant="outlined" name="nc_details.location_preference" type={"text"} component={TextField} label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
                 <Field SelectProps={showDropDownBelowField} select variant="outlined" name="nc_details.contact_type" type={"text"} component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
                   <MenuItem value="">Select Value</MenuItem>
                   {contactType.map((item: any, index: any) => (
@@ -239,6 +250,8 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               </div>
 
               <div className="input-container">
+                <Field variant="outlined" name="nc_details.location_preference" type={"text"} component={TextField} label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
+
                 <Field
                   SelectProps={showDropDownBelowField}
                   select
@@ -258,10 +271,10 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                     </MenuItem>
                   ))}
                 </Field>
-                <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
               </div>
 
               <div className="input-container">
+                <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                 <Field
                   variant="inline"
                   openTo="date"
@@ -274,8 +287,52 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                   label="Last Call Date"
                   name="nc_details.last_call_date"
                 />
+              </div>
+
+              <div className="input-container">
+                <Field
+                  onClick={(e: any) => {
+                    setFieldValue("nc_details.vaccine", e.target.value);
+                    setVaccineStatus(e.target.value);
+                    // if(e.target.value === 'exempted'){
+                    //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
+                    //   setFieldValue("nc_details.vaccination_dates.latest_shot", null);
+                    // }
+
+                    // if(e.target.value === 'half'){
+                    //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
+                    // }
+                  }}
+                  SelectProps={showDropDownBelowField}
+                  select
+                  variant="outlined"
+                  name="nc_details.vaccine"
+                  type={"text"}
+                  component={TextField}
+                  id="input_hcp_add_vaccine"
+                  label="Vaccine"
+                  fullWidth
+                  autoComplete="off"
+                >
+                  <MenuItem value="">Select Value</MenuItem>
+                  {vaccine.map((item: any, index: any) => (
+                    <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Field>
                 <Field variant="outlined" name="nc_details.family_consideration" type={"text"} component={TextField} id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off" />
               </div>
+
+              <div className={`${isFirstShotVisible && isLastShotVisible ? "input-container" : "input-container-minor"}`}>
+                {isFirstShotVisible && (
+                  <Field variant="outlined" name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField} label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
+                )}
+                {isLastShotVisible && (
+                  <Field variant="outlined" name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField} label="Latest Shot Date (MM-DD-YYYY" id="input_hcp_add_vaccination_dates_latest_shot" fullWidth autoComplete="off" />
+                )}
+              </div>
+
               <div className="input-container d-flex">
                 <div className="flex-1">
                   <div className="pdd-top-10">
@@ -436,7 +493,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                         {boolAcknowledge.map((item: any, index) => {
                           return (
                             <div>
-                              <FormControlLabel key={"input_hcp_add_more_important_preference" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="nc_details.is_gusto_onboarded" label={item.label} />
+                              <FormControlLabel key={"input_hcp_add_gusto_onboarded" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="nc_details.is_gusto_onboarded" label={item.label} />
                             </div>
                           );
                         })}

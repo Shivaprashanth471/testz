@@ -4,7 +4,7 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-material-ui";
 import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
 import { ScrollToError } from "../../../../components/ScrollToError";
@@ -13,6 +13,10 @@ import HcpAddAttachmentsComponent from "../AddAtachments/HcpAddAttachmentsCompon
 import { AddHcpInitialValues, hcpFormValidation, HcpItemAddType } from "../AddHcpValuesValidationsComponent";
 
 const AddHcpBasicDetailsComponent = (props: any) => {
+  const [vaccineStatus, setVaccineStatus] = useState<string>("");
+  const [isFirstShotVisible, setIsFirstShotVisible] = useState<boolean>(false);
+  const [isLastShotVisible, setIsLastShotVisible] = useState<boolean>(false);
+
   const contractFile = props?.contractFile;
   const fileUpload = props?.fileUpload;
   const setPreviewFile = props?.setPreviewFile;
@@ -50,6 +54,25 @@ const AddHcpBasicDetailsComponent = (props: any) => {
     },
     [fileUpload, contractFile?.wrapper, setPreviewFile, setOpen]
   );
+
+  useEffect(() => {
+    if (vaccineStatus === "full") {
+      setIsFirstShotVisible(true);
+      setIsLastShotVisible(true);
+    }
+    if (vaccineStatus === "half") {
+      setIsFirstShotVisible(true);
+      setIsLastShotVisible(false);
+    }
+    if (vaccineStatus === "exempted") {
+      setIsFirstShotVisible(false);
+      setIsLastShotVisible(false);
+    }
+    if (vaccineStatus === "") {
+      setIsFirstShotVisible(false);
+      setIsLastShotVisible(false);
+    }
+  }, [vaccineStatus]);
 
   return (
     <div>
@@ -135,18 +158,18 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                   <Field variant="outlined" name="address.state" id="input_hcp_add_state" type={"text"} component={TextField} label="State*" fullWidth autoComplete="off" />
                 </div>
                 <div className="input-container">
-                  <Field  variant="outlined" fullWidth name="address.zip_code" type={"number"} component={TextField} id="input_hcp_add_zip" label="Zip*" autoComplete="off" />
+                  <Field variant="outlined" fullWidth name="address.zip_code" type={"number"} component={TextField} id="input_hcp_add_zip" label="Zip*" autoComplete="off" />
                   <Field variant="outlined" name="address.country" type={"text"} component={TextField} id="input_hcp_add_country" label="Country*" fullWidth autoComplete="off" />
                 </div>
                 <div className="facility-about mrg-top-50">
                   <p className="card-header">About the HCP</p>
-                  <Field placeholder="About the Hcp" variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline  />
+                  <Field placeholder="About the Hcp" variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="about" id="input_hcp_add_about" multiline />
                 </div>
               </div>
               <div className="custom-border">
                 <div className="professional-summary mrg-top-10 ">
                   <p className="card-header">Professional Summary</p>
-                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_add_summary" multiline  placeholder="Enter Professional Summary" />
+                  <Field variant="outlined" component={TextField} type={"text"} fullWidth autoComplete="off" name="professional_details.summary" id="input_hcp_add_summary" multiline placeholder="Enter Professional Summary" />
                 </div>
               </div>
               <div className="hcp-profession-details  mrg-top-10 custom-border">
@@ -251,22 +274,6 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                 <p className="card-header">NC Section</p>
                 <div className="input-container">
                   <Field variant="outlined" name="nc_details.dnr" type={"text"} component={TextField} label="DNR" id="input_hcp_add_dnr" fullWidth autoComplete="off" />
-                  <Field SelectProps={showDropDownBelowField} select variant="outlined" name="nc_details.vaccine" type={"text"} component={TextField} id="input_hcp_add_vaccine" label="Vaccine" fullWidth autoComplete="off">
-                    <MenuItem value="">Select Value</MenuItem>
-                    {vaccine.map((item: any, index: any) => (
-                      <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </div>
-                <div className="input-container">
-                  <Field variant="outlined" name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField} label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
-                  <Field variant="outlined" name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField} label="Latest Shot Date (MM-DD-YYYY" id="input_hcp_add_vaccination_dates_latest_shot" fullWidth autoComplete="off" />
-                </div>
-
-                <div className="input-container">
-                  <Field variant="outlined" name="nc_details.location_preference" type={"text"} component={TextField} label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
                   <Field SelectProps={showDropDownBelowField} select variant="outlined" name="nc_details.contact_type" type={"text"} component={TextField} id="input_hcp_add_contact_type" label="Contact Type" fullWidth autoComplete="off">
                     <MenuItem value="">Select Value</MenuItem>
                     {contactType.map((item: any, index: any) => (
@@ -278,6 +285,8 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                 </div>
 
                 <div className="input-container">
+                  <Field variant="outlined" name="nc_details.location_preference" type={"text"} component={TextField} label="Preferred Location to Work" id="input_hcp_add_location_preference" fullWidth autoComplete="off" />
+
                   <Field
                     SelectProps={showDropDownBelowField}
                     select
@@ -297,10 +306,10 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                       </MenuItem>
                     ))}
                   </Field>
-                  <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                 </div>
 
                 <div className="input-container">
+                  <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                   <Field
                     variant="inline"
                     openTo="date"
@@ -313,8 +322,52 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                     label="Last Call Date"
                     name="nc_details.last_call_date"
                   />
+                </div>
+
+                <div className="input-container">
+                  <Field
+                    onClick={(e: any) => {
+                      setFieldValue("nc_details.vaccine", e.target.value);
+                      setVaccineStatus(e.target.value);
+                      // if (e.target.value === "exempted") {
+                      //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
+                      //   setFieldValue("nc_details.vaccination_dates.latest_shot", null);
+                      // }
+
+                      // if (e.target.value === "half") {
+                      //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
+                      // }
+                    }}
+                    SelectProps={showDropDownBelowField}
+                    select
+                    variant="outlined"
+                    name="nc_details.vaccine"
+                    type={"text"}
+                    component={TextField}
+                    id="input_hcp_add_vaccine"
+                    label="Vaccine"
+                    fullWidth
+                    autoComplete="off"
+                  >
+                    <MenuItem value="">Select Value</MenuItem>
+                    {vaccine.map((item: any, index: any) => (
+                      <MenuItem value={item.value} id={"menu_hcp_add_vaccine_" + index}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </Field>
                   <Field variant="outlined" name="nc_details.family_consideration" type={"text"} component={TextField} id="input_hcp_add_family_consideration" label="Family Considerations" fullWidth autoComplete="off" />
                 </div>
+
+                <div className={`${isFirstShotVisible && isLastShotVisible ? "input-container" : "input-container-minor"}`}>
+                  {isFirstShotVisible && (
+                    <Field variant="outlined" name="nc_details.vaccination_dates.first_shot" type={"text"} component={TextField} label="First Shot Date (MM-DD-YYYY)" id="input_hcp_add_vaccination_dates_first_shot" fullWidth autoComplete="off" />
+                  )}
+                  {isLastShotVisible && (
+                    <Field variant="outlined" name="nc_details.vaccination_dates.latest_shot" type={"text"} component={TextField} label="Latest Shot Date (MM-DD-YYYY" id="input_hcp_add_vaccination_dates_latest_shot" fullWidth autoComplete="off" />
+                  )}
+                </div>
+
                 <div className="input-container d-flex">
                   <div className="flex-1">
                     <div className="pdd-top-10">
