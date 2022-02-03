@@ -290,9 +290,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               </div>
 
               <div className="input-container">
-                {
-                  JSON.stringify(values?.nc_details?.vaccination_dates)
-                }
+             
                 <Field
                   onClick={(e: any) => {
                     setFieldValue("nc_details.vaccine", e.target.value);
