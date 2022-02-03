@@ -90,12 +90,7 @@ export const hcpFormValidation = Yup.object({
     state: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
     region: Yup.string().typeError(" must be a text").min(2, "min 2 letters").trim("empty space not allowed").max(150, "max limit 150").required("required"),
     country: Yup.string().typeError(" must be a text").min(2, "min 2 letters").required("required").trim("empty space not allowed").max(150, "max limit 150").required("required"),
-    zip_code: Yup.string()
-      .typeError(" must be a text")
-      .trim("empty space not allowed")
-      .min(5, "min 5 digits")
-      .max(6, "max 6 digits allowed")
-      .required("required"),
+    zip_code: Yup.string().typeError(" must be a text").trim("empty space not allowed").min(5, "min 5 digits").max(6, "max 6 digits allowed").required("required"),
   }),
   professional_details: Yup.object({
     experience: Yup.number().positive(),
@@ -128,10 +123,12 @@ export const hcpFormValidation = Yup.object({
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),
     vaccination_dates: Yup.object({
       first_shot: Yup.string()
+        .nullable()
         .trim()
         .typeError("must be valid")
         .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
       latest_shot: Yup.string()
+        .nullable()
         .trim()
         .typeError("must be valid")
         .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
