@@ -329,14 +329,19 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                     onClick={(e: any) => {
                       setFieldValue("nc_details.vaccine", e.target.value);
                       setVaccineStatus(e.target.value);
-                      // if (e.target.value === "exempted") {
-                      //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
-                      //   setFieldValue("nc_details.vaccination_dates.latest_shot", null);
-                      // }
+                      if (e.target.value === "exempted") {
+                        setFieldValue("nc_details.vaccination_dates.first_shot", "");
+                        setFieldValue("nc_details.vaccination_dates.latest_shot", "");
+                      }
 
-                      // if (e.target.value === "half") {
-                      //   setFieldValue("nc_details.vaccination_dates.first_shot", null);
-                      // }
+                      if (e.target.value === "half") {
+                        setFieldValue("nc_details.vaccination_dates.first_shot", "");
+                      }
+
+                      if(e.target.value === ''){
+                        setFieldValue("nc_details.vaccination_dates.first_shot", "");
+                        setFieldValue("nc_details.vaccination_dates.latest_shot", "");
+                      }
                     }}
                     SelectProps={showDropDownBelowField}
                     select
