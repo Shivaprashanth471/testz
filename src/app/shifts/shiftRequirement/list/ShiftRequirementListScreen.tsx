@@ -50,8 +50,8 @@ const ShiftRequirementListScreen = () => {
   const [selectedShifts, setSelectedShifts] = useState<any>(null)
   const [isAllselected, setAllSelected] = useState<boolean>(false);
   const [selectedCount, setSelectedCount] = useState<any>(-1)
-  const [isSelectedShifts, setIsSelectedShifts] = useState<boolean>(false)
-  console.log(selectedShifts)
+  // const [isSelectedShifts, setIsSelectedShifts] = useState<boolean>(false)
+  // console.log(selectedShifts)
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
