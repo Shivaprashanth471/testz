@@ -69,6 +69,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
   const [isSubmitting, setSubmitting] = useState<boolean>(true);
   const [searchHcp, setSearchHcp] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSelectedCount,setIsSelectedCount] = useState<any>(-1)
 
   const defaultOptions = {
     animationData,
@@ -88,9 +89,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
       };
     }
     // config
-    CommonService._api
-      .post(ENV.API_URL + "hcp/lite", payload)
-      .then((resp) => {
+    CommonService._api.post(ENV.API_URL + "hcp/lite", payload).then((resp) => {
         sethcpList(resp?.data);
         setIsLoading(false);
       })
@@ -100,16 +99,13 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
       });
   }, [hcp_type, searchHcp]);
 
-  const addHcpToshift = useCallback(
-    (hcp_id) => {
+  const addHcpToshift = useCallback((hcp_id) => {
       setSubmitting(false);
       let payload = {
         hcp_user_id: hcp_id,
         applied_by: user?._id,
       };
-      CommonService._api
-        .post(ENV.API_URL + "shift/requirement/" + id + "/application", payload)
-        .then((resp) => {
+      CommonService._api.post(ENV.API_URL + "shift/requirement/" + id + "/application", payload).then((resp) => {
           CommonService.showToast(resp?.msg || "Success", "success");
           if (afterConfirm) {
             setSubmitting(true);
@@ -133,8 +129,10 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
     let index = selectedHcps.indexOf(event.target.value);
     let tempHcps = [];
     if (index > -1) {
+      setIsSelectedCount(selectedHcps?.length-1===0?-1:selectedHcps?.length-1)
       tempHcps = selectedHcps.filter((item: any) => item !== event.target.value);
     } else {
+      setIsSelectedCount(selectedHcps?.length+1)
       tempHcps = [...selectedHcps, event.target.value];
     }
     setSelectedHcps(tempHcps);
@@ -210,7 +208,7 @@ const AddHcpToShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProp
             <Button type={"submit"} size="large" variant={"outlined"} className={"normal"} onClick={cancel}>
               Cancel
             </Button>
-            <Button type={"submit"} color={"primary"} size="large" disabled={!isSubmitting} variant={"contained"} className={!isSubmitting ? "mrg-left-30 has-loading-spinner" : "mrg-left-30"} onClick={() => addAllHcpToshift()}>
+            <Button type={"submit"} color={"primary"} size="large" disabled={isSelectedCount===-1 || !isSubmitting} variant={"contained"} className={!isSubmitting ? "mrg-left-30 has-loading-spinner" : "mrg-left-30"} onClick={() => addAllHcpToshift()}>
               {!isSubmitting ? "Adding Hcp" : "Add Hcp"}
             </Button>
           </div>

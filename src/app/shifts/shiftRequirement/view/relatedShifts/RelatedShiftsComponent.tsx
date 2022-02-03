@@ -80,7 +80,7 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
                                     </TableCell>
 
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                        <Link to={'/hcp/user/view/' + row['hcp_user_id']} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                        <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
                                             {('View Details')}
                                         </Link>
                                     </TableCell>

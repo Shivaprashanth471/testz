@@ -22,9 +22,7 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
 
   const getHcpUserDetails = useCallback(() => {
     setIsLoading(true);
-    CommonService._api
-      .get(ENV.API_URL + "hcp/user/" + hcpId)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/user/" + hcpId).then((resp) => {
         setHcpUserDetails(resp.data);
         setIsLoading(false);
       })
@@ -35,9 +33,7 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
 
   const init = useCallback(() => {
     setIsLoading(true);
-    CommonService._api
-      .get(ENV.API_URL + `shift/requirement/${requirementId}`)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + `shift/requirement/${requirementId}`).then((resp) => {
         setBasicDetails(resp?.data);
         setIsLoading(false);
       })
@@ -51,6 +47,7 @@ const PendingShiftsViewComponent = (props: PropsWithChildren<PendingShiftsViewCo
     init();
     getHcpUserDetails();
   }, [init, getHcpUserDetails]);
+  
   const { start_time, end_time } = CommonService.getUtcTimeInAMPM(basicDetails?.shift_timings?.start_time, basicDetails?.shift_timings?.end_time);
   const shift_date = CommonService.getUtcDate(basicDetails?.shift_date);
 

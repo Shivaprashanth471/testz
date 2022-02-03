@@ -103,6 +103,7 @@ const AddGroupScreen = () => {
             setIsGroupAdded(false)
         })
     }
+    
     useEffect(() => {
         let temp: any = []
         list?.table?.data?.forEach((item: any) => {

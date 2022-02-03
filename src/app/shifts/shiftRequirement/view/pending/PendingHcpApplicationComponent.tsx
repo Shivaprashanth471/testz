@@ -85,15 +85,15 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
     }, [init])
 
     return <div className='pending-shift-applications-hcps-list'>
-        {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
-        </div>}
         <DialogComponent open={isRejectOpen} cancel={cancelRejectApplication}>
             <RejectHcpApplicationComponent cancel={cancelRejectApplication} confirm={confirmRejectApplication} requirementId={id} applicationId={applicationId} />
         </DialogComponent>
         <DialogComponent open={isApproveOpen} cancel={cancelApprove}>
             <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} applicationId={applicationId} confirm={confirmApprove} requirementId={id} />
         </DialogComponent>
+        {list && list.table?._isDataLoading && <div className="table-loading-indicator">
+            <LinearProgress />
+        </div>}
         {list && list.table && <>
             <TableContainer component={Paper} className={'table-responsive'}>
                 <Table stickyHeader className="mat-table table shifts-requirment-pending-list-table">

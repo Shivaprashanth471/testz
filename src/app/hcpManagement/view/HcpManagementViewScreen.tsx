@@ -1,5 +1,5 @@
 // import HcpAssessmentRatingComponent from "./assessmentRatings/HcpAssessmentRatingComponent";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -55,12 +55,10 @@ const HcpManagementViewScreen = () => {
 
   const init = useCallback(() => {
     // config
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id)
-      .then((resp) => {
-        setBasicDetails(resp.data);
-        setIsLoading(false);
-      })
+    CommonService._api.get(ENV.API_URL + "hcp/" + id).then((resp) => {
+      setBasicDetails(resp.data);
+      setIsLoading(false);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -164,9 +162,11 @@ const HcpManagementViewScreen = () => {
           <div className="hcp_view_details">
             <div className="d-flex profile-status-wrapper">
               <div>
-                <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/edit/${id}`}>
-                  Edit HCP
-                </Button>
+                <Tooltip title="Edit Hcp">
+                  <Button variant={"contained"} color={"primary"} disabled={hcpBasicDetails?.status === "rejected"} component={Link} to={`/hcp/edit/${id}`}>
+                    Edit HCP
+                  </Button>
+                </Tooltip>
               </div>
             </div>
             <div className="mrg-top-15">
@@ -223,16 +223,20 @@ const HcpManagementViewScreen = () => {
             <div style={{ justifyContent: "center" }} className="mrg-top-50 d-flex button-wrapper">
               <AccessControlComponent role={[HUMANRESOURCE, ADMIN]}>
                 {hcpBasicDetails?.status === "pending" ? (
-                  <Button variant={"outlined"} onClick={openAdd} className="mrg-right-20">
-                    Approve
-                  </Button>
+                  <Tooltip title="Approve Hcp">
+                    <Button variant={"outlined"} onClick={openAdd} className="mrg-right-20">
+                      Approve
+                    </Button>
+                  </Tooltip>
                 ) : (
                   <></>
                 )}
                 {hcpBasicDetails?.status === "pending" ? (
-                  <Button variant={"outlined"} className="mrg-right-20" onClick={openRejectHcp}>
-                    Reject
-                  </Button>
+                  <Tooltip title="Reject Hcp">
+                    <Button variant={"outlined"} className="mrg-right-20" onClick={openRejectHcp}>
+                      Reject
+                    </Button>
+                  </Tooltip>
                 ) : (
                   <></>
                 )}

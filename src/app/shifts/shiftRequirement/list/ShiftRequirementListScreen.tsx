@@ -47,6 +47,11 @@ const ShiftRequirementListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftReqPageSizeIndex", 10);
 
+  const [selectedShifts, setSelectedShifts] = useState<any>(null)
+  const [isAllselected, setAllSelected] = useState<boolean>(false);
+  const [selectedCount, setSelectedCount] = useState<any>(-1)
+  const [isSelectedShifts, setIsSelectedShifts] = useState<boolean>(false)
+  console.log(selectedShifts)
   const getHcpTypes = useCallback(() => {
     CommonService._api
       .get(ENV.API_URL + "meta/hcp-types")
@@ -188,6 +193,41 @@ const ShiftRequirementListScreen = () => {
     // eslint-disable-next-line
   }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType]);
 
+  const handleSelectAll = (event: any) => {
+    selectedShifts?.forEach((item: any) => {
+      item.checked = event.target.checked
+    })
+    if(event.target.checked===true){
+    setSelectedCount(1)
+    }else{
+      setSelectedCount(-1)
+    }
+    setSelectedShifts(selectedShifts)
+    setAllSelected(event.target.checked)
+  }
+
+  const handleSelectShifts = (event: any, index: any) => {
+    let temp = selectedShifts?.filter((item:any)=>item?.checked===true)
+    if(event?.target?.checked === false){
+      console.log(212,temp)
+    setSelectedCount(temp.length-1===0?-1:temp.length)
+    }else{
+      console.log(215)
+      setSelectedCount(1)
+    }
+    selectedShifts[index].checked = event.target.checked
+    setSelectedShifts([...selectedShifts])
+  }
+
+  useEffect(() => {
+    let temp: any = []
+    list?.table?.data?.forEach((item: any) => {
+        item = {...item, checked: false }
+        temp.push(item)
+    })
+    setSelectedShifts(temp)
+}, [list])
+
   const clearFilterValues = () => {
     setSelectedTimeTypes([]);
     setSelectedFacilities([]);
@@ -287,7 +327,14 @@ const ShiftRequirementListScreen = () => {
               </div>
             </div>
             <div className="actions d-flex">
-              <div></div>
+            <div className="mrg-left-20">
+                <Tooltip title={"Cancel Shift Requirement"}>
+                  <Button variant={"contained"} color={"primary"} disabled={selectedCount===-1}>
+                    <AddRounded />
+                    &nbsp;&nbsp;Cancel Shift&nbsp;&nbsp;
+                  </Button>
+                </Tooltip>
+              </div>
               <div className="mrg-left-20">
                 <Tooltip title={"Add New Shift Requirement"}>
                   <Button component={Link} to={"/shift/add"} variant={"contained"} color={"primary"}>
@@ -304,6 +351,9 @@ const ShiftRequirementListScreen = () => {
                 <Table stickyHeader className="mat-table table shift-requirement-list-table">
                   <TableHead className={"mat-thead"}>
                     <TableRow className={"mat-tr"}>
+                      <TableCell padding="checkbox" className="mat-th">
+                        <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                      </TableCell>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
                         <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
                           {column}
@@ -317,7 +367,10 @@ const ShiftRequirementListScreen = () => {
                       const { start_time, end_time } = CommonService.getUtcTimeInAMPM(row["shift_timings"]?.start_time, row["shift_timings"]?.end_time);
                       const shift_date = CommonService.getUtcDate(row["shift_date"]);
                       return (
-                        <TableRow  role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                        <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
+                          <TableCell className="mat-td mat-td-checkbox">
+                            <input type={"checkbox"} id={"cb_" + rowIndex} checked={selectedShifts[rowIndex]?.checked} onChange={(event) => handleSelectShifts(event, rowIndex)} />
+                          </TableCell>
                           <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
                           <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
                           <TableCell className="mat-td mat-td-shift-date">{shift_date}</TableCell>
@@ -342,17 +395,17 @@ const ShiftRequirementListScreen = () => {
                 </Table>
               </TableContainer>
               <TablePagination
-                  rowsPerPageOptions={list.table.pagination.pageSizeOptions}
-                  component="div"
-                  count={list?.table.pagination.totalItems}
-                  rowsPerPage={list?.table.pagination.pageSize}
-                  page={list?.table.pagination.pageIndex}
-                  onPageChange={(event, page) => list.table.pageEvent(page)}
-                  onRowsPerPageChange={(event) => {
-                    setPageSizeIndex(event.target.value);
-                    list.table?.pageEvent(0, +event.target.value);
-                  }}
-                />
+                rowsPerPageOptions={list.table.pagination.pageSizeOptions}
+                component="div"
+                count={list?.table.pagination.totalItems}
+                rowsPerPage={list?.table.pagination.pageSize}
+                page={list?.table.pagination.pageIndex}
+                onPageChange={(event, page) => list.table.pageEvent(page)}
+                onRowsPerPageChange={(event) => {
+                  setPageSizeIndex(event.target.value);
+                  list.table?.pageEvent(0, +event.target.value);
+                }}
+              />
             </>
           )}
         </div>

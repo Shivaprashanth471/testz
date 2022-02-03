@@ -1,6 +1,6 @@
 // import HcpAssessmentRatingComponent from "./assessmentRatings/HcpAssessmentRatingComponent";
 // import HcpContractComponent from "./contract/HcpContractComponent";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -52,9 +52,11 @@ const HcpManagementViewScreen = (props: any) => {
           <div className="hcp_view_details">
             <div className="d-flex profile-status-wrapper">
               <div>
-                <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/edit/${hcpBasicDetails?._id}`}>
-                  Edit HCP
-                </Button>
+                <Tooltip title="Edit Hcp">
+                  <Button variant={"contained"} color={"primary"} component={Link} to={`/hcp/edit/${hcpBasicDetails?._id}`}>
+                    Edit HCP
+                  </Button>
+                </Tooltip>
               </div>
             </div>
             <div className="mrg-top-20">

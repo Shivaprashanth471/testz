@@ -11,8 +11,10 @@ import './ForgotPasswordScreen.scss';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { FormLabel } from "@material-ui/core";
 
+let isEmail = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{1,63}$')
+
 const forgotPasswordFormValidation = Yup.object({
-  email: Yup.string().required("Required"),
+  email: Yup.string().email().matches(isEmail, "Invalid Email").required("Required")
 });
 
 const restPasswordFormValidation = Yup.object({
@@ -87,8 +89,7 @@ const ForgotPasswordScreen = (props: any) => {
 
   const onSetPassword = useCallback((payload: any, { setSubmitting, setErrors }: FormikHelpers<any>) => {
     payload.email = email;
-    CommonService._api.post(ENV.API_URL + "resetPassword", payload)
-      .then((resp) => {
+    CommonService._api.post(ENV.API_URL + "resetPassword", payload).then((resp) => {
         setSubmitting(false);
         if (resp.success) {
           CommonService.showToast(resp.msg || "Success", "success");
@@ -133,7 +134,7 @@ const ForgotPasswordScreen = (props: any) => {
                     color={"primary"}
                     placeholder={"Enter Email Address"}
                     component={TextField}
-                    type={"email"}
+                    type={"text"}
                     fullWidth
                     autoComplete="off"
                     name="email"
