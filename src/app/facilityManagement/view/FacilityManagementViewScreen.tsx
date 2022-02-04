@@ -76,6 +76,7 @@ const FacilityManagementViewScreen = (props: any) => {
         console.log(err);
       });
   }, [id]);
+  
 
   useEffect(() => {
     let prevLocation:any="/facility/list";
