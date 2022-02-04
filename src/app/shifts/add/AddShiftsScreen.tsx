@@ -407,7 +407,7 @@ const AddShiftsScreen = () => {
                       <div className="shift-mode">
 
                         <div className="">
-                          <FormLabel className={"form-label"}>"Date Mode"</FormLabel>
+                          <FormLabel className={"form-label"}>Date Mode</FormLabel>
                         </div>
                         <div className="mrg-top-10">
                           <Field required component={RadioGroup} name="mode" onChange={(e: any) => {

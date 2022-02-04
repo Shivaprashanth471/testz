@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
+import { Box, FormControlLabel, MenuItem, Radio, Tooltip } from "@material-ui/core";
 import FormLabel from "@material-ui/core/FormLabel";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import { Field, FieldProps, Form, Formik } from "formik";
@@ -199,12 +199,16 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             </div>
                           </div>
                           <div className="d-flex contract_actions mrg-top-5 mrg-left-5">
-                            <p style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-image">
-                              View
-                            </p>
-                            <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>
-                              Delete
-                            </p>
+                            <Tooltip title={"View Contract"}>
+                              <p style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-image">
+                                View
+                              </p>
+                            </Tooltip>
+                            <Tooltip title={"Delete Contract"}>
+                              <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>
+                                Delete
+                              </p>
+                            </Tooltip>
                           </div>
                         </div>
                       </div>
@@ -217,9 +221,11 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                   <div>
                     <h3 className="card-header">Contract</h3>
                     <Box display="flex" gridGap="10px">
+                    <Tooltip title={"Upload Contract"}>
                       <Box width="250px" className="mrg-top-10">
                         <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
                       </Box>
+                      </Tooltip>
                     </Box>
                   </div>
                 )}
@@ -336,7 +342,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                         setFieldValue("nc_details.vaccination_dates.first_shot", "");
                       }
 
-                      if(e.target.value === ''){
+                      if (e.target.value === '') {
                         setFieldValue("nc_details.vaccination_dates.first_shot", "");
                         setFieldValue("nc_details.vaccination_dates.latest_shot", "");
                       }

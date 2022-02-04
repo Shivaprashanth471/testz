@@ -148,9 +148,11 @@ const ClosedShiftsViewScreen = () => {
             </div>
             <div className="flex-1 actions-wrapper">
               <div className="button">
+              <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
                 <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}>
                   View Details
                 </Button>
+                </Tooltip>
               </div>
             </div>
           </div>

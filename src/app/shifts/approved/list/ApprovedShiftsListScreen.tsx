@@ -47,9 +47,7 @@ const ApprovedShiftsListScreen = () => {
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftApprovePageSizeIndex", 10);
 
   const getHcpTypes = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-types")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
         setHcpTypes(resp.data || []);
       })
       .catch((err) => {
@@ -58,9 +56,7 @@ const ApprovedShiftsListScreen = () => {
   }, []);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
         setRegions(resp.data || []);
       })
       .catch((err) => {

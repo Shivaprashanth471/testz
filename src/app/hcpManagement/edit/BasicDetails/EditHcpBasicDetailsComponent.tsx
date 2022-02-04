@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
+import { Box, FormControlLabel, MenuItem, Radio, Tooltip } from "@material-ui/core";
 import FormLabel from "@material-ui/core/FormLabel";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import { Field, FieldProps, Form, Formik } from "formik";
@@ -286,21 +286,21 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               </div>
 
               <div className="input-container">
-             
+
                 <Field
                   onClick={(e: any) => {
                     setFieldValue("nc_details.vaccine", e.target.value);
                     setVaccineStatus(e.target.value);
-                    if(e.target.value === 'exempted'){
+                    if (e.target.value === 'exempted') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                       setFieldValue("nc_details.vaccination_dates.latest_shot", '');
                     }
-                    if(e.target.value === ''){
+                    if (e.target.value === '') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                       setFieldValue("nc_details.vaccination_dates.latest_shot", '');
                     }
 
-                    if(e.target.value === 'half'){
+                    if (e.target.value === 'half') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                     }
                   }}
@@ -585,9 +585,11 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                       <div className="file_details mrg-left-20"></div>
                     </div>
                     <div className="contract_actions mrg-left-5 mrg-top-10 ">
-                      <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} onClick={openDeleteContract} className="delete-button mrg-left-10">
-                        Delete
-                      </button>
+                      <Tooltip title={`Delete Contract`}>
+                        <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} onClick={openDeleteContract} className="delete-button mrg-left-10">
+                          Delete
+                        </button>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>
@@ -604,12 +606,16 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <div className="file_details mrg-left-20"></div>
                           </div>
                           <div className="d-flex contract_actions mrg-left-5 mrg-top-10">
-                            <button style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-button">
-                              View
-                            </button>
-                            <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>
-                              Delete
-                            </button>
+                            <Tooltip title={"View Contract"}>
+                              <button style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-button">
+                                View
+                              </button>
+                            </Tooltip>
+                            <Tooltip title={"Delete Contract"}>
+                              <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>
+                                Delete
+                              </button>
+                            </Tooltip>
                           </div>
                         </div>
                       </div>
@@ -619,9 +625,11 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                     <></>
                   ) : (
                     <Box display="flex" gridGap="10px">
-                      <Box width="250px" className="mrg-top-10">
-                        <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
-                      </Box>
+                      <Tooltip title={"Upload Contract"}>
+                        <Box width="250px" className="mrg-top-10">
+                          <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
+                        </Box>
+                      </Tooltip>
                     </Box>
                   )}
                 </>

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import DialogComponent from "../../../../components/DialogComponent";
 import { Tab, Tabs } from '@material-ui/core';
 import "./RequirementsShiftsViewScreen.scss";
@@ -60,8 +60,7 @@ const RequirementsShiftsViewScreen = () => {
 
     const cancelRejectShift = useCallback(() => {
         setRejectShiftOpen(false);
-        getShiftDetails()
-    }, [getShiftDetails])
+    }, [])
 
     const confirmRejectShift = useCallback(() => {
         setRejectShiftOpen(false);
@@ -83,7 +82,7 @@ const RequirementsShiftsViewScreen = () => {
     return <div className="pending-shifts-view screen crud-layout pdd-30">
 
         <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
-            <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={null}/>
+            <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={null} />
         </DialogComponent>
         <DialogComponent open={isAddOpen} cancel={cancelAdd}>
             <AddHcpToShiftScreen cancel={cancelAdd} confirm={confirmAdd} hcp_type={basicDetails?.hcp_type} />
@@ -94,9 +93,11 @@ const RequirementsShiftsViewScreen = () => {
                 <div className="filter"></div>
                 <div className="actions">
                     {basicDetails?.status !== "cancelled" ?
-                        <Button variant={"contained"} onClick={openRejectShift} color={"primary"} >
-                            Cancel Shift Requirement
-                        </Button> : <p className='status-header'>Status:&nbsp;<span className='status'>Cancelled</span></p>}
+                        <Tooltip title={`Cancel Shift Requirement`}>
+                            <Button variant={"contained"} onClick={openRejectShift} color={"primary"} >
+                                Cancel Shift Requirement
+                            </Button>
+                        </Tooltip> : <p className='status-header'>Status:&nbsp;<span className='status'>Cancelled</span></p>}
                 </div>
             </div>
             <div className="facility-details custom-border">
@@ -172,9 +173,11 @@ const RequirementsShiftsViewScreen = () => {
             <div className="header mrg-top-20">
                 <div className="filter"></div>
                 <div className="actions">
+                <Tooltip title={`Add Hcp to Shift Requirement`}>
                     <Button variant={"contained"} onClick={openAdd} color={"primary"} disabled={basicDetails?.status === "cancelled"} >
                         <AddRounded />&nbsp;&nbsp; Add Hcp
                     </Button>
+                    </Tooltip>
                 </div>
             </div>
             <div className="hcp_tabs mrg-top-10 custom-border pdd-10">
@@ -186,7 +189,7 @@ const RequirementsShiftsViewScreen = () => {
                         textColor="primary"
                         variant="fullWidth"
                         scrollButtons="auto"
-                    >   
+                    >
                         <Tab label="HCP's Pending" value={'pending'} />
                         <Tab label="HCP's Approved" value={"approved"} />
                         <Tab label="HCP's Unapproved" value={"rejected"} />

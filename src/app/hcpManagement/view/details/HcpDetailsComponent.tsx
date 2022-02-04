@@ -19,9 +19,7 @@ const HcpDetailsComponent = (props: any) => {
 
   const getAttachmentsDetails = useCallback(() => {
     setAttachmentLoading(true);
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/attachments")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/attachments").then((resp) => {
         setAttachmentsDetails(resp?.data);
         setAttachmentLoading(false);
       })
@@ -30,8 +28,6 @@ const HcpDetailsComponent = (props: any) => {
         setAttachmentLoading(false);
       });
   }, [id]);
-
-  // console.log(attachmentsDetails)
 
   useEffect(() => {
     getAttachmentsDetails();
@@ -63,7 +59,6 @@ const HcpDetailsComponent = (props: any) => {
 
     setSortedAttachments([...tempAttachemnts]);
   }, [attachmentsDetails]);
-  console.log(sortedAttachments);
 
   const StyledLoader = () => {
     return (

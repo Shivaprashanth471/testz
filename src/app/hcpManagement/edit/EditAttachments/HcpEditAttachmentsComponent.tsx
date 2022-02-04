@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from "react";
 import NormalTextField from '@material-ui/core/TextField';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
+import { Tooltip } from "@material-ui/core";
 
 export interface HcpEditAttachmentsComponentProps {
     fileUpload: any;
@@ -49,11 +50,15 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => handleExpiryDate(event, item?.index)}
                                         value={fileUpload?.wrapper[item?.index]?.extraPayload?.expiry_date}
-                                        disabled={item?.attachment_type === "SSN Card" || item?.attachment_type==="Covid Vaccine Card" || item?.attachment_type==="Vaccine Exemption Letter"}
+                                        disabled={item?.attachment_type === "SSN Card" || item?.attachment_type === "Covid Vaccine Card" || item?.attachment_type === "Vaccine Exemption Letter"}
                                     />
                                     <div className="file_actions d-flex">
+                                        <Tooltip title={`View ${item?.attachment_type}`}>
                                         <button style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-button mrg-top-15">View</button>
+                                        </Tooltip>
+                                        <Tooltip title={`Delete ${item?.attachment_type}`}>
                                         <button style={{ cursor: "pointer", width: '50px' }} disabled={isDeleted} className="delete-button mrg-left-20 mrg-top-15" onClick={() => deleteLocalAttachment(index)}>Delete</button>
+                                        </Tooltip>
                                     </div>
                                 </div>
                             </div>
@@ -66,9 +71,13 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                     <div className="attachments">
                         <div className="mrg-top-40">
                             <h3 className="attachement_name mrg-left-10 file_attachment_title">{item?.attachment_type}</h3>
-                            <FileDropZoneComponent allowedTypes={".pdf"}
-                                OnFileSelected={(item1) => OnFileSelected(item1, item?.id)}
-                            />
+                            <Tooltip title={`Upload ${item?.attachment_type}`}>
+                                <div>
+                                    <FileDropZoneComponent allowedTypes={".pdf"}
+                                        OnFileSelected={(item1) => OnFileSelected(item1, item?.id)}
+                                    />
+                                </div>
+                            </Tooltip>
                         </div>
                     </div>
                 )
@@ -100,13 +109,15 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                                     value={item.expiry_date}
                                 />
                                 <div className="file_actions">
-                                    <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={(e) => openDeleteAttachment(e, item)}>Delete</button>
+                                    <Tooltip title={`Delete ${item.attachment_type}`}>
+                                        <button style={{ cursor: "pointer", width: '50px' }} className="delete-button mrg-top-15" disabled={isDeleted} onClick={(e) => openDeleteAttachment(e, item)}>Delete</button>
+                                    </Tooltip>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
             )
         })
     }

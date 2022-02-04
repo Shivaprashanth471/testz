@@ -110,7 +110,7 @@ const ShiftMasterViewScreen = () => {
           CommonService.showToast(resp.msg || resp.error, "success");
         }
       };
-      uploadWrapper.onProgress = (progress) => {};
+      uploadWrapper.onProgress = (progress) => { };
       setFileUpload((prevState) => {
         let state: TsFileUploadWrapperClass[] = [];
         if (prevState) {
@@ -153,9 +153,8 @@ const ShiftMasterViewScreen = () => {
   }, []);
 
   const cancelBreaksOpen = useCallback(() => {
-    getShiftDetails();
     setBreaksOpen(false);
-  }, [getShiftDetails]);
+  }, []);
 
   const confirmBreaksOpen = useCallback(() => {
     setBreaksOpen(false);
@@ -347,15 +346,21 @@ const ShiftMasterViewScreen = () => {
           <div className="header mrg-top-10 mrg-bottom-0">
             <div className="filter"></div>
             <div className="actions">
-              <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} disabled={basicDetails?.shift_status === "cancelled"}>
-                CheckIn
-              </Button>
-              <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
-                Break-In/Out
-              </Button>
-              <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
-                CheckOut
-              </Button>
+              <Tooltip title={`Add CheckIn Timings`}>
+                <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} disabled={basicDetails?.shift_status === "cancelled"}>
+                  CheckIn
+                </Button>
+              </Tooltip>
+              <Tooltip title={`Add Break In / Break Out Timings`}>
+                <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
+                  Break-In/Out
+                </Button>
+              </Tooltip>
+              <Tooltip title={`Add CheckOut Timings`}>
+                <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
+                  CheckOut
+                </Button>
+              </Tooltip>
             </div>
           </div>
           <div className="mrg-top-10 custom-border pdd-top-10">
@@ -438,12 +443,16 @@ const ShiftMasterViewScreen = () => {
                                       </div>
                                     </div>
                                     <div className="d-flex file_actions">
+                                    <Tooltip title={`View ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
                                       <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>
                                         View
                                       </p>
+                                      </Tooltip>
+                                      <Tooltip title={`Delete ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
                                       <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>
                                         Delete
                                       </p>
+                                      </Tooltip>
                                     </div>
                                   </div>
                                 </>
@@ -453,7 +462,11 @@ const ShiftMasterViewScreen = () => {
                                 <div className="attachments">
                                   <div className="">
                                     <h3 className="attachement_name file_attachment_title">{item?.name}</h3>
-                                    <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
+                                    <Tooltip title={`Upload ${item?.name}`}>
+                                      <div>
+                                        <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
+                                      </div>
+                                    </Tooltip>
                                   </div>
                                 </div>
                               );

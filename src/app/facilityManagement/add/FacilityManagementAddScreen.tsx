@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import { FormikHelpers } from "formik";
+import { Tooltip } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-phone-number-input/style.css";
 import { useHistory } from "react-router-dom";
@@ -46,7 +47,7 @@ const FacilityManagementAddScreen = () => {
     setOpen(false);
   }, []);
 
-  useEffect(() => {}, [shiftTimings]);
+  useEffect(() => { }, [shiftTimings]);
 
   const OnFileSelected = (files: File[]) => {
     for (let file of files) {
@@ -97,7 +98,7 @@ const FacilityManagementAddScreen = () => {
     setTimeout(() => setIsImage(!isImage), 1000);
   };
 
-  useEffect(() => {}, [isImage]);
+  useEffect(() => { }, [isImage]);
 
   const handleFacilityImageUpload = useCallback(
     async (link: any) => {
@@ -283,9 +284,12 @@ const FacilityManagementAddScreen = () => {
         </div>
 
         <div className="facility-actions mrg-top-60">
-          <Button type="reset" size="large" variant={"outlined"} className={"normal"} color="primary" onClick={openAdd} id="btn_facility_add_cancel">
-            Cancel
-          </Button>
+          <Tooltip title={"Cancel"}>
+            <Button type="reset" size="large" variant={"outlined"} className={"normal"} color="primary" onClick={openAdd} id="btn_facility_add_cancel">
+              Cancel
+            </Button>
+          </Tooltip>
+          <Tooltip title={"Save Changes"}>
           <Button
             disabled={isFacilitySubmitting}
             form="facility-add-form"
@@ -298,6 +302,7 @@ const FacilityManagementAddScreen = () => {
           >
             {isFacilitySubmitting ? "Saving" : "Save"}
           </Button>
+          </Tooltip>
         </div>
         <ScrollToTop smooth color="white" />
       </div>

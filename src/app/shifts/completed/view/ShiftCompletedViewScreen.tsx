@@ -3,7 +3,7 @@ import { ENV } from "../../../../constants";
 import { CommonService, Communications } from "../../../../helpers";
 import "./ShiftCompletedViewScreen.scss";
 import { Link, useParams } from "react-router-dom";
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, Tooltip } from "@material-ui/core";
 import moment from "moment";
 import ShiftTimeline from "../../timeline/ShiftTimeline";
 import LoaderComponent from "../../../../components/LoaderComponent";
@@ -15,9 +15,7 @@ const ShiftCompletedViewScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getShiftDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "shift/" + id)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "shift/" + id).then((resp) => {
         setBasicDetails(resp.data);
         setIsLoading(false);
       })
@@ -95,9 +93,11 @@ const ShiftCompletedViewScreen = () => {
             </div>
             <div className="flex-1 actions-wrapper">
               <div className="button">
+              <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
                 <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/completedShifts/view/" + id } }}>
                   View Details
                 </Button>
+                </Tooltip>
               </div>
             </div>
           </div>

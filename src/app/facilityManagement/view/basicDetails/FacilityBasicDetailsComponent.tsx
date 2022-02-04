@@ -42,9 +42,11 @@ const FacilityBasicDetailsComponent = (props: any) => {
           <div className="d-flex edit-facility-wrapper">
             <h3>Basic Details</h3>
             <div>
+              <Tooltip title={`Edit ${facilityDetails?.facility_name}`}>
               <Button variant={"contained"} color={"primary"} component={Link} to={`/facility/edit/` + id}>
                 Edit Facility
               </Button>
+              </Tooltip>
             </div>
           </div>
           <div className="d-flex ">

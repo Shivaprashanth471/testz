@@ -1,4 +1,4 @@
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, Tooltip } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,12 +15,12 @@ import { ENV } from '../../../../../constants';
 import { ApiService } from '../../../../../helpers';
 import './RelatedShiftsComponent.scss';
 
-export interface RelatedShiftsComponentProps{
-    isAddOpen:boolean
+export interface RelatedShiftsComponentProps {
+    isAddOpen: boolean
 }
 
-const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentProps>) => {
-    const isAddOpen=props?.isAddOpen
+const RelatedShiftsComponent = (props: PropsWithChildren<RelatedShiftsComponentProps>) => {
+    const isAddOpen = props?.isAddOpen
     const param = useParams<any>()
     const { id } = param
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -28,8 +28,8 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
 
     const init = useCallback(() => {
         const options = new TsDataListOptions({
-            webMatColumns: ['HCP Name', 'Applied On', 'HCP Rate','HCP Type', 'Approved By', 'Actions'],
-            mobileMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'HCP Type','Approved By', 'Actions'],
+            webMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'HCP Type', 'Approved By', 'Actions'],
+            mobileMatColumns: ['HCP Name', 'Applied On', 'HCP Rate', 'HCP Type', 'Approved By', 'Actions'],
         }, ENV.API_URL + 'shift/requirement/' + id + '/shift', setList, ApiService, 'get');
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
@@ -37,7 +37,7 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
 
     useEffect(() => {
         init()
-    }, [init,isAddOpen])
+    }, [init, isAddOpen])
     return <div className="related-shifts-list">
         {list && list.table?._isDataLoading && <div className="table-loading-indicator">
             <LinearProgress />
@@ -48,7 +48,7 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
                     <TableHead className={"mat-thead"}>
                         <TableRow className={"mat-tr"}>
                             {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                <TableCell className = { column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
+                                <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                     key={'header-col-' + columnIndex}
                                 >
                                     {column}
@@ -56,13 +56,13 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
                             ))}
                         </TableRow>
                     </TableHead>
-                    <TableBody  className={"mat-tbody"}>
+                    <TableBody className={"mat-tbody"}>
                         {list.table.canShowNoData() &&
-                      <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
-                  } 
+                            <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
+                        }
                         {list?.table.data.map((row: any, rowIndex: any) => {
                             return (
-                                <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-'+rowIndex}>
+                                <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                     <TableCell className="mat-td mat-td-hcp-name">
                                         {row['hcp_user']?.first_name}&nbsp;{row['hcp_user']?.last_name}
                                     </TableCell>
@@ -78,11 +78,12 @@ const RelatedShiftsComponent = (props:PropsWithChildren<RelatedShiftsComponentPr
                                     <TableCell className="mat-td mat-td-approved-name">
                                         {row['approved_by']?.first_name} &nbsp;{row['approved_by']?.last_name}
                                     </TableCell>
-
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                        <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                            {('View Details')}
-                                        </Link>
+                                        <Tooltip title={`View ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Details`}>
+                                            <Link to={{ pathname: '/hcp/user/view/' + row['hcp_user_id'], state: { prevPath: "/shiftsRequirements/view/" + id } }} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                {('View Details')}
+                                            </Link>
+                                        </Tooltip>
                                     </TableCell>
                                 </TableRow>
                             )

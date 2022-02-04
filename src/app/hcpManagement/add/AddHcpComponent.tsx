@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -412,12 +412,10 @@ const AddHcpComponent = () => {
   };
 
   const getHcpTypes = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-types")
-      .then((resp) => {
-        setHcpTypes(resp.data || []);
-        setHcpTypesLoading(false);
-      })
+    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
+      setHcpTypes(resp.data || []);
+      setHcpTypesLoading(false);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -500,12 +498,16 @@ const AddHcpComponent = () => {
             <ReferenceAddComponent references={references} setReference={setReferences} />
           </div>
           <div className="add-hcp-actions mrg-top-80">
-            <Button size="large" onClick={openAdd} variant={"outlined"} color="primary" id="btn_hcp_add_cancel">
-              {"Cancel"}
-            </Button>
-            <Button disabled={isHcpSubmitting} form="add-hcp-form" type="submit" id="btn_hcp_add_save" size="large" variant={"contained"} color={"primary"} className={isHcpSubmitting ? "has-loading-spinner" : ""}>
-              {isHcpSubmitting ? "Saving" : "Save"}
-            </Button>
+            <Tooltip title={"Cancel"}>
+              <Button size="large" onClick={openAdd} variant={"outlined"} color="primary" id="btn_hcp_add_cancel">
+                {"Cancel"}
+              </Button>
+            </Tooltip>
+            <Tooltip title={"Save Changes"}>
+              <Button disabled={isHcpSubmitting} form="add-hcp-form" type="submit" id="btn_hcp_add_save" size="large" variant={"contained"} color={"primary"} className={isHcpSubmitting ? "has-loading-spinner" : ""}>
+                {isHcpSubmitting ? "Saving" : "Save"}
+              </Button>
+            </Tooltip>
           </div>
           <ScrollToTop smooth color="white" />
         </div>

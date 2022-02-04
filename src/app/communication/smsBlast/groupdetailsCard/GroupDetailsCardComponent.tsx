@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import "./GroupDetailsCardComponent.scss";
-import { Avatar } from "@material-ui/core";
+import { Avatar, Tooltip } from "@material-ui/core";
 import moment from "moment";
 
 export interface GroupDetailsCardComponentProps {
@@ -19,7 +19,8 @@ const GroupDetailsCardComponent = (props: PropsWithChildren<GroupDetailsCardComp
     }
   }
 
-  return (
+  return (<div>
+     <Tooltip title={`Select ${props?.data?.title}`}>
     <div className={invisible ? "group-details-card" : "group-details-card active-group"} onClick={props?.onClick}>
       <div className="message-details">
         <div className={"group-details"}>
@@ -35,6 +36,8 @@ const GroupDetailsCardComponent = (props: PropsWithChildren<GroupDetailsCardComp
           <p>{props?.showBlastHistory ? moment(props?.data?.updated_at).format("lll") : moment(props?.data?.created_at).format("lll")}</p>
         </div>
       </div>
+    </div>
+    </Tooltip>
     </div>
   );
 };

@@ -10,13 +10,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {  LinearProgress } from "@material-ui/core";
+import { LinearProgress, Tooltip } from "@material-ui/core";
 import './ApprovedHcpApplicationComponent.scss';
 import moment from 'moment';
 import NoDataCardComponent from '../../../../../components/NoDataCardComponent';
 
 export interface ApprovedHcpApplicationComponentProps {
-    isAddOpen:Boolean;
+    isAddOpen: Boolean;
 }
 
 const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApplicationComponentProps>) => {
@@ -26,8 +26,8 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
     const [list, setList] = useState<TsDataListState | null>(null);
     const init = useCallback(() => {
         const options = new TsDataListOptions({
-            webMatColumns: ['HCP Name','Approved By', 'Applied On', 'HCP Rate','Actions'],
-            mobileMatColumns: ['HCP Name','Approved By', 'Applied On', 'HCP Rate','Actions'],
+            webMatColumns: ['HCP Name', 'Approved By', 'Applied On', 'HCP Rate', 'Actions'],
+            mobileMatColumns: ['HCP Name', 'Approved By', 'Applied On', 'HCP Rate', 'Actions'],
         }, ENV.API_URL + 'shift/requirement/' + id + '/application?status=approved', setList, ApiService, 'get');
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
@@ -44,23 +44,23 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
             <TableContainer component={Paper} className={'table-responsive'}>
                 <Table stickyHeader className='mat-table table shifts-requirment-approved-list-table'>
                     <TableHead className={"mat-thead"}>
-                         <TableRow className={"mat-tr"}>
+                        <TableRow className={"mat-tr"}>
                             {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                <TableCell className = {column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
+                                <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                     key={'header-col-' + columnIndex}
-                                    >
+                                >
                                     {column}
                                 </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
-                   <TableBody className={"mat-tbody"}>
+                    <TableBody className={"mat-tbody"}>
                         {list.table.canShowNoData() &&
                             <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                         }
                         {list?.table.data.map((row: any, rowIndex: any) => {
                             return (
-                                <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-'+rowIndex}>
+                                <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                     <TableCell className="mat-td mat-td-hcp-name">
                                         {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
                                     </TableCell>
@@ -74,9 +74,11 @@ const ApprovedHcpApplicationComponent = (props: PropsWithChildren<ApprovedHcpApp
                                         {row['hcp_data']?.rate}
                                     </TableCell>
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                        <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
-                                            {('View Details')}
-                                        </Link>
+                                        <Tooltip title={`View ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Details`}>
+                                            <Link to={{ pathname: '/hcp/user/view/' + row['hcp_user_id'], state: { prevPath: "/shiftsRequirements/view/" + id } }} className="info-link" id={"link_hospital_details" + rowIndex} >
+                                                {('View Details')}
+                                            </Link>
+                                        </Tooltip>
                                     </TableCell>
                                 </TableRow>
                             )

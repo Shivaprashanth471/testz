@@ -249,8 +249,7 @@ console.log(isAllselected)
 
   const cancelRejectShift = useCallback(() => {
     setRejectShiftOpen(false);
-    getList()
-  }, [getList])
+  }, [])
 
   const confirmRejectShift = useCallback(() => {
     setRejectShiftOpen(false);
