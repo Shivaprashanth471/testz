@@ -309,12 +309,12 @@ const AddHcpComponent = () => {
         Promise.all(promArray)
           .then((resp) => {
             console.log({ resp });
-            history.push("/hcp/view/" + hcpId);
+            setTimeout(()=> history.push("/hcp/view/" + hcpId),600);
           })
           .catch((err) => console.log(err));
       } else {
         CommonService.showToast(hcpResp.msg || "Success", "success");
-        history.push("/hcp/view/" + hcpId);
+        setTimeout(()=> history.push("/hcp/view/" + hcpId),600);
       }
     },
     [fileUpload?.wrapper, onHandleAttachmentUpload, history, required_attachments]

@@ -121,7 +121,10 @@ export const hcpFormValidation = Yup.object({
     .trim()
     .typeError("must be valid")
     .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
-    last_call_date: Yup.string().typeError("must be date").nullable(),
+    last_call_date: Yup.string()
+    .trim()
+    .typeError("must be valid")
+    .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format").nullable(),
     contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),
     vaccination_dates: Yup.object({
