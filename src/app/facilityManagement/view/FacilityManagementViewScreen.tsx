@@ -65,30 +65,30 @@ const FacilityManagementViewScreen = (props: any) => {
       });
   }, [id]);
 
-    useEffect(() => {
-        let prevLocation:any="/facility/list";
-        if(props?.location.state){
-            prevLocation=props?.location.state?.prevPath;
-        }
-        init();
-        getFacilityMembers();
-        getShiftDetails();
-        Communications.pageTitleSubject.next('Facility Details');
-        Communications.pageBackButtonSubject.next(prevLocation);
-    }, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
-
+  const getFacilityMembers = useCallback(() => {
+    CommonService._api
+      .get(ENV.API_URL + "facility/" + id + "/member")
+      .then((resp) => {
+        // console.log(resp);
+        setFacilityMembers(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+  
 
   useEffect(() => {
-    let prevLocation: any = "/facility/tabs/" + id;
-    if (props?.location.state) {
-      prevLocation = props?.location.state?.prevPath;
+    let prevLocation:any="/facility/list";
+    if(props?.location.state){
+        prevLocation=props?.location.state?.prevPath;
     }
     init();
     getFacilityMembers();
     getShiftDetails();
-    Communications.pageTitleSubject.next("Facility Details");
+    Communications.pageTitleSubject.next('Facility Details');
     Communications.pageBackButtonSubject.next(prevLocation);
-  }, [init, getFacilityMembers, getShiftDetails, id, history, props?.location.state]);
+}, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
 
   if (isLoading) {
     return <LoaderComponent />;
