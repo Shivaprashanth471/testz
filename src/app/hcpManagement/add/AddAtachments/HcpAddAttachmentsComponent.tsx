@@ -80,43 +80,33 @@ const HcpAddAttachmentsComponent = (props: any) => {
       return { wrapper: [...(prevState || { wrapper: [] }).wrapper] };
     });
   };
+  return <div>
+    <div className="attachments_wrapper">
+      {required_attachments?.map((item: any, index: any) => {
+        if (item.index !== -1) {
+          return (<>
+            <div className="attachments">
+              <div className="custom_file mrg-top-0">
+                <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {required_attachments[index].name}</h3>
+                <div className="d-flex">
+                  <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
+                  <div className="file_details mrg-left-20 mrg-top-20">
+                    <NormalTextField
+                      required
+                      label="Expires On"
+                      type={"date"}
+                      InputLabelProps={{ shrink: true }}
+                      onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
+                      value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
+                      disabled={index === 5 || index === 8 || index === 11}
+                      inputProps={{
+                        max: '2999-01-01'
+                      }}
+                    />
+                    <div className="file_actions d-flex">
+                      <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
+                      <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-30" onClick={() => deleteFile(index, item?.index)}>Delete</p>
 
-  return (
-    <div>
-      <div className="attachments_wrapper">
-        {required_attachments?.map((item: any, index: any) => {
-          if (item.index !== -1) {
-            return (
-              <>
-                <div className="attachments">
-                  <div className="custom_file mrg-top-0">
-                    <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {required_attachments[index].name}</h3>
-                    <div className="d-flex">
-                      <div className="mrg-top-15">
-                        <InsertDriveFileIcon color={"primary"} className="file-icon" />
-                      </div>
-                      <div className="file_details mrg-left-20 mrg-top-20">
-                        <NormalTextField
-                          required
-                          label="Expires On"
-                          type={"date"}
-                          InputLabelProps={{ shrink: true }}
-                          onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
-                          value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
-                          disabled={index === 5}
-                          inputProps={{
-                            max: "2999-01-01",
-                          }}
-                        />
-                        <div className="file_actions d-flex">
-                          <p style={{ cursor: "pointer" }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">
-                            View
-                          </p>
-                          <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-30" onClick={() => deleteFile(index, item?.index)}>
-                            Delete
-                          </p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
