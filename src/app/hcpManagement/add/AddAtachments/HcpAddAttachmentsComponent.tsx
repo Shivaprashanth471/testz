@@ -103,7 +103,7 @@ const HcpAddAttachmentsComponent = (props: any) => {
                           InputLabelProps={{ shrink: true }}
                           onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                           value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
-                          disabled={index === 5}
+                          disabled={index === 5 || index === 8 || index === 11}
                           inputProps={{
                             max: "2999-01-01",
                           }}

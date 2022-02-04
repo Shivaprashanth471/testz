@@ -52,7 +52,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                       InputLabelProps={{ shrink: true }}
                       onChange={(event) => handleExpiryDate(event, item?.index)}
                       value={fileUpload?.wrapper[item?.index]?.extraPayload?.expiry_date}
-                      disabled={item?.attachment_type === "SSN Card"}
+                      disabled={item?.attachment_type === "SSN Card" || item?.attachment_type==="Covid Vaccine Card" || item?.attachment_type==="Vaccine Exemption Letter"}
                     />
                     <div className="file_actions d-flex">
                       <button style={{ cursor: "pointer" }} onClick={() => previewFile(item?.index, "attachment")} className="delete-button mrg-top-15">
