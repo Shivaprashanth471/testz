@@ -315,7 +315,7 @@ const FacilityManagementListScreen = () => {
                                                     }
                                                     <TableCell className="text-right mrg-right-10 position-sticky">
                                                         <Link
-                                                            to={"/facility/tabs/" + row?._id}
+                                                            to={"/facility/view/" + row?._id}
                                                             className="info-link "
                                                             id={"link_facility_details" + rowIndex}
                                                         >

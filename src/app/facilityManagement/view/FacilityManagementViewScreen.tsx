@@ -69,7 +69,7 @@ const FacilityManagementViewScreen = (props:any) => {
     }, [id])
 
     useEffect(() => {
-        let prevLocation:any="/facility/tabs/" + id;
+        let prevLocation:any="/facility/list";
         if(props?.location.state){
             prevLocation=props?.location.state?.prevPath;
         }
