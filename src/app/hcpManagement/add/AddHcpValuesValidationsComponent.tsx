@@ -110,7 +110,7 @@ export const AddHcpInitialValues = {
     is_gusto_onboarded: "",
     gusto_type: "",
     nc_last_updated: `${currentUser?.first_name} ${currentUser?.last_name}`,
-    last_call_date: null,
+    last_call_date: "",
     contact_type: "",
     other_information: "",
     is_vaccinated: "",
@@ -186,7 +186,7 @@ export const hcpFormValidation = Yup.object({
     last_call_date: Yup.string()
     .trim()
     .typeError("must be valid")
-    .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
+    .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format").nullable(),
     contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),
     vaccination_dates: Yup.object({
