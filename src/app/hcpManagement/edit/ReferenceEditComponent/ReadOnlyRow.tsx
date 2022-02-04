@@ -5,12 +5,12 @@ import React from "react";
 interface ReferenceReadOnlyRowProps {
   reference: any;
   openAdd: any;
-  index?: number
+  index?: number;
 }
 
 const ReadOnlyRow = ({ reference, openAdd }: ReferenceReadOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{
@@ -44,16 +44,16 @@ const ReadOnlyRow = ({ reference, openAdd }: ReferenceReadOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={reference.email ? reference.email : 'NA'}
+          value={reference.email ? reference.email : "NA"}
           disabled
         />
       </td>
 
       <td>
-      <Tooltip title={`Delete References`}>
-        <IconButton onClick={() => openAdd(reference?._id)}>
-          <DeleteIcon className="delete-icon" />
-        </IconButton>
+        <Tooltip title={`Delete References`}>
+          <IconButton onClick={() => openAdd(reference?._id)}>
+            <DeleteIcon className="delete-icon" />
+          </IconButton>
         </Tooltip>
       </td>
     </TableRow>

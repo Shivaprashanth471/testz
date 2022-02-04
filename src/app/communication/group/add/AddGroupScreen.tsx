@@ -103,6 +103,7 @@ const AddGroupScreen = () => {
             setIsGroupAdded(false)
         })
     }
+    
     useEffect(() => {
         let temp: any = []
         list?.table?.data?.forEach((item: any) => {
@@ -146,17 +147,18 @@ const AddGroupScreen = () => {
                         </div>
                     </div>
                 </div>
+                <div className="mrg-top-20 custom-border padding">
                 {list && list.table && <>
                     <TableContainer component={Paper} className={'table-responsive'}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell padding="checkbox">
+                        <Table stickyHeader className="mat-table table add-members-list-table">
+                            <TableHead className={"mat-thead"}>
+                                 <TableRow className={"mat-tr"}>
+                                    <TableCell padding="checkbox" className="mat-th">
                                         <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                                     </TableCell>
 
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} 
                                             key={'header-col-' + columnIndex}
                                         >
                                             {column}
@@ -164,23 +166,23 @@ const AddGroupScreen = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                           <TableBody className={"mat-tbody"}>
                                 {list.table.canShowNoData() &&
                                     <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                 }
                                 {list?.table.data.map((row: any, rowIndex: any) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
-                                            <TableCell>
+                                        <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
+                                            <TableCell className="mat-td mat-td-checkbox">
                                                 <input type={"checkbox"} id={"cb_" + rowIndex} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-name">
                                                 {row['first_name']} &nbsp; {row['last_name']}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-type">
                                                 {row['hcp_type']}
                                             </TableCell>
-                                            <TableCell >
+                                            <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                                 <Link to={'/hcp/view/' + row?._id} className="info-link" id={"link_hcp_details" + rowIndex} >
                                                     {('View Details')}
                                                 </Link>
@@ -201,6 +203,7 @@ const AddGroupScreen = () => {
                         />
                     </TableContainer>
                 </>}
+                </div>
                 <div className="button-wrapper">
                     <Button variant={"contained"} className={isGroupAdded?"add-button has-loading-spinner":"add-button"} color={"primary"} disabled={!title || isGroupAdded} onClick={onAdd}>{isGroupAdded ?"Adding  Group":"Add  Group"}</Button>
                 </div>

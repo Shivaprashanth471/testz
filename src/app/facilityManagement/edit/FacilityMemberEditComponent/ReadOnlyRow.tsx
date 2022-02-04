@@ -9,7 +9,7 @@ interface readOnlyRowProps {
 
 const ReadOnlyRow = ({ member, openAdd }: readOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{
@@ -30,7 +30,7 @@ const ReadOnlyRow = ({ member, openAdd }: readOnlyRowProps) => {
         />
       </td>
 
-      <td >
+      <td>
         <TextField
           InputProps={{
             disableUnderline: true,

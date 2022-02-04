@@ -52,6 +52,7 @@ import EmployeeViewScreen from "../app/employee/view/EmployeeViewScreen";
 import EditEmployeeComponent from "../app/employee/edit/EditEmployeeComponent";
 import AppLayout from "../app/layout/app-layout/app-layout";
 import AuthLayout from "../app/layout/auth-layout/auth-layout";
+import ForgotPasswordScreen from "../app/auth/forgotPassword/ForgotPasswordScreen";
 
 // @ts-ignore
 const AuthLayoutRoute = ({ component: Component, ...rest }) => {
@@ -123,6 +124,7 @@ const Navigator = (props: any) => {
       </Route>
 
       <AuthLayoutRoute path="/login" component={LoginScreen} />
+      <AuthLayoutRoute path="/forgot-password" component={ForgotPasswordScreen}/>
       <AppLayoutRoute path="/dashboard" component={DashboardScreen} />
       <AppLayoutRoute path="/notifications" component={NotificationScreen} />
       <AppLayoutRoute path="/hcp/list" component={HcpManagementListScreen} />

@@ -5,12 +5,12 @@ import React from "react";
 interface readOnlyRowProps {
   reference: any;
   handleDeleteClick: any;
-  index?: number
+  index?: number;
 }
 
 const ReadOnlyRow = ({ reference, handleDeleteClick }: readOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{
@@ -44,15 +44,15 @@ const ReadOnlyRow = ({ reference, handleDeleteClick }: readOnlyRowProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={reference.email ? reference.email : 'NA'}
+          value={reference.email ? reference.email : "NA"}
           disabled
         />
       </td>
       <td>
-      <Tooltip title={`Delete References`}>
-        <IconButton onClick={() => handleDeleteClick(reference.tempId)}>
-          <DeleteIcon className="delete-icon" />
-        </IconButton>
+        <Tooltip title={`Delete References`}>
+          <IconButton onClick={() => handleDeleteClick(reference.tempId)}>
+            <DeleteIcon className="delete-icon" />
+          </IconButton>
         </Tooltip>
       </td>
     </TableRow>

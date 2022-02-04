@@ -242,7 +242,7 @@ const getUtcDate = (raw_utc_date: any) => {
 }
 
 const getYearsDiff = (start_date: any, end_date: any) => {
-    // console.log(start_date, end_date)
+    console.log(start_date, end_date)
     if (end_date) {
         return Math.round(moment(end_date).diff(start_date, 'years', true) * 10) / 10;
     } else {

@@ -63,7 +63,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     }, [setShiftBreakTimings, shiftBreakTimings])
 
     const handleBreakoutChange = useCallback((event: any, index: any) => {
-        let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date)
+        let breakOutDate = moment(shiftBreakTimings[index]?.break_out_date);
         let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
     
         let error = false
@@ -73,12 +73,12 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         } else {
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
-            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss')
+            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss');
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
             let checkoutTime = shiftDetails?.time_breakup?.check_out_time.slice(11, 19);
-            let currBreakOutTime = index !== shiftBreakTimings?.length-1 ? moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss'): moment(checkoutTime, 'HH:mm:ss')
+            let currBreakOutTime = index !== shiftBreakTimings?.length-1 ? moment(shiftBreakTimings[index+1]?.break_in_time, 'HH:mm:ss'): moment(checkoutTime, 'HH:mm:ss');
             if(currBreakOutTime.isBefore(beginningTime)){
                  error = true
              }
@@ -96,7 +96,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
                 break_out_date: data[index]?.break_out_date,
                 break_out_time: value
             }
-            setShiftBreakTimings([...data])
+            setShiftBreakTimings([...data]);
         }
     }, [setShiftBreakTimings, shiftBreakTimings,shiftDetails?.time_breakup?.check_out_time])
 
@@ -110,7 +110,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         } else if (breakOutDate > moment(breakInDate)) {
         } else {
             let beginningTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss');
-            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
+            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss');
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
@@ -133,7 +133,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     }, [setShiftBreakTimings, shiftBreakTimings, checkIn?.date, checkIn?.time])
 
     const handleBreakOutDateChange = useCallback((event: any, index: any) => {
-        let breakOutDate =  moment(event).format('YYYY-MM-DD')
+        let breakOutDate =  moment(event).format('YYYY-MM-DD');
         let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
         let error = false
         if (breakInDate < moment(breakOutDate)) {
@@ -141,7 +141,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         } else if (breakInDate > moment(breakOutDate)) {
         } else {
             let beginningTime = moment(shiftBreakTimings[index]?.break_out_time, 'HH:mm:ss');
-            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss')
+            let endTime = moment(shiftBreakTimings[index]?.break_in_time, 'HH:mm:ss');
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
@@ -164,9 +164,9 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     }, [setShiftBreakTimings, shiftBreakTimings])
 
     const handleBreakInChange = useCallback((event: any, index: any) => {
-        let breakInDate = moment(shiftBreakTimings[index]?.break_in_date)
+        let breakInDate = moment(shiftBreakTimings[index]?.break_in_date);
         let breakOutDate = index === 0 ? moment(checkIn?.date) : moment(shiftBreakTimings[index - 1]?.break_out_date);
-        let error = false
+        let error = false;
         if (breakOutDate < breakInDate) {
             // date is past
         } else if (breakOutDate > breakInDate) {
@@ -174,7 +174,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             let value = moment(event).format("HH:mm:ss");
             let beginningTime = moment(value, 'HH:mm:ss');
             let currBreakOutTime = moment(shiftBreakTimings[index]?.break_out_time, 'HH:mm:ss')
-            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss')
+            let endTime = index === 0 ? moment(checkIn?.time, 'HH:mm:ss') : moment(shiftBreakTimings[index - 1]?.break_out_time, 'HH:mm:ss');
             if (beginningTime.isBefore(endTime)) {
                 error = true
             }
@@ -203,7 +203,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
     const handleBreakTimings = useCallback(() => {
         setIsSubmitting(true)
         let data = shiftBreakTimings;
-        let tempError = ""
+        let tempError = "";
         data?.forEach((item: any, index: any) => {
             if (item?.break_in_date === null || item?.break_out_date === null || item?.break_in_time === null || item?.break_out_time === null) {
                 tempError = "Please fill all the fields"
@@ -227,7 +227,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
             let payload = {
                 "hcp_user_id": shiftDetails?.hcp_user_id,
                 "break_timings": data
-            }
+            };
             CommonService._api.post(ENV.API_URL + 'shift/' + id + '/webBreak', payload).then((resp) => {
                 if (afterConfirm) {
                     afterConfirm();
@@ -243,7 +243,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
 
     useEffect(() => {
         if (shiftDetails?.time_breakup?.break_timings?.length > 0) {
-            let data = shiftDetails?.time_breakup?.break_timings
+            let data = shiftDetails?.time_breakup?.break_timings;
             data?.forEach((item: any, index: any) => {
                 if (item?.break_in_time) {
                     data[index].break_in_date = (item?.break_in_time).slice(0, 10);

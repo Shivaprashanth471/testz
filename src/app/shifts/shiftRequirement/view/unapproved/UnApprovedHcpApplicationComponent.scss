@@ -1,6 +1,32 @@
-.unapproved-hcps-list{
-    .text-right{
-        text-align: right !important;
-        padding-right: 40px !important;
-    }
+.unapproved-hcps-list {
+	.shifts-requirment-unapproved-list-table {
+		.mat-td-hcp-rate {
+			min-width: 150px;
+			max-width: 150px;
+		}
+
+        .mat-td-rejected-name{
+            min-width: 250px;
+			max-width: 250px;
+        }
+
+		.mat-td-hcp-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-rejected-reason {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-created-at {
+			min-width: 160px;
+			max-width: 160px;
+		}
+		.mat-td-actions {
+			min-width: 120px;
+			max-width: 120px;
+		}
+	}
 }

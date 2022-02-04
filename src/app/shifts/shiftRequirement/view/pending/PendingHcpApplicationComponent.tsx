@@ -38,8 +38,8 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
 
     const init = useCallback(() => {
         const options = new TsDataListOptions({
-            webMatColumns: ['HCP Name', 'Email', 'Applied On', 'HCP Type', 'HCP Rate', 'Action'],
-            mobileMatColumns: ['HCP Name', 'Email', 'Applied On', 'HCP Type', 'HCP Rate', 'Action'],
+            webMatColumns: ['HCP Name', 'Email', 'Applied On', 'HCP Type', 'HCP Rate', 'Actions'],
+            mobileMatColumns: ['HCP Name', 'Email', 'Applied On', 'HCP Type', 'HCP Rate', 'Actions'],
         }, ENV.API_URL + 'shift/requirement/' + id + '/application?status=pending', setList, ApiService, 'get');
         let tableWrapperObj = new TsDataListWrapperClass(options)
         setList({ table: tableWrapperObj });
@@ -84,23 +84,23 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
         init()
     }, [init])
 
-    return <div className='pending-hcps-list'>
-        {list && list.table?._isDataLoading && <div className="table-loading-indicator">
-            <LinearProgress />
-        </div>}
+    return <div className='pending-shift-applications-hcps-list'>
         <DialogComponent open={isRejectOpen} cancel={cancelRejectApplication}>
             <RejectHcpApplicationComponent cancel={cancelRejectApplication} confirm={confirmRejectApplication} requirementId={id} applicationId={applicationId} />
         </DialogComponent>
         <DialogComponent open={isApproveOpen} cancel={cancelApprove}>
             <CreateShiftScreen hcpId={hcpId} cancel={cancelApprove} applicationId={applicationId} confirm={confirmApprove} requirementId={id} />
         </DialogComponent>
+        {list && list.table?._isDataLoading && <div className="table-loading-indicator">
+            <LinearProgress />
+        </div>}
         {list && list.table && <>
             <TableContainer component={Paper} className={'table-responsive'}>
-                <Table stickyHeader aria-label="sticky table" style={{ tableLayout: "fixed" }}>
-                    <TableHead>
-                        <TableRow>
+                <Table stickyHeader className="mat-table table shifts-requirment-pending-list-table">
+                    <TableHead className={"mat-thead"}>
+                         <TableRow className={"mat-tr"}>
                             {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                <TableCell className={(column === 'Action') ? '' : ''}
+                                <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                     key={'header-col-' + columnIndex}
                                 >
                                     {column}
@@ -108,29 +108,29 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
                             ))}
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                   <TableBody className={"mat-tbody"}>
                         {list.table.canShowNoData() &&
                             <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                         }
                         {list?.table.data.map((row: any, rowIndex: any) => {
                             return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={'row-'}>
-                                    <TableCell>
+                                <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-'}>
+                                    <TableCell className="mat-td mat-td-hcp-name">
                                         {row['hcp_data']?.first_name}&nbsp;{row['hcp_data']?.last_name}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="mat-td mat-td-hcp-email">
                                         {row['hcp_data']?.email}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="mat-td mat-td-created-at">
                                         {moment(row['created_at']).format("DD-MM-YYYY")}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="mat-td mat-td-hcp-type">
                                         {row['hcp_data']?.hcp_type}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="mat-td mat-td-hcp-rate">
                                         {row['hcp_data']?.rate}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                         <div className="d-flex action-wrapper">
                                             <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'])} disabled={status === "cancelled"}>
                                                 <CheckIcon className="add-icon" />

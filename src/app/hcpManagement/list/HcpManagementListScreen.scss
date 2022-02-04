@@ -11,7 +11,14 @@
   .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
     padding: 2px !important;
   }
-
+  .table-row-wrapper {
+    overflow: scroll !important;
+    height: 300px !important;
+   }
+   .table-row-wrapper{
+       overflow: scroll !important;
+       height: 300px !important;
+   }
   .text-right {
     text-align: right !important;
     padding-right: 20px !important;
@@ -21,5 +28,37 @@
   }
   .first-row {
     border-radius: 5px 0px 0px 5px;
+  }
+  .hcp-list-table{
+
+    .mat-td-created-at{
+      min-width: 100px;
+      max-width: 100px;
+    }
+
+    .mat-td-hcp-name{
+      min-width: 250px;
+      max-width: 250px;
+    }
+
+    .mat-td-email{
+      min-width: 150px;
+      max-width: 150px;
+    }
+
+    .mat-td-contact-number{
+      min-width: 200px;
+      max-width: 200px;
+    }
+
+    .mat-td-status{
+      min-width: 100px;
+      max-width: 100px;
+    }
+
+    .mat-td-actions{
+      min-width: 120px;
+      max-width: 120px;
+    }
   }
 }

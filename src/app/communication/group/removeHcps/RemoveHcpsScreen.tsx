@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import { Button } from "@material-ui/core";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import "./RemoveHcpsScreen.scss";
 
 const RemoveHcpsScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -132,14 +133,14 @@ const RemoveHcpsScreen = () => {
                 </div>
                 {list && list.table && <>
                     <TableContainer component={Paper} className={'table-responsive'}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell padding="checkbox">
+                        <Table stickyHeader className="mat-table table remove-members-list-table">
+                            <TableHead className={"mat-thead"}>
+                                 <TableRow className={"mat-tr"}>
+                                    <TableCell padding="checkbox" className="mat-th">
                                         <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id="cb_select_all_hcps" />
                                     </TableCell>
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell className={(column === 'actions') ? 'min-width-cell' : ''}
+                                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                             key={'header-col-' + columnIndex}
                                         >
                                             {column}
@@ -147,23 +148,23 @@ const RemoveHcpsScreen = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                           <TableBody className={"mat-tbody"}>
                                 {list.table.canShowNoData() &&
                                     <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                 }
                                 {list?.table.data.map((row: any, rowIndex: any) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={'row-' + 1}>
-                                            <TableCell>
+                                        <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-' + 1}>
+                                            <TableCell className="mat-td mat-td-checkbox">
                                                 <input type={"checkbox"} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-name">
                                                 {row['hcp_name']}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell className="mat-td mat-td-hcp-type">
                                                 {row['hcp_type']}
                                             </TableCell>
-                                            <TableCell >
+                                            <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                                 <Link to={'/hcp/view/' + row.id} className="info-link" id={"link_hcp_details" + rowIndex} >
                                                     {('View Details')}
                                                 </Link>
