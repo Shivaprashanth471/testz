@@ -288,7 +288,7 @@ const FacilityManagementListScreen = () => {
                             {role === "super_admin" ? <FormControlLabel control={<Switch checked={row["is_active"]} onChange={() => handletoggleStatus(row["_id"], row["is_active"])} />} label={""} /> : <>{row["is_active"] ? "Active" : "Inactive"}</>}
                           </TableCell>
                           <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                            <Link to={"/facility/tabs/" + row?._id} className="info-link " id={"link_facility_details" + rowIndex}>
+                            <Link to={"/facility/view/" + row?._id} className="info-link " id={"link_facility_details" + rowIndex}>
                               {"View Details"}
                             </Link>
                           </TableCell>

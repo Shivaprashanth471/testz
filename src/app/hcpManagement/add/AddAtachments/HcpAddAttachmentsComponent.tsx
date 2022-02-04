@@ -1,10 +1,10 @@
-import React from "react";
-import NormalTextField from "@material-ui/core/TextField";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../../classes/ts-file-upload-wrapper.class";
-import { ENV } from "../../../../constants";
-import { CommonService } from "../../../../helpers";
-import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
+import React from 'react';
+import NormalTextField from '@material-ui/core/TextField';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { TsFileUploadConfig, TsFileUploadWrapperClass } from '../../../../classes/ts-file-upload-wrapper.class';
+import { ENV } from '../../../../constants';
+import { CommonService } from '../../../../helpers';
+import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 
 const HcpAddAttachmentsComponent = (props: any) => {
   const fileUpload = props?.fileUpload;
@@ -15,17 +15,17 @@ const HcpAddAttachmentsComponent = (props: any) => {
 
   const OnFileSelected = (files: File[], index: any) => {
     if (required_attachments[index]) {
-      required_attachments[index].index = fileUpload?.wrapper?.length || 0;
-      setRequiredAttachments([...required_attachments]);
+      required_attachments[index].index = fileUpload?.wrapper?.length || 0
+      setRequiredAttachments([...required_attachments])
     }
     for (let file of files) {
       // console.log(file)
       const uploadConfig: TsFileUploadConfig = {
         file: file,
-        fileFieldName: "Data",
-        uploadUrl: ENV.API_URL + "facility/add",
-        allowed_types: ["jpg", "png", "csv", "pdf"],
-        extraPayload: { expiry_date: "", file_type: required_attachments[index]?.name },
+        fileFieldName: 'Data',
+        uploadUrl: ENV.API_URL + 'facility/add',
+        allowed_types: ['jpg', 'png', 'csv', 'pdf'],
+        extraPayload: { expiry_date: '', file_type: required_attachments[index]?.name }
       };
       const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
         // console.log(state);
@@ -36,21 +36,22 @@ const HcpAddAttachmentsComponent = (props: any) => {
             return { wrapper: prevState.wrapper };
           }
           return prevState;
-        });
+        })
       });
       uploadWrapper.onError = (err, heading) => {
         // console.error(err, heading);
         if (heading) {
-          CommonService.showToast(err, "error");
+          CommonService.showToast(err, 'error');
         }
       };
       uploadWrapper.onSuccess = (resp) => {
         console.log(resp);
         if (resp && resp.success) {
-          CommonService.showToast(resp.msg || resp.error, "success");
+          CommonService.showToast(resp.msg || resp.error, 'success');
         }
       };
-      uploadWrapper.onProgress = (progress) => {};
+      uploadWrapper.onProgress = (progress) => {
+      };
       setFileUpload((prevState: any) => {
         let state: TsFileUploadWrapperClass[] = [];
         if (prevState) {
@@ -60,17 +61,17 @@ const HcpAddAttachmentsComponent = (props: any) => {
         return { wrapper: newState };
       });
     }
-  };
+  }
 
   const deleteFile = (temp: any, itemIndex: any) => {
-    console.log(temp, "deleteindex", itemIndex);
+    console.log(temp, "deleteindex", itemIndex)
     let data = fileUpload?.wrapper.filter((_: any, index: any) => index !== itemIndex);
-    console.log(data);
+    console.log(data)
     if (required_attachments[temp]) {
-      required_attachments[temp].index = -1;
-      setRequiredAttachments([...required_attachments]);
+      required_attachments[temp].index = -1
+      setRequiredAttachments([...required_attachments])
     }
-  };
+  }
 
   const handleExpiryDate = (event: any, index: any) => {
     setFileUpload((prevState: any) => {
@@ -78,8 +79,9 @@ const HcpAddAttachmentsComponent = (props: any) => {
         prevState.wrapper[index].extraPayload.expiry_date = event.target.value;
       }
       return { wrapper: [...(prevState || { wrapper: [] }).wrapper] };
-    });
-  };
+    })
+  }
+
   return <div>
     <div className="attachments_wrapper">
       {required_attachments?.map((item: any, index: any) => {
@@ -98,7 +100,7 @@ const HcpAddAttachmentsComponent = (props: any) => {
                       InputLabelProps={{ shrink: true }}
                       onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
                       value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
-                      disabled={index === 5 || index === 8 || index === 11}
+                      disabled={index === 5 || index === 8 || index ===11}
                       inputProps={{
                         max: '2999-01-01'
                       }}
@@ -106,26 +108,30 @@ const HcpAddAttachmentsComponent = (props: any) => {
                     <div className="file_actions d-flex">
                       <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
                       <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-30" onClick={() => deleteFile(index, item?.index)}>Delete</p>
-
                     </div>
                   </div>
                 </div>
-              </>
-            );
-          } else {
-            return (
-              <div className="attachments">
-                <div className="">
-                  <h3 className="attachement_name mrg-left-10 file_attachment_title">{item?.name}</h3>
-                  <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
-                </div>
               </div>
-            );
-          }
-        })}
-      </div>
+            </div>
+          </>
+          )
+        } else {
+          return (
+            <div className="attachments">
+              <div className="">
+                <h3 className="attachement_name mrg-left-10 file_attachment_title">{item?.name}</h3>
+                <FileDropZoneComponent
+                  OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"}
+                />
+              </div>
+            </div>
+          )
+        }
+      })}
     </div>
-  );
-};
+  </div>;
+}
+
+
 
 export default HcpAddAttachmentsComponent;
