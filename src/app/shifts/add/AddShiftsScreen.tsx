@@ -91,6 +91,7 @@ const AddShiftsScreen = () => {
   }, []);
 
   const getFacilityShiftTimings = useCallback((facilityId: string) => {
+    setShiftLoading(true);
     ApiService.get(ENV.API_URL + "facility/" + facilityId + "/shift")
       .then((res) => {
         setShiftTimings(res.data || []);
@@ -301,13 +302,12 @@ const AddShiftsScreen = () => {
     }
   };
 
-  if (loading || shiftLoading || hcpTypesLoading) {
+  if (loading || hcpTypesLoading) {
     return <LoaderComponent />;
   }
 
   return (
     !loading &&
-    !shiftLoading &&
     !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
         <DialogComponent open={isAddOpen} cancel={cancelAdd}>
@@ -371,6 +371,7 @@ const AddShiftsScreen = () => {
                       </Field>
 
                       <Field
+                       disabled={shiftLoading}
                         SelectProps={showDropDownBelowField}
                         id="input_shift_requirement_shift_timings"
                         variant="outlined"
@@ -400,15 +401,16 @@ const AddShiftsScreen = () => {
                             );
                           })}
                       </Field>
+                    
                     </div>
                     <div className="shift-second-row shift-row mrg-top-30">
                       <div className="shift-mode">
 
                         <div className="">
-                          <FormLabel className={"form-label"}>{"Date Mode"}</FormLabel>
+                          <FormLabel className={"form-label"}>"Date Mode"</FormLabel>
                         </div>
                         <div className="mrg-top-10">
-                          <Field component={RadioGroup} name="mode" onChange={(e: any) => {
+                          <Field required component={RadioGroup} name="mode" onChange={(e: any) => {
                             setFieldValue("mode", e.target.value);
                             setMode(e.target.value);
                           }}>
@@ -434,7 +436,7 @@ const AddShiftsScreen = () => {
                           plugins={[<DatePanel eachDaysInRange />]}
                           format="YYYY/MM/DD"
                           range={mode === "range" ? true : false}
-                          r
+                          
                           multiple={mode === "multiple" ? true : false}
                           onChange={handleDatePicker}
                           value={value}
@@ -460,7 +462,7 @@ const AddShiftsScreen = () => {
                               {warningZone && warningZone.map((item: any, index) => {
                                 return (
                                   <div>
-                                    <FormControlLabel key={"input_add_shift_warniing_type" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="warning_type" label={item.label} />
+                                    <FormControlLabel key={"input_add_shift_warniing_type" + index} value={item.value} control={<Radio required disabled={isSubmitting} />} disabled={isSubmitting} name="warning_type" label={item.label} />
                                   </div>
                                 );
                               })}
