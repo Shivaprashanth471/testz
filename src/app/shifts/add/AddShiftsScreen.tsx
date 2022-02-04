@@ -1,13 +1,10 @@
-import {
-  Button, MenuItem,
-  Paper, TextField as NormalTextField
-} from "@material-ui/core";
+import { Button, FormControlLabel, FormLabel, MenuItem, Paper, Radio, TextField as NormalTextField } from "@material-ui/core";
 import { DateRangeOutlined } from "@material-ui/icons";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { TextField } from "formik-material-ui";
+import { RadioGroup, TextField } from "formik-material-ui";
 import moment from "moment";
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useState } from "react";
 import DatePickers from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
@@ -18,22 +15,19 @@ import DialogComponent from "../../../components/DialogComponent";
 import LoaderComponent from "../../../components/LoaderComponent";
 import LeavePageConfirmationComponent from "../../../components/shared/LeavePageConfirmationComponent";
 import { ENV } from "../../../constants";
-import {
-  calenderMode, warningZone
-} from "../../../constants/data";
+import { calenderMode, warningZone } from "../../../constants/data";
 import { ApiService, CommonService, Communications } from "../../../helpers";
 import "./AddShiftsScreen.scss";
 import { addShiftsValidation } from "./AddShiftsValidation";
 import ReadOnlyShifts from "./ReadOnlyShifts";
 
-
 interface ShiftItem {
-  temp_id?: string,
-  title: string,
+  temp_id?: string;
+  title: string;
   hcp_type: string;
   mode: string;
-  start_time: string | number,
-  end_time: string | number,
+  start_time: string | number;
+  end_time: string | number;
   shift_dates: any;
   shift_type: string;
   warning_type: string;
@@ -56,7 +50,7 @@ let shiftInitialState: ShiftItem = {
 };
 
 const AddShiftsScreen = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [facilities, setFacilities] = useState<any[]>([]);
   const [facilityId, setFacilityId] = useState<any>("");
   const [shifts, setShifts] = useState<any[]>([]);
@@ -64,15 +58,14 @@ const AddShiftsScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [shiftLoading, setShiftLoading] = useState<boolean>(false);
   const [hcpTypesLoading, setHcpTypesLoading] = useState<boolean>(true);
-  const [facilityOffset, setFacilityOffset] = useState<any>(null)
+  const [facilityOffset, setFacilityOffset] = useState<any>(null);
   const [isShifts, setIsShifts] = useState<boolean>(false);
   const [doubleClick, setDoubleClick] = useState<boolean>(false);
-  const [hcpTypes, setHcpTypes] = useState<any>([])
+  const [hcpTypes, setHcpTypes] = useState<any>([]);
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
-  const [value, setValue] = useState<any>(null)
-  const [mode, setMode] = useState('')
-
+  const [value, setValue] = useState<any>(null);
+  const [mode, setMode] = useState("");
 
   const user: any = localStorage.getItem("currentUser");
   let currentUser = JSON.parse(user);
@@ -82,7 +75,7 @@ const AddShiftsScreen = () => {
   };
 
   function handleDatePicker(value: any) {
-    setValue(value)
+    setValue(value);
   }
 
   const getFacilityData = useCallback(() => {
@@ -98,6 +91,7 @@ const AddShiftsScreen = () => {
   }, []);
 
   const getFacilityShiftTimings = useCallback((facilityId: string) => {
+    setShiftLoading(true);
     ApiService.get(ENV.API_URL + "facility/" + facilityId + "/shift")
       .then((res) => {
         setShiftTimings(res.data || []);
@@ -113,95 +107,92 @@ const AddShiftsScreen = () => {
       .then((res) => {
         setFacilityOffset(res?.data?.timezone);
       })
-      .catch((err) => {
-      });
+      .catch((err) => { });
   }, []);
 
   const getHcpTypes = useCallback(() => {
-    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
-      setHcpTypes(resp.data || []);
-      setHcpTypesLoading(false);
-    }).catch((err) => {
-      console.log(err);
-    });
+    CommonService._api
+      .get(ENV.API_URL + "meta/hcp-types")
+      .then((resp) => {
+        setHcpTypes(resp.data || []);
+        setHcpTypesLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleFacilitySelect = (facility: any) => {
-    setShiftTimings([])
+    setShiftTimings([]);
 
     if (facility) {
-      setFacilityId(facility?._id)
-      getFacilityShiftTimings(facility?._id)
-      getFacilityOffset(facility?._id)
+      setFacilityId(facility?._id);
+      getFacilityShiftTimings(facility?._id);
+      getFacilityOffset(facility?._id);
     }
-
-  }
+  };
 
   const formatShiftTimings = (item: any) => {
-    let start = moment(CommonService.convertMinsToHrsMins(item?.shift_start_time), 'hh:mm').format('LT')
-    let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), 'hh:mm').format('LT')
-    let type = item?.shift_type
+    let start = moment(CommonService.convertMinsToHrsMins(item?.shift_start_time), "hh:mm").format("LT");
+    let end = moment(CommonService.convertMinsToHrsMins(item?.shift_end_time), "hh:mm").format("LT");
+    let type = item?.shift_type;
 
-    return `${start} - ${end} (${type}-Shift)`
-  }
+    return `${start} - ${end} (${type}-Shift)`;
+  };
 
   const onAddShiftRequirement = useCallback((shiftR: any) => {
     return new Promise(async (resolve, reject) => {
       try {
-        let data = await ApiService.post(ENV.API_URL + "shift/requirement", shiftR)
-        resolve(data)
+        let data = await ApiService.post(ENV.API_URL + "shift/requirement", shiftR);
+        resolve(data);
       } catch (error) {
-        reject(error)
+        reject(error);
       }
     });
   }, []);
 
   const addShiftsRequirement = useCallback(async () => {
-    let promArray = []
+    let promArray = [];
     try {
       for (let i = 0; i < shifts.length; i++) {
-        promArray.push(onAddShiftRequirement(shifts[i]))
+        promArray.push(onAddShiftRequirement(shifts[i]));
       }
 
-      Promise.all(promArray).then(resp => {
-        CommonService.showToast(resp.length + ' Shift Requirement Created' || "Success");
-        setTimeout(() => history.push('/shiftrequirementMaster/list'), 200)
-      }).catch(err => {
-        CommonService.showToast(err?.msg || "Error", "error");
-        setDoubleClick(false)
-      })
+      Promise.all(promArray)
+        .then((resp) => {
+          CommonService.showToast(resp.length + " Shift Requirement Created" || "Success");
+          setTimeout(() => history.push("/shiftrequirementMaster/list"), 200);
+        })
+        .catch((err) => {
+          CommonService.showToast(err?.msg || "Error", "error");
+          setDoubleClick(false);
+        });
     } catch (error: any) {
       CommonService.showToast(error?.msg || "Error", "error");
-      setDoubleClick(false)
-      return error
+      setDoubleClick(false);
+      return error;
     }
-  },
-    [shifts, onAddShiftRequirement, history]
-  );
+  }, [shifts, onAddShiftRequirement, history]);
 
   const onSubmit = () => {
-    addShiftsRequirement()
+    addShiftsRequirement();
+  };
 
-  }
-
-  const onAdd = (
-    data: any,
-    { setSubmitting, setErrors, resetForm }: FormikHelpers<any>
-  ) => {
+  const onAdd = (data: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
     if (!facilityId) {
-      CommonService.showToast('Please select Facility')
+      CommonService.showToast("Please select Facility");
       setSubmitting(false);
-      return
+      return;
     }
 
     let shift_dates = value.map((item: any) => {
-      let mm = item?.month?.number
-      let dd = item?.day
-      let yyyy = item?.year
+      let mm = item?.month?.number;
+      let dd = item?.day;
+      let yyyy = item?.year;
 
-      let shift_date = moment(`${yyyy}-${mm}-${dd}`).format('YYYY-MM-DD')
-      return shift_date
-    })
+      let shift_date = moment(`${yyyy}-${mm}-${dd}`).format("YYYY-MM-DD");
+      return shift_date;
+    });
 
     let newShift;
 
@@ -211,10 +202,10 @@ const AddShiftsScreen = () => {
       data.end_time = "";
       data.shift_type = "";
 
-      return
+      return;
     }
 
-    if (mode === 'multiple') {
+    if (mode === "multiple") {
       newShift = {
         temp_id: nanoid(),
         title: data.title,
@@ -232,10 +223,9 @@ const AddShiftsScreen = () => {
         price: {
           inbound_price: "0",
           outbound_price: "0",
-        }
+        },
       };
-
-    } else if (mode === 'range') {
+    } else if (mode === "range") {
       newShift = {
         temp_id: nanoid(),
         title: data.title,
@@ -254,131 +244,111 @@ const AddShiftsScreen = () => {
         price: {
           inbound_price: "0",
           outbound_price: "0",
-        }
+        },
       };
     }
-
 
     let totalShifts = [...shifts, newShift];
 
     setShifts(totalShifts);
 
     resetForm();
-    setValue(null)
-    handleCancelAdd()
+    setValue(null);
+    handleCancelAdd();
   };
 
   const openAdd = useCallback(() => {
-    setIsAddOpen(true)
-  }, [])
+    setIsAddOpen(true);
+  }, []);
 
   const cancelAdd = useCallback(() => {
     setIsAddOpen(false);
-  }, [])
+  }, []);
 
   const confirmAdd = useCallback(() => {
-    history.push(`/shiftrequirementMaster/list`)
-
-  }, [history])
+    history.push(`/shiftrequirementMaster/list`);
+  }, [history]);
 
   useEffect(() => {
     Communications.pageTitleSubject.next("Add Shift Requirement");
     Communications.pageBackButtonSubject.next(null);
 
     getFacilityData();
-    getHcpTypes()
+    getHcpTypes();
   }, [getFacilityData, getHcpTypes]);
 
   const showDropDownBelowField: any = {
     MenuProps: {
       anchorOrigin: {
         vertical: "bottom",
-        horizontal: "left"
+        horizontal: "left",
       },
-      getContentAnchorEl: null
-    }
-  }
+      getContentAnchorEl: null,
+    },
+  };
 
   const handleShowHideCalender = () => {
     if (value) {
       if (value instanceof Array) {
-        if (value.length === 0) { return { display: 'block' } } else {
-          return { display: 'none' }
+        if (value.length === 0) {
+          return { display: "block" };
+        } else {
+          return { display: "none" };
         }
       }
       return {
-        display: 'none'
-      }
+        display: "none",
+      };
     }
+  };
+
+  if (loading || hcpTypesLoading) {
+    return <LoaderComponent />;
   }
-
-
-  if (loading || shiftLoading || hcpTypesLoading) {
-    return <LoaderComponent />
-  }
-
 
   return (
-    !loading && !shiftLoading && !hcpTypesLoading && (
+    !loading &&
+    !hcpTypesLoading && (
       <div className="add-shifts screen pdd-30">
         <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={''} notext={"Cancel"} yestext={"Leave"} />
+          <LeavePageConfirmationComponent cancel={cancelAdd} confirm={confirmAdd} confirmationText={""} notext={"Cancel"} yestext={"Leave"} />
         </DialogComponent>
-        {facilities !== null && <Autocomplete
-          disableClearable
-          PaperComponent={({ children }) => (
-            <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>
-          )}
-          options={facilities}
-          getOptionLabel={(option: any) => option.facility_name}
-          getOptionSelected={(option: any, value) => option.facility_name === value?.facility_name}
-          placeholder={"Select Facility"}
-          id="input_select_facility"
-          onChange={($event, value) => {
+        {facilities !== null && (
+          <Autocomplete
+            disableClearable
+            PaperComponent={({ children }) => <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>}
+            options={facilities}
+            getOptionLabel={(option: any) => option.facility_name}
+            getOptionSelected={(option: any, value) => option.facility_name === value?.facility_name}
+            placeholder={"Select Facility"}
+            id="input_select_facility"
+            onChange={($event, value) => {
+              handleFacilitySelect(value);
+            }}
+            renderInput={(params) => <NormalTextField {...params} id="select_region" variant="outlined" placeholder={"Select (or) Search Facility"} />}
+          />
+        )}
 
-            handleFacilitySelect(value)
-          }
-          }
-          renderInput={(params) => (
-            <NormalTextField
-              {...params}
-              id='select_region'
-              variant='outlined'
-              placeholder={"Select (or) Search Facility"}
-            />
-          )}
-        />}
-
-        <div className='shift-header-container mrg-top-10'>
-          <p className='shift-header '>Shift Details</p>
+        <div className="shift-header-container mrg-top-10">
+          <p className="shift-header ">Shift Details</p>
         </div>
-
 
         {!isShifts ? (
           <div className="shift-add-action pdd-top-30">
-
-            <p
-              id='btn_shift_requirement_add_shift'
-              onClick={() => setIsShifts(true)}
-              className="add-shift-requirment-text"
-            >
+            <p id="btn_shift_requirement_add_shift" onClick={() => setIsShifts(true)} className="add-shift-requirment-text">
               + Add a Shift Requirement
             </p>
           </div>
         ) : (
           <div className="custom-card">
-            <Formik
-              initialValues={shiftInitialState}
-              validationSchema={addShiftsValidation}
-              onSubmit={onAdd}
-            >
+            <Formik initialValues={shiftInitialState} validationSchema={addShiftsValidation} onSubmit={onAdd}>
               {({ isSubmitting, isValid, resetForm, handleChange, setFieldValue, values }) => (
-                <Form className={"form-holder"} id='shift-add-form'>
-                  <div >
+                <Form className={"form-holder"} id="shift-add-form">
+                  <div>
                     <div className="shift-first-row shift-row ">
                       <Field
-                        id='input_shift_requirement_title'
-                        variant='outlined'
+                        id="input_shift_requirement_title"
+                        variant="outlined"
                         name="title"
                         component={TextField}
                         label="Title (30 characters)"
@@ -389,20 +359,9 @@ const AddShiftsScreen = () => {
                       />
                     </div>
 
-                    <div className="shift-row mrg-top-30" >
-                      <Field
-                        SelectProps={showDropDownBelowField}
-                        id='input_shift_requirement_hcp_type'
-                        variant='outlined'
-                        select
-                        name="hcp_type"
-                        component={TextField}
-                        label="HCP Type"
-                        fullWidth
-                      >
-                        <MenuItem value="" >
-                          Select HCP Type
-                        </MenuItem>
+                    <div className="shift-row mrg-top-30">
+                      <Field SelectProps={showDropDownBelowField} id="input_shift_requirement_hcp_type" variant="outlined" select name="hcp_type" component={TextField} label="HCP Type" fullWidth>
+                        <MenuItem value="">Select HCP Type</MenuItem>
                         {hcpTypes &&
                           hcpTypes.map((item: any, index: any) => (
                             <MenuItem value={item.code} key={index}>
@@ -412,9 +371,10 @@ const AddShiftsScreen = () => {
                       </Field>
 
                       <Field
+                       disabled={shiftLoading}
                         SelectProps={showDropDownBelowField}
-                        id='input_shift_requirement_shift_timings'
-                        variant='outlined'
+                        id="input_shift_requirement_shift_timings"
+                        variant="outlined"
                         select
                         required
                         name="shift_timings"
@@ -422,126 +382,116 @@ const AddShiftsScreen = () => {
                         label="Shift Timings and Type"
                         fullWidth
                         onChange={(e: any) => {
-                          const selectedShiftTiming = e.target.value
+                          const selectedShiftTiming = e.target.value;
                           if (shiftTimings.length > 0) {
-                            setFieldValue('start_time', selectedShiftTiming?.shift_start_time)
-                            setFieldValue('end_time', selectedShiftTiming?.shift_end_time)
-                            setFieldValue('shift_type', selectedShiftTiming?.shift_type)
+                            setFieldValue("start_time", selectedShiftTiming?.shift_start_time);
+                            setFieldValue("end_time", selectedShiftTiming?.shift_end_time);
+                            setFieldValue("shift_type", selectedShiftTiming?.shift_type);
                           }
-
                         }}
                       >
-                        <MenuItem value="" >
-                          Select Shift Timing
-                        </MenuItem>
+                        <MenuItem value="">Select Shift Timing</MenuItem>
                         {shiftTimings.length > 0 &&
                           shiftTimings?.map((item: any, index) => {
-                            let shift = formatShiftTimings(item)
-                            return <MenuItem value={item} key={index}>
-                              {shift}
-                            </MenuItem>
+                            let shift = formatShiftTimings(item);
+                            return (
+                              <MenuItem value={item} key={index}>
+                                {shift}
+                              </MenuItem>
+                            );
                           })}
                       </Field>
+                    
                     </div>
-                    <div className='shift-second-row shift-row mrg-top-30'>
+                    <div className="shift-second-row shift-row mrg-top-30">
                       <div className="shift-mode">
-                        <Field
-                          SelectProps={showDropDownBelowField}
-                          id='input_shift_requirement_mode'
-                          variant='outlined'
-                          onChange={(e: any) => {
-                            setFieldValue('mode', e.target.value)
-                            setMode(e.target.value)
-                          }}
-                          select
-                          name="mode"
-                          component={TextField}
-                          label="Date Mode"
-                          placeholder="Select Mode"
-                          fullWidth
-                        >
-                          <MenuItem value="" >
-                            Select Date Mode
-                          </MenuItem>
-                          {calenderMode &&
-                            calenderMode.map((item: any, index) => (
-                              <MenuItem value={item.value} key={index}>
-                                {item.label}
-                              </MenuItem>
-                            ))}
-                        </Field>
-                      </div>
-                      <div className='shift-calender'>
-                        <Field
 
+                        <div className="">
+                          <FormLabel className={"form-label"}>"Date Mode"</FormLabel>
+                        </div>
+                        <div className="mrg-top-10">
+                          <Field required component={RadioGroup} name="mode" onChange={(e: any) => {
+                            setFieldValue("mode", e.target.value);
+                            setMode(e.target.value);
+                          }}>
+                            <div className="d-flex">
+                              {calenderMode && calenderMode.map((item: any, index) => {
+                                return (
+                                  <div>
+                                    <FormControlLabel key={"input_hcp_add_more_important_preference" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="mode" label={item.label} />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </Field>
+                        </div>
+
+                      </div>
+                      <div className="shift-calender">
+                        <Field
                           disabled={!mode ? true : false}
                           required
-                          inputClass='custom-input'
+                          inputClass="custom-input"
                           className="rmdp-mobile"
-                          plugins={[
-                            <DatePanel eachDaysInRange />
-
-                          ]}
+                          plugins={[<DatePanel eachDaysInRange />]}
                           format="YYYY/MM/DD"
-                          range={mode === 'range' ? true : false} r
-                          multiple={mode === 'multiple' ? true : false}
+                          range={mode === "range" ? true : false}
+                          
+                          multiple={mode === "multiple" ? true : false}
                           onChange={handleDatePicker}
                           value={value}
                           variant="inline"
-                          inputVariant='outlined'
-                          placeholder={mode === 'multiple' ? "Select Single (or) Multiple Dates" : mode === 'range' ? "Select Date Range" : "Please Select Date Mode"}
-                          id='input_shift_requirement_shift_datepicker'
+                          inputVariant="outlined"
+                          placeholder={mode === "multiple" ? "Select Single (or) Multiple Dates" : mode === "range" ? "Select Date Range" : "Please Select Date Mode"}
+                          id="input_shift_requirement_shift_datepicker"
                           name="shift_dates"
                           InputLabelProps={{ shrink: true }}
                           component={DatePickers}
                         />
 
-                        <DateRangeOutlined style={handleShowHideCalender()} className='date-icon' fontSize='large' color='action' />
+                        <DateRangeOutlined style={handleShowHideCalender()} className="date-icon" fontSize="large" color="action" />
                       </div>
-
                     </div>
-                    <div className="shift-third-row shift-row mrg-top-30 ">
-                      <Field
-                        SelectProps={showDropDownBelowField}
-                        id='input_shift_requirement_warning_zone'
-                        variant='outlined'
-                        select
-                        name="warning_type"
-                        component={TextField}
-                        label="Warning Zone"
-                        fullWidth
-                      >
-                        <MenuItem value="" >
-                          Select Warning Zone
-                        </MenuItem>
-                        {warningZone &&
-                          warningZone.map((item: any, index) => (
-                            <MenuItem value={item.value} key={index}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                      </Field>
-                      <Field
-                        InputProps={{
-                          inputProps: { min: 0 }
-                        }}
-                        type='number'
-                        autoComplete="off"
-                        id='input_shift_requirement_no_of_hcps'
-                        variant='outlined'
-                        name="hcp_count"
-                        component={TextField}
-                        label="No of HCPs"
-                        fullWidth
-                      />
-                    </div>
+                    <div className="d-flex shift-third-row shift-row mrg-top-30 ">
+                      <div className="shift-mode">
+                        <FormLabel className={"form-label"}>{" Warning Zone"}</FormLabel>
 
+                        <div className="mrg-top-10">
+                          <Field component={RadioGroup} name="warning_type">
+                            <div className="d-flex">
+                              {warningZone && warningZone.map((item: any, index) => {
+                                return (
+                                  <div>
+                                    <FormControlLabel key={"input_add_shift_warniing_type" + index} value={item.value} control={<Radio required disabled={isSubmitting} />} disabled={isSubmitting} name="warning_type" label={item.label} />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </Field>
+                        </div>
+                      </div>
+                      <div className="shift-calender shift-mode">
+                        <Field
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          type="number"
+                          autoComplete="off"
+                          id="input_shift_requirement_no_of_hcps"
+                          variant="outlined"
+                          name="hcp_count"
+                          component={TextField}
+                          label="No of HCPs"
+                          fullWidth
+                        />
+                      </div>
+                    </div>
                     <div className="shift-third-row mrg-top-30">
                       <Field
-                        id='input_shift_requirement_shift_details'
+                        id="input_shift_requirement_shift_details"
                         label="Shift Requirement Details"
                         placeholder="Type Shift Details Here"
-                        variant='outlined'
+                        variant="outlined"
                         component={TextField}
                         type={"text"}
                         name="shift_details"
@@ -554,25 +504,20 @@ const AddShiftsScreen = () => {
 
                   <div className="add-shift-btn-grp mrg-top-30">
                     <Button
-                      id='btn_add_shift_requirement_delete'
+                      id="btn_add_shift_requirement_delete"
                       color={"primary"}
                       variant={"outlined"}
                       type="reset"
                       onClick={() => {
                         resetForm();
-                        setValue(null)
-                        setMode('')
+                        setValue(null);
+                        setMode("");
                         handleCancelAdd();
                       }}
                     >
                       Delete
                     </Button>
-                    <Button type="submit"
-                      id='btn_add_shift_requirement_save'
-                      variant={"contained"}
-                      className={"normal"}
-                      color={"primary"}
-                    >
+                    <Button type="submit" id="btn_add_shift_requirement_save" variant={"contained"} className={"normal"} color={"primary"}>
                       Save
                     </Button>
                   </div>
@@ -582,49 +527,33 @@ const AddShiftsScreen = () => {
           </div>
         )}
 
-        {
-          shifts.length > 0 &&
-          shifts.map((item: ShiftItem, index: any) => (
-            <ReadOnlyShifts mode={mode} facilityOffset={facilityOffset} key={index} item={item} shifts={shifts} setShifts={setShifts} />
-          ))
-        }
+        {shifts.length > 0 && shifts.map((item: ShiftItem, index: any) => <ReadOnlyShifts mode={mode} facilityOffset={facilityOffset} key={index} item={item} shifts={shifts} setShifts={setShifts} />)}
 
-        {
-          shifts.length > 0 && <div className="shift-actions mrg-top-30">
-            <Button
-              id='btn_add_shift_requirement_cancel_requirement'
-              type="reset"
-              size="large"
-              variant={"outlined"}
-              className={"normal"}
-              color={"primary"}
-              onClick={openAdd}
-            >
+        {shifts.length > 0 && (
+          <div className="shift-actions mrg-top-30">
+            <Button id="btn_add_shift_requirement_cancel_requirement" type="reset" size="large" variant={"outlined"} className={"normal"} color={"primary"} onClick={openAdd}>
               Cancel
             </Button>
             <Button
-              id='btn_add_shift_requirement_save_requirement'
+              id="btn_add_shift_requirement_save_requirement"
               disabled={doubleClick}
               onClick={() => {
-                setDoubleClick(true)
-                onSubmit()
-
+                setDoubleClick(true);
+                onSubmit();
               }}
               size="large"
               variant={"contained"}
               color={"primary"}
-              className={doubleClick?'has-loading-spinner':""}
+              className={doubleClick ? "has-loading-spinner" : ""}
             >
-              {doubleClick?"Saving Requirement":"Save Requirement"}
+              {doubleClick ? "Saving Requirement" : "Save Requirement"}
             </Button>
           </div>
-        }
+        )}
         <ScrollToTop smooth color="white" />
-      </div >
+      </div>
     )
   );
 };
 
 export default AddShiftsScreen;
-
-

@@ -1,34 +1,43 @@
 @import "src/assets/scss/common";
 
 .hcp_details {
-  .flex-1 {
-    flex: 1px !important;
-  }
-  .attachments_wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    .attachments {
-      flex: 50%;
-      margin-top: 20px;
-    }
-  }
-  h4 {
-    color: $text-light;
-  }
-  h3 {
-    color: $light-black;
-  }
-  p {
-    color: $light-black;
-    margin-top: -10px;
-  }
-  .title-count {
-    color: $light-black;
-    //margin-bottom: 0px;
-    margin-top: 30px;
-  }
-  .preview-file {
-    margin-top: 14px;
-  }
+	.d-flex {
+		display: flex;
+		gap: 15px;
+	}
+	.flex-1 {
+		flex: 1px !important;
+		max-width: 32% !important;
+	}
+	.attachments_wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		.attachments {
+			flex: 50%;
+			margin-top: 20px;
+		}
+	}
+	h4 {
+		color: $text-light;
+	}
+	h3 {
+		color: $light-black;
+	}
+	p {
+		color: $light-black;
+		margin-top: -10px;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		hyphens: auto;
+		text-align: left;
+	}
+	.title-count {
+		color: $light-black;
+		//margin-bottom: 0px;
+		margin-top: 30px;
+	}
+	.preview-file {
+		margin-top: 14px;
+	}
 }

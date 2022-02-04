@@ -9,7 +9,7 @@ interface readOnlyRowProps {
 
 const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{
@@ -30,7 +30,7 @@ const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
         />
       </td>
 
-      <td >
+      <td>
         <TextField
           InputProps={{
             disableUnderline: true,
@@ -61,10 +61,10 @@ const ReadOnlyRow = ({ member, handleDeleteClick }: readOnlyRowProps) => {
       </td>
 
       <td>
-      <Tooltip title={`Delete ${member.name} Facility Member`}>
-        <IconButton onClick={() => handleDeleteClick(member?.tempId)}>
-          <DeleteIcon className="delete-icon" />
-        </IconButton>
+        <Tooltip title={`Delete ${member.name} Facility Member`}>
+          <IconButton onClick={() => handleDeleteClick(member?.tempId)}>
+            <DeleteIcon className="delete-icon" />
+          </IconButton>
         </Tooltip>
       </td>
     </TableRow>

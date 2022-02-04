@@ -6,12 +6,12 @@ import React from "react";
 interface EducationReadOnlyProps {
   education: any;
   openAdd: any;
-  index: number
+  index: number;
 }
 
 const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
   return (
-    <TableRow>
+     <TableRow className={"mat-tr"}>
       <td>
         <TextField
           InputProps={{
@@ -45,7 +45,7 @@ const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.start_date).format('MM-YYYY')}
+          value={education.start_date ? moment(education.start_date).format("MM-YYYY") : "NA"}
           disabled
         />
       </td>
@@ -55,7 +55,7 @@ const ReadOnlyRow = ({ education, openAdd }: EducationReadOnlyProps) => {
           InputProps={{
             disableUnderline: true,
           }}
-          value={moment(education.graduation_date).format('MM-YYYY')}
+          value={education.graduation_date ? moment(education.graduation_date).format("MM-YYYY") : "NA"}
           disabled
         />
       </td>

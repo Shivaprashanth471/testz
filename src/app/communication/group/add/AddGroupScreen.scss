@@ -4,6 +4,9 @@
     .MuiFormControl-fullWidth {
         width: 250px;
     }
+    .padding{
+        padding:20px 0px 20px 15px !important;
+    }
     .group-title{
         width: 100%;
     }
@@ -30,5 +33,25 @@
         justify-content: center;
         width: 150px;
 
+    }
+    .add-members-list-table{
+        .mat-td-checkbox{
+            min-width: 30px;
+            max-width: 30px;
+        }
+        .mat-td-hcp-type{
+            min-width: 150px;
+            max-width: 150px;
+          }
+      
+          .mat-td-hcp-name{
+            min-width: 250px;
+            max-width: 250px;
+          }      
+          .mat-td-actions{
+            min-width: 120px;
+            max-width: 120px;
+            text-align: center !important;
+          }
     }
 }

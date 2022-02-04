@@ -171,8 +171,8 @@ console.log(open)
             <>
               <TableContainer component={Paper} className={"table-responsive"}>
                 <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
+                  <TableHead className={"mat-thead"}>
+                     <TableRow className={"mat-tr"}>
                       {list?.table.matColumns.map(
                         (column: any, columnIndex: any) => (
                           <TableCell
@@ -184,7 +184,7 @@ console.log(open)
                       )}
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                 <TableBody className={"mat-tbody"}>
                     {list.table.canShowNoData() &&
                       <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                     {list?.table.data.map((row: any, rowIndex: any) => {
