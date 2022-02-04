@@ -1,17 +1,16 @@
-import React, { PropsWithChildren, useState, useEffect } from "react";
+import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
+import FormLabel from "@material-ui/core/FormLabel";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import { Field, FieldProps, Form, Formik } from "formik";
+import { CheckboxWithLabel, RadioGroup, TextField } from "formik-material-ui";
+import { DatePicker } from "formik-material-ui-pickers";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
-import { Field, FieldProps, Form, Formik } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-material-ui";
-import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, travelDistancePreference, vaccine } from "../../../../constants/data";
-import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
-import { hcpFormValidation } from "../../add/AddHcpValuesValidationsComponent";
 import { ScrollToError } from "../../../../components/ScrollToError";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, travelDistancePreference, vaccine } from "../../../../constants/data";
+import { hcpFormValidation } from "../../add/AddHcpValuesValidationsComponent";
 import HcpEditAttachmentsComponent from "../EditAttachments/HcpEditAttachmentsComponent";
-import FormLabel from "@material-ui/core/FormLabel";
-import { RadioGroup } from "formik-material-ui";
 
 export interface EditHcpBasicDetailsComponentProps {
   contractFile: any;
@@ -276,14 +275,11 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               <div className="input-container">
                 <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                 <Field
-                  variant="inline"
-                  openTo="date"
-                  inputVariant="outlined"
-                  component={DateTimePicker}
-                  placeholder="MM/DD/YYYY HH:MM "
+                  variant="outlined"
+                  component={TextField}
+                  placeholder="MM-DD-YYYY"
                   fullWidth
                   autoComplete="off"
-                  InputLabelProps={{ shrink: true }}
                   label="Last Call Date"
                   name="nc_details.last_call_date"
                 />
@@ -537,7 +533,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                 <div className="flex-1">
                   <div className="pdd-top-10">
-                    <FormLabel className={"form-label"}>Legally Authorised to work in United States?</FormLabel>
+                    <FormLabel className={"form-label"}>Legally Authorized to work in United States?</FormLabel>
                   </div>
                   <div className="mrg-top-10">
                     <Field component={RadioGroup} name="nc_details.is_authorized_to_work">

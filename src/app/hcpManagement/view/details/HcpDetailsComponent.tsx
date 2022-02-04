@@ -184,7 +184,6 @@ const HcpDetailsComponent = (props: any) => {
           <h3>Attachments</h3>
           {sortedAttachments?.length === 0 && (
             <p>
-              {" "}
               <NoDataToShowCardComponent />
             </p>
           )}
@@ -220,24 +219,24 @@ const HcpDetailsComponent = (props: any) => {
         <div className="d-flex">
           <div className="flex-1">
             <h4>DNR</h4>
-            <p>{hcpBasicDetails?.nc_details?.dnr}</p>
+            <p>{hcpBasicDetails?.nc_details?.dnr ? hcpBasicDetails?.nc_details?.dnr : 'N/A'}</p>
           </div>
 
           <div className="flex-1">
             <h4>Contact Type</h4>
-            <p>{hcpBasicDetails?.nc_details?.contact_type}</p>
+            <p>{hcpBasicDetails?.nc_details?.contact_type ? hcpBasicDetails?.nc_details?.contact_type : "N/A"}</p>
           </div>
 
           <div className="flex-1">
             <h4>Preferred Location to Work</h4>
-            <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+            <p>{hcpBasicDetails?.nc_details?.location_preference ? hcpBasicDetails?.nc_details?.location_preference : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
             <h4>Preference Shift Type</h4>
-            <p>{hcpBasicDetails?.nc_details?.shift_type_preference}</p>
+            <p>{hcpBasicDetails?.nc_details?.shift_type_preference ? hcpBasicDetails?.nc_details?.shift_type_preference : "N/A"}</p>
           </div>
           <div className="flex-1">
             <h4>Zone Assignment</h4>
@@ -245,7 +244,7 @@ const HcpDetailsComponent = (props: any) => {
           </div>
           <div className="flex-1">
             <h4>Last Call Date</h4>
-            <p>{hcpBasicDetails?.nc_details?.last_call_date ? moment(hcpBasicDetails?.nc_details?.last_call_date).format("MMMM Do YYYY, hh:mm A") : "N/A"}</p>
+            <p>{hcpBasicDetails?.nc_details?.last_call_date ? moment(hcpBasicDetails?.nc_details?.last_call_date).format("MMMM Do YYYY") : "N/A"}</p>
           </div>
         </div>
 
@@ -254,7 +253,7 @@ const HcpDetailsComponent = (props: any) => {
         <div className="d-flex">
         <div className="flex-1">
             <h4>Vaccine</h4>
-            <p>{hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
+            <p>{!hcpBasicDetails?.nc_details?.vaccine ? "N/A" : hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
           </div>
 
           <div className="flex-1">
@@ -276,7 +275,7 @@ const HcpDetailsComponent = (props: any) => {
           </div>
           <div className="flex-1">
             <h4>Covid (or) Non Covid Facility ?</h4>
-            <p>{hcpBasicDetails?.nc_details?.covid_facility_preference}</p>
+            <p>{hcpBasicDetails?.nc_details?.covid_facility_preference ? hcpBasicDetails?.nc_details?.covid_facility_preference : "N/A"}</p>
           </div>
           <div className="flex-1">
             <h4>What Is More Important for You ?</h4>
@@ -309,29 +308,30 @@ const HcpDetailsComponent = (props: any) => {
             <p>{hcpBasicDetails?.nc_details?.is_gusto_onboarded !== "" ? (hcpBasicDetails?.nc_details?.is_gusto_onboarded === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>
           <div className="flex-1">
-            <h4>Legally Authorised to work in United States ?</h4>
+            <h4>Require Sponsorship for Employment in United States?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+        
+        </div>
+
+        <div className="d-flex">
+            <div className="flex-1">
+            <h4>Legally Authorized to work in United States ?</h4>
             <p>{hcpBasicDetails?.nc_details?.is_authorized_to_work !== "" ? (hcpBasicDetails?.nc_details?.is_authorized_to_work === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
-            <h4>Require Sponsorship for Employment in United States?</h4>
-            <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
-          </div>
-        </div>
-
-        <div className="d-flex">
-          <div className="flex-1">
             <h4>Family Considerations</h4>
-            <p className="summary">{hcpBasicDetails?.nc_details?.family_consideration}</p>
+            <p className="summary">{hcpBasicDetails?.nc_details?.family_consideration ? hcpBasicDetails?.nc_details?.family_consideration : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
             <h4>Other Information Gathered</h4>
-            <p>{hcpBasicDetails?.nc_details?.other_information}</p>
+            <p>{hcpBasicDetails?.nc_details?.other_information ? hcpBasicDetails?.nc_details?.other_information : "N/A"}</p>
           </div>
         </div>
       </div>

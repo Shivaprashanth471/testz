@@ -117,7 +117,10 @@ export const hcpFormValidation = Yup.object({
     is_gusto_invited: Yup.string().trim().typeError("must be valid ").nullable(),
     is_gusto_onboarded: Yup.string().trim().typeError("must be valid ").nullable(),
     gusto_type: Yup.string().trim().typeError("must be valid text").nullable(),
-    nc_last_updated: Yup.string().trim().typeError("must be valid text").nullable(),
+    nc_last_updated: Yup.string()
+    .trim()
+    .typeError("must be valid")
+    .matches(/^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/, "MM-DD-YYYY format"),
     last_call_date: Yup.string().typeError("must be date").nullable(),
     contact_type: Yup.string().trim().typeError("must be valid text").nullable(),
     other_information: Yup.string().min(2, "invalid").trim().typeError("must be valid text").max(200, "max limit 200").nullable(),

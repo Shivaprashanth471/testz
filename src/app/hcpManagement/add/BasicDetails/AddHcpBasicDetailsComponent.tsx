@@ -3,7 +3,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-material-ui";
-import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
+import { DatePicker } from "formik-material-ui-pickers";
 import React, { useCallback, useEffect, useState } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
@@ -312,14 +312,11 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                 <div className="input-container">
                   <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                   <Field
-                    variant="inline"
-                    openTo="date"
-                    inputVariant="outlined"
-                    component={DateTimePicker}
-                    placeholder="MM/DD/YYYY HH:MM "
+                    variant='outlined'
+                    component={TextField}
+                    placeholder="MM-DD-YYYY"
                     fullWidth
                     autoComplete="off"
-                    InputLabelProps={{ shrink: true }}
                     label="Last Call Date"
                     name="nc_details.last_call_date"
                   />
@@ -573,7 +570,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
 
                   <div className="flex-1">
                     <div className="pdd-top-10">
-                      <FormLabel className={"form-label"}>Legally Authorised to work in United States?</FormLabel>
+                      <FormLabel className={"form-label"}>Legally Authorized to work in United States?</FormLabel>
                     </div>
                     <div className="mrg-top-10">
                       <Field component={RadioGroup} name="nc_details.is_authorized_to_work">
