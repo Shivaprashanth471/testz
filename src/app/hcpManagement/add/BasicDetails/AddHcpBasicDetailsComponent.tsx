@@ -74,6 +74,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
     }
   }, [vaccineStatus]);
 
+
   return (
     <div>
       <Formik initialValues={hcpInitialState} validateOnChange={true} validationSchema={hcpFormValidation} onSubmit={onAdd}>

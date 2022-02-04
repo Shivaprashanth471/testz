@@ -1,34 +1,28 @@
-# Getting Started with Create React App
+# Vitawerks-Admin-UI
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running the project
 
-In the project directory, you can run:
+1. Clone the project `https://github.com/Vitawerks/Vitawerks-Admin-UI.git`.
+2. Install dependencies `yarn install`.
+3. Run `yarn run start`.
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `yarn start`
+## Adding new environment
+1. Add a file with name `.env.ENVIRONMENT_NAME` at root level.
+2. copy contents from `.env.template` file into newly created environment file and edit the values as per requirements.
 
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Building the project
+1. Staging/Dev - `yarn run build:staging`
+2. Test/QA - `yarn run build:qa`
+3. UAT - `yarn run build:uat`
+4. PROD - `yarn run build:prod`
 
 ### `yarn test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `yarn eject`
 
@@ -45,3 +39,31 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+### CICD Trigger
+
+- **For DEV ENV**
+  ```
+  Push code to dev branch
+
+  ```
+- **For Test ENV** 
+  ```
+  We Need to Push the code to dev branch with Tag
+
+  ```
+  ```
+  After commiting the code. Use the Command "yarn version patch/minor/major".
+
+  ```
+
+- **For UAT ENV**
+  ```
+  Merge the dev branch with main branch by raising Pull request
+
+  ```
+- **For PROD ENV**
+  ```
+  Approach Frontend or Devops Lead to Trigger the Prod Workflow
+
+  ```
