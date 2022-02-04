@@ -13,12 +13,14 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
+import DialogComponent from "../../../../components/DialogComponent";
 import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from "../../../../components/NoDataCardComponent";
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import ShiftFilter from "../../filters/ShiftFilter";
+import RejectShiftRequirementComponent from "../rejectShiftRequirement/RejectShiftRequirementComponent";
 import "./ShiftRequirementListScreen.scss";
 
 const CssTextField = withStyles({
@@ -36,7 +38,7 @@ const ShiftRequirementListScreen = () => {
   const [hcpTypes, setHcpTypes] = useState<any | null>(null);
   const [facilityList, setFacilityList] = useState<any | null>(null);
   const [regions, setRegions] = useState<any>([]);
-
+  const [isRejectShiftOpen, setRejectShiftOpen] = useState<boolean>(false);
   const [selectedRegion, setSelectedRegion] = useLocalStorage<string>("selectedRegion", "");
   const [statusType, setStatusType] = useLocalStorage<any | string>("statusType", "open");
   const [selectedHcps, setSelectedHcps] = useLocalStorage<any[]>("selectedHcps", []);
@@ -47,28 +49,24 @@ const ShiftRequirementListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftReqPageSizeIndex", 10);
 
-  const [selectedShifts, setSelectedShifts] = useState<any>(null)
+  const [selectedShifts, setSelectedShifts] = useState<any>([])
   const [isAllselected, setAllSelected] = useState<boolean>(false);
   const [selectedCount, setSelectedCount] = useState<any>(-1)
   // const [isSelectedShifts, setIsSelectedShifts] = useState<boolean>(false)
   // console.log(selectedShifts)
   const getHcpTypes = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-types")
-      .then((resp) => {
-        setHcpTypes(resp.data || []);
-      })
+    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
+      setHcpTypes(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
-        setRegions(resp.data || []);
-      })
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
+      setRegions(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -135,14 +133,9 @@ const ShiftRequirementListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "Status", "Actions"],
-        mobileMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "Status", "Actions"],
-      },
-      ENV.API_URL + url,
-      setList,
-      ApiService,
-      "post"
-    );
+        webMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type","HCP'S Filled", "Status", "Actions"],
+        mobileMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "HCP'S Filled","Status", "Actions"],
+      },ENV.API_URL + url,setList,ApiService,"post");
 
     let tableWrapperObj = new TsDataListWrapperClass(options);
     setList({ table: tableWrapperObj });
@@ -191,42 +184,36 @@ const ShiftRequirementListScreen = () => {
     list?.table?.setExtraPayload(payload);
     list?.table?.getList(1);
     // eslint-disable-next-line
-  }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType]);
-
+  }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType,setAllSelected]);
+console.log(isAllselected)
   const handleSelectAll = (event: any) => {
-    selectedShifts?.forEach((item: any) => {
-      item.checked = event.target.checked
-    })
     if(event.target.checked===true){
-    setSelectedCount(1)
+      let temp: any[]=[]
+      list?.table?.data?.forEach((item: any) => {
+        temp.push(item._id)
+      })
+      setSelectedShifts([...temp])
+      setSelectedCount(1)
     }else{
+      setSelectedShifts([])
       setSelectedCount(-1)
     }
-    setSelectedShifts(selectedShifts)
     setAllSelected(event.target.checked)
   }
 
-  const handleSelectShifts = (event: any, index: any) => {
-    let temp = selectedShifts?.filter((item:any)=>item?.checked===true)
-    if(event?.target?.checked === false){
-      console.log(212,temp)
-    setSelectedCount(temp.length-1===0?-1:temp.length)
-    }else{
-      console.log(215)
-      setSelectedCount(1)
+  const handleSelectShifts = useCallback((event: any, _id: any) => {
+    console.log(event.target.checked)
+    if (event.target.checked === true) {
+      setSelectedShifts([...selectedShifts,_id]);
+      setSelectedCount(1);
+    } else {
+      let index = selectedShifts?.indexOf(_id);
+      console.log(index)
+      let tempSelectedShifts = selectedShifts?.filter((item:any)=>item!==_id)
+      setSelectedShifts([...tempSelectedShifts]);
+      // setSelectedCount(temp.length - 1 === 0 ? -1 : temp.length);
     }
-    selectedShifts[index].checked = event.target.checked
-    setSelectedShifts([...selectedShifts])
-  }
-
-  useEffect(() => {
-    let temp: any = []
-    list?.table?.data?.forEach((item: any) => {
-        item = {...item, checked: false }
-        temp.push(item)
-    })
-    setSelectedShifts(temp)
-}, [list])
+  }, [selectedShifts])
 
   const clearFilterValues = () => {
     setSelectedTimeTypes([]);
@@ -251,8 +238,41 @@ const ShiftRequirementListScreen = () => {
   useEffect(() => {
     getList();
   }, [getList]);
+
+  useEffect(() => {
+    setAllSelected(false)
+  }, [list?.table?.data])
+
+  const openRejectShift = useCallback(() => {
+    setRejectShiftOpen(true);
+  }, [])
+
+  const cancelRejectShift = useCallback(() => {
+    setRejectShiftOpen(false);
+    getList()
+  }, [getList])
+
+  const confirmRejectShift = useCallback(() => {
+    setRejectShiftOpen(false);
+    getList()
+  }, [getList])
+
+  const isSelected = useCallback((_id: any) => {
+    if (selectedShifts?.indexOf(_id) !== -1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+
+  }, [selectedShifts])
+
+
   return (
     <>
+      <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
+        <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={selectedShifts} />
+      </DialogComponent>
       <div className={"shift-requirment-list screen crud-layout pdd-30"}>
         {list && list.table?._isDataLoading && (
           <div className="table-loading-indicator">
@@ -327,10 +347,9 @@ const ShiftRequirementListScreen = () => {
               </div>
             </div>
             <div className="actions d-flex">
-            <div className="mrg-left-20">
+              <div className="mrg-left-20">
                 <Tooltip title={"Cancel Shift Requirement"}>
-                  <Button variant={"contained"} color={"primary"} disabled={selectedCount===-1}>
-                    <AddRounded />
+                  <Button variant={"contained"} color={"primary"} disabled={selectedCount === -1} onClick={openRejectShift}>
                     &nbsp;&nbsp;Cancel Shift&nbsp;&nbsp;
                   </Button>
                 </Tooltip>
@@ -363,13 +382,15 @@ const ShiftRequirementListScreen = () => {
                   </TableHead>
                   <TableBody className={"mat-tbody"}>
                     {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
-                    {list?.table.data.map((row: any, rowIndex: any) => {
+                    {list.table?.data.length > 0 && list?.table.data.map((row: any, rowIndex: any) => {
                       const { start_time, end_time } = CommonService.getUtcTimeInAMPM(row["shift_timings"]?.start_time, row["shift_timings"]?.end_time);
                       const shift_date = CommonService.getUtcDate(row["shift_date"]);
+                      const isItemSelected = isSelected(row["_id"]);
+                      console.log(isItemSelected)
                       return (
                         <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
                           <TableCell className="mat-td mat-td-checkbox">
-                            <input type={"checkbox"} id={"cb_" + rowIndex} checked={selectedShifts[rowIndex]?.checked} onChange={(event) => handleSelectShifts(event, rowIndex)} />
+                            <input type={"checkbox"} id={"cb_" + rowIndex} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
                           </TableCell>
                           <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
                           <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
@@ -380,6 +401,7 @@ const ShiftRequirementListScreen = () => {
                             {start_time}&nbsp;-&nbsp;{end_time}
                           </TableCell>
                           <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
+                          <TableCell className="mat-td mat-td-shift-type">{row["approved_hcps"]>=0 ? row["approved_hcps"]+"/"+row['hcp_count']:"N/A"}</TableCell>
                           <TableCell className={`${row["status"]} mat-td mat-td-status`}>{row["status"]}</TableCell>
                           <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["title"]} view details`}>

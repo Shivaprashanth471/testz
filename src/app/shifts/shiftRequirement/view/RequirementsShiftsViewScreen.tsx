@@ -83,7 +83,7 @@ const RequirementsShiftsViewScreen = () => {
     return <div className="pending-shifts-view screen crud-layout pdd-30">
 
         <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
-            <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} />
+            <RejectShiftRequirementComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={null}/>
         </DialogComponent>
         <DialogComponent open={isAddOpen} cancel={cancelAdd}>
             <AddHcpToShiftScreen cancel={cancelAdd} confirm={confirmAdd} hcp_type={basicDetails?.hcp_type} />

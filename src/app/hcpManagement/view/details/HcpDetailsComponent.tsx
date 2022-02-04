@@ -143,6 +143,24 @@ const HcpDetailsComponent = (props: any) => {
           <p className="summary">{hcpBasicDetails?.about}</p>
         </div>
       </div>
+      <div className="mrg-top-15 custom-border pdd-20 pdd-left-40 pdd-right-40">
+            <div className="">
+              <h3>Reason for Cancellation</h3>
+              <p>{hcpBasicDetails?.rejected_details?.reason}</p>
+            </div>
+            <div className="reject-by-wrapper d-flex">
+              <div>
+                <h4>Cancelled By:</h4>
+                <p>
+                  {hcpBasicDetails?.rejected_details?.rejected_by?.first_name} &nbsp; {hcpBasicDetails?.rejected_details?.rejected_by?.last_name}
+                </p>
+              </div>
+              <div className="mrg-left-50">
+                <h4>Role:</h4>
+                <p>{hcpBasicDetails?.rejected_details?.rejected_by?.role}</p>
+              </div>
+            </div>
+          </div>
       <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
         <h3>Professional Details</h3>
         <div className="d-flex">

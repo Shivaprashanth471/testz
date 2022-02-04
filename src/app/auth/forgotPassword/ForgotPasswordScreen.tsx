@@ -121,6 +121,7 @@ const ForgotPasswordScreen = (props: any) => {
           </div>
           <Formik
             initialValues={{ email: "" }}
+            validateOnBlur={true}
             validateOnChange={true}
             validationSchema={forgotPasswordFormValidation}
             onSubmit={onSendResetLink}
@@ -200,7 +201,7 @@ const ForgotPasswordScreen = (props: any) => {
                 <div className="form-field position-relative email-wrapper">
                   <FormLabel className={"form-label"}>OTP*</FormLabel>
                   {isResendOtp ? <p className="change-email-wrapper">Resend OTP</p> :
-                    <p className="change-email-wrapper" onClick={ResendOTP}>{isSeconds ? `Resend otp in ${seconds} seconds` : "Resend OTP"}</p>
+                   isSeconds ? <p className="change-email-wrapper">{`Resend otp in ${seconds} seconds`}</p>:<p className="change-email-wrapper" onClick={ResendOTP}> {"Resend OTP"}</p>
                   }
                   <Field
                     variant={"outlined"}

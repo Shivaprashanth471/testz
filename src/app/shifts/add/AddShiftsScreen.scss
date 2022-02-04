@@ -1,6 +1,9 @@
 @import "src/assets/scss/common";
 
 .add-shifts {
+  .MuiTypography-body1 {
+    color: $text-light !important;
+  }
   .add-shift-requirment-text{
     color: $primary-color;
     text-decoration: underline;

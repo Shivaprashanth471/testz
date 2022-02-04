@@ -21,6 +21,7 @@ const formValidation = Yup.object({
 export interface RejectShiftRequirementComponentProps {
   cancel: () => void;
   confirm: () => void;
+  selectedShifts:any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,16 +55,35 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
   const classes = useStyles();
   const { user } = useSelector((state: StateParams) => state.auth);
   const reasonsList = ["NCNS", "Nurse Cancel", "SNF Cancel", "Vitawerks Cancel", "Sent Home", "DNR"];
+  const selectedShifts = props?.selectedShifts;
 
-  const onAdd = (payload: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
+  const onCancelShift = (payload: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
+    payload = {
+      ...payload,
+      cancelled_by: user?._id
+    };
+
+    CommonService._api.patch(ENV.API_URL + "shift/requirement/" +  id + "/cancel", payload).then((resp) => {
+        setSubmitting(false);
+        if (afterConfirm) {
+          afterConfirm();
+          resetForm({});
+        }
+      })
+      .catch((err) => {
+        CommonService.handleErrors(setErrors, err);
+        setSubmitting(false);
+      });
+  };
+
+  const onCancelMultipleShifts = (payload: any, { setSubmitting, setErrors, resetForm }: FormikHelpers<any>) => {
     payload = {
       ...payload,
       cancelled_by: user?._id,
+      selectedShifts:selectedShifts
     };
 
-    CommonService._api
-      .patch(ENV.API_URL + "shift/requirement/" + id + "/cancel", payload)
-      .then((resp) => {
+    CommonService._api.patch(ENV.API_URL + "shift/requirement/" + id + "/ncel", payload).then((resp) => {
         setSubmitting(false);
         if (afterConfirm) {
           afterConfirm();
@@ -81,12 +101,12 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
       afterCancel();
     }
   };
-
+console.log(selectedShifts)
   return (
     <div>
       <div className={classes.paper}>
         <h2>Rejection Request</h2>
-        <Formik initialValues={{ reason: "" }} validateOnChange={true} validationSchema={formValidation} onSubmit={onAdd}>
+        <Formik initialValues={{ reason: "" }} validateOnChange={true} validationSchema={formValidation} onSubmit={selectedShifts?onCancelMultipleShifts:onCancelShift}>
           {({ isSubmitting, isValid, dirty, resetForm }) => (
             <Form className={"form-holder"}>
               <DialogContent>

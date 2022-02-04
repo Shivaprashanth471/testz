@@ -14,9 +14,7 @@ const CancelledShiftsViewScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const getShiftDetails = useCallback(() => {
     // config
-    CommonService._api
-      .get(ENV.API_URL + "shift/" + id)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "shift/" + id).then((resp) => {
         setBasicDetails(resp.data);
         setIsLoading(false);
       })

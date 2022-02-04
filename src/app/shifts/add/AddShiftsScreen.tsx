@@ -1,8 +1,8 @@
-import { Button, MenuItem, Paper, TextField as NormalTextField } from "@material-ui/core";
+import { Button, FormControlLabel, FormLabel, MenuItem, Paper, Radio, TextField as NormalTextField } from "@material-ui/core";
 import { DateRangeOutlined } from "@material-ui/icons";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { TextField } from "formik-material-ui";
+import { RadioGroup, TextField } from "formik-material-ui";
 import moment from "moment";
 import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useState } from "react";
@@ -106,7 +106,7 @@ const AddShiftsScreen = () => {
       .then((res) => {
         setFacilityOffset(res?.data?.timezone);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }, []);
 
   const getHcpTypes = useCallback(() => {
@@ -403,29 +403,27 @@ const AddShiftsScreen = () => {
                     </div>
                     <div className="shift-second-row shift-row mrg-top-30">
                       <div className="shift-mode">
-                        <Field
-                          SelectProps={showDropDownBelowField}
-                          id="input_shift_requirement_mode"
-                          variant="outlined"
-                          onChange={(e: any) => {
+
+                        <div className="">
+                          <FormLabel className={"form-label"}>{"Date Mode"}</FormLabel>
+                        </div>
+                        <div className="mrg-top-10">
+                          <Field component={RadioGroup} name="mode" onChange={(e: any) => {
                             setFieldValue("mode", e.target.value);
                             setMode(e.target.value);
-                          }}
-                          select
-                          name="mode"
-                          component={TextField}
-                          label="Date Mode"
-                          placeholder="Select Mode"
-                          fullWidth
-                        >
-                          <MenuItem value="">Select Date Mode</MenuItem>
-                          {calenderMode &&
-                            calenderMode.map((item: any, index) => (
-                              <MenuItem value={item.value} key={index}>
-                                {item.label}
-                              </MenuItem>
-                            ))}
-                        </Field>
+                          }}>
+                            <div className="d-flex">
+                              {calenderMode && calenderMode.map((item: any, index) => {
+                                return (
+                                  <div>
+                                    <FormControlLabel key={"input_hcp_add_more_important_preference" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="mode" label={item.label} />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </Field>
+                        </div>
+
                       </div>
                       <div className="shift-calender">
                         <Field
@@ -452,31 +450,40 @@ const AddShiftsScreen = () => {
                         <DateRangeOutlined style={handleShowHideCalender()} className="date-icon" fontSize="large" color="action" />
                       </div>
                     </div>
-                    <div className="shift-third-row shift-row mrg-top-30 ">
-                      <Field SelectProps={showDropDownBelowField} id="input_shift_requirement_warning_zone" variant="outlined" select name="warning_type" component={TextField} label="Warning Zone" fullWidth>
-                        <MenuItem value="">Select Warning Zone</MenuItem>
-                        {warningZone &&
-                          warningZone.map((item: any, index) => (
-                            <MenuItem value={item.value} key={index}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                      </Field>
-                      <Field
-                        InputProps={{
-                          inputProps: { min: 0 },
-                        }}
-                        type="number"
-                        autoComplete="off"
-                        id="input_shift_requirement_no_of_hcps"
-                        variant="outlined"
-                        name="hcp_count"
-                        component={TextField}
-                        label="No of HCPs"
-                        fullWidth
-                      />
-                    </div>
+                    <div className="d-flex shift-third-row shift-row mrg-top-30 ">
+                      <div className="shift-mode">
+                        <FormLabel className={"form-label"}>{" Warning Zone"}</FormLabel>
 
+                        <div className="mrg-top-10">
+                          <Field component={RadioGroup} name="warning_type">
+                            <div className="d-flex">
+                              {warningZone && warningZone.map((item: any, index) => {
+                                return (
+                                  <div>
+                                    <FormControlLabel key={"input_add_shift_warniing_type" + index} value={item.value} control={<Radio disabled={isSubmitting} />} disabled={isSubmitting} name="warning_type" label={item.label} />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </Field>
+                        </div>
+                      </div>
+                      <div className="shift-calender shift-mode">
+                        <Field
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          type="number"
+                          autoComplete="off"
+                          id="input_shift_requirement_no_of_hcps"
+                          variant="outlined"
+                          name="hcp_count"
+                          component={TextField}
+                          label="No of HCPs"
+                          fullWidth
+                        />
+                      </div>
+                    </div>
                     <div className="shift-third-row mrg-top-30">
                       <Field
                         id="input_shift_requirement_shift_details"
