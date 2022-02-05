@@ -234,7 +234,6 @@ const GroupViewScreen = () => {
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }
                                     {list?.table.data.map((row: any, rowIndex: any) => {
-
                                         return (
                                             <TableRow className={"mat-tr"} role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                                 <TableCell className="mat-td mat-td-hcp-name">
