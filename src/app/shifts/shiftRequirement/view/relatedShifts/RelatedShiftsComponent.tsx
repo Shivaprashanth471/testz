@@ -79,7 +79,7 @@ const RelatedShiftsComponent = (props: PropsWithChildren<RelatedShiftsComponentP
                                         {row['approved_by']?.first_name} &nbsp;{row['approved_by']?.last_name}
                                     </TableCell>
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                        <Tooltip title={`View ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Details`}>
+                                        <Tooltip title={`View ${row['hcp_user']?.first_name} ${row['hcp_user']?.last_name} Details`}>
                                             <Link to={{ pathname: '/hcp/user/view/' + row['hcp_user_id'], state: { prevPath: "/shiftsRequirements/view/" + id } }} className="info-link" id={"link_hospital_details" + rowIndex} >
                                                 {('View Details')}
                                             </Link>

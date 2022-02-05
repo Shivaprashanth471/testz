@@ -141,7 +141,7 @@ const HcpDetailsComponent = (props: any) => {
       </div>
       <div className="mrg-top-15 custom-border pdd-20 pdd-left-40 pdd-right-40">
             <div className="">
-              <h3>Reason for Cancellation</h3>
+              <h3>Reason for Rejection</h3>
               <p>{hcpBasicDetails?.rejected_details?.reason}</p>
             </div>
             <div className="reject-by-wrapper d-flex">
