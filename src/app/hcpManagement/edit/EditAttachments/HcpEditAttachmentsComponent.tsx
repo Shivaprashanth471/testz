@@ -33,7 +33,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
         return filteredData.map((item: any, index: any) => {
             if (item.index !== -1) {
                 return (<>
-                    <div key={item?.id} className="attachments mrg-top-15">
+                    <div key={"render-sorted-attachments-"+item?.id} className="attachments mrg-top-15">
                         <br />
                         <div className="custom_file">
                             <h3 className="mrg-top-10 mrg-bottom-0 file_name file_attachment_title"> {item.attachment_type}</h3>
@@ -50,7 +50,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
                                         InputLabelProps={{ shrink: true }}
                                         onChange={(event) => handleExpiryDate(event, item?.index)}
                                         value={fileUpload?.wrapper[item?.index]?.extraPayload?.expiry_date}
-                                        disabled={item?.attachment_type === "SSN Card" || item?.attachment_type === "Covid Vaccine Card" || item?.attachment_type === "Vaccine Exemption Letter"}
+                                        disabled={item?.attachment_type === "Resume" || item?.attachment_type === "SSN Card" || item?.attachment_type === "Covid Vaccine Card" || item?.attachment_type === "Vaccine Exemption Letter"}
                                     />
                                     <div className="file_actions d-flex">
                                         <Tooltip title={`View ${item?.attachment_type}`}>
@@ -91,7 +91,7 @@ const HcpEditAttachmentsComponent = (props: PropsWithChildren<HcpEditAttachments
     function RenderAvailableAttachments() {
         return attachmentsDetails?.map((item: any, index: any) => {
             return (
-                <div key={index} className="attachments">
+                <div key={"render-available-attachments"+index} className="attachments">
                     <div className="custom_file">
                         <h3 className="mrg-top-10 mrg-bottom-0 file_name file_attachment_title"> {item.attachment_type}</h3>
                         <div className="d-flex">

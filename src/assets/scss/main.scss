@@ -9,6 +9,17 @@ body {
   background-color: $background-color;
   scrollbar-width: thin;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .summary{
 	overflow-wrap: break-word;
 	word-wrap: break-word;

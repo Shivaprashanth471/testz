@@ -57,18 +57,19 @@ const EditHcpComponent = () => {
   const [isDeleteAttachment, setIsDeleteAttachment] = useState<boolean>(false);
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
-    { attachment_type: "Physical Test", index: -1, id: 1 },
-    { attachment_type: "TB Test", index: -1, id: 2 },
-    { attachment_type: "Chest X-ray", index: -1, id: 3 },
-    { attachment_type: "CPR/BLS Card", index: -1, id: 4 },
-    { attachment_type: "Driver's Licence", index: -1, id: 5 },
-    { attachment_type: "SSN Card", index: -1, id: 6 },
-    { attachment_type: "License", index: -1, id: 7 },
-    { attachment_type: "Covid Certificate", index: -1, id: 8 },
-    { attachment_type: "Covid Vaccine Card", index: -1, id: 9 },
-    { attachment_type: "Covid Test Result", index: -1, id: 10 },
-    { attachment_type: "Livescan", index: -1, id: 11 },
-    { attachment_type: "Vaccine Exemption Letter", index: -1, id: 12 },
+    { attachment_type: "Resume", index : -1, id:1},
+    { attachment_type: "Physical Test", index: -1, id: 2 },
+    { attachment_type: "TB Test", index: -1, id: 3 },
+    { attachment_type: "Chest X-ray", index: -1, id: 4 },
+    { attachment_type: "CPR/BLS Card", index: -1, id: 5 },
+    { attachment_type: "Driver's Licence", index: -1, id: 6 },
+    { attachment_type: "SSN Card", index: -1, id: 7 },
+    { attachment_type: "License", index: -1, id: 8 },
+    { attachment_type: "Covid Certificate", index: -1, id: 9 },
+    { attachment_type: "Covid Vaccine Card", index: -1, id: 10 },
+    { attachment_type: "Covid Test Result", index: -1, id: 11 },
+    { attachment_type: "Livescan", index: -1, id: 12 },
+    { attachment_type: "Vaccine Exemption Letter", index: -1, id: 13 },
   ]);
 
   const [isHcpSubmitting, setIsHcpSubmitting] = useState<boolean>(false);

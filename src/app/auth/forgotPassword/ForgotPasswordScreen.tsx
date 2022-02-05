@@ -89,6 +89,7 @@ const ForgotPasswordScreen = (props: any) => {
 
   const onSetPassword = useCallback((payload: any, { setSubmitting, setErrors }: FormikHelpers<any>) => {
     payload.email = email;
+    payload.code = payload.code.toString();
     CommonService._api.post(ENV.API_URL + "resetPassword", payload).then((resp) => {
         setSubmitting(false);
         if (resp.success) {
@@ -208,7 +209,7 @@ const ForgotPasswordScreen = (props: any) => {
                     color={"primary"}
                     placeholder={"Enter OTP"}
                     component={TextField}
-                    type={"text"}
+                    type={"number"}
                     fullWidth
                     autoComplete="off"
                     name="code"

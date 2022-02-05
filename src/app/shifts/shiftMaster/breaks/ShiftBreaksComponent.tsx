@@ -213,6 +213,7 @@ const ShiftBreaksComponent = (props: PropsWithChildren<ShiftBreaksComponentProps
         if (tempError) {
             CommonService.showToast(tempError || "Error", "error")
             tempError = ""
+            setIsSubmitting(false)
         } else {
             data.forEach((item: any, index: any) => {
                 if (item?.break_in_time !== null) {

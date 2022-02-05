@@ -28,6 +28,7 @@ const AddHcpComponent = () => {
   const [volunteerExperiences, setVolunteerExperiences] = useState<any>([]);
   const [references, setReferences] = useState<any>([]);
   const [required_attachments, setRequiredAttachments] = useState<any>([
+    { name: "Resume", index : -1},
     { name: "Physical Test", index: -1 },
     { name: "TB Test", index: -1 },
     { name: "Chest X-ray", index: -1 },

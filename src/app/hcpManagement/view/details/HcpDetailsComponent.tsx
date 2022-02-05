@@ -35,6 +35,7 @@ const HcpDetailsComponent = (props: any) => {
 
   useEffect(() => {
     const required_attachments = [
+      { name: "Resume", index : -1},
       { name: "Physical Test", index: -1 },
       { name: "TB Test", index: -1 },
       { name: "Chest X-ray", index: -1 },

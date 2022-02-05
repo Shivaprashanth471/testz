@@ -22,6 +22,7 @@ import { ApiService, CommonService, Communications } from "../../../../helpers";
 import ShiftFilter from "../../filters/ShiftFilter";
 import RejectShiftRequirementComponent from "../rejectShiftRequirement/RejectShiftRequirementComponent";
 import "./ShiftRequirementListScreen.scss";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const CssTextField = withStyles({
   root: {
@@ -45,15 +46,12 @@ const ShiftRequirementListScreen = () => {
   const [selectedFacilities, setSelectedFacilities] = useLocalStorage<any[]>("selectedFacilities", []);
   const [selectedTimeTypes, setSelectedTimeTypes] = useLocalStorage<any[]>("selectedTimeTypes", []);
   const [dateRange, setDateRange] = useLocalStorage<any[]>("dateRange", [null, null]);
-
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftReqPageSizeIndex", 10);
-
   const [selectedShifts, setSelectedShifts] = useState<any>([])
   const [isAllselected, setAllSelected] = useState<boolean>(false);
   const [selectedCount, setSelectedCount] = useState<any>(-1)
-  // const [isSelectedShifts, setIsSelectedShifts] = useState<boolean>(false)
-  // console.log(selectedShifts)
+
   const getHcpTypes = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
       setHcpTypes(resp.data || []);
@@ -78,8 +76,7 @@ const ShiftRequirementListScreen = () => {
     if (selectedRegion) {
       payload.regions = [selectedRegion];
     }
-    ApiService.post(ENV.API_URL + "facility/lite", payload)
-      .then((res) => {
+    ApiService.post(ENV.API_URL + "facility/lite", payload).then((res) => {
         setFacilityList(res?.data || []);
         setIsFacilityListLoading(false);
       })
@@ -133,9 +130,9 @@ const ShiftRequirementListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type","HCP'S Filled", "Status", "Actions"],
-        mobileMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "HCP'S Filled","Status", "Actions"],
-      },ENV.API_URL + url,setList,ApiService,"post");
+        webMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "HCP'S Filled", "Status", "Actions"],
+        mobileMatColumns: ["Title", "Facility Name", "Shift Date", "Type of HCP", "No. of Hcps", "Shift Hours", "Time Type", "HCP'S Filled", "Status", "Actions"],
+      }, ENV.API_URL + url, setList, ApiService, "post");
 
     let tableWrapperObj = new TsDataListWrapperClass(options);
     setList({ table: tableWrapperObj });
@@ -184,17 +181,17 @@ const ShiftRequirementListScreen = () => {
     list?.table?.setExtraPayload(payload);
     list?.table?.getList(1);
     // eslint-disable-next-line
-  }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType,setAllSelected]);
-console.log(isAllselected)
+  }, [dateRange, selectedTimeTypes, selectedHcps, selectedFacilities, statusType, setAllSelected]);
+
   const handleSelectAll = (event: any) => {
-    if(event.target.checked===true){
-      let temp: any[]=[]
+    if (event.target.checked === true) {
+      let temp: any[] = []
       list?.table?.data?.forEach((item: any) => {
         temp.push(item._id)
       })
       setSelectedShifts([...temp])
       setSelectedCount(1)
-    }else{
+    } else {
       setSelectedShifts([])
       setSelectedCount(-1)
     }
@@ -202,16 +199,12 @@ console.log(isAllselected)
   }
 
   const handleSelectShifts = useCallback((event: any, _id: any) => {
-    console.log(event.target.checked)
     if (event.target.checked === true) {
-      setSelectedShifts([...selectedShifts,_id]);
+      setSelectedShifts([...selectedShifts, _id]);
       setSelectedCount(1);
     } else {
-      let index = selectedShifts?.indexOf(_id);
-      console.log(index)
-      let tempSelectedShifts = selectedShifts?.filter((item:any)=>item!==_id)
+      let tempSelectedShifts = selectedShifts?.filter((item: any) => item !== _id)
       setSelectedShifts([...tempSelectedShifts]);
-      // setSelectedCount(temp.length - 1 === 0 ? -1 : temp.length);
     }
   }, [selectedShifts])
 
@@ -266,6 +259,20 @@ console.log(isAllselected)
 
   }, [selectedShifts])
 
+
+  useEffect(() => {
+    let count = 0;
+    list?.table?.data?.forEach((item: any) => {
+      if (selectedShifts?.indexOf(item?._id) !== -1) {
+        count++
+      }
+    })
+    if (count === pageSizeIndex) {
+      setAllSelected(true)
+    }else{
+      setAllSelected(false)
+    }
+  }, [list?.table?.data,pageSizeIndex,selectedShifts])
 
   return (
     <>
@@ -370,7 +377,7 @@ console.log(isAllselected)
                   <TableHead className={"mat-thead"}>
                     <TableRow className={"mat-tr"}>
                       <TableCell padding="checkbox" className="mat-th">
-                        <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                        <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                       </TableCell>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
                         <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
@@ -385,11 +392,10 @@ console.log(isAllselected)
                       const { start_time, end_time } = CommonService.getUtcTimeInAMPM(row["shift_timings"]?.start_time, row["shift_timings"]?.end_time);
                       const shift_date = CommonService.getUtcDate(row["shift_date"]);
                       const isItemSelected = isSelected(row["_id"]);
-                      console.log(isItemSelected)
                       return (
                         <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
                           <TableCell className="mat-td mat-td-checkbox">
-                            <input type={"checkbox"} id={"cb_" + rowIndex} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
+                            <Checkbox id={"cb_" + rowIndex} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
                           </TableCell>
                           <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
                           <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
@@ -400,7 +406,7 @@ console.log(isAllselected)
                             {start_time}&nbsp;-&nbsp;{end_time}
                           </TableCell>
                           <TableCell className="mat-td mat-td-shift-type">{row["shift_type"]}</TableCell>
-                          <TableCell className="mat-td mat-td-shift-type">{row["approved_hcps"]>=0 ? row["approved_hcps"]+"/"+row['hcp_count']:"N/A"}</TableCell>
+                          <TableCell className="mat-td mat-td-shift-type">{row["approved_hcps"] >= 0 ? row["approved_hcps"] + "/" + row['hcp_count'] : "N/A"}</TableCell>
                           <TableCell className={`${row["status"]} mat-td mat-td-status`}>{row["status"]}</TableCell>
                           <TableCell className="mat-td mat-td-sticky mat-td-actions">
                             <Tooltip title={`${row["title"]} view details`}>

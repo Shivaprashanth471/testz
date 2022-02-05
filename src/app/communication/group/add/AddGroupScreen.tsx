@@ -15,6 +15,7 @@ import { Link, useHistory } from "react-router-dom";
 import './AddGroupScreen.scss';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const AddGroupScreen = () => {
     const [list, setList] = useState<TsDataListState | any>(null);
@@ -154,7 +155,7 @@ const AddGroupScreen = () => {
                                 <TableHead className={"mat-thead"}>
                                     <TableRow className={"mat-tr"}>
                                         <TableCell padding="checkbox" className="mat-th">
-                                            <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                                            <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                                         </TableCell>
 
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
@@ -174,7 +175,7 @@ const AddGroupScreen = () => {
                                         return (
                                             <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
                                                 <TableCell className="mat-td mat-td-checkbox">
-                                                    <input type={"checkbox"} id={"cb_" + rowIndex} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} />
+                                                    <Checkbox id={"cb_" + rowIndex} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} />
                                                 </TableCell>
                                                 <TableCell className="mat-td mat-td-hcp-name">
                                                     {row['first_name']} &nbsp; {row['last_name']}

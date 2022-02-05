@@ -51,9 +51,7 @@ const HcpDetailsComponent = (props: any) => {
   const getAttachmentsDetails = useCallback(
     (hcp_id) => {
       setAttachmentLoading(true);
-      CommonService._api
-        .get(ENV.API_URL + "hcp/" + hcp_id + "/attachments")
-        .then((resp) => {
+      CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/attachments").then((resp) => {
           setAttachmentsDetails(resp?.data);
           setIsAttachmentsLoading(false);
           setAttachmentLoading(false);
@@ -68,9 +66,7 @@ const HcpDetailsComponent = (props: any) => {
   );
 
   const getEducationDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/education")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/education").then((resp) => {
         // console.log(resp);
         setEducationDetails(resp.data);
       })
@@ -80,9 +76,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getExperienceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=fulltime")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=fulltime").then((resp) => {
         // console.log(resp);
         setExperienceDetails(resp.data);
       })
@@ -92,9 +86,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getVolunteerExperienceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=volunteer")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=volunteer").then((resp) => {
         // console.log(resp);
         setVolunteerExperience(resp.data);
       })
@@ -104,9 +96,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getReferenceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/reference")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/reference").then((resp) => {
         // console.log(resp);
         setReferenceDetails(resp.data);
       })
@@ -117,9 +107,7 @@ const HcpDetailsComponent = (props: any) => {
 
   const init = useCallback(() => {
     // config
-    CommonService._api
-      .get(ENV.API_URL + "hcp/user/" + id)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/user/" + id).then((resp) => {
         setBasicDetails(resp.data);
         getEducationDetails(resp.data?._id);
         getExperienceDetails(resp.data?._id);
@@ -138,6 +126,7 @@ const HcpDetailsComponent = (props: any) => {
 
   useEffect(() => {
     const required_attachments = [
+      { name: "Resume", index : -1},
       { name: "Physical Test", index: -1 },
       { name: "TB Test", index: -1 },
       { name: "Chest X-ray", index: -1 },
