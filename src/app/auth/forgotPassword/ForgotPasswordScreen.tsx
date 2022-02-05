@@ -26,7 +26,7 @@ const restPasswordFormValidation = Yup.object({
 const ForgotPasswordScreen = (props: any) => {
   const history = useHistory();
   const [email, setEmail] = useState("");
-  const [mode, setMode] = useState<"reset" | "password">("reset");
+  const [mode, setMode] = useState<"reset" | "password">("password");
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [seconds, setSeconds] = useState<any>(0);
@@ -211,9 +211,12 @@ const ForgotPasswordScreen = (props: any) => {
                     component={TextField}
                     type={"number"}
                     fullWidth
+                    onKeyDown={ (event:any) => (event.key == "." || event.key === "-" || event.key === "e") && event.preventDefault() }
                     autoComplete="off"
                     name="code"
-                    inputProps={{ maxLength: 4 }}
+                    onInput = {(e:any) =>{
+                      e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)
+                  }}
                   />
                 </div>
                 <div className="form-field position-relative ">
