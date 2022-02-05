@@ -211,7 +211,7 @@ const ForgotPasswordScreen = (props: any) => {
                     component={TextField}
                     type={"number"}
                     fullWidth
-                    onKeyDown={ (event:any) => (event.key == "." || event.key === "-" || event.key === "e") && event.preventDefault() }
+                    onKeyDown={ (event:any) => (event.key === "." || event.key === "-" || event.key === "e") && event.preventDefault() }
                     autoComplete="off"
                     name="code"
                     onInput = {(e:any) =>{
