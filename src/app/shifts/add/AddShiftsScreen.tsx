@@ -434,7 +434,7 @@ const AddShiftsScreen = () => {
                           inputClass="custom-input"
                           className="rmdp-mobile"
                           plugins={[<DatePanel eachDaysInRange />]}
-                          format="YYYY/MM/DD"
+                          format="MM/DD/YYYY"
                           range={mode === "range" ? true : false}
                           
                           multiple={mode === "multiple" ? true : false}
