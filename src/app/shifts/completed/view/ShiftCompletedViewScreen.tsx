@@ -1,22 +1,49 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ENV } from "../../../../constants";
-import { CommonService, Communications } from "../../../../helpers";
-import "./ShiftCompletedViewScreen.scss";
-import { Link, useParams } from "react-router-dom";
-import { Avatar, Button, Tooltip } from "@material-ui/core";
+import { Avatar, Button, Checkbox, Tooltip } from "@material-ui/core";
 import moment from "moment";
-import ShiftTimeline from "../../timeline/ShiftTimeline";
+import React, { useCallback, useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
 import LoaderComponent from "../../../../components/LoaderComponent";
+import { ENV } from "../../../../constants";
+import { ApiService, CommonService, Communications } from "../../../../helpers";
+import ShiftTimeline from "../../timeline/ShiftTimeline";
+import "./ShiftCompletedViewScreen.scss";
 
 const ShiftCompletedViewScreen = () => {
   const param = useParams<any>();
   const { id } = param;
   const [basicDetails, setBasicDetails] = useState<any>(null);
+  const [isFacilityConfirm, setIsFacilityConfirm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isDataSubmitting, setIsDataSubmitting] = useState<boolean>(false);
+  const history = useHistory();
+
+  const handleFacilityConfirmation = (e: any) => {
+    setIsFacilityConfirm(e.target.checked);
+  };
+
+  const handleSubmit = () => {
+    setIsDataSubmitting(true);
+    ApiService.put(ENV.API_URL + "shift/" + id, {
+      is_facility_approved: isFacilityConfirm,
+    })
+      .then((res: any) => {
+        setIsDataSubmitting(false);
+        CommonService.showToast(res?.msg, "success");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsDataSubmitting(false);
+
+        CommonService.showToast(err?.msg, "error");
+      });
+  };
 
   const getShiftDetails = useCallback(() => {
-    CommonService._api.get(ENV.API_URL + "shift/" + id).then((resp) => {
+    CommonService._api
+      .get(ENV.API_URL + "shift/" + id)
+      .then((resp) => {
         setBasicDetails(resp.data);
+        setIsFacilityConfirm(resp.data?.is_facility_approved)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -41,6 +68,7 @@ const ShiftCompletedViewScreen = () => {
 
   return (
     <div className="shift-completed-view screen crud-layout pdd-30">
+      
       {!isLoading && (
         <>
           <div className="pdd-0 custom-border">
@@ -93,10 +121,10 @@ const ShiftCompletedViewScreen = () => {
             </div>
             <div className="flex-1 actions-wrapper">
               <div className="button">
-              <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
-                <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/completedShifts/view/" + id } }}>
-                  View Details
-                </Button>
+                <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
+                  <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/completedShifts/view/" + id } }}>
+                    View Details
+                  </Button>
                 </Tooltip>
               </div>
             </div>
@@ -156,10 +184,16 @@ const ShiftCompletedViewScreen = () => {
                   <h3>Attended On:</h3>
                   <p className="attended-date mrg-left-15">{moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY")}</p>
                 </div>
+
                 {/* <div className="flex-1 d-flex shift-ot-time">
                             <h3>OT Hours:</h3>
                             <p className="attended-date mrg-left-15">--</p>
                         </div> */}
+
+                <div className="flex-1 d-flex fac-confirm">
+                  <p className="attended-date mrg-left-15">Facility Confirmation</p>
+                  <Checkbox checked={isFacilityConfirm} onChange={handleFacilityConfirmation} />
+                </div>
               </div>
               <div className="pdd-bottom-45">
                 <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
@@ -168,6 +202,19 @@ const ShiftCompletedViewScreen = () => {
           </div>
         </>
       )}
+
+      <div className="shift-view-actions mrg-top-20">
+        <Tooltip title={"Cancel"}>
+          <Button size="large" onClick={() => history.push(`/completedShifts/list`)} variant={"outlined"} color="primary" id="btn_cancel">
+            {"Cancel"}
+          </Button>
+        </Tooltip>
+        <Tooltip title={"Save Changes"}>
+          <Button disabled={isDataSubmitting} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting ? "has-loading-spinner" : ""} onClick={handleSubmit}>
+            {isDataSubmitting ? "Saving" : "Save"}
+          </Button>
+        </Tooltip>
+      </div>
     </div>
   );
 };
