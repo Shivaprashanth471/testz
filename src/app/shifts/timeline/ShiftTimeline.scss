@@ -60,6 +60,12 @@
       }
 
 
+      .small-dot-gap-container {
+        display: flex;
+        justify-content: space-between;
+        gap:5rem;
+      }
+
 
       .small-dot {
         width: 15px;
