@@ -71,7 +71,7 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
                   setSelectedRegions(value);
                 }}
                 renderTags={() => null}
-                renderInput={(params) => <TextField {...params} id="select_region" variant="outlined" placeholder={"Select Multiple Regions"} />}
+                renderInput={(params) => <TextField {...params} id="select_region" variant="outlined" placeholder={"Multiple Regions"} />}
               />
             </div>
 
@@ -87,7 +87,7 @@ const FacilityFiltersComponent = (props: PropsWithChildren<FacilityFiltersCompon
                 onChange={($event, value) => {
                   setStatus(value);
                 }}
-                renderInput={(params) => <TextField {...params} id="select_status" variant="outlined" placeholder={"Select Status"} />}
+                renderInput={(params) => <TextField {...params} id="select_status" variant="outlined" placeholder={"Status"} />}
               />
             </div>
           </div>

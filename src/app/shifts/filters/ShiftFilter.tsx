@@ -6,7 +6,7 @@ import React, { PropsWithChildren } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import { AllShiftStatusList, shiftType, OpenShiftsStatusList } from "../../../constants/data";
+import { AllShiftStatusList, shiftType, OpenShiftsStatusList, timesheet, facilityConfirmation } from "../../../constants/data";
 import { localStore } from "../../../helpers";
 import "./ShiftFilter.scss";
 
@@ -34,6 +34,11 @@ export interface ShiftFilterProps {
   selectedFaciltities?: any;
   setSelectedFacilities?: any;
   setSelectedStatusTypes?: any;
+  isTimeSheetUploaded?: any;
+  isFacilityApproved?: any;
+  setIsTimeSheetUploaded?: any;
+  setIsFacilityApproved?: any;
+
   statusType?: any;
   setStatusType?: any;
 
@@ -50,6 +55,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
   const setSelectedRegion = props?.setSelectedRegion;
   const isMaster = props?.isMaster;
   const statusList = props?.isMaster ? AllShiftStatusList : OpenShiftsStatusList;
+  const isCompleted = props?.isCompleted;
 
   const regions: any[] = props?.regions ? props?.regions : [];
   const facilityList: any[] = props?.facilityList ? props?.facilityList : [];
@@ -67,6 +73,12 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
   const setSelectedTimeTypes = props?.setSelectedTimeTypes;
   const setSelectedStatusTypes = props?.setSelectedStatusTypes;
   const setSelectedFacilities = props?.setSelectedFacilities;
+
+  const setIsTimeSheetUploaded = props?.setIsTimeSheetUploaded;
+  const setIsFacilityApproved = props?.setIsFacilityApproved;
+  const isTimeSheetUploaded = props?.isTimeSheetUploaded;
+  const isFacilityApproved = props?.isFacilityApproved;
+
   const setStatusType = props?.setStatusType;
 
   const dateRange = props?.dateRange;
@@ -95,7 +107,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
     setSelectedTimeTypes(filterdChips);
   };
 
-  let regularCheckForAllFields = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || dateRange[0] !== null || dateRange[1] !== null;
+  let regularCheckForAllFields = selectedFaciltities?.length > 0 || selectedHcps?.length > 0 || selectedTimeTypes?.length > 0 || selectedStatusTypes?.length > 0 || dateRange[0] !== null || dateRange[1] !== null || (isFacilityApproved !== "" && isFacilityApproved !== null) || (isTimeSheetUploaded !== "" && isTimeSheetUploaded !== null)  ;
   let checkForStatusField = noMultiStatus ? false : !isMaster && statusType !== "" && statusType !== null;
 
   const handleDisableReset = (): boolean => {
@@ -129,7 +141,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                   }
                 }
               }}
-              renderInput={(params) => <TextField {...params} id="select_region" variant="outlined" placeholder="Select Region" />}
+              renderInput={(params) => <TextField {...params} id="select_region" variant="outlined" placeholder="Region" />}
             />
           </div>
 
@@ -148,7 +160,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                 setSelectedFacilities(newValue);
               }}
               renderTags={() => null}
-              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select Facilities" />}
+              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Facilities" />}
             />
             {isFacilityListLoading && (
               <div className="loading-text-wrapper">
@@ -167,7 +179,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
               options={hcpTypes?.map((option: any) => option?.code)}
               onChange={(e, newValue) => setSelectedHcps(newValue)}
               renderTags={() => null}
-              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select HCP Types" />}
+              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="HCP Types" />}
             />
           </div>
 
@@ -182,7 +194,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                 onChange={(e, newValue) => {
                   setStatusType(newValue);
                 }}
-                renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select Status" />}
+                renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Status" />}
               />
             </div>
           )}
@@ -198,7 +210,7 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
                 options={statusList.map((option: any) => option?.code)}
                 onChange={(e, newValue) => setSelectedStatusTypes(newValue)}
                 renderTags={() => null}
-                renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select Status" />}
+                renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Status" />}
               />
             </div>
           )}
@@ -213,9 +225,45 @@ const ShiftFilter = (props: PropsWithChildren<ShiftFilterProps>) => {
               options={shiftType.map((option: any) => option?.value)}
               onChange={(e, newValue) => setSelectedTimeTypes(newValue)}
               renderTags={() => null}
-              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Select Time Types" />}
+              renderInput={(params) => <TextField {...params} variant="outlined" placeholder="Time Types" />}
             />
           </div>
+
+          {isCompleted && (
+            <>
+              <div className="form-field-item">
+              <Autocomplete
+                PaperComponent={({ children }) => <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>}
+                value={isTimeSheetUploaded}
+                options={timesheet}
+                getOptionLabel={(option: any) => option.label}
+                placeholder={"Time Sheet"}
+                id="input_select_status"
+                className="mrg-top-10"
+                onChange={($event, value) => {
+                  setIsTimeSheetUploaded(value);
+                }}
+                renderInput={(params) => <TextField {...params} id="select_status" variant="outlined" placeholder={"Time Sheet"} />}
+              />
+              </div>
+
+              <div className="form-field-item">
+              <Autocomplete
+                PaperComponent={({ children }) => <Paper style={{ color: "#1e1e1e" }}>{children}</Paper>}
+                value={isFacilityApproved}
+                options={facilityConfirmation}
+                getOptionLabel={(option: any) => option.label}
+                placeholder={"Facility Confirmation"}
+                id="input_select_status"
+                className="mrg-top-10"
+                onChange={($event, value) => {
+                  setIsFacilityApproved(value);
+                }}
+                renderInput={(params) => <TextField {...params} id="select_fac_confirm" variant="outlined" placeholder={"Facility Confirmation"} />}
+              />
+              </div>
+            </>
+          )}
         </div>
         <div className="form-field-right">
           <div className="mrg-top-10">
@@ -294,6 +342,10 @@ export const clearShiftFilterValues = () => {
   localStore.removeItem("selectedStatusTypes");
   localStore.removeItem("dateRange");
   localStore.removeItem("selectedTimeTypes");
+  localStore.removeItem("isFacilityApproved");
+  localStore.removeItem("isTimeSheetUploaded");
+  localStore.removeItem("dateRange");
+
 };
 
 export default ShiftFilter;
