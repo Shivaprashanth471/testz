@@ -246,8 +246,10 @@ const ShiftRequirementListScreen = () => {
 
   const confirmRejectShift = useCallback(() => {
     setRejectShiftOpen(false);
-    getList()
-  }, [getList])
+    getList();
+    setSelectedCount(-1);
+    setSelectedShifts([])
+  }, [getList,setSelectedCount,setSelectedShifts])
 
   const isSelected = useCallback((_id: any) => {
     if (selectedShifts?.indexOf(_id) !== -1) {
@@ -259,6 +261,8 @@ const ShiftRequirementListScreen = () => {
 
   }, [selectedShifts])
 
+
+  console.log(statusType)
 
   useEffect(() => {
     let count = 0;
@@ -355,7 +359,7 @@ const ShiftRequirementListScreen = () => {
             <div className="actions d-flex">
               <div className="mrg-left-20">
                 <Tooltip title={"Cancel Shift Requirement"}>
-                  <Button variant={"contained"} color={"primary"} disabled={selectedCount === -1} onClick={openRejectShift}>
+                  <Button variant={"contained"} color={"primary"} disabled={selectedCount === -1 || statusType==="cancelled" || statusType === "unfilled"} onClick={openRejectShift}>
                     &nbsp;&nbsp;Cancel Shift&nbsp;&nbsp;
                   </Button>
                 </Tooltip>
@@ -377,7 +381,7 @@ const ShiftRequirementListScreen = () => {
                   <TableHead className={"mat-thead"}>
                     <TableRow className={"mat-tr"}>
                       <TableCell padding="checkbox" className="mat-th">
-                        <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                        <Checkbox disabled={statusType==="cancelled" || statusType === "unfilled" || statusType===null} onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                       </TableCell>
                       {list?.table.matColumns.map((column: any, columnIndex: any) => (
                         <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} key={"header-col-" + columnIndex}>
@@ -395,7 +399,7 @@ const ShiftRequirementListScreen = () => {
                       return (
                         <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className={"mat-tr"}>
                           <TableCell className="mat-td mat-td-checkbox">
-                            <Checkbox id={"cb_" + rowIndex} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
+                            <Checkbox id={"cb_" + rowIndex} disabled={row["status"]==="cancelled"} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
                           </TableCell>
                           <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
                           <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>

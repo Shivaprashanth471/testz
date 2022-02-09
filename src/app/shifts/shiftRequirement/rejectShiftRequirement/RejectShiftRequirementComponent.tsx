@@ -80,10 +80,10 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
     payload = {
       ...payload,
       cancelled_by: user?._id,
-      selectedShifts:selectedShifts
+      requirement_ids:selectedShifts
     };
 
-    CommonService._api.patch(ENV.API_URL + "shift/requirement/" + id + "/ncel", payload).then((resp) => {
+    CommonService._api.patch(ENV.API_URL + "shift/requirements/cancel", payload).then((resp) => {
         setSubmitting(false);
         if (afterConfirm) {
           afterConfirm();
@@ -101,7 +101,7 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
       afterCancel();
     }
   };
-console.log(selectedShifts)
+
   return (
     <div>
       <div className={classes.paper}>

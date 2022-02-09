@@ -224,7 +224,6 @@ export const OpenShiftsStatusList = [
   { name: "Open", code: "open" },
   { name: "Cancelled", code: "cancelled" },
   { name: "Unfilled", code: "unfilled" },
-
 ]
 
 
