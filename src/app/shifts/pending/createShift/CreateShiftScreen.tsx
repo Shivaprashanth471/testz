@@ -35,7 +35,7 @@ const hcpFormValidation = Yup.object({
   end_date: Yup.string().required("required"),
   start_time: Yup.string().required("required"),
   end_time: Yup.string().required("required"),
-  differential_amount: Yup.number().typeError("must be a number").min(0, "min limit 0").max(9999, "max limit 9999.").required('required'),
+  differential_amount: Yup.number().typeError(" must be a Number"),
   created_by: Yup.string().required("required"),
   hcp_user_id: Yup.string(),
   application_id: Yup.string(),
@@ -163,15 +163,15 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
             {({ isSubmitting, isValid, resetForm }) => (
               <Form>
                 <div className="input-container mrg-top-40">
-                  <Field variant='outlined' type="date" InputLabelProps={{ shrink: true }} name="start_date" component={TextField} label="Start Date* (MM/DD/YYYY)" fullWidth />
-                  <Field variant='outlined' type="time" InputLabelProps={{ shrink: true }} name="start_time" component={TextField} label="Start Time*" fullWidth />
+                  <Field type="date" InputLabelProps={{ shrink: true }} name="start_date" component={TextField} label="Start Date* (MM/DD/YYYY)" fullWidth />
+                  <Field type="time" InputLabelProps={{ shrink: true }} name="start_time" component={TextField} label="Start Time*" fullWidth />
                 </div>
                 <div className="input-container mrg-top-40">
-                  <Field variant='outlined' type="date" InputLabelProps={{ shrink: true }} name="end_date" component={TextField} label="End Date* (MM/DD/YYYY)" fullWidth />
-                  <Field variant='outlined' type="time" InputLabelProps={{ shrink: true }} name="end_time" component={TextField} label="End Time*" fullWidth />
+                  <Field type="date" InputLabelProps={{ shrink: true }} name="end_date" component={TextField} label="End Date* (MM/DD/YYYY)" fullWidth />
+                  <Field type="time" InputLabelProps={{ shrink: true }} name="end_time" component={TextField} label="End Time*" fullWidth />
                 </div>
                 <div className="input-container mrg-top-40">
-                  <Field variant='outlined' InputLabelProps={{ shrink: true }} name="differential_amount" type={"text"} component={TextField} label="Differential Amount*" fullWidth />
+                  <Field InputLabelProps={{ shrink: true }} name="differential_amount" type={"text"} component={TextField} label="Differential Amount*" fullWidth />
                 </div>
 
                 <div className="create-shift-actions mrg-top-40">

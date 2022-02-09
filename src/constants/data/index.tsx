@@ -94,20 +94,6 @@ export const boolAcknowledge = [
 ]
 
 
-
-export const timesheet = [
-  { value: "", label: "All" },
-  { value: true, label: "Yes" },
-  { value: false, label: "No" },
-]
-
-export const facilityConfirmation = [
-  { value: "", label: "All" },
-  { value: true, label: "Yes" },
-  { value: false, label: "No" },
-]
-
-
 export const shiftTypePreference = [
   {
     value: "AM",

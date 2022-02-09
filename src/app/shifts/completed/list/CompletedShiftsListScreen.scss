@@ -7,48 +7,40 @@
   .MuiPaper-elevation1 {
     box-shadow: none !important;
   }
-  .shifts-completed-list-table {
-    .mat-td-title {
-      min-width: 200px;
-      max-width: 200px;
-    }
-    .mat-td-completed-date {
-      min-width: 50px;
-      max-width: 50px;
-    }
-
-    .mat-td-facility-name {
-      min-width: 100px;
-      max-width: 100px;
-    }
-
-    .mat-td-hcp-name {
-      min-width: 100px;
-      max-width: 100px;
-    }
-    .mat-td-hcp-type {
-      min-width: 100px;
-      max-width: 100px;
-    }
-    .mat-td-shift-type {
-      min-width: 80px;
-      max-width: 80px;
-    }
-    .mat-td-differential {
-      min-width: 50px;
-      max-width: 50px;
-    }
-    .mat-td-timesheet {
-      min-width: 50px;
-      max-width: 50px;
-    }
-    .mat-td-is-facility-approved {
-      min-width: 50px;
-      max-width: 50px;
-    }
-    .mat-td-actions {
+	.shifts-completed-list-table {
+		.mat-td-title {
+			min-width: 250px;
+			max-width: 250px;
+		}
+    .mat-td-completed-date{
       min-width: 120px;
-      max-width: 120px;
+			max-width: 120px;
     }
-  }
+    
+		.mat-td-facility-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		.mat-td-hcp-name {
+			min-width: 250px;
+			max-width: 250px;
+		}
+    .mat-td-hcp-type {
+			min-width: 100px;
+			max-width: 100px;
+		}
+    .mat-td-shift-type {
+			min-width: 80px;
+			max-width: 80px;
+		}
+		.mat-td-differential {
+			min-width: 150px;
+			max-width: 150px;
+		}
+		.mat-td-actions {
+			min-width: 120px;
+			max-width: 120px;
+		}
+	}
 }

@@ -65,7 +65,7 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
                   setSelectedHcpTypes(value);
                 }}
                 renderTags={() => null}
-                renderInput={(params) => <TextField {...params} id="select_hcpType" variant="outlined" placeholder={"Multiple HCP Types"} />}
+                renderInput={(params) => <TextField {...params} id="select_hcpType" variant="outlined" placeholder={"Select Multiple HCP Types"} />}
               />
             </div>
 
@@ -79,7 +79,7 @@ const HcpFiltersComponent = (props: PropsWithChildren<HcpFiltersComponentProps>)
                 id="input_select_status"
                 className="mrg-top-10"
                 onChange={($event, value) => setStatus(value)}
-                renderInput={(params) => <TextField {...params} id="select_status" variant="outlined" value={status} placeholder={"Status"} fullWidth />}
+                renderInput={(params) => <TextField {...params} id="select_status" variant="outlined" value={status} placeholder={"Select Status"} fullWidth />}
               />
             </div>
           </div>

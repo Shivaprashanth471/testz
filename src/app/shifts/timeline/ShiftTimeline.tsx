@@ -37,10 +37,10 @@ const ShiftTimeline = (props: any) => {
               {props?.timeBreakup?.check_in_time ? tConvert((props?.timeBreakup?.check_in_time).slice(11, 16)) : "--"}
             </span>
           </div>
-          <div className='small-dot-gap-container'>
+          <div className="">
           {props?.timeBreakup?.break_timings?.map((item: any, index: number) => {
             return (
-              <div key={"shift-timeline-" + index} className='small-dot-gap-container' >
+              <div key={"shift-timeline-" + index}>
                 <div className="small-dot">
                   <span className="small-dot-title">Break In</span>
                   <span className="small-dot-time">

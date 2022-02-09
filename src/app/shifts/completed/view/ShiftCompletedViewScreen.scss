@@ -106,12 +106,6 @@
 	.flex-1 {
 		flex: 1px;
 	}
-
-	.fac-confirm{
-		justify-content:flex-end;
-		align-items: center;
-		
-	}
 	.shift-details {
 		h3 {
 			margin-bottom: 0px !important;
@@ -145,14 +139,5 @@
 	}
 	.MuiInputBase-inputMultiline{
 		border: none !important;
-	}
-
-
-	.shift-view-actions{
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-
 	}
 }
