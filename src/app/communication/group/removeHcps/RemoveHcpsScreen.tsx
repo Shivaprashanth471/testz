@@ -166,7 +166,7 @@ const RemoveHcpsScreen = () => {
                                                 {row['hcp_type']}
                                             </TableCell>
                                             <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                                <Link to={{pathname:'/hcp/user/view/' + row.id,state:{prevPath:"/group/remove/"+id}}} className="info-link" id={"link_hcp_details" + rowIndex} >
+                                                <Link to={{pathname:'/hcp/user/view/' + row?.hcp_user_id,state:{prevPath:"/group/remove/"+id}}} className="info-link" id={"link_hcp_details" + rowIndex} >
                                                     {('View Details')}
                                                 </Link>
                                             </TableCell>

@@ -1,4 +1,4 @@
-import { TextField, Tooltip } from "@material-ui/core";
+import { Button, Checkbox, TextField, Tooltip } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -14,12 +14,14 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
+import DialogComponent from "../../../../components/DialogComponent";
 import LoaderComponent from "../../../../components/LoaderComponent";
 import NoDataCardComponent from "../../../../components/NoDataCardComponent";
 import { useLocalStorage } from "../../../../components/useLocalStorage";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import ShiftFilter from "../../filters/ShiftFilter";
+import RejectShiftComponent from "../rejectShift/RejectShiftComponent";
 import "./ApprovedShiftsListScreen.scss";
 
 const CssTextField = withStyles({
@@ -46,10 +48,50 @@ const ApprovedShiftsListScreen = () => {
   const [isFacilityListLoading, setIsFacilityListLoading] = useState<boolean>(false);
   const [pageSizeIndex, setPageSizeIndex] = useLocalStorage<any>("shiftApprovePageSizeIndex", 10);
 
+  const [selectedShifts, setSelectedShifts] = useState<any>([]);
+  const [isAllselected, setAllSelected] = useState<boolean>(false);
+  const [selectedCount, setSelectedCount] = useState<any>(-1);
+
+  const [isRejectShiftOpen, setRejectShiftOpen] = useState<boolean>(false);
+  const isSelected = useCallback((_id: any) => {
+    if (selectedShifts?.indexOf(_id) !== -1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+
+  }, [selectedShifts])
+
+  const handleSelectAll = (event: any) => {
+    if (event.target.checked === true) {
+      let temp: any[] = []
+      list?.table?.data?.forEach((item: any) => {
+        temp.push(item._id)
+      })
+      setSelectedShifts([...temp])
+      setSelectedCount(1)
+    } else {
+      setSelectedShifts([])
+      setSelectedCount(-1)
+    }
+    setAllSelected(event.target.checked)
+  }
+
+  const handleSelectShifts = useCallback((event: any, _id: any) => {
+    if (event.target.checked === true) {
+      setSelectedShifts([...selectedShifts, _id]);
+      setSelectedCount(1);
+    } else {
+      let tempSelectedShifts = selectedShifts?.filter((item: any) => item !== _id)
+      setSelectedShifts([...tempSelectedShifts]);
+    }
+  }, [selectedShifts])
+
   const getHcpTypes = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
-        setHcpTypes(resp.data || []);
-      })
+      setHcpTypes(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -57,8 +99,8 @@ const ApprovedShiftsListScreen = () => {
 
   const getRegions = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
-        setRegions(resp.data || []);
-      })
+      setRegions(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -124,8 +166,8 @@ const ApprovedShiftsListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title","Facility Name","HCP Name",  "Requested On", "Require On","Type of hcp", "Time Type", "Actions"],
-        mobileMatColumns: ["Title","Facility Name","HCP Name",  "Requested On", "Require On","Type of hcp", "Time Type", "Actions"],
+        webMatColumns: ["Title", "Facility Name", "HCP Name", "Requested On", "Require On", "Type of hcp", "Time Type", "Actions"],
+        mobileMatColumns: ["Title", "Facility Name", "HCP Name", "Requested On", "Require On", "Type of hcp", "Time Type", "Actions"],
       },
       ENV.API_URL + url,
       setList,
@@ -181,6 +223,21 @@ const ApprovedShiftsListScreen = () => {
     // eslint-disable-next-line
   }, [dateRange, selectedFacilities, selectedHcps, selectedTimeTypes]);
 
+  const openRejectShift = useCallback(() => {
+    setRejectShiftOpen(true);
+  }, [])
+
+  const cancelRejectShift = useCallback(() => {
+    setRejectShiftOpen(false);
+  }, [])
+
+  const confirmRejectShift = useCallback(() => {
+    setRejectShiftOpen(false);
+    getList();
+    setSelectedCount(-1);
+    setSelectedShifts([])
+  }, [getList,setSelectedCount,setSelectedShifts])
+
   const clearFilterValues = () => {
     setSelectedTimeTypes([]);
     setSelectedFacilities([]);
@@ -204,8 +261,26 @@ const ApprovedShiftsListScreen = () => {
     getList();
   }, [getList]);
 
+  useEffect(() => {
+    let count = 0;
+    list?.table?.data?.forEach((item: any) => {
+      if (selectedShifts?.indexOf(item?._id) !== -1) {
+        count++
+      }
+    })
+    console.log(list?.table?.data)
+    if (list?.table?.data?.length !== 0 && count === list?.table?.data?.length) {
+      setAllSelected(true)
+    } else {
+      setAllSelected(false)
+    }
+  }, [list?.table?.data, selectedShifts]);
+
   return (
     <div className="pending-shifts screen crud-layout pdd-30">
+       <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
+        <RejectShiftComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={selectedShifts}/>
+      </DialogComponent>
       {list && list.table?._isDataLoading && (
         <div className="table-loading-indicator">
           <LoaderComponent />
@@ -277,13 +352,25 @@ const ApprovedShiftsListScreen = () => {
               </div>
             </div>
           </div>
+          <div className="actions d-flex">
+            <div className="mrg-left-20">
+              <Tooltip title={"Cancel Shift Requirement"}>
+                <Button variant={"contained"} color={"primary"} disabled={selectedCount === -1} onClick={openRejectShift}>
+                  &nbsp;&nbsp;Cancel Shift&nbsp;&nbsp;
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
         </div>
         {list && list.table && (
           <>
             <TableContainer component={Paper} className={"table-responsive"}>
               <Table stickyHeader className="mat-table table shifts-approved-list-table">
                 <TableHead className={"mat-thead"}>
-                   <TableRow className={"mat-tr"}>
+                  <TableRow className={"mat-tr"}>
+                    <TableCell padding="checkbox" className="mat-th">
+                      <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                    </TableCell>
                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
                       <TableCell key={"header-col-" + columnIndex} className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}>
                         {column}
@@ -291,13 +378,16 @@ const ApprovedShiftsListScreen = () => {
                     ))}
                   </TableRow>
                 </TableHead>
-               <TableBody className={"mat-tbody"}>
+                <TableBody className={"mat-tbody"}>
                   {!list.table._isDataLoading && list.table?.data.length === 0 && <NoDataCardComponent tableCellCount={list.table.matColumns.length} />}
                   {list?.table.data.map((row: any, rowIndex: any) => {
                     const shift_date = CommonService.getUtcDate(row["shift_date"]);
-
+                    const isItemSelected = isSelected(row["_id"]);
                     return (
                       <TableRow role="checkbox" tabIndex={-1} key={"row-" + rowIndex} className="mat-tr">
+                        <TableCell className="mat-td mat-td-checkbox">
+                          <Checkbox id={"cb_" + rowIndex} checked={isItemSelected} onChange={(event) => handleSelectShifts(event, row['_id'])} />
+                        </TableCell>
                         <TableCell className="mat-td mat-td-title">{row["title"]}</TableCell>
                         <TableCell className="mat-td mat-td-facility-name">{row["facility"]?.facility_name}</TableCell>
                         <TableCell className="mat-td mat-td-hcp-name">
@@ -321,17 +411,17 @@ const ApprovedShiftsListScreen = () => {
               </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={list.table.pagination.pageSizeOptions}
-                component="div"
-                count={list?.table.pagination.totalItems}
-                rowsPerPage={list?.table.pagination.pageSize}
-                page={list?.table.pagination.pageIndex}
-                onPageChange={(event, page) => list.table.pageEvent(page)}
-                onRowsPerPageChange={(event) => {
-                  setPageSizeIndex(event.target.value);
-                  list.table?.pageEvent(0, +event.target.value);
-                }}
-              />
+              rowsPerPageOptions={list.table.pagination.pageSizeOptions}
+              component="div"
+              count={list?.table.pagination.totalItems}
+              rowsPerPage={list?.table.pagination.pageSize}
+              page={list?.table.pagination.pageIndex}
+              onPageChange={(event, page) => list.table.pageEvent(page)}
+              onRowsPerPageChange={(event) => {
+                setPageSizeIndex(event.target.value);
+                list.table?.pageEvent(0, +event.target.value);
+              }}
+            />
           </>
         )}
       </div>

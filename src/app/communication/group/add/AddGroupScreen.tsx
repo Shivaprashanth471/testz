@@ -185,7 +185,7 @@ const AddGroupScreen = () => {
                                                 </TableCell>
                                                 <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                                     <Tooltip title={`View ${row['first_name']} ${row['last_name']} Details`}>
-                                                        <Link to={'/hcp/view/' + row?._id} className="info-link" id={"link_hcp_details" + rowIndex} >
+                                                        <Link to={{pathname:'/hcp/user/view/' + row?.user_id,state:{prevPath:"/group/add"}}} className="info-link" id={"link_hcp_details" + rowIndex} >
                                                             {('View Details')}
                                                         </Link>
                                                     </Tooltip>

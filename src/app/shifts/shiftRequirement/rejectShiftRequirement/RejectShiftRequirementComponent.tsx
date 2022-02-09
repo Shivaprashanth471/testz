@@ -65,6 +65,7 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
 
     CommonService._api.patch(ENV.API_URL + "shift/requirement/" +  id + "/cancel", payload).then((resp) => {
         setSubmitting(false);
+           CommonService.showToast(resp?.msg || "Success", "success");
         if (afterConfirm) {
           afterConfirm();
           resetForm({});
@@ -85,6 +86,7 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
 
     CommonService._api.patch(ENV.API_URL + "shift/requirements/cancel", payload).then((resp) => {
         setSubmitting(false);
+        CommonService.showToast(resp?.msg || "Success", "success");
         if (afterConfirm) {
           afterConfirm();
           resetForm({});

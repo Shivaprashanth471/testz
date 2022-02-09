@@ -271,12 +271,12 @@ const ShiftRequirementListScreen = () => {
         count++
       }
     })
-    if (count === pageSizeIndex) {
+    if (list?.table?.data?.length!==0 && count === list?.table?.data?.length) {
       setAllSelected(true)
     }else{
       setAllSelected(false)
     }
-  }, [list?.table?.data,pageSizeIndex,selectedShifts])
+  }, [list?.table?.data,selectedShifts])
 
   return (
     <>

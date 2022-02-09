@@ -41,6 +41,9 @@ const AddHcpComponent = () => {
     { name: "Covid Test Result", index: -1 },
     { name: "Livescan", index: -1 },
     { name: "Vaccine Exemption Letter", index: -1 },
+    // { name:"Additional Attachment",index:-1},
+    // { name:"Additional Attachment",index:-1},
+    // { name:"Additional Attachment",index:-1}
   ]);
   const [specIsLoading, setSpecIsLoading] = useState<boolean>(true);
   const [regIsLoading, setRegIsLoading] = useState<boolean>(true);

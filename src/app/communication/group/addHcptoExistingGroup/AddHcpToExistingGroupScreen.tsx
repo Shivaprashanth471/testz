@@ -221,7 +221,7 @@ const AddHcpToExistingGroupScreen = () => {
                                             </TableCell>
                                             <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                                 <Tooltip title={`View  ${row['first_name']} ${row['last_name']} Details`}>
-                                                    <Link to={{pathname:'/hcp/user/view/' + row?._id,state:{prevPath:"/group/edit/member/"+id}}} className="info-link" id={"link_facility_details" + rowIndex} >
+                                                    <Link to={{pathname:'/hcp/user/view/' + row?.user_id,state:{prevPath:"/group/edit/member/"+id}}} className="info-link" id={"link_facility_details" + rowIndex} >
                                                         {('View Details')}
                                                     </Link>
                                                 </Tooltip>
