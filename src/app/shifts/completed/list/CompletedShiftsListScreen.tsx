@@ -55,7 +55,7 @@ const CompletedShiftsListScreen = () => {
 
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
-  const[shiftId,setShiftId] = useState<string>('')
+  const [shiftId, setShiftId] = useState<string>('')
 
 
   const getHcpTypes = useCallback(() => {
@@ -104,10 +104,11 @@ const CompletedShiftsListScreen = () => {
     (shiftId: string) => {
       setIsConfirm(true);
       ApiService.patch(ENV.API_URL + "shift/" + shiftId + '/closed')
-        .then((resp: any) => {  
+        .then((resp: any) => {
           CommonService.showToast(resp?.msg || "Shift has been moved from complete to closed", "success");
           setIsConfirm(false);
           setIsAddOpen(false);
+          list?.table.reload(1)
         })
         .catch((err) => {
           console.log(err);
@@ -115,7 +116,7 @@ const CompletedShiftsListScreen = () => {
           setIsConfirm(false);
           setIsAddOpen(false)
         });
-    },[]
+    }, [list?.table]
   );
 
   const init = useCallback(() => {
@@ -163,8 +164,8 @@ const CompletedShiftsListScreen = () => {
           pageSize: pageSizeIndex,
         },
         extraPayload: payload,
-        webMatColumns: ["Title", "Completed On", "Facility Name", "HCP Name", "Type of hcp", "Time Type", "Differential Amount", "Timesheet", "Facility Confirmation", "Close Shift","Actions"],
-        mobileMatColumns: ["Title", "Completed On", "Facility Name", "HCP Name", "Type of hcp", "Time Type", "Differential Amount", "Timesheet", "Facility Confirmation","Close Shift", "Actions"],
+        webMatColumns: ["Title", "Completed On", "Facility Name", "HCP Name", "Type of hcp", "Time Type", "Differential Amount", "Timesheet", "Facility Confirmation", "Close Shift", "Actions"],
+        mobileMatColumns: ["Title", "Completed On", "Facility Name", "HCP Name", "Type of hcp", "Time Type", "Differential Amount", "Timesheet", "Facility Confirmation", "Close Shift", "Actions"],
       },
       ENV.API_URL + url,
       setList,
@@ -258,7 +259,7 @@ const CompletedShiftsListScreen = () => {
 
   const confirmAdd = useCallback(() => {
     handleCloseShift(shiftId)
-  }, [handleCloseShift,shiftId]);
+  }, [handleCloseShift, shiftId]);
 
 
   return (
@@ -379,8 +380,8 @@ const CompletedShiftsListScreen = () => {
                         <TableCell className="mat-td mat-td-is-facility-approved">{row.is_facility_approved ? <Checkbox checked={row?.is_facility_approved} /> : <Checkbox checked={Boolean(row?.is_facility_approved)} />}</TableCell>
                         <TableCell className="mat-td mat-td-sticky mat-td-actions">
                           <Tooltip title={` close shift`}>
-                            <Button color="primary" onClick={()=> openAdd(row['_id'])}  className="close-shift-btn">
-                             Close
+                            <Button color="primary" onClick={() => openAdd(row['_id'])} className="close-shift-btn">
+                              Close
                             </Button>
                           </Tooltip>
                         </TableCell>

@@ -1,8 +1,13 @@
 import { Avatar, Button, Checkbox, Tooltip } from "@material-ui/core";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
+import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../../classes/ts-file-upload-wrapper.class";
+import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
+import DialogComponent from "../../../../components/DialogComponent";
 import LoaderComponent from "../../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../../components/shared/CustomPreviewFile";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import ShiftTimeline from "../../timeline/ShiftTimeline";
@@ -15,27 +20,128 @@ const ShiftCompletedViewScreen = () => {
   const [isFacilityConfirm, setIsFacilityConfirm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isDataSubmitting, setIsDataSubmitting] = useState<boolean>(false);
+  const [isTimeSheetBeingUpdated, setIsTimeSheetBeingUpdated] = useState<boolean>(false);
+
+  const [attachmentsList, seAttachmentsList] = useState<any>(null);
+  const [previewFileData, setPreviewFile] = useState<any | null>(null);
+  const [fileUpload, setFileUpload] = useState<{ wrapper: any } | null>(null);
+  const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
+  const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
   const history = useHistory();
+
+  const previewFile = useCallback(
+    (index: any, type: any) => {
+      if (type === "local") {
+        setPreviewFile(fileUpload?.wrapper[0]);
+      } else {
+        setPreviewFile(attachmentsList[index]);
+      }
+      setOpen(true);
+    },
+    [attachmentsList, fileUpload?.wrapper]
+  );
+
+  const getShiftAttachmentsDownload = useCallback(() => {
+    CommonService._api
+      .get(ENV.API_URL + "shift/" + id + "/attachments")
+      .then((resp) => {
+        downloadSeAttachmentsList(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const cancelPreviewFile = useCallback(() => {
+    setOpen(false);
+  }, []);
+  const confirmPreviewFile = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const getShiftAttachments = useCallback(() => {
+    CommonService._api
+      .get(ENV.API_URL + "shift/" + id + "/attachments?is_preview=true")
+      .then((resp) => {
+        seAttachmentsList(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+
+  const OnFileSelected = (files: File[], index: any) => {
+    if (required_attachments[index]) {
+      required_attachments[index].index = fileUpload?.wrapper?.length || 0;
+      setRequiredAttachments([...required_attachments]);
+    }
+    for (let file of files) {
+      // console.log(file)
+      const uploadConfig: TsFileUploadConfig = {
+        file: file,
+        fileFieldName: "Data",
+        uploadUrl: ENV.API_URL + "facility/add",
+        allowed_types: ["jpg", "png", "csv", "pdf", "jpeg"],
+        extraPayload: { file_type: required_attachments[index]?.name },
+      };
+      const uploadWrapper = new TsFileUploadWrapperClass(uploadConfig, CommonService._api, (state: { wrapper: TsFileUploadWrapperClass }) => {
+        // console.log(state);
+        setFileUpload((prevState) => {
+          if (prevState) {
+            const index = prevState?.wrapper.findIndex((value: any) => value.uploadId === state.wrapper.uploadId);
+            prevState.wrapper[index] = state.wrapper;
+            return { wrapper: prevState.wrapper };
+          }
+          return prevState;
+        });
+      });
+      uploadWrapper.onError = (err, heading) => {
+        // console.error(err, heading);
+        if (heading) {
+          CommonService.showToast(err, "error");
+        }
+      };
+      uploadWrapper.onSuccess = (resp) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          CommonService.showToast(resp.msg || resp.error, "success");
+        }
+      };
+      uploadWrapper.onProgress = (progress) => { };
+      setFileUpload((prevState) => {
+        let state: TsFileUploadWrapperClass[] = [];
+        if (prevState) {
+          state = prevState?.wrapper;
+        }
+        const newState = [...state, uploadWrapper];
+        return { wrapper: newState };
+      });
+    }
+  };
+
+  const deleteFile = (temp: any) => {
+    let data = fileUpload?.wrapper.filter((_: any, index: any) => index !== temp);
+    if (required_attachments[temp]) {
+      required_attachments[temp].index = -1;
+      setRequiredAttachments([...required_attachments]);
+    }
+    setFileUpload((prevState) => {
+      return { wrapper: [...data] };
+    });
+  };
+
+
+
 
   const handleFacilityConfirmation = (e: any) => {
     setIsFacilityConfirm(e.target.checked);
   };
 
-  const handleSubmit = () => {
-    setIsDataSubmitting(true);
-    ApiService.put(ENV.API_URL + "shift/" + id, {
-      is_facility_approved: isFacilityConfirm,
-    })
-      .then((res: any) => {
-        setIsDataSubmitting(false);
-        CommonService.showToast(res?.msg, "success");
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsDataSubmitting(false);
-
-        CommonService.showToast(err?.msg, "error");
-      });
+  const handleSubmit = async () => {
+    await handleConfirmationFromFacility()
+    await handlegetUrlForUpload()
+    history.push(`/completedShifts/list`)
   };
 
   const getShiftDetails = useCallback(() => {
@@ -51,9 +157,77 @@ const ShiftCompletedViewScreen = () => {
       });
   }, [id]);
 
+
+  const handleConfirmationFromFacility = useCallback(() => {
+    setIsDataSubmitting(true);
+    return new Promise((resolve, reject) => {
+      ApiService.put(ENV.API_URL + "shift/" + id, {
+        is_facility_approved: isFacilityConfirm,
+      })
+        .then((res: any) => {
+          setIsDataSubmitting(false);
+          CommonService.showToast(res?.msg, "success");
+          resolve(null)
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsDataSubmitting(false);
+          reject(err)
+          CommonService.showToast(err?.msg, "error");
+        });
+    })
+  }, [id, isFacilityConfirm])
+
+
+  const handlegetUrlForUpload = useCallback(() => {
+    return new Promise((resolve, reject) => {
+      if (fileUpload?.wrapper.length > 0) {
+        fileUpload?.wrapper?.forEach(async (value: any, index: any) => {
+          let payload = {
+            file_name: value?.file?.name,
+            file_type: value?.file?.type,
+            attachment_type: value?.extraPayload?.file_type,
+          };
+          setIsTimeSheetBeingUpdated(true);
+          CommonService._api
+            .post(ENV.API_URL + "shift/" + id + "/attachment", payload)
+            .then((resp) => {
+              if (fileUpload?.wrapper[index]) {
+                const file = fileUpload?.wrapper[index]?.file;
+                delete file.base64;
+                CommonService._api
+                  .upload(resp.data, file, { "Content-Type": value?.file?.type })
+                  .then((resp) => {
+                    setIsTimeSheetBeingUpdated(false);
+                    CommonService.showToast(resp?.msg || "attachment uploaded", 'success')
+                    resolve(null)
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    setIsTimeSheetBeingUpdated(false);
+                    reject(err)
+                  });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              CommonService.showToast(err?.error || "Error", "error");
+              setIsTimeSheetBeingUpdated(false);
+            });
+        });
+      } else {
+        resolve(null)
+      }
+    })
+  }, [fileUpload?.wrapper, id]);
+
+
   useEffect(() => {
     getShiftDetails();
-  }, [getShiftDetails]);
+    getShiftAttachments();
+    getShiftAttachmentsDownload();
+  }, [getShiftDetails, getShiftAttachments, getShiftAttachmentsDownload]);
+
   useEffect(() => {
     Communications.pageTitleSubject.next("Shifts Completed");
     Communications.pageBackButtonSubject.next("/completedShifts/list");
@@ -68,7 +242,10 @@ const ShiftCompletedViewScreen = () => {
 
   return (
     <div className="shift-completed-view screen crud-layout pdd-30">
-      
+      <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
+        <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={previewFileData} />
+      </DialogComponent>
+
       {!isLoading && (
         <>
           <div className="pdd-0 custom-border">
@@ -202,6 +379,94 @@ const ShiftCompletedViewScreen = () => {
           </div>
         </>
       )}
+      {basicDetails?.shift_status === "complete" || basicDetails?.shift_status === "closed" ? (
+        <div className="mrg-top-10 custom-border pdd-top-10">
+          <div className="mrg-top-20">
+            {attachmentsList?.length > 0 ? (
+              <>
+                <h3>Attachment:</h3>
+                <div className="d-flex" style={{ gap: "50px" }}>
+                  {attachmentsList?.map((item: any, index: any) => {
+                    return (
+                      <div className="attachments">
+                        <div>
+                          <p className="">{item?.attachment_type}</p>
+                          <Tooltip title="Preview CDPH 530 A Form">{<InsertDriveFileIcon color={"primary"} className="file-icon" onClick={() => previewFile(index, "api")} style={{ cursor: "pointer" }} />}</Tooltip>
+                        </div>
+                        <div className="d-flex">
+                          <Tooltip title="Download CDPH 530 A Form">
+                            <p onClick={() => previewFile(index, "api")} className="file-actions">
+                              Preview
+                            </p>
+                          </Tooltip>
+                          <Tooltip title="Download CDPH 530 A Form">
+                            <a download href={downloadAttachmentsList[index]?.url} className="file-actions mrg-left-10">
+                              Download
+                            </a>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <>
+                {basicDetails?.shift_status === "complete" && (
+                  <>
+                    <h3 className="mrg-top-0">Attachment:</h3>
+                    <div className="d-flex" style={{ gap: "50px" }}>
+                      {required_attachments?.map((item: any, index: any) => {
+                        if (item.index !== -1) {
+                          return (
+                            <>
+                              <div className="attachments">
+                                <div className="custom_file mrg-top-0">
+                                  <h3 className="mrg-top-20 mrg-bottom-0 file_name file_attachment_title"> {fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}</h3>
+                                  <div className="mrg-top-15">
+                                    <InsertDriveFileIcon color={"primary"} className="file-icon" />
+                                  </div>
+                                </div>
+                                <div className="d-flex file_actions">
+                                  <Tooltip title={`View ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
+                                    <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>
+                                      View
+                                    </p>
+                                  </Tooltip>
+                                  <Tooltip title={`Delete ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
+                                    <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>
+                                      Delete
+                                    </p>
+                                  </Tooltip>
+                                </div>
+                              </div>
+                            </>
+                          );
+                        } else {
+                          return (
+                            <div className="attachments">
+                              <div className="">
+                                <h3 className="attachement_name file_attachment_title">{item?.name}</h3>
+                                <Tooltip title={`Upload ${item?.name}`}>
+                                  <div>
+                                    <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
+                                  </div>
+                                </Tooltip>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="shift-view-actions mrg-top-20">
         <Tooltip title={"Cancel"}>
@@ -210,8 +475,8 @@ const ShiftCompletedViewScreen = () => {
           </Button>
         </Tooltip>
         <Tooltip title={"Save Changes"}>
-          <Button disabled={isDataSubmitting} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting ? "has-loading-spinner" : ""} onClick={handleSubmit}>
-            {isDataSubmitting ? "Saving" : "Save"}
+          <Button disabled={isDataSubmitting || isTimeSheetBeingUpdated} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting || isTimeSheetBeingUpdated ? "has-loading-spinner" : ""} onClick={handleSubmit}>
+            {isDataSubmitting || isTimeSheetBeingUpdated ? "Saving" : "Save"}
           </Button>
         </Tooltip>
       </div>
