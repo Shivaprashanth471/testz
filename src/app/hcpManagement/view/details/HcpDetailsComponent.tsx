@@ -20,10 +20,9 @@ const HcpDetailsComponent = (props: any) => {
   const getAttachmentsDetails = useCallback(() => {
     setAttachmentLoading(true);
     CommonService._api.get(ENV.API_URL + "hcp/" + id + "/attachments").then((resp) => {
-        setAttachmentsDetails(resp?.data);
-        setAttachmentLoading(false);
-      })
-      .catch((err) => {
+      setAttachmentsDetails(resp?.data);
+      setAttachmentLoading(false);
+    }).catch((err) => {
         console.log(err);
         setAttachmentLoading(false);
       });
@@ -35,7 +34,7 @@ const HcpDetailsComponent = (props: any) => {
 
   useEffect(() => {
     const required_attachments = [
-      { name: "Resume", index : -1},
+      { name: "Resume", index: -1 },
       { name: "Physical Test", index: -1 },
       { name: "TB Test", index: -1 },
       { name: "Chest X-ray", index: -1 },
@@ -51,16 +50,21 @@ const HcpDetailsComponent = (props: any) => {
     ];
     let tempAttachemnts: any = [];
     required_attachments?.forEach((item: any) => {
-      attachmentsDetails?.forEach((attachment: any) => {
+      attachmentsDetails?.forEach((attachment: any,index:any) => {
         if (item.name === attachment?.attachment_type) {
+          attachmentsDetails.splice(index,1);
           tempAttachemnts.push(attachment);
         }
       });
     });
 
+    attachmentsDetails?.forEach((attachment: any) => {
+      tempAttachemnts.push(attachment);
+    })
     setSortedAttachments([...tempAttachemnts]);
   }, [attachmentsDetails]);
 
+  console.log(sortedAttachments)
   const StyledLoader = () => {
     return (
       <div className="pdd-20" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -140,23 +144,23 @@ const HcpDetailsComponent = (props: any) => {
         </div>
       </div>
       <div className="mrg-top-15 custom-border pdd-20 pdd-left-40 pdd-right-40">
-            <div className="">
-              <h3>Reason for Rejection</h3>
-              <p>{hcpBasicDetails?.rejected_details?.reason}</p>
-            </div>
-            <div className="reject-by-wrapper d-flex">
-              <div>
-                <h4>Cancelled By:</h4>
-                <p>
-                  {hcpBasicDetails?.rejected_details?.rejected_by?.first_name} &nbsp; {hcpBasicDetails?.rejected_details?.rejected_by?.last_name}
-                </p>
-              </div>
-              <div className="mrg-left-50">
-                <h4>Role:</h4>
-                <p>{hcpBasicDetails?.rejected_details?.rejected_by?.role}</p>
-              </div>
-            </div>
+        <div className="">
+          <h3>Reason for Rejection</h3>
+          <p>{hcpBasicDetails?.rejected_details?.reason}</p>
+        </div>
+        <div className="reject-by-wrapper d-flex">
+          <div>
+            <h4>Cancelled By:</h4>
+            <p>
+              {hcpBasicDetails?.rejected_details?.rejected_by?.first_name} &nbsp; {hcpBasicDetails?.rejected_details?.rejected_by?.last_name}
+            </p>
           </div>
+          <div className="mrg-left-50">
+            <h4>Role:</h4>
+            <p>{hcpBasicDetails?.rejected_details?.rejected_by?.role}</p>
+          </div>
+        </div>
+      </div>
       <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
         <h3>Professional Details</h3>
         <div className="d-flex">
@@ -244,10 +248,8 @@ const HcpDetailsComponent = (props: any) => {
           </div>
         </div>
 
-       
-
         <div className="d-flex">
-        <div className="flex-1">
+          <div className="flex-1">
             <h4>Vaccine</h4>
             <p>{!hcpBasicDetails?.nc_details?.vaccine ? "N/A" : hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
           </div>
@@ -263,7 +265,6 @@ const HcpDetailsComponent = (props: any) => {
           </div>
         </div>
 
-       
         <div className="d-flex">
           <div className="flex-1">
             <h4>Do you have a Full-time Job ?</h4>
@@ -307,11 +308,10 @@ const HcpDetailsComponent = (props: any) => {
             <h4>Require Sponsorship for Employment in United States?</h4>
             <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>
-        
         </div>
 
         <div className="d-flex">
-            <div className="flex-1">
+          <div className="flex-1">
             <h4>Legally Authorized to work in United States ?</h4>
             <p>{hcpBasicDetails?.nc_details?.is_authorized_to_work !== "" ? (hcpBasicDetails?.nc_details?.is_authorized_to_work === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>

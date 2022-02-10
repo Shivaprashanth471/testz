@@ -6,6 +6,7 @@ import { ENV } from '../../../../constants';
 import { CommonService } from '../../../../helpers';
 import FileDropZoneComponent from '../../../../components/core/FileDropZoneComponent';
 import { Tooltip } from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
 
 const HcpAddAttachmentsComponent = (props: any) => {
   const fileUpload = props?.fileUpload;
@@ -64,13 +65,27 @@ const HcpAddAttachmentsComponent = (props: any) => {
     }
   }
 
+  console.log(fileUpload?.wrapper[1]?.extraPayload)
+
+  const handleAttachmentName = (index:any,RequiredAttachmentsIndex:any)=>{
+   let temp = required_attachments[RequiredAttachmentsIndex];
+   temp.name = fileUpload?.wrapper[index]?.extraPayload?.expiry_date;
+    setFileUpload((prevState: any) => {
+      if (prevState) {
+        prevState.wrapper[index].extraPayload.file_type = prevState.wrapper[index].extraPayload.expiry_date;
+      //  prevState.wrapper[index].extraPayload.expiry_date = '';
+      }
+      return { wrapper: [...(prevState || { wrapper: [] }).wrapper] };
+    })
+  }
+
   const deleteFile = (temp: any, itemIndex: any) => {
-    console.log(temp, "deleteindex", itemIndex)
-    let data = fileUpload?.wrapper.filter((_: any, index: any) => index !== itemIndex);
-    console.log(data)
     if (required_attachments[temp]) {
-      required_attachments[temp].index = -1
-      setRequiredAttachments([...required_attachments])
+      if(temp>12){
+        required_attachments[temp].name = "Additional Attachment";
+      }
+      required_attachments[temp].index = -1;
+      setRequiredAttachments([...required_attachments]);
     }
   }
 
@@ -94,24 +109,36 @@ const HcpAddAttachmentsComponent = (props: any) => {
                 <div className="d-flex">
                   <div className="mrg-top-15"><InsertDriveFileIcon color={"primary"} className="file-icon" /></div>
                   <div className="file_details mrg-left-20 mrg-top-20">
-                    <NormalTextField
-                      required
-                      label="Expires On"
-                      type={"date"}
-                      InputLabelProps={{ shrink: true }}
-                      onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
-                      value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
-                      disabled={index===0 || index === 6 || index === 9 || index === 12}
-                      inputProps={{
-                        max: '2999-01-01'
-                      }}
-                    />
-                    <div className="file_actions d-flex">
+                    {index <= 12 ?
+                      index === 0 || index === 6 || index === 9 || index === 12 ? <div></div> :
+                        <NormalTextField
+                          required
+                          label={"Expires On"}
+                          type={"date"}
+                          InputLabelProps={{ shrink: true }}
+                          onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
+                          value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
+                          disabled={index === 0 || index === 6 || index === 9 || index === 12}
+                          inputProps={{
+                            max: '2999-01-01'
+                          }}
+                        /> :
+                      <div className='d-flex'>
+                        <NormalTextField
+                          required
+                          label="Attachment Name"
+                          type={"text"}
+                          InputLabelProps={{ shrink: true }}
+                           onChange={(event) => handleExpiryDate(event, required_attachments[index]?.index)}
+                          value={fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.expiry_date}
+                        /><div className='mrg-top-15 mrg-left-15'><DoneIcon color='primary' onClick={()=>handleAttachmentName(required_attachments[index]?.index,index)}/></div>
+                      </div>}
+                    <div className={index === 0 || index === 6 || index === 9 || index === 12 ? "file_actions" : "file_actions d-flex"}>
                       <Tooltip title={`View ${item?.name}`}>
                         <p style={{ cursor: 'pointer' }} onClick={() => previewFile(item?.index, "attachment")} className="delete-image">View</p>
                       </Tooltip>
                       <Tooltip title={`Delete ${item?.name}`}>
-                        <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-30" onClick={() => deleteFile(index, item?.index)}>Delete</p>
+                        <p style={{ cursor: "pointer", width: "50px" }} className={index === 0 || index === 6 || index === 9 || index === 12 ? "" : "mrg-left-30"} onClick={() => deleteFile(index, item?.index)}>Delete</p>
                       </Tooltip>
                     </div>
                   </div>

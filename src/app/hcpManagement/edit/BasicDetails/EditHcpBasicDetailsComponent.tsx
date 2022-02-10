@@ -34,6 +34,8 @@ export interface EditHcpBasicDetailsComponentProps {
   openDeleteAttachment: any;
   hcpInitialState: any;
   openDeleteContract: any;
+  setRequiredAttachments:any;
+  setFileUpload:any;
 }
 
 const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetailsComponentProps>) => {
@@ -41,6 +43,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
   const [isFirstShotVisible, setIsFirstShotVisible] = useState<boolean>(false);
   const [isLastShotVisible, setIsLastShotVisible] = useState<boolean>(false);
 
+  const setRequiredAttachments = props?.setRequiredAttachments;
   const hcpInitialState = props?.hcpInitialState;
   const contractFile = props?.contractFile;
   const fileUpload = props?.fileUpload;
@@ -62,6 +65,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
   const deleteLocalAttachment = props?.deleteLocalAttachment;
   const openDeleteContract = props?.openDeleteContract;
   const openDeleteAttachment = props?.openDeleteAttachment;
+  const setFileUpload = props?.setFileUpload;
 
   const showDropDownBelowField = {
     MenuProps: {
@@ -95,6 +99,8 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
       setIsLastShotVisible(false);
     }
   }, [vaccineStatus]);
+
+  
 
   return (
     <div>
@@ -560,6 +566,8 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               <h3 className="card-header">Documents/Attachments</h3>
               <div className="attachments_wrapper mrg-top-30">
                 <HcpEditAttachmentsComponent
+                setFileUpload={setFileUpload}
+                setRequiredAttachments={setRequiredAttachments}
                   attachmentsDetails={attachmentsDetails}
                   required_attachments={required_attachments}
                   handleExpiryDate={handleExpiryDate}

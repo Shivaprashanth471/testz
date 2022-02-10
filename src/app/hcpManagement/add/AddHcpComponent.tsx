@@ -41,9 +41,9 @@ const AddHcpComponent = () => {
     { name: "Covid Test Result", index: -1 },
     { name: "Livescan", index: -1 },
     { name: "Vaccine Exemption Letter", index: -1 },
-    // { name:"Additional Attachment",index:-1},
-    // { name:"Additional Attachment",index:-1},
-    // { name:"Additional Attachment",index:-1}
+    { name:"Additional Attachment",index:-1},
+    { name:"Additional Attachment",index:-1},
+    { name:"Additional Attachment",index:-1}
   ]);
   const [specIsLoading, setSpecIsLoading] = useState<boolean>(true);
   const [regIsLoading, setRegIsLoading] = useState<boolean>(true);
@@ -61,9 +61,7 @@ const AddHcpComponent = () => {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const getSpecialities = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-specialities")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-specialities").then((resp) => {
         setSpecialitiesMaster(resp.data || []);
         setSpecIsLoading(false);
       })
@@ -73,9 +71,7 @@ const AddHcpComponent = () => {
   }, []);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
         setRegions(resp.data || []);
         setRegIsLoading(false);
       })
@@ -93,8 +89,7 @@ const AddHcpComponent = () => {
 
   const onAddEducation = useCallback((education: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/education", education)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/education", education).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -109,8 +104,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addEducations = useCallback(
-    (hcpId: string) => {
+  const addEducations = useCallback((hcpId: string) => {
       (educations || []).forEach((value: any) => {
         onAddEducation(value, hcpId);
       });
@@ -120,8 +114,7 @@ const AddHcpComponent = () => {
 
   const onAddExperience = useCallback((experience: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -136,8 +129,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addExperiences = useCallback(
-    (hcpId: string) => {
+  const addExperiences = useCallback((hcpId: string) => {
       (experiences || []).forEach((value: any) => {
         onAddExperience(value, hcpId);
       });
@@ -147,8 +139,7 @@ const AddHcpComponent = () => {
 
   const onAddVolunteerExperience = useCallback((experience: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -163,8 +154,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addVolunteerExperiences = useCallback(
-    (hcpId: string) => {
+  const addVolunteerExperiences = useCallback((hcpId: string) => {
       (volunteerExperiences || []).forEach((value: any) => {
         onAddVolunteerExperience(value, hcpId);
       });
@@ -174,8 +164,7 @@ const AddHcpComponent = () => {
 
   const onAddReference = useCallback((reference: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/reference", reference)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/reference", reference).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -190,8 +179,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addReferences = useCallback(
-    (hcpId: string) => {
+  const addReferences = useCallback((hcpId: string) => {
       (references || []).forEach((value: any) => {
         onAddReference(value, hcpId);
       });
@@ -269,11 +257,9 @@ const AddHcpComponent = () => {
           file_name: value?.file?.name,
           file_type: value?.file?.type,
           attachment_type: value?.extraPayload?.file_type,
-          expiry_date: value?.extraPayload?.expiry_date,
+          expiry_date: moment(value?.extraPayload?.expiry_date).format("MM-DD-YYYY")==="Invalid date"?"":value?.extraPayload?.expiry_date,
         };
-        CommonService._api
-          .post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload)
-          .then((resp) => {
+        CommonService._api.post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload).then((resp) => {
             if (value) {
               const file = value?.file;
               delete file.base64;
@@ -297,8 +283,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const handleAttachmentsUpload = useCallback(
-    async (hcpId: any, hcpResp: any) => {
+  const handleAttachmentsUpload = useCallback(async (hcpId: any, hcpResp: any) => {
       let promArray: any = [];
 
       required_attachments?.forEach((value: any, index: any) => {
