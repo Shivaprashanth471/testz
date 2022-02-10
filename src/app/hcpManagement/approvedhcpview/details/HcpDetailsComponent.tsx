@@ -142,13 +142,17 @@ const HcpDetailsComponent = (props: any) => {
     ];
     let tempAttachemnts: any = [];
     required_attachments?.forEach((item: any) => {
-      attachmentsDetails?.forEach((attachment: any) => {
+      attachmentsDetails?.forEach((attachment: any,index:any) => {
         if (item.name === attachment?.attachment_type) {
+          attachmentsDetails.splice(index,1);
           tempAttachemnts.push(attachment);
         }
       });
     });
 
+    attachmentsDetails?.forEach((attachment: any) => {
+      tempAttachemnts.push(attachment);
+    })
     setSortedAttachments([...tempAttachemnts]);
   }, [attachmentsDetails]);
 

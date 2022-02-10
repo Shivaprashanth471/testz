@@ -107,7 +107,7 @@ const RejectShiftComponent = (props: PropsWithChildren<RejectShiftComponentProps
 
     return <div>
         <div className={classes.paper}>
-            <h2>Rejection Request</h2>
+            <h2>{selectedShifts && selectedShifts?.length>1?"Cancel Shifts":"Cancel Shift"}</h2>
             <Formik initialValues={{ reason: "" }} validateOnChange={true}
                 validationSchema={formValidation}  onSubmit={selectedShifts?handleCancelMultipleShifts:onCancelShift}>
                 {({ isSubmitting, isValid, resetForm, dirty }) => (<Form className={'form-holder'}>
@@ -148,7 +148,7 @@ const RejectShiftComponent = (props: PropsWithChildren<RejectShiftComponentProps
                         <Button type={"submit"} id="btn_reject_application"
                             className={isSubmitting ? "submit has-loading-spinner" : "submit"}
                             disabled={!dirty || isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
-                            {isSubmitting ? "Cancelling Shift" : 'Cancel Shift'}
+                            {isSubmitting ? "Cancelling Shift" :selectedShifts && selectedShifts?.length>1?"Cancel Shifts":"Cancel Shift"}
                         </Button>
                     </DialogActions>
                 </Form>)}

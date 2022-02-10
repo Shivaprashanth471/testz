@@ -163,14 +163,11 @@ const HcpApprovedListScreen = () => {
     clearFilterValues();
   };
 
-  const handletoggleStatus = useCallback(
-    (id: any, is_active) => {
+  const handletoggleStatus = useCallback((id: any, is_active) => {
       let payload = {
         is_active: !is_active,
       };
-      CommonService._api
-        .put(ENV.API_URL + "hcp/" + id, payload)
-        .then((resp) => {
+      CommonService._api.put(ENV.API_URL + "hcp/" + id, payload).then((resp) => {
           onReload(Number(list?.table?.pagination?.pageIndex) + 1);
         })
         .catch((err) => {

@@ -150,7 +150,7 @@ const HcpDetailsComponent = (props: any) => {
         </div>
         <div className="reject-by-wrapper d-flex">
           <div>
-            <h4>Cancelled By:</h4>
+            <h4>Rejected By:</h4>
             <p>
               {hcpBasicDetails?.rejected_details?.rejected_by?.first_name} &nbsp; {hcpBasicDetails?.rejected_details?.rejected_by?.last_name}
             </p>
@@ -159,6 +159,10 @@ const HcpDetailsComponent = (props: any) => {
             <h4>Role:</h4>
             <p>{hcpBasicDetails?.rejected_details?.rejected_by?.role}</p>
           </div>
+          {/* <div className="mrg-left-50">
+            <h4>Date:</h4>
+            <p>{hcpBasicDetails?.rejected_details?.rejected_by?.role}</p>
+          </div> */}
         </div>
       </div>
       <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
