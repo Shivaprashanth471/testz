@@ -22,5 +22,10 @@ export const memberFormValidation = Yup.object({
     .min(1, "min 1 digit")
     .max(10, "max 10 digits")
     .required("required"),
-  designation: Yup.string().min(2, "min 2 letters").typeError("must be text").required("required").max(30, "max limit 30"),
+  designation: Yup.string().trim("empty space not allowed")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ").min(2, "min 2 letters")
+    .typeError("must be text").required("required")
+    .max(30, "max limit 30"),
 });
+
+
