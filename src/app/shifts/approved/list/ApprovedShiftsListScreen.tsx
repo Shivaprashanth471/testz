@@ -85,14 +85,16 @@ const ApprovedShiftsListScreen = () => {
     } else {
       let tempSelectedShifts = selectedShifts?.filter((item: any) => item !== _id)
       setSelectedShifts([...tempSelectedShifts]);
+      if(tempSelectedShifts?.length===0){
+        setSelectedCount(-1)
+      }
     }
   }, [selectedShifts])
 
   const getHcpTypes = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
       setHcpTypes(resp.data || []);
-    })
-      .catch((err) => {
+    }).catch((err) => {
         console.log(err);
       });
   }, []);
@@ -100,8 +102,7 @@ const ApprovedShiftsListScreen = () => {
   const getRegions = useCallback(() => {
     CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
       setRegions(resp.data || []);
-    })
-      .catch((err) => {
+    }).catch((err) => {
         console.log(err);
       });
   }, []);
@@ -268,7 +269,6 @@ const ApprovedShiftsListScreen = () => {
         count++
       }
     })
-    console.log(list?.table?.data)
     if (list?.table?.data?.length !== 0 && count === list?.table?.data?.length) {
       setAllSelected(true)
     } else {

@@ -205,6 +205,9 @@ const ShiftRequirementListScreen = () => {
     } else {
       let tempSelectedShifts = selectedShifts?.filter((item: any) => item !== _id)
       setSelectedShifts([...tempSelectedShifts]);
+      if(tempSelectedShifts?.length===0){
+        setSelectedCount(-1)
+      }
     }
   }, [selectedShifts])
 
@@ -260,9 +263,6 @@ const ShiftRequirementListScreen = () => {
     }
 
   }, [selectedShifts])
-
-
-  console.log(statusType)
 
   useEffect(() => {
     let count = 0;
