@@ -51,9 +51,7 @@ const HcpDetailsComponent = (props: any) => {
   const getAttachmentsDetails = useCallback(
     (hcp_id) => {
       setAttachmentLoading(true);
-      CommonService._api
-        .get(ENV.API_URL + "hcp/" + hcp_id + "/attachments")
-        .then((resp) => {
+      CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/attachments").then((resp) => {
           setAttachmentsDetails(resp?.data);
           setIsAttachmentsLoading(false);
           setAttachmentLoading(false);
@@ -68,9 +66,7 @@ const HcpDetailsComponent = (props: any) => {
   );
 
   const getEducationDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/education")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/education").then((resp) => {
         // console.log(resp);
         setEducationDetails(resp.data);
       })
@@ -80,9 +76,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getExperienceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=fulltime")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=fulltime").then((resp) => {
         // console.log(resp);
         setExperienceDetails(resp.data);
       })
@@ -92,9 +86,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getVolunteerExperienceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=volunteer")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/experience?exp_type=volunteer").then((resp) => {
         // console.log(resp);
         setVolunteerExperience(resp.data);
       })
@@ -104,9 +96,7 @@ const HcpDetailsComponent = (props: any) => {
   }, []);
 
   const getReferenceDetails = useCallback((hcp_id) => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + hcp_id + "/reference")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + hcp_id + "/reference").then((resp) => {
         // console.log(resp);
         setReferenceDetails(resp.data);
       })
@@ -117,9 +107,7 @@ const HcpDetailsComponent = (props: any) => {
 
   const init = useCallback(() => {
     // config
-    CommonService._api
-      .get(ENV.API_URL + "hcp/user/" + id)
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/user/" + id).then((resp) => {
         setBasicDetails(resp.data);
         getEducationDetails(resp.data?._id);
         getExperienceDetails(resp.data?._id);
@@ -138,6 +126,7 @@ const HcpDetailsComponent = (props: any) => {
 
   useEffect(() => {
     const required_attachments = [
+      { name: "Resume", index : -1},
       { name: "Physical Test", index: -1 },
       { name: "TB Test", index: -1 },
       { name: "Chest X-ray", index: -1 },
@@ -153,13 +142,17 @@ const HcpDetailsComponent = (props: any) => {
     ];
     let tempAttachemnts: any = [];
     required_attachments?.forEach((item: any) => {
-      attachmentsDetails?.forEach((attachment: any) => {
+      attachmentsDetails?.forEach((attachment: any,index:any) => {
         if (item.name === attachment?.attachment_type) {
+          attachmentsDetails.splice(index,1);
           tempAttachemnts.push(attachment);
         }
       });
     });
 
+    attachmentsDetails?.forEach((attachment: any) => {
+      tempAttachemnts.push(attachment);
+    })
     setSortedAttachments([...tempAttachemnts]);
   }, [attachmentsDetails]);
 
@@ -284,10 +277,126 @@ const HcpDetailsComponent = (props: any) => {
         <HcpContractComponent id={hcpBasicDetails?._id} hcpDetails={hcpBasicDetails} />
       </div>
 
-      <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40">
-        <h3>Travel Preference</h3>
-        <div className="d-flex mrg-top-20">
-          {hcpBasicDetails?.nc_details?.travel_preferences && hcpBasicDetails?.nc_details?.travel_preferences.length > 0 ? hcpBasicDetails?.nc_details?.travel_preferences.map((item: any) => <p className="flex-1">{item} Miles</p>) : <p>N/A</p>}
+      <div className="custom-border mrg-top-10 pdd-20 pdd-left-40 pdd-right-40 pdd-bottom-35">
+        <h3>NC Section</h3>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>DNR</h4>
+            <p>{hcpBasicDetails?.nc_details?.dnr ? hcpBasicDetails?.nc_details?.dnr : 'N/A'}</p>
+          </div>
+
+          <div className="flex-1">
+            <h4>Contact Type</h4>
+            <p>{hcpBasicDetails?.nc_details?.contact_type ? hcpBasicDetails?.nc_details?.contact_type : "N/A"}</p>
+          </div>
+
+          <div className="flex-1">
+            <h4>Preferred Location to Work</h4>
+            <p>{hcpBasicDetails?.nc_details?.location_preference ? hcpBasicDetails?.nc_details?.location_preference : "N/A"}</p>
+          </div>
+        </div>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Preference Shift Type</h4>
+            <p>{hcpBasicDetails?.nc_details?.shift_type_preference ? hcpBasicDetails?.nc_details?.shift_type_preference : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Zone Assignment</h4>
+            <p>{hcpBasicDetails?.nc_details?.zone_assignment !== "" ? hcpBasicDetails?.nc_details?.zone_assignment : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Last Call Date</h4>
+            <p>{hcpBasicDetails?.nc_details?.last_call_date ? moment(hcpBasicDetails?.nc_details?.last_call_date).format("MMMM Do YYYY") : "N/A"}</p>
+          </div>
+        </div>
+
+       
+
+        <div className="d-flex">
+        <div className="flex-1">
+            <h4>Vaccine</h4>
+            <p>{!hcpBasicDetails?.nc_details?.vaccine ? "N/A" : hcpBasicDetails?.nc_details?.vaccine === "half" ? "1st Dose" : hcpBasicDetails?.nc_details?.vaccine}</p>
+          </div>
+
+          <div className="flex-1">
+            <h4>First Shot Date</h4>
+            <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot : "N/A"}</p>
+          </div>
+
+          <div className="flex-1">
+            <h4>Latest Shot Date</h4>
+            <p>{hcpBasicDetails?.nc_details?.vaccination_dates?.first_shot ? hcpBasicDetails?.nc_details?.vaccination_dates?.latest_shot : "N/A"}</p>
+          </div>
+        </div>
+
+       
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Do you have a Full-time Job ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_fulltime_job !== "" ? (hcpBasicDetails?.nc_details?.is_fulltime_job === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Covid (or) Non Covid Facility ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.covid_facility_preference ? hcpBasicDetails?.nc_details?.covid_facility_preference : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>What Is More Important for You ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.more_important_preference !== "" ? hcpBasicDetails?.nc_details?.more_important_preference : "N/A"}</p>
+          </div>
+        </div>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Is this a Supplement to your Income ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_supplement_to_income !== "" ? (hcpBasicDetails?.nc_details?.is_supplement_to_income === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Are you Studying ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_studying !== "" ? (hcpBasicDetails?.nc_details?.is_studying === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Gusto</h4>
+            <p>{hcpBasicDetails?.nc_details?.gusto_type !== "" ? hcpBasicDetails?.nc_details?.gusto_type : "N/A"}</p>
+          </div>
+        </div>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Is Gusto Invited ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_gusto_invited !== "" ? (hcpBasicDetails?.nc_details?.is_gusto_invited === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Is Gusto Onboarded ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_gusto_onboarded !== "" ? (hcpBasicDetails?.nc_details?.is_gusto_onboarded === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+          <div className="flex-1">
+            <h4>Require Sponsorship for Employment in United States?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+        
+        </div>
+
+        <div className="d-flex">
+            <div className="flex-1">
+            <h4>Legally Authorized to work in United States ?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_authorized_to_work !== "" ? (hcpBasicDetails?.nc_details?.is_authorized_to_work === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+        </div>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Family Considerations</h4>
+            <p className="summary">{hcpBasicDetails?.nc_details?.family_consideration ? hcpBasicDetails?.nc_details?.family_consideration : "N/A"}</p>
+          </div>
+        </div>
+
+        <div className="d-flex">
+          <div className="flex-1">
+            <h4>Other Information Gathered</h4>
+            <p>{hcpBasicDetails?.nc_details?.other_information ? hcpBasicDetails?.nc_details?.other_information : "N/A"}</p>
+          </div>
         </div>
       </div>
 
@@ -297,24 +406,24 @@ const HcpDetailsComponent = (props: any) => {
         <div className="d-flex">
           <div className="flex-1">
             <h4>DNR</h4>
-            <p>{hcpBasicDetails?.nc_details?.dnr}</p>
+            <p>{hcpBasicDetails?.nc_details?.dnr ? hcpBasicDetails?.nc_details?.dnr : 'N/A'}</p>
           </div>
 
           <div className="flex-1">
             <h4>Contact Type</h4>
-            <p>{hcpBasicDetails?.nc_details?.contact_type}</p>
+            <p>{hcpBasicDetails?.nc_details?.contact_type ? hcpBasicDetails?.nc_details?.contact_type : "N/A"}</p>
           </div>
 
           <div className="flex-1">
             <h4>Preferred Location to Work</h4>
-            <p>{hcpBasicDetails?.nc_details?.location_preference}</p>
+            <p>{hcpBasicDetails?.nc_details?.location_preference ? hcpBasicDetails?.nc_details?.location_preference : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
             <h4>Preference Shift Type</h4>
-            <p>{hcpBasicDetails?.nc_details?.shift_type_preference}</p>
+            <p>{hcpBasicDetails?.nc_details?.shift_type_preference ? hcpBasicDetails?.nc_details?.shift_type_preference : "N/A"}</p>
           </div>
           <div className="flex-1">
             <h4>Zone Assignment</h4>
@@ -322,7 +431,7 @@ const HcpDetailsComponent = (props: any) => {
           </div>
           <div className="flex-1">
             <h4>Last Call Date</h4>
-            <p>{hcpBasicDetails?.nc_details?.last_call_date ? moment(hcpBasicDetails?.nc_details?.last_call_date).format("MMMM Do YYYY, hh:mm A") : "N/A"}</p>
+            <p>{hcpBasicDetails?.nc_details?.last_call_date ? moment(hcpBasicDetails?.nc_details?.last_call_date).format("MMMM Do YYYY") : "N/A"}</p>
           </div>
         </div>
 
@@ -386,29 +495,30 @@ const HcpDetailsComponent = (props: any) => {
             <p>{hcpBasicDetails?.nc_details?.is_gusto_onboarded !== "" ? (hcpBasicDetails?.nc_details?.is_gusto_onboarded === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>
           <div className="flex-1">
-            <h4>Legally Authorised to work in United States ?</h4>
+            <h4>Require Sponsorship for Employment in United States?</h4>
+            <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
+          </div>
+        
+        </div>
+
+        <div className="d-flex">
+            <div className="flex-1">
+            <h4>Legally Authorized to work in United States ?</h4>
             <p>{hcpBasicDetails?.nc_details?.is_authorized_to_work !== "" ? (hcpBasicDetails?.nc_details?.is_authorized_to_work === "true" ? "Yes" : "No") : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
-            <h4>Require Sponsorship for Employment in United States?</h4>
-            <p>{hcpBasicDetails?.nc_details?.is_require_employment_sponsorship !== "" ? (hcpBasicDetails?.nc_details?.is_require_employment_sponsorship === "true" ? "Yes" : "No") : "N/A"}</p>
-          </div>
-        </div>
-
-        <div className="d-flex">
-          <div className="flex-1">
             <h4>Family Considerations</h4>
-            <p className="summary">{hcpBasicDetails?.nc_details?.family_consideration}</p>
+            <p className="summary">{hcpBasicDetails?.nc_details?.family_consideration ? hcpBasicDetails?.nc_details?.family_consideration : "N/A"}</p>
           </div>
         </div>
 
         <div className="d-flex">
           <div className="flex-1">
             <h4>Other Information Gathered</h4>
-            <p>{hcpBasicDetails?.nc_details?.other_information}</p>
+            <p>{hcpBasicDetails?.nc_details?.other_information ? hcpBasicDetails?.nc_details?.other_information : "N/A"}</p>
           </div>
         </div>
       </div>

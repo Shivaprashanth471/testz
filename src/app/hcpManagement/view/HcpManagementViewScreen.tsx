@@ -58,38 +58,29 @@ const HcpManagementViewScreen = () => {
     CommonService._api.get(ENV.API_URL + "hcp/" + id).then((resp) => {
       setBasicDetails(resp.data);
       setIsLoading(false);
-    })
-      .catch((err) => {
+    }).catch((err) => {
         console.log(err);
       });
   }, [id]);
 
   const getEducationDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/education")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/education").then((resp) => {
         setEducationDetails(resp.data);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err);
       });
   }, [id]);
 
   const getExperienceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=fulltime")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=fulltime").then((resp) => {
         setExperienceDetails(resp.data);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err);
       });
   }, [id]);
 
   const getVolunteerExperienceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=volunteer")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=volunteer").then((resp) => {
         setVolunteerExperience(resp.data);
       })
       .catch((err) => {
@@ -98,9 +89,7 @@ const HcpManagementViewScreen = () => {
   }, [id]);
 
   const getReferenceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/reference")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/reference").then((resp) => {
         // console.log(resp);
         setReferenceDetails(resp.data);
       })

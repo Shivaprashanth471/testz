@@ -10,7 +10,7 @@ import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../.
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
 import { AddRounded, DeleteForeverOutlined } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import { Link, useParams, useHistory } from "react-router-dom";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from "@material-ui/core/IconButton";
@@ -28,7 +28,7 @@ const GroupViewScreen = () => {
     const openEditGroupOptions = Boolean(editGroup);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
     const [isGroupOpen, setIsGroupOpen] = useState<boolean>(false);
-    const [isConfirmDelete,setIsConfirmDelete] = useState<boolean>(false);
+    const [isConfirmDelete, setIsConfirmDelete] = useState<boolean>(false);
     const history = useHistory();
     const ITEM_HEIGHT = 48;
     const [groupDetails, setGroupDetails] = useState<any>(null);
@@ -150,10 +150,10 @@ const GroupViewScreen = () => {
                     <LoaderComponent />
                 </div>}
                 <DialogComponent open={isAddOpen} cancel={cancelAdd}>
-                    <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Remove' hcpname={removeMemberDetails?.hcp_name} groupname={groupDetails?.title} confirmationText={'from'} notext={"Cancel"} yestext={"Remove"} isConfirm={isConfirmDelete}/>
+                    <VitawerksConfirmComponent cancel={cancelAdd} confirm={confirmAdd} text1='Remove' hcpname={removeMemberDetails?.hcp_name} groupname={groupDetails?.title} confirmationText={'from'} notext={"Cancel"} yestext={"Remove"} isConfirm={isConfirmDelete} />
                 </DialogComponent>
                 <DialogComponent open={isGroupOpen} cancel={cancelDeleteGroup}>
-                    <VitawerksConfirmComponent cancel={cancelDeleteGroup} confirm={confirmDeleteGroup} text1='Delete' hcpname={groupDetails?.title} groupname={''} confirmationText={'Group'} notext={"Cancel"} yestext={"Delete"}  isConfirm={isConfirmDelete}/>
+                    <VitawerksConfirmComponent cancel={cancelDeleteGroup} confirm={confirmDeleteGroup} text1='Delete' hcpname={groupDetails?.title} groupname={''} confirmationText={'Group'} notext={"Cancel"} yestext={"Delete"} isConfirm={isConfirmDelete} />
                 </DialogComponent>
                 <div>
                     <div className="header mrg-bottom-0 custom-border pdd-top-30 pdd-bottom-10">
@@ -164,12 +164,16 @@ const GroupViewScreen = () => {
                             </div>
                         </div>
                         <div className="actions">
-                            <Button variant={"outlined"} className={'normal mrg-right-20'} color={"primary"} onClick={() => handleSmsBlast(groupDetails)} id="btn-send-sms-blast">
-                                Send SMS Blast
-                            </Button>
-                            <Button variant={"outlined"} className={'normal'} color={"primary"} component={Link} to={`/group/edit/member/` + id} id="btn-add-new-hcp">
-                                <AddRounded />&nbsp;&nbsp;Add New
-                            </Button>
+                            <Tooltip title={" Send SMS Blast"}>
+                                <Button variant={"outlined"} className={'normal mrg-right-20'} color={"primary"} onClick={() => handleSmsBlast(groupDetails)} id="btn-send-sms-blast">
+                                    Send SMS Blast
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title={"Add New Member"}>
+                                <Button variant={"outlined"} className={'normal'} color={"primary"} component={Link} to={`/group/edit/member/` + id} id="btn-add-new-hcp">
+                                    <AddRounded />&nbsp;&nbsp;Add New
+                                </Button>
+                            </Tooltip>
                             <IconButton
                                 aria-label="more"
                                 aria-controls="long-menu"
@@ -177,7 +181,9 @@ const GroupViewScreen = () => {
                                 onClick={handleClick}
                                 id="group-long-menu"
                             >
-                                <MoreVertIcon />
+                                <Tooltip title={"More Actions"}>
+                                    <MoreVertIcon />
+                                </Tooltip>
                             </IconButton>
                             <Menu
                                 id="long-menu"
@@ -193,12 +199,16 @@ const GroupViewScreen = () => {
                                     },
                                 }}
                             >
-                                <MenuItem key={"delete-group"} onClick={() => openDeleteGroup()} id="btn-delete-group">
-                                    {'Delete Group'}
-                                </MenuItem>
-                                <MenuItem onClick={handleRemoveMembers} key={"remove-members"} remove-memid="btn-ber">
-                                    {'Remove Members'}
-                                </MenuItem>
+                                <Tooltip title={`Delete ${groupDetails?.title}`}>
+                                    <MenuItem key={"delete-group"} onClick={() => openDeleteGroup()} id="btn-delete-group">
+                                        {'Delete Group'}
+                                    </MenuItem>
+                                </Tooltip>
+                                <Tooltip title={`Remove Members from ${groupDetails?.title}`}>
+                                    <MenuItem onClick={handleRemoveMembers} key={"remove-members"} remove-memid="btn-ber">
+                                        {'Remove Members'}
+                                    </MenuItem>
+                                </Tooltip>
                             </Menu>
 
                         </div>
@@ -209,9 +219,9 @@ const GroupViewScreen = () => {
                         <TableContainer component={Paper} className={'table-responsive'}>
                             <Table stickyHeader className="mat-table table group-members-list-table">
                                 <TableHead className={"mat-thead"}>
-                                     <TableRow className={"mat-tr"}>
+                                    <TableRow className={"mat-tr"}>
                                         {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                            <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} 
+                                            <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                                 key={'header-col-' + columnIndex}
                                             >
                                                 {column}
@@ -219,12 +229,11 @@ const GroupViewScreen = () => {
                                         ))}
                                     </TableRow>
                                 </TableHead>
-                               <TableBody className={"mat-tbody"}>
+                                <TableBody className={"mat-tbody"}>
                                     {list.table.canShowNoData() &&
                                         <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                     }
                                     {list?.table.data.map((row: any, rowIndex: any) => {
-
                                         return (
                                             <TableRow className={"mat-tr"} role="checkbox" tabIndex={-1} key={'row-' + rowIndex}>
                                                 <TableCell className="mat-td mat-td-hcp-name">
@@ -234,14 +243,18 @@ const GroupViewScreen = () => {
                                                     {row['hcp_type']}
                                                 </TableCell>
                                                 <TableCell className="mat-td mat-td-remove-hcp">
-                                                    <div className="d-flex message-wrapper" onClick={() => openAdd(row._id, rowIndex)} id={"btn-remove-hcp-" + rowIndex}>
-                                                        <DeleteForeverOutlined className="remove" /> &nbsp; <span className="remove">Remove</span>
-                                                    </div>
+                                                    <Tooltip title={`Remove ${row['hcp_name']} from ${groupDetails?.title}`}>
+                                                        <div className="d-flex message-wrapper" onClick={() => openAdd(row._id, rowIndex)} id={"btn-remove-hcp-" + rowIndex}>
+                                                            <DeleteForeverOutlined className="remove" /> &nbsp; <span className="remove">Remove</span>
+                                                        </div>
+                                                    </Tooltip>
                                                 </TableCell>
                                                 <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                                    <Link to={'/hcp/user/view/' + row?.hcp_user_id} className="info-link" id={"link_hcp_details_" + rowIndex} >
-                                                        {('View Details')}
-                                                    </Link>
+                                                    <Tooltip title={`View ${row['hcp_name']} Details`}>
+                                                        <Link to={{pathname:'/hcp/user/view/' + row?.hcp_user_id, state :{prevPath:'/group/view/'+id}}} className="info-link" id={"link_hcp_details_" + rowIndex} >
+                                                            {('View Details')}
+                                                        </Link>
+                                                    </Tooltip>
                                                 </TableCell>
                                             </TableRow>
                                         );

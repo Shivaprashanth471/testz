@@ -1,9 +1,9 @@
-import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
+import { Box, FormControlLabel, MenuItem, Radio, Tooltip } from "@material-ui/core";
 import FormLabel from "@material-ui/core/FormLabel";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import { Field, FieldProps, Form, Formik } from "formik";
 import { CheckboxWithLabel, RadioGroup, TextField } from "formik-material-ui";
-import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
+import { DatePicker } from "formik-material-ui-pickers";
 import React, { useCallback, useEffect, useState } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
@@ -199,12 +199,16 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                             </div>
                           </div>
                           <div className="d-flex contract_actions mrg-top-5 mrg-left-5">
-                            <p style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-image">
-                              View
-                            </p>
-                            <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>
-                              Delete
-                            </p>
+                            <Tooltip title={"View Contract"}>
+                              <p style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-image">
+                                View
+                              </p>
+                            </Tooltip>
+                            <Tooltip title={"Delete Contract"}>
+                              <p style={{ cursor: "pointer", width: "50px" }} className="mrg-left-20" onClick={() => deleteContractFile(index)}>
+                                Delete
+                              </p>
+                            </Tooltip>
                           </div>
                         </div>
                       </div>
@@ -217,9 +221,11 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                   <div>
                     <h3 className="card-header">Contract</h3>
                     <Box display="flex" gridGap="10px">
+                    <Tooltip title={"Upload Contract"}>
                       <Box width="250px" className="mrg-top-10">
                         <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
                       </Box>
+                      </Tooltip>
                     </Box>
                   </div>
                 )}
@@ -312,14 +318,11 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                 <div className="input-container">
                   <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                   <Field
-                    variant="inline"
-                    openTo="date"
-                    inputVariant="outlined"
-                    component={DateTimePicker}
-                    placeholder="MM/DD/YYYY HH:MM "
+                    variant='outlined'
+                    component={TextField}
+                    placeholder="MM-DD-YYYY"
                     fullWidth
                     autoComplete="off"
-                    InputLabelProps={{ shrink: true }}
                     label="Last Call Date"
                     name="nc_details.last_call_date"
                   />
@@ -339,7 +342,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
                         setFieldValue("nc_details.vaccination_dates.first_shot", "");
                       }
 
-                      if(e.target.value === ''){
+                      if (e.target.value === '') {
                         setFieldValue("nc_details.vaccination_dates.first_shot", "");
                         setFieldValue("nc_details.vaccination_dates.latest_shot", "");
                       }
@@ -573,7 +576,7 @@ const AddHcpBasicDetailsComponent = (props: any) => {
 
                   <div className="flex-1">
                     <div className="pdd-top-10">
-                      <FormLabel className={"form-label"}>Legally Authorised to work in United States?</FormLabel>
+                      <FormLabel className={"form-label"}>Legally Authorized to work in United States?</FormLabel>
                     </div>
                     <div className="mrg-top-10">
                       <Field component={RadioGroup} name="nc_details.is_authorized_to_work">

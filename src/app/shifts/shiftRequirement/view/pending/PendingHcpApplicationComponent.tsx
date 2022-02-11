@@ -13,7 +13,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-import { LinearProgress, IconButton } from "@material-ui/core";
+import { LinearProgress, IconButton, Tooltip } from "@material-ui/core";
 import DialogComponent from "../../../../../components/DialogComponent";
 import moment from 'moment';
 import NoDataCardComponent from '../../../../../components/NoDataCardComponent';
@@ -56,15 +56,10 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
     }, [init])
 
     const openApprove = useCallback((hcpId: string, applicationId: string) => {
-        console.log(hcpId, applicationId)
         setHcpId(hcpId)
         setApplicationId(applicationId)
         setIsApproveOpen(true);
     }, [])
-
-    // const openRejectApplication=useCallback(()=>{
-    //     setIsRejectOpen(true)
-    // },[])
 
     useEffect(() => {
         init()
@@ -98,7 +93,7 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
             <TableContainer component={Paper} className={'table-responsive'}>
                 <Table stickyHeader className="mat-table table shifts-requirment-pending-list-table">
                     <TableHead className={"mat-thead"}>
-                         <TableRow className={"mat-tr"}>
+                        <TableRow className={"mat-tr"}>
                             {list?.table.matColumns.map((column: any, columnIndex: any) => (
                                 <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
                                     key={'header-col-' + columnIndex}
@@ -108,7 +103,7 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
                             ))}
                         </TableRow>
                     </TableHead>
-                   <TableBody className={"mat-tbody"}>
+                    <TableBody className={"mat-tbody"}>
                         {list.table.canShowNoData() &&
                             <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                         }
@@ -132,12 +127,16 @@ const PendingHcpApplicationComponent = (props: PropsWithChildren<PendingHcpAppli
                                     </TableCell>
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
                                         <div className="d-flex action-wrapper">
-                                            <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'])} disabled={status === "cancelled"}>
-                                                <CheckIcon className="add-icon" />
-                                            </IconButton>
-                                            <IconButton onClick={() => openRejectApplication(row['_id'])} disabled={status === "cancelled"}>
-                                                <CancelIcon className="delete-icon" />
-                                            </IconButton>
+                                            <Tooltip title={`Approve ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Application`}>
+                                                <IconButton onClick={() => openApprove(row['hcp_user_id'], row['_id'])} disabled={status === "cancelled"}>
+                                                    <CheckIcon className="add-icon" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title={`Reject ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Application`}>
+                                                <IconButton onClick={() => openRejectApplication(row['_id'])} disabled={status === "cancelled"}>
+                                                    <CancelIcon className="delete-icon" />
+                                                </IconButton>
+                                            </Tooltip>
                                         </div>
                                     </TableCell>
                                 </TableRow>

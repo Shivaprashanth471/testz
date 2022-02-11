@@ -1,9 +1,13 @@
-
 @import "src/assets/scss/common";
 
 .timeline{
    margin-top: 5rem;
    position: relative;
+
+   .gap-container{
+    display: flex;
+    gap: 5rem;
+  }
  
     .wrap {
         width: 98%;
@@ -105,4 +109,3 @@
 
      
 }
-

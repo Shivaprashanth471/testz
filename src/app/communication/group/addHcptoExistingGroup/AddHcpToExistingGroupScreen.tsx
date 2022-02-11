@@ -9,11 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import { Link, useHistory, useParams } from "react-router-dom";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
 import "./AddHcpToExistingGroupScreen.scss";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const AddHcpToExistingGroupScreen = () => {
     const params = useParams<{ id: string }>();
@@ -26,7 +27,7 @@ const AddHcpToExistingGroupScreen = () => {
     const history = useHistory();
     const [groupHcps, setGroupHcps] = useState<any>(null);
     const [finalHcps, setFinalHcps] = useState<any>(null);
-    const [isMembersAdded,setIsMembersAdded] = useState<boolean>(false)
+    const [isMembersAdded, setIsMembersAdded] = useState<boolean>(false)
     const init = useCallback(() => {
         let payload: any = {}
         payload.is_approved = 1;
@@ -188,9 +189,9 @@ const AddHcpToExistingGroupScreen = () => {
                     <TableContainer component={Paper} className={'table-responsive'}>
                         <Table stickyHeader className="mat-table table add-members-group-list-table">
                             <TableHead className={"mat-thead"}>
-                                 <TableRow className={"mat-tr"}>
+                                <TableRow className={"mat-tr"}>
                                     <TableCell padding="checkbox" className="mat-th">
-                                        <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
+                                        <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                                     </TableCell>
 
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
@@ -202,7 +203,7 @@ const AddHcpToExistingGroupScreen = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                           <TableBody className={"mat-tbody"}>
+                            <TableBody className={"mat-tbody"}>
                                 {list.table.canShowNoData() &&
                                     <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
                                 }
@@ -210,7 +211,7 @@ const AddHcpToExistingGroupScreen = () => {
                                     return (
                                         <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
                                             <TableCell className="mat-td mat-td-checkbox">
-                                                <input type={"checkbox"} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
+                                                <Checkbox checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
                                             </TableCell>
                                             <TableCell className="mat-td mat-td-hcp-name">
                                                 {row['first_name']} &nbsp; {row['last_name']}
@@ -218,10 +219,12 @@ const AddHcpToExistingGroupScreen = () => {
                                             <TableCell className="mat-td mat-td-hcp-type">
                                                 {row['hcp_type']}
                                             </TableCell>
-                                            <TableCell  className="mat-td mat-td-sticky mat-td-actions">
-                                                <Link to={'/hcp/view/' + row?._id} className="info-link" id={"link_facility_details" + rowIndex} >
-                                                    {('View Details')}
-                                                </Link>
+                                            <TableCell className="mat-td mat-td-sticky mat-td-actions">
+                                                <Tooltip title={`View  ${row['first_name']} ${row['last_name']} Details`}>
+                                                    <Link to={{pathname:'/hcp/user/view/' + row?.user_id,state:{prevPath:"/group/edit/member/"+id}}} className="info-link" id={"link_facility_details" + rowIndex} >
+                                                        {('View Details')}
+                                                    </Link>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -232,9 +235,13 @@ const AddHcpToExistingGroupScreen = () => {
                 </>}
             </div>
             <div className="button-wrapper">
-                <Button component={Link} variant={"outlined"} className={'normal pdd-left-40 pdd-right-40'} to={'/group/view/' + id} color={"primary"}>Back</Button>
-                <Button variant={"contained"} color={"primary"} className={isMembersAdded?"add-button mrg-left-20 has-loading-spinner":"add-button mrg-left-20"} onClick={onAdd} disabled={isMembersAdded}>
-                {isMembersAdded ?"Adding Members":"Add Members"}</Button>
+                <Tooltip title={`Back to ${groupDetails?.title} View details`}>
+                    <Button component={Link} variant={"outlined"} className={'normal pdd-left-40 pdd-right-40'} to={'/group/view/' + id} color={"primary"}>Back</Button>
+                </Tooltip>
+                <Tooltip title={`Add Members to ${groupDetails?.title}`}>
+                    <Button variant={"contained"} color={"primary"} className={isMembersAdded ? "add-button mrg-left-20 has-loading-spinner" : "add-button mrg-left-20"} onClick={onAdd} disabled={isMembersAdded}>
+                        {isMembersAdded ? "Adding Members" : "Add Members"}</Button>
+                </Tooltip>
             </div>
         </div>
     </>

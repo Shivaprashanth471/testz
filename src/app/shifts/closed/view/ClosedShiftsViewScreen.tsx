@@ -3,7 +3,7 @@ import { ENV } from "../../../../constants";
 import { CommonService, Communications } from "../../../../helpers";
 import "./ClosedShiftsViewScreen.scss";
 import { useParams } from "react-router-dom";
-import { Avatar, Tooltip } from "@material-ui/core";
+import { Avatar, Checkbox, Tooltip } from "@material-ui/core";
 import moment from "moment";
 import { Button } from "@material-ui/core";
 import ShiftTimeline from "../../timeline/ShiftTimeline";
@@ -22,6 +22,8 @@ const ClosedShiftsViewScreen = () => {
   const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [previewFileData, setPreviewFile] = useState<any | null>(null);
+  const [isFacilityConfirm, setIsFacilityConfirm] = useState<boolean>(false);
+
 
   const previewFile = useCallback(
     (index: any) => {
@@ -66,6 +68,7 @@ const ClosedShiftsViewScreen = () => {
       .get(ENV.API_URL + "shift/" + id)
       .then((resp) => {
         setBasicDetails(resp.data);
+        setIsFacilityConfirm(resp.data?.is_facility_approved)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -148,9 +151,11 @@ const ClosedShiftsViewScreen = () => {
             </div>
             <div className="flex-1 actions-wrapper">
               <div className="button">
-                <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}>
-                  View Details
-                </Button>
+                <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
+                  <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/closedShifts/view/" + id } }}>
+                    View Details
+                  </Button>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -171,7 +176,6 @@ const ClosedShiftsViewScreen = () => {
               <div className="flex-1">
                 <h3>Time</h3>
                 <p>
-                  {" "}
                   {start_time} &nbsp;-&nbsp;{end_time}
                 </p>
               </div>
@@ -201,20 +205,20 @@ const ClosedShiftsViewScreen = () => {
             <div className="d-flex shift-name-requested">
               <h2>Shift Details</h2>
               <div className="d-flex requested-on-wrapper">
-                <h4 className="hcp-rate">
+                <h3 className="hcp-rate">
                   HCP Rate:<span className="mrg-left-10 ">{basicDetails?.hcp_user?.rate} $</span>
-                </h4>
+                </h3>
               </div>
             </div>
             <div className="d-flex shift-date-time">
-              <div className="d-flex flex-1">
+              <div className="d-flex flex-1 flex-baseline">
                 <h3>Attended On:</h3>
                 <p className="attended-date mrg-left-15">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : moment(basicDetails?.expected?.shift_start_time).format("MM-DD-YYYY")}</p>
               </div>
-              {/* <div className="flex-1 d-flex shift-ot-time">
-                        <h3>OT Hours:</h3>
-                        <p className="attended-date mrg-left-15">--</p>
-                    </div> */}
+              <div className=" d-flex  flex-center">
+                <h3 className="attended-date mrg-left-15">Facility Confirmation</h3>
+                <Checkbox checked={isFacilityConfirm} disabled />
+              </div>
             </div>
             <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
             <div className="mrg-top-70">

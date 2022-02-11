@@ -10,11 +10,12 @@ import TableRow from '@material-ui/core/TableRow';
 import { TsDataListOptions, TsDataListState, TsDataListWrapperClass } from "../../../../classes/ts-data-list-wrapper.class";
 import { ENV } from "../../../../constants";
 import { ApiService, CommonService, Communications } from "../../../../helpers";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Tooltip } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import './AddGroupScreen.scss';
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const AddGroupScreen = () => {
     const [list, setList] = useState<TsDataListState | any>(null);
@@ -22,7 +23,7 @@ const AddGroupScreen = () => {
     const [selectedHcps, setSelectedHcps] = useState<any>(null)
     const [isAllselected, setAllSelected] = useState<boolean>(false);
     const [selectedCount, setSelectedCount] = useState<any>(-1)
-    const [isGroupAdded,setIsGroupAdded] = useState<boolean>(false)
+    const [isGroupAdded, setIsGroupAdded] = useState<boolean>(false)
     const history = useHistory();
 
     const init = useCallback(() => {
@@ -56,7 +57,7 @@ const AddGroupScreen = () => {
         setSelectedHcps(selectedHcps)
         setAllSelected(event.target.checked)
     }
-    
+
     const AddHcpsToGroup = useCallback((hcp: any, group_id: any) => {
         delete hcp["checked"];
         return new Promise((resolve, reject) => {
@@ -80,12 +81,12 @@ const AddGroupScreen = () => {
                 }
             })
             setIsGroupAdded(false)
-            
+
         } else {
             history.push('/group/view/' + groupId);
             setIsGroupAdded(false)
         }
-      
+
     }, [selectedHcps, AddHcpsToGroup, history, selectedCount])
 
     const onAdd = () => {
@@ -103,7 +104,7 @@ const AddGroupScreen = () => {
             setIsGroupAdded(false)
         })
     }
-    
+
     useEffect(() => {
         let temp: any = []
         list?.table?.data?.forEach((item: any) => {
@@ -148,64 +149,68 @@ const AddGroupScreen = () => {
                     </div>
                 </div>
                 <div className="mrg-top-20 custom-border padding">
-                {list && list.table && <>
-                    <TableContainer component={Paper} className={'table-responsive'}>
-                        <Table stickyHeader className="mat-table table add-members-list-table">
-                            <TableHead className={"mat-thead"}>
-                                 <TableRow className={"mat-tr"}>
-                                    <TableCell padding="checkbox" className="mat-th">
-                                        <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
-                                    </TableCell>
-
-                                    {list?.table.matColumns.map((column: any, columnIndex: any) => (
-                                        <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"} 
-                                            key={'header-col-' + columnIndex}
-                                        >
-                                            {column}
+                    {list && list.table && <>
+                        <TableContainer component={Paper} className={'table-responsive'}>
+                            <Table stickyHeader className="mat-table table add-members-list-table">
+                                <TableHead className={"mat-thead"}>
+                                    <TableRow className={"mat-tr"}>
+                                        <TableCell padding="checkbox" className="mat-th">
+                                            <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id={"select-all-cb"} />
                                         </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                           <TableBody className={"mat-tbody"}>
-                                {list.table.canShowNoData() &&
-                                    <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
-                                }
-                                {list?.table.data.map((row: any, rowIndex: any) => {
-                                    return (
-                                        <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
-                                            <TableCell className="mat-td mat-td-checkbox">
-                                                <input type={"checkbox"} id={"cb_" + rowIndex} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} />
+
+                                        {list?.table.matColumns.map((column: any, columnIndex: any) => (
+                                            <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
+                                                key={'header-col-' + columnIndex}
+                                            >
+                                                {column}
                                             </TableCell>
-                                            <TableCell className="mat-td mat-td-hcp-name">
-                                                {row['first_name']} &nbsp; {row['last_name']}
-                                            </TableCell>
-                                            <TableCell className="mat-td mat-td-hcp-type">
-                                                {row['hcp_type']}
-                                            </TableCell>
-                                            <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                                <Link to={'/hcp/view/' + row?._id} className="info-link" id={"link_hcp_details" + rowIndex} >
-                                                    {('View Details')}
-                                                </Link>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                        <TablePagination
-                            rowsPerPageOptions={list.table.pagination.pageSizeOptions}
-                            component='div'
-                            count={list?.table.pagination.totalItems}
-                            rowsPerPage={list?.table.pagination.pageSize}
-                            page={list?.table.pagination.pageIndex}
-                            onPageChange={(event, page) => list.table.pageEvent(page)}
-                            onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
-                        />
-                    </TableContainer>
-                </>}
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody className={"mat-tbody"}>
+                                    {list.table.canShowNoData() &&
+                                        <NoDataCardComponent tableCellCount={list.table.matColumns.length} />
+                                    }
+                                    {list?.table.data.map((row: any, rowIndex: any) => {
+                                        return (
+                                            <TableRow role="checkbox" tabIndex={-1} key={'row-' + rowIndex} className='mat-tr'>
+                                                <TableCell className="mat-td mat-td-checkbox">
+                                                    <Checkbox id={"cb_" + rowIndex} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} />
+                                                </TableCell>
+                                                <TableCell className="mat-td mat-td-hcp-name">
+                                                    {row['first_name']} &nbsp; {row['last_name']}
+                                                </TableCell>
+                                                <TableCell className="mat-td mat-td-hcp-type">
+                                                    {row['hcp_type']}
+                                                </TableCell>
+                                                <TableCell className="mat-td mat-td-sticky mat-td-actions">
+                                                    <Tooltip title={`View ${row['first_name']} ${row['last_name']} Details`}>
+                                                        <Link to={{pathname:'/hcp/user/view/' + row?.user_id,state:{prevPath:"/group/add"}}} className="info-link" id={"link_hcp_details" + rowIndex} >
+                                                            {('View Details')}
+                                                        </Link>
+                                                    </Tooltip>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                            <TablePagination
+                                rowsPerPageOptions={list.table.pagination.pageSizeOptions}
+                                component='div'
+                                count={list?.table.pagination.totalItems}
+                                rowsPerPage={list?.table.pagination.pageSize}
+                                page={list?.table.pagination.pageIndex}
+                                onPageChange={(event, page) => list.table.pageEvent(page)}
+                                onRowsPerPageChange={event => list.table?.pageEvent(0, +event.target.value)}
+                            />
+                        </TableContainer>
+                    </>}
                 </div>
                 <div className="button-wrapper">
-                    <Button variant={"contained"} className={isGroupAdded?"add-button has-loading-spinner":"add-button"} color={"primary"} disabled={!title || isGroupAdded} onClick={onAdd}>{isGroupAdded ?"Adding  Group":"Add  Group"}</Button>
+                    <Tooltip title={"Add Group"}>
+                        <Button variant={"contained"} className={isGroupAdded ? "add-button has-loading-spinner" : "add-button"} color={"primary"} disabled={!title || isGroupAdded} onClick={onAdd}>{isGroupAdded ? "Adding  Group" : "Add  Group"}</Button>
+                    </Tooltip>
                 </div>
             </div>
         </>

@@ -99,6 +99,10 @@ const CancelledShiftsViewScreen = () => {
                 <h3>Role:</h3>
                 <p>{basicDetails?.cancelled_details?.cancelled_by?.role}</p>
               </div>
+              {/* <div className="mrg-left-50">
+                <h3>Date:</h3>
+                <p>{moment(basicDetails?.cancelled_details?.cancelled_by?.role).format("MM-DD-YYYY")}</p>
+              </div> */}
             </div>
           </div>
           <div className="facility-details custom-border mrg-top-10">

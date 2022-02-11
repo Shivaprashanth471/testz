@@ -37,14 +37,22 @@ const FacilityBasicDetailsComponent = (props: any) => {
       <DialogComponent open={open} cancel={cancelPreviewFile} class="preview-content">
         <CustomPreviewFile cancel={cancelPreviewFile} confirm={confirmPreviewFile} previewData={facilityDetails?.image_url} />
       </DialogComponent>
+      <div className="fac-edit-btn">
+        <div>
+          <Tooltip title={`Edit ${facilityDetails?.facility_name}`}>
+            <Button variant={"contained"} color={"primary"} component={Link} to={`/facility/edit/` + id}>
+              Edit Facility
+            </Button>
+          </Tooltip>
+        </div>
+      </div>
       <div className="custom-border">
         <div className="basic_details">
-          <div className="d-flex edit-facility-wrapper">
+          <div className="d-flex title-rating-container edit-facility-wrapper">
             <h3>Basic Details</h3>
-            <div>
-              <Button variant={"contained"} color={"primary"} component={Link} to={`/facility/edit/` + id}>
-                Edit Facility
-              </Button>
+            <div className='rating-container'>
+              <p className='rating-title'>Average Rating</p>
+              <p className='rating-content'>{facilityDetails?.rating ? `${facilityDetails?.rating}/5` : "N/A"}</p>
             </div>
           </div>
           <div className="d-flex ">

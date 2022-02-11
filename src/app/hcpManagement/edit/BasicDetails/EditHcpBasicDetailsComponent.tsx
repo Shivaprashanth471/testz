@@ -1,17 +1,16 @@
-import React, { PropsWithChildren, useState, useEffect } from "react";
+import { Box, FormControlLabel, MenuItem, Radio, Tooltip } from "@material-ui/core";
+import FormLabel from "@material-ui/core/FormLabel";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import { Field, FieldProps, Form, Formik } from "formik";
+import { CheckboxWithLabel, RadioGroup, TextField } from "formik-material-ui";
+import { DatePicker } from "formik-material-ui-pickers";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
 import PhoneInputComponent from "../../../../components/phoneInput/PhoneInputComponent";
-import { Field, FieldProps, Form, Formik } from "formik";
-import { CheckboxWithLabel, TextField } from "formik-material-ui";
-import { DatePicker, DateTimePicker } from "formik-material-ui-pickers";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, travelDistancePreference, vaccine } from "../../../../constants/data";
-import { Box, FormControlLabel, MenuItem, Radio } from "@material-ui/core";
-import { hcpFormValidation } from "../../add/AddHcpValuesValidationsComponent";
 import { ScrollToError } from "../../../../components/ScrollToError";
+import { boolAcknowledge, contactType, covidPreference, genderTypes, gustoType, moreImportant, salaryCredit, shiftTypePreference, travelDistancePreference, vaccine } from "../../../../constants/data";
+import { hcpFormValidation } from "../../add/AddHcpValuesValidationsComponent";
 import HcpEditAttachmentsComponent from "../EditAttachments/HcpEditAttachmentsComponent";
-import FormLabel from "@material-ui/core/FormLabel";
-import { RadioGroup } from "formik-material-ui";
 
 export interface EditHcpBasicDetailsComponentProps {
   contractFile: any;
@@ -35,6 +34,8 @@ export interface EditHcpBasicDetailsComponentProps {
   openDeleteAttachment: any;
   hcpInitialState: any;
   openDeleteContract: any;
+  setRequiredAttachments:any;
+  setFileUpload:any;
 }
 
 const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetailsComponentProps>) => {
@@ -42,6 +43,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
   const [isFirstShotVisible, setIsFirstShotVisible] = useState<boolean>(false);
   const [isLastShotVisible, setIsLastShotVisible] = useState<boolean>(false);
 
+  const setRequiredAttachments = props?.setRequiredAttachments;
   const hcpInitialState = props?.hcpInitialState;
   const contractFile = props?.contractFile;
   const fileUpload = props?.fileUpload;
@@ -63,6 +65,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
   const deleteLocalAttachment = props?.deleteLocalAttachment;
   const openDeleteContract = props?.openDeleteContract;
   const openDeleteAttachment = props?.openDeleteAttachment;
+  const setFileUpload = props?.setFileUpload;
 
   const showDropDownBelowField = {
     MenuProps: {
@@ -96,6 +99,8 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
       setIsLastShotVisible(false);
     }
   }, [vaccineStatus]);
+
+  
 
   return (
     <div>
@@ -276,35 +281,32 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               <div className="input-container">
                 <Field variant="outlined" name="nc_details.zone_assignment" type={"text"} component={TextField} id="input_hcp_add_zone_assignment" label="Zone Assignment" fullWidth autoComplete="off" />
                 <Field
-                  variant="inline"
-                  openTo="date"
-                  inputVariant="outlined"
-                  component={DateTimePicker}
-                  placeholder="MM/DD/YYYY HH:MM "
+                  variant="outlined"
+                  component={TextField}
+                  placeholder="MM-DD-YYYY"
                   fullWidth
                   autoComplete="off"
-                  InputLabelProps={{ shrink: true }}
                   label="Last Call Date"
                   name="nc_details.last_call_date"
                 />
               </div>
 
               <div className="input-container">
-             
+
                 <Field
                   onClick={(e: any) => {
                     setFieldValue("nc_details.vaccine", e.target.value);
                     setVaccineStatus(e.target.value);
-                    if(e.target.value === 'exempted'){
+                    if (e.target.value === 'exempted') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                       setFieldValue("nc_details.vaccination_dates.latest_shot", '');
                     }
-                    if(e.target.value === ''){
+                    if (e.target.value === '') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                       setFieldValue("nc_details.vaccination_dates.latest_shot", '');
                     }
 
-                    if(e.target.value === 'half'){
+                    if (e.target.value === 'half') {
                       setFieldValue("nc_details.vaccination_dates.first_shot", '');
                     }
                   }}
@@ -537,7 +539,7 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
 
                 <div className="flex-1">
                   <div className="pdd-top-10">
-                    <FormLabel className={"form-label"}>Legally Authorised to work in United States?</FormLabel>
+                    <FormLabel className={"form-label"}>Legally Authorized to work in United States?</FormLabel>
                   </div>
                   <div className="mrg-top-10">
                     <Field component={RadioGroup} name="nc_details.is_authorized_to_work">
@@ -564,6 +566,8 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
               <h3 className="card-header">Documents/Attachments</h3>
               <div className="attachments_wrapper mrg-top-30">
                 <HcpEditAttachmentsComponent
+                setFileUpload={setFileUpload}
+                setRequiredAttachments={setRequiredAttachments}
                   attachmentsDetails={attachmentsDetails}
                   required_attachments={required_attachments}
                   handleExpiryDate={handleExpiryDate}
@@ -589,9 +593,11 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                       <div className="file_details mrg-left-20"></div>
                     </div>
                     <div className="contract_actions mrg-left-5 mrg-top-10 ">
-                      <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} onClick={openDeleteContract} className="delete-button mrg-left-10">
-                        Delete
-                      </button>
+                      <Tooltip title={`Delete Contract`}>
+                        <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} onClick={openDeleteContract} className="delete-button mrg-left-10">
+                          Delete
+                        </button>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>
@@ -608,12 +614,16 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                             <div className="file_details mrg-left-20"></div>
                           </div>
                           <div className="d-flex contract_actions mrg-left-5 mrg-top-10">
-                            <button style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-button">
-                              View
-                            </button>
-                            <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>
-                              Delete
-                            </button>
+                            <Tooltip title={"View Contract"}>
+                              <button style={{ cursor: "pointer" }} onClick={() => previewFile(index, "contract")} className="delete-button">
+                                View
+                              </button>
+                            </Tooltip>
+                            <Tooltip title={"Delete Contract"}>
+                              <button style={{ cursor: "pointer", width: "50px" }} disabled={isContractDeleted} className="mrg-left-20 delete-button" onClick={() => deleteContractFile(index)}>
+                                Delete
+                              </button>
+                            </Tooltip>
                           </div>
                         </div>
                       </div>
@@ -623,9 +633,11 @@ const EditHcpBasicDetailsComponent = (props: PropsWithChildren<EditHcpBasicDetai
                     <></>
                   ) : (
                     <Box display="flex" gridGap="10px">
-                      <Box width="250px" className="mrg-top-10">
-                        <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
-                      </Box>
+                      <Tooltip title={"Upload Contract"}>
+                        <Box width="250px" className="mrg-top-10">
+                          <FileDropZoneComponent allowedTypes={".pdf"} OnFileSelected={OnContractFileUpload} />
+                        </Box>
+                      </Tooltip>
                     </Box>
                   )}
                 </>

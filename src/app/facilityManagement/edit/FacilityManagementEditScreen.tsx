@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import React, { useCallback, useEffect, useState } from "react";
 import "react-phone-number-input/style.css";
@@ -40,28 +40,22 @@ const FacilityManagementEditScreen = () => {
     async (link: any) => {
       const file = fileUpload?.wrapper[0]?.file;
       delete file.base64;
-      CommonService._api
-        .upload(link, file, { "Content-Type": file?.type })
-        .then((resp) => {
-          console.log(resp);
-        })
+      CommonService._api.upload(link, file, { "Content-Type": file?.type }).then((resp) => {
+        console.log(resp);
+      })
         .catch((err) => {
           console.log(err);
         });
-    },
-    [fileUpload?.wrapper]
-  );
+    }, [fileUpload?.wrapper]);
 
   const handlegetUrlForUpload = useCallback(() => {
     let payload = {
       file_name: fileUpload?.wrapper[0]?.file?.name,
       file_type: fileUpload?.wrapper[0]?.file?.type,
     };
-    CommonService._api
-      .post(ENV.API_URL + "facility/" + id + "/profile", payload)
-      .then((resp) => {
-        handleFacilityImageUpload(resp?.data);
-      })
+    CommonService._api.post(ENV.API_URL + "facility/" + id + "/profile", payload).then((resp) => {
+      handleFacilityImageUpload(resp?.data);
+    })
       .catch((err) => {
         console.log(err);
         CommonService.showToast(err || "Error", "error");
@@ -69,13 +63,11 @@ const FacilityManagementEditScreen = () => {
   }, [handleFacilityImageUpload, fileUpload?.wrapper, id]);
 
   const init = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "facility/" + id)
-      .then((resp) => {
-        setFacilityDetails(resp.data);
-        setTimeZone(resp?.data?.timezone);
-        setIsLoading(false);
-      })
+    CommonService._api.get(ENV.API_URL + "facility/" + id).then((resp) => {
+      setFacilityDetails(resp.data);
+      setTimeZone(resp?.data?.timezone);
+      setIsLoading(false);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -83,23 +75,19 @@ const FacilityManagementEditScreen = () => {
 
   const deleteFacilityImage = useCallback(() => {
     setIsImageRemoved(true);
-    CommonService._api
-      .delete(ENV.API_URL + "facility/" + id + "/profile")
-      .then((resp) => {
-        init();
-      })
+    CommonService._api.delete(ENV.API_URL + "facility/" + id + "/profile").then((resp) => {
+      init();
+    })
       .catch((err) => {
         console.log(err);
       });
   }, [init, id]);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
-        setRegions(resp.data || []);
-        setRegIsLoading(false);
-      })
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
+      setRegions(resp.data || []);
+      setRegIsLoading(false);
+    })
       .catch((err) => {
         console.log(err);
         setRegIsLoading(false);
@@ -107,11 +95,9 @@ const FacilityManagementEditScreen = () => {
   }, []);
 
   const getShiftDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "facility/" + id + "/shift")
-      .then((resp) => {
-        setShiftTimings(resp.data || []);
-      })
+    CommonService._api.get(ENV.API_URL + "facility/" + id + "/shift").then((resp) => {
+      setShiftTimings(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
         setShiftTimings([]);
@@ -119,11 +105,9 @@ const FacilityManagementEditScreen = () => {
   }, [id]);
 
   const getFacilityMembers = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "facility/" + id + "/member")
-      .then((resp) => {
-        setMembers(resp.data || []);
-      })
+    CommonService._api.get(ENV.API_URL + "facility/" + id + "/member").then((resp) => {
+      setMembers(resp.data || []);
+    })
       .catch((err) => {
         console.log(err);
         setMembers([]);
@@ -311,7 +295,7 @@ const FacilityManagementEditScreen = () => {
     setTimeout(() => setIsImage(!isImage), 1000);
   };
 
-  useEffect(() => {}, [isImage]);
+  useEffect(() => { }, [isImage]);
 
   if (isLoading || regIsLoading) {
     return <LoaderComponent />;
@@ -351,21 +335,25 @@ const FacilityManagementEditScreen = () => {
       </div>
 
       <div className="facility-actions mrg-top-60">
-        <Button size="large" variant={"outlined"} className={"normal"} onClick={openAdd} color="primary" id="btn_facility_edit_submit">
-          Cancel
-        </Button>
-        <Button
-          disabled={facilitySubmitting}
-          form="facility-edit-form"
-          type="submit"
-          size="large"
-          variant={"contained"}
-          color={"primary"}
-          className={facilitySubmitting ? "has-loading-spinner pdd-left-30 pdd-right-30" : "pdd-left-30 pdd-right-30"}
-          id="btn_facility_edit_submit"
-        >
-          {facilitySubmitting ? "Saving" : "Save"}
-        </Button>
+        <Tooltip title={"Cancel"}>
+          <Button size="large" variant={"outlined"} className={"normal"} onClick={openAdd} color="primary" id="btn_facility_edit_submit">
+            Cancel
+          </Button>
+        </Tooltip>
+        <Tooltip title={"Save Changes"}>
+          <Button
+            disabled={facilitySubmitting}
+            form="facility-edit-form"
+            type="submit"
+            size="large"
+            variant={"contained"}
+            color={"primary"}
+            className={facilitySubmitting ? "has-loading-spinner pdd-left-30 pdd-right-30" : "pdd-left-30 pdd-right-30"}
+            id="btn_facility_edit_submit"
+          >
+            {facilitySubmitting ? "Saving" : "Save"}
+          </Button>
+        </Tooltip>
       </div>
       <ScrollToTop smooth color="white" />
     </div>

@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import { FormikHelpers } from "formik";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
@@ -28,6 +28,7 @@ const AddHcpComponent = () => {
   const [volunteerExperiences, setVolunteerExperiences] = useState<any>([]);
   const [references, setReferences] = useState<any>([]);
   const [required_attachments, setRequiredAttachments] = useState<any>([
+    { name: "Resume", index : -1},
     { name: "Physical Test", index: -1 },
     { name: "TB Test", index: -1 },
     { name: "Chest X-ray", index: -1 },
@@ -40,6 +41,9 @@ const AddHcpComponent = () => {
     { name: "Covid Test Result", index: -1 },
     { name: "Livescan", index: -1 },
     { name: "Vaccine Exemption Letter", index: -1 },
+    { name:"Additional Attachment",index:-1},
+    { name:"Additional Attachment",index:-1},
+    { name:"Additional Attachment",index:-1}
   ]);
   const [specIsLoading, setSpecIsLoading] = useState<boolean>(true);
   const [regIsLoading, setRegIsLoading] = useState<boolean>(true);
@@ -57,9 +61,7 @@ const AddHcpComponent = () => {
   const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
 
   const getSpecialities = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-specialities")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-specialities").then((resp) => {
         setSpecialitiesMaster(resp.data || []);
         setSpecIsLoading(false);
       })
@@ -69,9 +71,7 @@ const AddHcpComponent = () => {
   }, []);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
         setRegions(resp.data || []);
         setRegIsLoading(false);
       })
@@ -89,8 +89,7 @@ const AddHcpComponent = () => {
 
   const onAddEducation = useCallback((education: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/education", education)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/education", education).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -105,8 +104,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addEducations = useCallback(
-    (hcpId: string) => {
+  const addEducations = useCallback((hcpId: string) => {
       (educations || []).forEach((value: any) => {
         onAddEducation(value, hcpId);
       });
@@ -116,8 +114,7 @@ const AddHcpComponent = () => {
 
   const onAddExperience = useCallback((experience: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -132,8 +129,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addExperiences = useCallback(
-    (hcpId: string) => {
+  const addExperiences = useCallback((hcpId: string) => {
       (experiences || []).forEach((value: any) => {
         onAddExperience(value, hcpId);
       });
@@ -143,8 +139,7 @@ const AddHcpComponent = () => {
 
   const onAddVolunteerExperience = useCallback((experience: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/experience", experience).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -159,8 +154,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addVolunteerExperiences = useCallback(
-    (hcpId: string) => {
+  const addVolunteerExperiences = useCallback((hcpId: string) => {
       (volunteerExperiences || []).forEach((value: any) => {
         onAddVolunteerExperience(value, hcpId);
       });
@@ -170,8 +164,7 @@ const AddHcpComponent = () => {
 
   const onAddReference = useCallback((reference: any, hcpId: string) => {
     return new Promise((resolve, reject) => {
-      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/reference", reference)
-        .then((resp: any) => {
+      ApiService.post(ENV.API_URL + "hcp/" + hcpId + "/reference", reference).then((resp: any) => {
           console.log(resp);
           if (resp && resp.success) {
             resolve(null);
@@ -186,8 +179,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const addReferences = useCallback(
-    (hcpId: string) => {
+  const addReferences = useCallback((hcpId: string) => {
       (references || []).forEach((value: any) => {
         onAddReference(value, hcpId);
       });
@@ -265,11 +257,9 @@ const AddHcpComponent = () => {
           file_name: value?.file?.name,
           file_type: value?.file?.type,
           attachment_type: value?.extraPayload?.file_type,
-          expiry_date: value?.extraPayload?.expiry_date,
+          expiry_date: moment(value?.extraPayload?.expiry_date).format("MM-DD-YYYY")==="Invalid date"?"":value?.extraPayload?.expiry_date,
         };
-        CommonService._api
-          .post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload)
-          .then((resp) => {
+        CommonService._api.post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload).then((resp) => {
             if (value) {
               const file = value?.file;
               delete file.base64;
@@ -293,8 +283,7 @@ const AddHcpComponent = () => {
     });
   }, []);
 
-  const handleAttachmentsUpload = useCallback(
-    async (hcpId: any, hcpResp: any) => {
+  const handleAttachmentsUpload = useCallback(async (hcpId: any, hcpResp: any) => {
       let promArray: any = [];
 
       required_attachments?.forEach((value: any, index: any) => {
@@ -309,12 +298,12 @@ const AddHcpComponent = () => {
         Promise.all(promArray)
           .then((resp) => {
             console.log({ resp });
-            history.push("/hcp/view/" + hcpId);
+            setTimeout(()=> history.push("/hcp/view/" + hcpId),600);
           })
           .catch((err) => console.log(err));
       } else {
         CommonService.showToast(hcpResp.msg || "Success", "success");
-        history.push("/hcp/view/" + hcpId);
+        setTimeout(()=> history.push("/hcp/view/" + hcpId),600);
       }
     },
     [fileUpload?.wrapper, onHandleAttachmentUpload, history, required_attachments]
@@ -412,12 +401,10 @@ const AddHcpComponent = () => {
   };
 
   const getHcpTypes = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-types")
-      .then((resp) => {
-        setHcpTypes(resp.data || []);
-        setHcpTypesLoading(false);
-      })
+    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
+      setHcpTypes(resp.data || []);
+      setHcpTypesLoading(false);
+    })
       .catch((err) => {
         console.log(err);
       });
@@ -500,12 +487,16 @@ const AddHcpComponent = () => {
             <ReferenceAddComponent references={references} setReference={setReferences} />
           </div>
           <div className="add-hcp-actions mrg-top-80">
-            <Button size="large" onClick={openAdd} variant={"outlined"} color="primary" id="btn_hcp_add_cancel">
-              {"Cancel"}
-            </Button>
-            <Button disabled={isHcpSubmitting} form="add-hcp-form" type="submit" id="btn_hcp_add_save" size="large" variant={"contained"} color={"primary"} className={isHcpSubmitting ? "has-loading-spinner" : ""}>
-              {isHcpSubmitting ? "Saving" : "Save"}
-            </Button>
+            <Tooltip title={"Cancel"}>
+              <Button size="large" onClick={openAdd} variant={"outlined"} color="primary" id="btn_hcp_add_cancel">
+                {"Cancel"}
+              </Button>
+            </Tooltip>
+            <Tooltip title={"Save Changes"}>
+              <Button disabled={isHcpSubmitting} form="add-hcp-form" type="submit" id="btn_hcp_add_save" size="large" variant={"contained"} color={"primary"} className={isHcpSubmitting ? "has-loading-spinner" : ""}>
+                {isHcpSubmitting ? "Saving" : "Save"}
+              </Button>
+            </Tooltip>
           </div>
           <ScrollToTop smooth color="white" />
         </div>

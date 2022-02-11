@@ -14,6 +14,7 @@ import { Button } from "@material-ui/core";
 import NoDataCardComponent from '../../../../components/NoDataCardComponent';
 import LoaderComponent from '../../../../components/LoaderComponent';
 import "./RemoveHcpsScreen.scss";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const RemoveHcpsScreen = () => {
     const [list, setList] = useState<TsDataListState | null>(null);
@@ -137,7 +138,7 @@ const RemoveHcpsScreen = () => {
                             <TableHead className={"mat-thead"}>
                                  <TableRow className={"mat-tr"}>
                                     <TableCell padding="checkbox" className="mat-th">
-                                        <input type="checkbox" onChange={(event) => handleSelectAll(event)} checked={isAllselected} id="cb_select_all_hcps" />
+                                        <Checkbox onChange={(event) => handleSelectAll(event)} checked={isAllselected} id="cb_select_all_hcps" />
                                     </TableCell>
                                     {list?.table.matColumns.map((column: any, columnIndex: any) => (
                                         <TableCell className={column === "Actions" ? "mat-th mat-th-sticky" : "mat-th"}
@@ -156,7 +157,7 @@ const RemoveHcpsScreen = () => {
                                     return (
                                         <TableRow className='mat-tr' role="checkbox" tabIndex={-1} key={'row-' + 1}>
                                             <TableCell className="mat-td mat-td-checkbox">
-                                                <input type={"checkbox"} checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
+                                                <Checkbox checked={selectedHcps[rowIndex]?.checked} onChange={(event) => handleSelectHcp(event, rowIndex)} id={"cb_" + rowIndex} />
                                             </TableCell>
                                             <TableCell className="mat-td mat-td-hcp-name">
                                                 {row['hcp_name']}
@@ -165,7 +166,7 @@ const RemoveHcpsScreen = () => {
                                                 {row['hcp_type']}
                                             </TableCell>
                                             <TableCell className="mat-td mat-td-sticky mat-td-actions">
-                                                <Link to={'/hcp/view/' + row.id} className="info-link" id={"link_hcp_details" + rowIndex} >
+                                                <Link to={{pathname:'/hcp/user/view/' + row?.hcp_user_id,state:{prevPath:"/group/remove/"+id}}} className="info-link" id={"link_hcp_details" + rowIndex} >
                                                     {('View Details')}
                                                 </Link>
                                             </TableCell>

@@ -302,6 +302,14 @@ const AddShiftsScreen = () => {
     }
   };
 
+  const handleAddShiftRequirementOpen = () => {
+    if (facilityId) {
+      setIsShifts(true)
+    } else {
+      console.log("Please Select Facility Id")
+    }
+  }
+
   if (loading || hcpTypesLoading) {
     return <LoaderComponent />;
   }
@@ -335,7 +343,7 @@ const AddShiftsScreen = () => {
 
         {!isShifts ? (
           <div className="shift-add-action pdd-top-30">
-            <p id="btn_shift_requirement_add_shift" onClick={() => setIsShifts(true)} className="add-shift-requirment-text">
+            <p id="btn_shift_requirement_add_shift" onClick={() => handleAddShiftRequirementOpen()} className={`add-shift-requirment-text ${!facilityId && "add-shift-requirment-text-light"}`}>
               + Add a Shift Requirement
             </p>
           </div>
@@ -371,7 +379,7 @@ const AddShiftsScreen = () => {
                       </Field>
 
                       <Field
-                       disabled={shiftLoading}
+                        disabled={shiftLoading}
                         SelectProps={showDropDownBelowField}
                         id="input_shift_requirement_shift_timings"
                         variant="outlined"
@@ -401,13 +409,13 @@ const AddShiftsScreen = () => {
                             );
                           })}
                       </Field>
-                    
+
                     </div>
                     <div className="shift-second-row shift-row mrg-top-30">
                       <div className="shift-mode">
 
                         <div className="">
-                          <FormLabel className={"form-label"}>"Date Mode"</FormLabel>
+                          <FormLabel className={"form-label"}>Date Mode</FormLabel>
                         </div>
                         <div className="mrg-top-10">
                           <Field required component={RadioGroup} name="mode" onChange={(e: any) => {
@@ -434,9 +442,9 @@ const AddShiftsScreen = () => {
                           inputClass="custom-input"
                           className="rmdp-mobile"
                           plugins={[<DatePanel eachDaysInRange />]}
-                          format="YYYY/MM/DD"
+                          format="MM/DD/YYYY"
                           range={mode === "range" ? true : false}
-                          
+
                           multiple={mode === "multiple" ? true : false}
                           onChange={handleDatePicker}
                           value={value}

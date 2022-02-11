@@ -89,6 +89,7 @@ const ForgotPasswordScreen = (props: any) => {
 
   const onSetPassword = useCallback((payload: any, { setSubmitting, setErrors }: FormikHelpers<any>) => {
     payload.email = email;
+    payload.code = payload.code.toString();
     CommonService._api.post(ENV.API_URL + "resetPassword", payload).then((resp) => {
         setSubmitting(false);
         if (resp.success) {
@@ -208,11 +209,14 @@ const ForgotPasswordScreen = (props: any) => {
                     color={"primary"}
                     placeholder={"Enter OTP"}
                     component={TextField}
-                    type={"text"}
+                    type={"number"}
                     fullWidth
+                    onKeyDown={ (event:any) => (event.key === "."|| event.key === "+" || event.key === "-" || event.key === "e") && event.preventDefault() }
                     autoComplete="off"
                     name="code"
-                    inputProps={{ maxLength: 4 }}
+                    onInput = {(e:any) =>{
+                      e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,4)
+                  }}
                   />
                 </div>
                 <div className="form-field position-relative ">

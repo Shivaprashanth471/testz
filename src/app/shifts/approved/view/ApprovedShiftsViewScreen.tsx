@@ -4,7 +4,7 @@ import { CommonService, Communications } from "../../../../helpers";
 import "./ApprovedShiftsViewScreen.scss";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, Tooltip } from "@material-ui/core";
 import ShiftTimeline from "../../timeline/ShiftTimeline";
 import DialogComponent from "../../../../components/DialogComponent";
 import RejectShiftComponent from "../rejectShift/RejectShiftComponent";
@@ -36,8 +36,7 @@ const ApprovedShiftsViewScreen = () => {
 
   const cancelRejectShift = useCallback(() => {
     setRejectShiftOpen(false);
-    getShiftDetails();
-  }, [getShiftDetails]);
+  }, []);
 
   const confirmRejectShift = useCallback(() => {
     setRejectShiftOpen(false);
@@ -63,7 +62,7 @@ const ApprovedShiftsViewScreen = () => {
   return (
     <div className="pending-shifts-view screen crud-layout pdd-30">
       <DialogComponent open={isRejectShiftOpen} cancel={cancelRejectShift}>
-        <RejectShiftComponent cancel={cancelRejectShift} confirm={confirmRejectShift} />
+        <RejectShiftComponent cancel={cancelRejectShift} confirm={confirmRejectShift} selectedShifts={null}/>
       </DialogComponent>
 
       {!isLoading && (
@@ -72,9 +71,11 @@ const ApprovedShiftsViewScreen = () => {
             <div className="filter"></div>
             <div className="actions">
               {basicDetails?.shift_status !== "cancelled" ? (
-                <Button variant={"contained"} onClick={openRejectShift} color={"primary"}>
-                  Cancel Shift
-                </Button>
+                <Tooltip title={"Cancel Shift"}>
+                  <Button variant={"contained"} onClick={openRejectShift} color={"primary"}>
+                    Cancel Shift
+                  </Button>
+                </Tooltip>
               ) : (
                 <></>
               )}
@@ -132,9 +133,11 @@ const ApprovedShiftsViewScreen = () => {
             </div>
             <div className="flex-1 actions-wrapper">
               <div className="button">
+              <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}>
                 <Button component={Link} color={"primary"} variant={"outlined"} to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/approvedShifts/view/" + id } }}>
                   View Details
                 </Button>
+                </Tooltip>
               </div>
             </div>
           </div>

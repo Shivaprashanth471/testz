@@ -1,20 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { ENV } from "../../../../constants";
-import { CommonService, Communications } from "../../../../helpers";
-import { useParams } from "react-router-dom";
+import { Button, Checkbox, Tooltip } from "@material-ui/core";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+// import { Rating } from "@material-ui/lab";
 import moment from "moment";
-import { Button, DialogActions, Tooltip } from "@material-ui/core";
-import ShiftTimeline from "../../timeline/ShiftTimeline";
-import DialogComponent from "../../../../components/DialogComponent";
-import CustomPreviewFile from "../../../../components/shared/CustomPreviewFile";
-import ShiftCheckInComponent from "../checkIn/ShiftCheckInComponent";
-import ShiftBreaksComponent from "../breaks/ShiftBreaksComponent";
-import ShiftCheckOutComponent from "../CheckOut/ShiftCheckOutComponent";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../../classes/ts-file-upload-wrapper.class";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
-import "./ShiftMasterViewScreen.scss";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import DialogComponent from "../../../../components/DialogComponent";
 import LoaderComponent from "../../../../components/LoaderComponent";
+import CustomPreviewFile from "../../../../components/shared/CustomPreviewFile";
+import { ENV } from "../../../../constants";
+import { ApiService, CommonService, Communications } from "../../../../helpers";
+import ShiftTimeline from "../../timeline/ShiftTimeline";
+import ShiftBreaksComponent from "../breaks/ShiftBreaksComponent";
+import ShiftCheckInComponent from "../checkIn/ShiftCheckInComponent";
+import ShiftCheckOutComponent from "../CheckOut/ShiftCheckOutComponent";
+import "./ShiftMasterViewScreen.scss";
 
 const ShiftMasterViewScreen = () => {
   const param = useParams<any>();
@@ -31,6 +32,12 @@ const ShiftMasterViewScreen = () => {
   const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
   const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
   const [isTimeSheetBeingUpdated, setIsTimeSheetBeingUpdated] = useState<boolean>(false);
+  // const [hcpRating, setHcpRating] = useState<number | null>(null)
+  const [isDataSubmitting, setIsDataSubmitting] = useState<boolean>(false);
+  const [isFacilityConfirm, setIsFacilityConfirm] = useState<boolean>(false);
+  const history = useHistory();
+
+
 
   const previewFile = useCallback(
     (index: any, type: any) => {
@@ -73,6 +80,10 @@ const ShiftMasterViewScreen = () => {
       });
   }, [id]);
 
+  const handleFacilityConfirmation = (e: any) => {
+    setIsFacilityConfirm(e.target.checked);
+  };
+
   const OnFileSelected = (files: File[], index: any) => {
     if (required_attachments[index]) {
       required_attachments[index].index = fileUpload?.wrapper?.length || 0;
@@ -110,7 +121,7 @@ const ShiftMasterViewScreen = () => {
           CommonService.showToast(resp.msg || resp.error, "success");
         }
       };
-      uploadWrapper.onProgress = (progress) => {};
+      uploadWrapper.onProgress = (progress) => { };
       setFileUpload((prevState) => {
         let state: TsFileUploadWrapperClass[] = [];
         if (prevState) {
@@ -128,6 +139,8 @@ const ShiftMasterViewScreen = () => {
       .get(ENV.API_URL + "shift/" + id)
       .then((resp) => {
         setBasicDetails(resp.data);
+        setIsFacilityConfirm(resp.data?.is_facility_approved)
+        // setHcpRating(resp.data?.hcp_rating)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -153,9 +166,8 @@ const ShiftMasterViewScreen = () => {
   }, []);
 
   const cancelBreaksOpen = useCallback(() => {
-    getShiftDetails();
     setBreaksOpen(false);
-  }, [getShiftDetails]);
+  }, []);
 
   const confirmBreaksOpen = useCallback(() => {
     setBreaksOpen(false);
@@ -186,57 +198,74 @@ const ShiftMasterViewScreen = () => {
     });
   };
 
-  const handleShiftStatus = useCallback(() => {
-    const payload = {
-      hcp_user_id: basicDetails?.hcp_user_id,
-    };
-    CommonService._api
-      .patch(ENV.API_URL + "shift/" + id + "/closed", payload)
-      .then((resp) => {
-        CommonService.showToast(resp?.msg || "Success", "success");
-        getShiftAttachments();
-        getShiftDetails();
-        getShiftAttachmentsDownload();
-      })
-      .catch((err) => {
-        console.log(err);
-        CommonService.showToast(err || "Error", "error");
-      });
-  }, [basicDetails?.hcp_user_id, id, getShiftAttachments, getShiftDetails, getShiftAttachmentsDownload]);
+  const handleGetUrlForUpload = useCallback(() => {
+    return new Promise((resolve, reject) => {
+      if (fileUpload?.wrapper.length > 0) {
+        fileUpload?.wrapper?.forEach(async (value: any, index: any) => {
+          let payload = {
+            file_name: value?.file?.name,
+            file_type: value?.file?.type,
+            attachment_type: value?.extraPayload?.file_type,
+          };
+          setIsTimeSheetBeingUpdated(true);
+          CommonService._api
+            .post(ENV.API_URL + "shift/" + id + "/attachment", payload)
+            .then((resp) => {
+              if (fileUpload?.wrapper[index]) {
+                const file = fileUpload?.wrapper[index]?.file;
+                delete file.base64;
+                CommonService._api
+                  .upload(resp.data, file, { "Content-Type": value?.file?.type })
+                  .then((resp) => {
+                    setIsTimeSheetBeingUpdated(false);
+                    CommonService.showToast(resp?.msg || "attachment uploaded", 'success')
+                    resolve(null)
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    setIsTimeSheetBeingUpdated(false);
+                    reject(err)
+                  });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              CommonService.showToast(err?.error || "Error", "error");
+              setIsTimeSheetBeingUpdated(false);
+            });
+        });
+      } else {
+        resolve(null)
+      }
+    })
+  }, [fileUpload?.wrapper, id]);
 
-  const handlegetUrlForUpload = useCallback(() => {
-    setIsTimeSheetBeingUpdated(true);
-    fileUpload?.wrapper?.forEach(async (value: any, index: any) => {
-      let payload = {
-        file_name: value?.file?.name,
-        file_type: value?.file?.type,
-        attachment_type: value?.extraPayload?.file_type,
-      };
-      CommonService._api
-        .post(ENV.API_URL + "shift/" + id + "/attachment", payload)
-        .then((resp) => {
-          if (fileUpload?.wrapper[index]) {
-            const file = fileUpload?.wrapper[index]?.file;
-            delete file.base64;
-            CommonService._api
-              .upload(resp.data, file, { "Content-Type": value?.file?.type })
-              .then((resp) => {
-                handleShiftStatus();
-                setIsTimeSheetBeingUpdated(false);
-              })
-              .catch((err) => {
-                console.log(err);
-                setIsTimeSheetBeingUpdated(false);
-              });
-          }
+  const handleConfirmationFromFacility = useCallback(() => {
+    setIsDataSubmitting(true);
+    return new Promise((resolve, reject) => {
+      ApiService.put(ENV.API_URL + "shift/" + id, {
+        is_facility_approved: isFacilityConfirm,
+        // hcp_rating: hcpRating,
+      })
+        .then((res: any) => {
+          setIsDataSubmitting(false);
+          CommonService.showToast(res?.msg, "success");
+          resolve(null)
         })
         .catch((err) => {
           console.log(err);
-          CommonService.showToast(err?.error || "Error", "error");
-          setIsTimeSheetBeingUpdated(false);
+          setIsDataSubmitting(false);
+          reject(err)
+          CommonService.showToast(err?.msg, "error");
         });
-    });
-  }, [fileUpload?.wrapper, id, handleShiftStatus]);
+    })
+  }, [id, isFacilityConfirm])
+
+  const handleSubmit = async () => {
+    await handleConfirmationFromFacility()
+    await handleGetUrlForUpload()
+    history.goBack()
+  };
 
   useEffect(() => {
     getShiftDetails();
@@ -347,15 +376,21 @@ const ShiftMasterViewScreen = () => {
           <div className="header mrg-top-10 mrg-bottom-0">
             <div className="filter"></div>
             <div className="actions">
-              <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} disabled={basicDetails?.shift_status === "cancelled"}>
-                CheckIn
-              </Button>
-              <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
-                Break-In/Out
-              </Button>
-              <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
-                CheckOut
-              </Button>
+              <Tooltip title={`Add CheckIn Timings`}>
+                <Button variant={"contained"} onClick={openTimeBreak} color={"primary"} disabled={basicDetails?.shift_status === "cancelled"}>
+                  CheckIn
+                </Button>
+              </Tooltip>
+              <Tooltip title={`Add Break In / Break Out Timings`}>
+                <Button variant={"contained"} onClick={openBreaks} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
+                  Break-In/Out
+                </Button>
+              </Tooltip>
+              <Tooltip title={`Add CheckOut Timings`}>
+                <Button variant={"contained"} onClick={openCheckOut} color={"primary"} disabled={basicDetails?.shift_status === "cancelled" || basicDetails?.time_breakup?.check_in_time === ""}>
+                  CheckOut
+                </Button>
+              </Tooltip>
             </div>
           </div>
           <div className="mrg-top-10 custom-border pdd-top-10">
@@ -367,11 +402,11 @@ const ShiftMasterViewScreen = () => {
                 </h4>
               </div>
               <div className="d-flex shift-date-time ">
-                <div className="flex-1 flex-container">
+                <div className="d-flex flex-1 flex-baseline">
                   <h3>Attended On:</h3>
                   <p className="attended-date mrg-left-20">{basicDetails?.actuals?.shift_start_time ? moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY") : "--"}</p>
                 </div>
-                <div className="flex-1 shift-duration flex-container">
+                <div className="d-flex flex-1 flex-baseline">
                   <h3>Shift Duration:</h3>
                   <p className="shift-duration mrg-left-20">
                     {basicDetails?.time_breakup?.check_in_time &&
@@ -379,10 +414,27 @@ const ShiftMasterViewScreen = () => {
                       CommonService.durationFromHHMM(moment(basicDetails?.time_breakup?.check_in_time).format("HH:mm"), moment(basicDetails?.time_breakup?.check_out_time).format("HH:mm"))}
                   </p>
                 </div>
-                {/* <div className="flex-1 flex-container shift-ot-time">
-                            <h3>OT Hours:</h3>
-                            <p className="attended-date mrg-left-20">--</p>
-                        </div> */}
+
+                <div className="flex-container">
+                  {
+                    basicDetails?.shift_status === 'complete' || basicDetails?.shift_status === 'closed' ? (<>
+                      {/* <div className="flex-1 d-flex flex-center">
+                      <h3 className="hcp-rating mrg-left-15">HCP Rating &nbsp;</h3>
+                      <Rating
+                        color='primary'
+                        name="hcp-rating"
+                        value={hcpRating}
+                        onChange={(event, newValue) => {
+                          setHcpRating(newValue);
+                        }}
+                      />
+                    </div> */}
+                      <div className="flex-1 d-flex flex-center">
+                        <h3 className="attended-date mrg-left-15">Facility Confirmation</h3>
+                        <Checkbox checked={isFacilityConfirm} disabled={basicDetails?.shift_status === 'closed'} onChange={handleFacilityConfirmation} />
+                      </div></>) : <></>
+                  }
+                </div>
               </div>
               <div className="pdd-bottom-55">
                 <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
@@ -438,12 +490,16 @@ const ShiftMasterViewScreen = () => {
                                       </div>
                                     </div>
                                     <div className="d-flex file_actions">
-                                      <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>
-                                        View
-                                      </p>
-                                      <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>
-                                        Delete
-                                      </p>
+                                      <Tooltip title={`View ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
+                                        <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => previewFile(index, "local")}>
+                                          View
+                                        </p>
+                                      </Tooltip>
+                                      <Tooltip title={`Delete ${fileUpload?.wrapper[required_attachments[index]?.index]?.extraPayload?.file_type}`}>
+                                        <p style={{ cursor: "pointer", width: "50px" }} className={"delete-cdhp mrg-top-0"} onClick={() => deleteFile(index)}>
+                                          Delete
+                                        </p>
+                                      </Tooltip>
                                     </div>
                                   </div>
                                 </>
@@ -453,7 +509,11 @@ const ShiftMasterViewScreen = () => {
                                 <div className="attachments">
                                   <div className="">
                                     <h3 className="attachement_name file_attachment_title">{item?.name}</h3>
-                                    <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
+                                    <Tooltip title={`Upload ${item?.name}`}>
+                                      <div>
+                                        <FileDropZoneComponent OnFileSelected={(item) => OnFileSelected(item, index)} allowedTypes={".pdf"} />
+                                      </div>
+                                    </Tooltip>
                                   </div>
                                 </div>
                               );
@@ -465,25 +525,24 @@ const ShiftMasterViewScreen = () => {
                   </>
                 )}
               </div>
-              <DialogActions className="mrg-top-35">
-                {basicDetails?.shift_status === "complete" && (
-                  <Button
-                    type={"submit"}
-                    className={isTimeSheetBeingUpdated ? "submit has-loading-spinner" : "submit"}
-                    variant={"contained"}
-                    color="primary"
-                    autoFocus
-                    disabled={fileUpload?.wrapper?.length <= 0 || isTimeSheetBeingUpdated}
-                    onClick={handlegetUrlForUpload}
-                  >
-                    {isTimeSheetBeingUpdated ? "Saving" : "Save"}
-                  </Button>
-                )}
-              </DialogActions>
             </div>
           ) : (
             <></>
           )}
+          {
+            basicDetails?.shift_status === 'complete' && <div className="shift-view-actions mrg-top-20">
+              <Tooltip title={"Cancel"}>
+                <Button size="large" onClick={() => history.goBack()} variant={"outlined"} color="primary" id="btn_cancel">
+                  {"Cancel"}
+                </Button>
+              </Tooltip>
+              <Tooltip title={"Save Changes"}>
+                <Button disabled={isDataSubmitting || isTimeSheetBeingUpdated} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting || isTimeSheetBeingUpdated ? "has-loading-spinner" : ""} onClick={handleSubmit}>
+                  {isDataSubmitting || isTimeSheetBeingUpdated ? "Saving" : "Save"}
+                </Button>
+              </Tooltip>
+            </div>
+          }
         </>
       )}
     </div>

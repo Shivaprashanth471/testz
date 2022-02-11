@@ -253,12 +253,11 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                   id="input_facility_edit_conditional_rates.overtime.hours"
                 >
                   <MenuItem>Select</MenuItem>
-                  {otHours &&
-                    otHours.map((item: any, index) => (
-                      <MenuItem value={item.value} key={index}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
+                  {otHours && otHours.map((item: any, index) => (
+                    <MenuItem value={item.value} key={index}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
                 </Field>
                 <Field variant="outlined" name="conditional_rates.overtime.rate" type={"text"} component={TextField} label="OT Rate($)" fullWidth autoComplete="off" id="input_facility_edit_conditional_rates_overtime_rate" />
               </div>
@@ -363,9 +362,11 @@ const FacilityEditDetailsComponent = (props: FacilityEditDetailsComponentProps) 
                     })
                   ) : (
                     <Box display="flex" gridGap="10px">
-                      <Box width="250px" className="mrg-top-10">
-                        <FileDropZoneComponent allowedTypes={".jpg,.png,jpeg"} OnFileSelected={onFileSelected} />
-                      </Box>
+                      <Tooltip title={"Upload Facility Image"}>
+                        <Box width="250px" className="mrg-top-10">
+                          <FileDropZoneComponent allowedTypes={".jpg,.png,jpeg"} OnFileSelected={onFileSelected} />
+                        </Box>
+                      </Tooltip>
                     </Box>
                   )}
                 </>

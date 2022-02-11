@@ -65,6 +65,7 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
 
     CommonService._api.patch(ENV.API_URL + "shift/requirement/" +  id + "/cancel", payload).then((resp) => {
         setSubmitting(false);
+           CommonService.showToast(resp?.msg || "Success", "success");
         if (afterConfirm) {
           afterConfirm();
           resetForm({});
@@ -80,11 +81,12 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
     payload = {
       ...payload,
       cancelled_by: user?._id,
-      selectedShifts:selectedShifts
+      requirement_ids:selectedShifts
     };
 
-    CommonService._api.patch(ENV.API_URL + "shift/requirement/" + id + "/ncel", payload).then((resp) => {
+    CommonService._api.patch(ENV.API_URL + "shift/requirements/cancel", payload).then((resp) => {
         setSubmitting(false);
+        CommonService.showToast(resp?.msg || "Success", "success");
         if (afterConfirm) {
           afterConfirm();
           resetForm({});
@@ -101,11 +103,11 @@ const RejectShiftRequirementComponent = (props: PropsWithChildren<RejectShiftReq
       afterCancel();
     }
   };
-console.log(selectedShifts)
+
   return (
     <div>
       <div className={classes.paper}>
-        <h2>Rejection Request</h2>
+        <h2>{selectedShifts && selectedShifts?.length>1?"Cancel Shifts":"Cancel Shift"}</h2>
         <Formik initialValues={{ reason: "" }} validateOnChange={true} validationSchema={formValidation} onSubmit={selectedShifts?onCancelMultipleShifts:onCancelShift}>
           {({ isSubmitting, isValid, dirty, resetForm }) => (
             <Form className={"form-holder"}>
@@ -127,7 +129,7 @@ console.log(selectedShifts)
                   {"Back"}
                 </Button>
                 <Button type={"submit"} id="btn_reject_application" className={isSubmitting ? "submit has-loading-spinner" : "submit"} disabled={!dirty || isSubmitting || !isValid} variant={"contained"} color="primary" autoFocus>
-                  {isSubmitting ? "Cancelling Shift" : "Cancel Shift"}
+                  {isSubmitting ? "Cancelling Shift" : selectedShifts && selectedShifts?.length>1?"Cancel Shifts":"Cancel Shift"}
                 </Button>
               </DialogActions>
             </Form>

@@ -10,7 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, Tooltip } from "@material-ui/core";
 import './UnApprovedHcpApplicationComponent.scss'
 import moment from 'moment';
 import NoDataCardComponent from '../../../../../components/NoDataCardComponent';
@@ -78,9 +78,11 @@ const UnApprovedHcpApplicationComponent = (props: PropsWithChildren<UnApprovedHc
                                         {row['rejected_reason']}
                                     </TableCell>
                                     <TableCell className="mat-td mat-td-sticky mat-td-actions">
+                                    <Tooltip title={`View ${row['hcp_data']?.first_name} ${row['hcp_data']?.last_name} Details`}>
                                         <Link to={{pathname:'/hcp/user/view/' + row['hcp_user_id'],state : { prevPath: "/shiftsRequirements/view/"+id }}} className="info-link" id={"link_hospital_details" + rowIndex} >
                                             {('View Details')}
                                         </Link>
+                                    </Tooltip>
                                     </TableCell>
                                 </TableRow>
                             )

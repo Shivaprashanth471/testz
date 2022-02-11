@@ -94,6 +94,20 @@ export const boolAcknowledge = [
 ]
 
 
+
+export const timesheet = [
+  { value: "", label: "All" },
+  { value: true, label: "Yes" },
+  { value: false, label: "No" },
+]
+
+export const facilityConfirmation = [
+  { value: "", label: "All" },
+  { value: true, label: "Yes" },
+  { value: false, label: "No" },
+]
+
+
 export const shiftTypePreference = [
   {
     value: "AM",
@@ -224,7 +238,6 @@ export const OpenShiftsStatusList = [
   { name: "Open", code: "open" },
   { name: "Cancelled", code: "cancelled" },
   { name: "Unfilled", code: "unfilled" },
-
 ]
 
 

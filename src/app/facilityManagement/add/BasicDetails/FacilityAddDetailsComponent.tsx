@@ -174,11 +174,11 @@ const FacilityAddDetailsComponent = (props: any) => {
               ) : (
                 <div>
                   <Box display="flex" gridGap="10px">
-                    <Box width="250px" className="mrg-top-10">
-                      <Tooltip title={"Upload Facility Image"}>
+                    <Tooltip title={"Upload Facility Image"}>
+                      <Box width="250px" className="mrg-top-10">
                         <FileDropZoneComponent OnFileSelected={OnFileSelected} allowedTypes={".jpg,.png,.jpeg"} />
-                      </Tooltip>
-                    </Box>
+                      </Box>
+                    </Tooltip>
                   </Box>
                 </div>
               )}

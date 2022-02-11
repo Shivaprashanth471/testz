@@ -3,7 +3,7 @@ import { ENV } from '../../../../constants';
 import { CommonService, Communications } from '../../../../helpers';
 import './ShiftInprogressViewScreen.scss';
 import moment from 'moment';
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, Tooltip } from "@material-ui/core";
 import ShiftTimeline from '../../timeline/ShiftTimeline';
 import { Link, useParams } from 'react-router-dom';
 import LoaderComponent from '../../../../components/LoaderComponent';
@@ -83,14 +83,17 @@ const ShiftInprogressViewScreen = () => {
                     <p>{basicDetails?.facility?.address?.street},&nbsp;{basicDetails?.facility?.address?.region_name},&nbsp;{basicDetails?.facility?.address?.city},&nbsp;{basicDetails?.facility?.address?.country},&nbsp;{basicDetails?.facility?.address?.zip_code}.</p>
                 </div>
                 <div className="flex-1 actions-wrapper">
-                    <div className="button"><Button
-                        component={Link}
-                        color={"primary"}
-                        variant={"outlined"}
-                        to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/inprogessShifts/view/" + id } }}
-                    >
-                        View Details
-                    </Button></div>
+                    <div className="button">
+                        <Tooltip title={`View ${basicDetails?.facility?.facility_name} Details`}><Button
+                            component={Link}
+                            color={"primary"}
+                            variant={"outlined"}
+                            to={{ pathname: "/facility/view/" + basicDetails?.facility?._id, state: { prevPath: "/inprogessShifts/view/" + id } }}
+                        >
+                            View Details
+                        </Button>
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
             <div className="facility-details mrg-top-10 custom-border">

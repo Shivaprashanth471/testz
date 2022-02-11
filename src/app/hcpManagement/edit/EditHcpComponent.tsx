@@ -57,18 +57,19 @@ const EditHcpComponent = () => {
   const [isDeleteAttachment, setIsDeleteAttachment] = useState<boolean>(false);
 
   const [required_attachments, setRequiredAttachments] = useState<any>([
-    { attachment_type: "Physical Test", index: -1, id: 1 },
-    { attachment_type: "TB Test", index: -1, id: 2 },
-    { attachment_type: "Chest X-ray", index: -1, id: 3 },
-    { attachment_type: "CPR/BLS Card", index: -1, id: 4 },
-    { attachment_type: "Driver's Licence", index: -1, id: 5 },
-    { attachment_type: "SSN Card", index: -1, id: 6 },
-    { attachment_type: "License", index: -1, id: 7 },
-    { attachment_type: "Covid Certificate", index: -1, id: 8 },
-    { attachment_type: "Covid Vaccine Card", index: -1, id: 9 },
-    { attachment_type: "Covid Test Result", index: -1, id: 10 },
-    { attachment_type: "Livescan", index: -1, id: 11 },
-    { attachment_type: "Vaccine Exemption Letter", index: -1, id: 12 },
+    { attachment_type: "Resume", index: -1, id: 1 },
+    { attachment_type: "Physical Test", index: -1, id: 2 },
+    { attachment_type: "TB Test", index: -1, id: 3 },
+    { attachment_type: "Chest X-ray", index: -1, id: 4 },
+    { attachment_type: "CPR/BLS Card", index: -1, id: 5 },
+    { attachment_type: "Driver's Licence", index: -1, id: 6 },
+    { attachment_type: "SSN Card", index: -1, id: 7 },
+    { attachment_type: "License", index: -1, id: 8 },
+    { attachment_type: "Covid Certificate", index: -1, id: 9 },
+    { attachment_type: "Covid Vaccine Card", index: -1, id: 10 },
+    { attachment_type: "Covid Test Result", index: -1, id: 11 },
+    { attachment_type: "Livescan", index: -1, id: 12 },
+    { attachment_type: "Vaccine Exemption Letter", index: -1, id: 13 },
   ]);
 
   const [isHcpSubmitting, setIsHcpSubmitting] = useState<boolean>(false);
@@ -161,62 +162,49 @@ const EditHcpComponent = () => {
   }, [calcExperience, handleCalcExperience, handleCalcSpecialities]);
 
   const init = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id)
-      .then((resp) => {
-        setHcpDetails(resp.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id).then((resp) => {
+      setHcpDetails(resp.data);
+      setIsLoading(false);
+    }).catch((err) => {
+      console.log(err);
+    });
   }, [id]);
 
   const getEducationDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/education")
-      .then((resp) => {
-        setEducations(resp.data || []);
-      })
-      .catch((err) => {
-        console.log(err);
-        setEducations([]);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/education").then((resp) => {
+      setEducations(resp.data || []);
+    }).catch((err) => {
+      console.log(err);
+      setEducations([]);
+    });
   }, [id]);
 
   const getReferenceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/reference")
-      .then((resp) => {
-        setReferences(resp.data || []);
-      })
-      .catch((err) => {
-        console.log(err);
-        setReferences([]);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/reference").then((resp) => {
+      setReferences(resp.data || []);
+    }).catch((err) => {
+      console.log(err);
+      setReferences([]);
+    });
   }, [id]);
 
   const getExperienceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=fulltime")
-      .then((resp) => {
-        setExperiences(resp.data || []);
-        setCalcExperience(resp.data || []);
-      })
-      .catch((err) => {
-        console.log(err);
-        setExperiences([]);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=fulltime").then((resp) => {
+      setExperiences(resp.data || []);
+      setCalcExperience(resp.data || []);
+    }).catch((err) => {
+      console.log(err);
+      setExperiences([]);
+    });
   }, [id]);
-  const previewFile = useCallback(
-    (index: any, type: any) => {
-      if (type === "contract") {
-        setPreviewFile(contractFile?.wrapper[0]);
-      } else {
-        setPreviewFile(fileUpload?.wrapper[index]);
-      }
-      setOpen(true);
-    },
+  const previewFile = useCallback((index: any, type: any) => {
+    if (type === "contract") {
+      setPreviewFile(contractFile?.wrapper[0]);
+    } else {
+      setPreviewFile(fileUpload?.wrapper[index]);
+    }
+    setOpen(true);
+  },
     [fileUpload, contractFile?.wrapper]
   );
 
@@ -228,64 +216,49 @@ const EditHcpComponent = () => {
   }, []);
 
   const getVolunteerExperienceDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=volunteer")
-      .then((resp) => {
-        setVolunteerExperiences(resp.data || []);
-      })
-      .catch((err) => {
-        console.log(err);
-        setVolunteerExperiences([]);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/experience?exp_type=volunteer").then((resp) => {
+      setVolunteerExperiences(resp.data || []);
+    }).catch((err) => {
+      console.log(err);
+      setVolunteerExperiences([]);
+    });
   }, [id]);
 
   const getRegions = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-regions")
-      .then((resp) => {
-        setRegions(resp.data || []);
-        setRegIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    CommonService._api.get(ENV.API_URL + "meta/hcp-regions").then((resp) => {
+      setRegions(resp.data || []);
+      setRegIsLoading(false);
+    }).catch((err) => {
+      console.log(err);
+    });
   }, []);
 
   const getContractDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/contract")
-      .then((resp) => {
-        setContractDetails(resp.data[0]);
-        SetIsContractDeleted(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/contract").then((resp) => {
+      setContractDetails(resp.data[0]);
+      SetIsContractDeleted(false);
+    }).catch((err) => {
+      console.log(err);
+    });
   }, [id]);
 
   const getSpecialities = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-specialities")
-      .then((resp) => {
-        setSpecialitiesMaster(resp.data || []);
-        setSpecIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    CommonService._api.get(ENV.API_URL + "meta/hcp-specialities").then((resp) => {
+      setSpecialitiesMaster(resp.data || []);
+      setSpecIsLoading(false);
+    }).catch((err) => {
+      console.log(err);
+    });
   }, []);
 
   const getAttachmentsDetails = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "hcp/" + id + "/attachments")
-      .then((resp) => {
-        setAttachmentsDetails(resp?.data);
-        setIsAttachmentsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsAttachmentsLoading(false);
-      });
+    CommonService._api.get(ENV.API_URL + "hcp/" + id + "/attachments").then((resp) => {
+      setAttachmentsDetails(resp?.data);
+      setIsAttachmentsLoading(false);
+    }).catch((err) => {
+      console.log(err);
+      setIsAttachmentsLoading(false);
+    });
   }, [id]);
 
   const deleteContractFileApi = useCallback(() => {
@@ -293,17 +266,14 @@ const EditHcpComponent = () => {
     let payload = {
       file_key: contractDetails?.file_key,
     };
-    CommonService._api
-      .delete(ENV.API_URL + "hcp/" + id + "/contract", payload)
-      .then((resp) => {
-        getContractDetails();
-        setIsDeleteOpen(false);
-        CommonService.showToast(resp?.msg || "Hcp Contract Deleted", "info");
-      })
-      .catch((err) => {
-        SetIsContractDeleted(false);
-        console.log(err);
-      });
+    CommonService._api.delete(ENV.API_URL + "hcp/" + id + "/contract", payload).then((resp) => {
+      getContractDetails();
+      setIsDeleteOpen(false);
+      CommonService.showToast(resp?.msg || "Hcp Contract Deleted", "info");
+    }).catch((err) => {
+      SetIsContractDeleted(false);
+      console.log(err);
+    });
   }, [id, contractDetails?.file_key, getContractDetails]);
 
   const calculateExperience = (experiences: any[]) => {
@@ -336,15 +306,12 @@ const EditHcpComponent = () => {
   }, [id, getAttachmentsDetails, deleteAttachmentDetails?.file_key]);
 
   const getHcpTypes = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "meta/hcp-types")
-      .then((resp) => {
-        setHcpTypes(resp.data || []);
-        setHcpTypesLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    CommonService._api.get(ENV.API_URL + "meta/hcp-types").then((resp) => {
+      setHcpTypes(resp.data || []);
+      setHcpTypesLoading(false);
+    }).catch((err) => {
+      console.log(err);
+    });
   }, []);
 
   const OnFileSelected = (files: File[], id: any) => {
@@ -431,26 +398,22 @@ const EditHcpComponent = () => {
     SetIsContractDeleted(false);
   };
 
-  const onAddEducation = useCallback(
-    (education: any) => {
-      return new Promise((resolve, reject) => {
-        ApiService.post(ENV.API_URL + "hcp/" + id + "/education", education)
-          .then((resp: any) => {
-            console.log(resp);
-            if (resp && resp.success) {
-              resolve(null);
-            } else {
-              reject(resp);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            reject(err);
-          });
-      });
-    },
-    [id]
-  );
+  const onAddEducation = useCallback((education: any) => {
+    return new Promise((resolve, reject) => {
+      ApiService.post(ENV.API_URL + "hcp/" + id + "/education", education).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          resolve(null);
+        } else {
+          reject(resp);
+        }
+      })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }, [id]);
 
   const OnContractFileUpload = (files: File[]) => {
     for (let file of files) {
@@ -482,7 +445,7 @@ const EditHcpComponent = () => {
           CommonService.showToast(resp.msg || resp.error, "success");
         }
       };
-      uploadWrapper.onProgress = (progress) => {};
+      uploadWrapper.onProgress = (progress) => { };
       setContractFile((prevState) => {
         let state: TsFileUploadWrapperClass[] = [];
         if (prevState) {
@@ -495,105 +458,79 @@ const EditHcpComponent = () => {
     }
   };
 
-  const onAddExperience = useCallback(
-    (experience: any) => {
-      return new Promise((resolve, reject) => {
-        ApiService.post(ENV.API_URL + "hcp/" + id + "/experience", experience)
-          .then((resp: any) => {
-            console.log(resp);
-            if (resp && resp.success) {
-              resolve(null);
-            } else {
-              reject(resp);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            reject(err);
-          });
-      });
-    },
-    [id]
-  );
-
-  const onAddVolunteerExperience = useCallback(
-    (experience: any) => {
-      return new Promise((resolve, reject) => {
-        ApiService.post(ENV.API_URL + "hcp/" + id + "/experience", experience)
-          .then((resp: any) => {
-            console.log(resp);
-            if (resp && resp.success) {
-              resolve(null);
-            } else {
-              reject(resp);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            reject(err);
-          });
-      });
-    },
-    [id]
-  );
-
-  const onAddReference = useCallback(
-    (reference: any) => {
-      return new Promise((resolve, reject) => {
-        ApiService.post(ENV.API_URL + "hcp/" + id + "/reference", reference)
-          .then((resp: any) => {
-            console.log(resp);
-            if (resp && resp.success) {
-              resolve(null);
-            } else {
-              reject(resp);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            reject(err);
-          });
-      });
-    },
-    [id]
-  );
-
-  const handleContractFileUpload = useCallback(
-    async (link: any) => {
-      const file = contractFile?.wrapper[0].file;
-      delete file.base64;
-      CommonService._api
-        .upload(link, file, { "Content-Type": file?.type })
-        .then((resp) => {
-          console.log(resp);
-        })
+  const onAddExperience = useCallback((experience: any) => {
+    return new Promise((resolve, reject) => {
+      ApiService.post(ENV.API_URL + "hcp/" + id + "/experience", experience).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          resolve(null);
+        } else {
+          reject(resp);
+        }
+      })
         .catch((err) => {
           console.log(err);
+          reject(err);
         });
-    },
-    [contractFile?.wrapper]
-  );
+    });
+  }, [id]);
 
-  const handleContractUpload = useCallback(
-    (hcpId: any, setSubmitting, setErrors) => {
-      let payload = {
-        file_name: contractFile?.wrapper[0]?.file?.name,
-        file_type: contractFile?.wrapper[0]?.file?.type,
-        attachment_type: "contract",
-      };
-      CommonService._api
-        .post(ENV.API_URL + "hcp/" + hcpId + "/contract", payload)
-        .then((resp) => {
-          handleContractFileUpload(resp?.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          setSubmitting(false);
-          CommonService.handleErrors(setErrors, err);
-        });
-    },
-    [handleContractFileUpload, contractFile?.wrapper]
-  );
+  const onAddVolunteerExperience = useCallback((experience: any) => {
+    return new Promise((resolve, reject) => {
+      ApiService.post(ENV.API_URL + "hcp/" + id + "/experience", experience).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          resolve(null);
+        } else {
+          reject(resp);
+        }
+      }).catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }, [id]);
+
+  const onAddReference = useCallback((reference: any) => {
+    return new Promise((resolve, reject) => {
+      ApiService.post(ENV.API_URL + "hcp/" + id + "/reference", reference).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          resolve(null);
+        } else {
+          reject(resp);
+        }
+      }).catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }, [id]);
+
+  const handleContractFileUpload = useCallback(async (link: any) => {
+    const file = contractFile?.wrapper[0].file;
+    delete file.base64;
+    CommonService._api.upload(link, file, { "Content-Type": file?.type }).then((resp) => {
+      console.log(resp);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }, [contractFile?.wrapper]);
+
+  const handleContractUpload = useCallback((hcpId: any, setSubmitting, setErrors) => {
+    let payload = {
+      file_name: contractFile?.wrapper[0]?.file?.name,
+      file_type: contractFile?.wrapper[0]?.file?.type,
+      attachment_type: "contract",
+    };
+    CommonService._api.post(ENV.API_URL + "hcp/" + hcpId + "/contract", payload).then((resp) => {
+      handleContractFileUpload(resp?.data);
+    }).catch((err) => {
+      console.log(err);
+      setSubmitting(false);
+      CommonService.handleErrors(setErrors, err);
+    });
+  }, [handleContractFileUpload, contractFile?.wrapper]);
 
   const onHandleAttachmentUpload = useCallback((value: any, index: any, hcpId: any) => {
     return new Promise(async (resolve, reject) => {
@@ -602,28 +539,23 @@ const EditHcpComponent = () => {
           file_name: value?.file?.name,
           file_type: value?.file?.type,
           attachment_type: value?.extraPayload?.file_type,
-          expiry_date: value?.extraPayload?.expiry_date,
+          expiry_date: moment(value?.extraPayload?.expiry_date).format("MM-DD-YYYY")==="Invalid date"?"":value?.extraPayload?.expiry_date,
         };
-        CommonService._api
-          .post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload)
-          .then((resp) => {
-            if (value) {
-              const file = value?.file;
-              delete file.base64;
-              CommonService._api
-                .upload(resp.data, file, { "Content-Type": value?.file?.type })
-                .then((resp) => {
-                  console.log(resp);
-                  resolve(resp);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        CommonService._api.post(ENV.API_URL + "hcp/" + hcpId + "/attachment", payload).then((resp) => {
+          if (value) {
+            const file = value?.file;
+            delete file.base64;
+            CommonService._api.upload(resp.data, file, { "Content-Type": value?.file?.type }).then((resp) => {
+              console.log(resp);
+              resolve(resp);
+            })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
       } catch (error) {
         reject(error);
       }
@@ -662,50 +594,45 @@ const EditHcpComponent = () => {
     [fileUpload?.wrapper, history, onHandleAttachmentUpload, hcpDetails?.is_approved, hcpDetails?.user_id, id, required_attachments]
   );
 
-  const onAdd = useCallback(
-    (hcp: HcpEditType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
-      setIsHcpSubmitting(true);
-      const AddHcp = () => {
-        hcp.contact_number = hcp?.contact_number?.toLowerCase();
-        let signed_on = hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format("YYYY-MM-DD") : null;
-        let payload: any = hcp;
+  const onAdd = useCallback((hcp: HcpEditType, { setSubmitting, setErrors, setFieldValue, resetForm }: FormikHelpers<any>) => {
+    setIsHcpSubmitting(true);
+    const AddHcp = () => {
+      hcp.contact_number = hcp?.contact_number?.toLowerCase();
+      let signed_on = hcp?.contract_details?.signed_on ? moment(hcp?.contract_details?.signed_on).format("YYYY-MM-DD") : null;
+      let payload: any = hcp;
 
-        payload = {
-          ...payload,
-          professional_details: {
-            ...payload?.professional_details,
-            experience: expInYears,
-            speciality: specialities,
-          },
-          contract_details: {
-            ...payload.contract_details,
-            signed_on,
-          },
-        };
-        ApiService.put(ENV.API_URL + "hcp/" + id, payload)
-          .then((resp: any) => {
-            console.log(resp);
-            if (resp && resp.success) {
-              if (contractFile?.wrapper[0]?.file) {
-                handleContractUpload(id, setSubmitting, setErrors);
-              }
-              handleAttachmentsUpload(id, resp);
-            } else {
-              setSubmitting(false);
-              setIsHcpSubmitting(false);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            CommonService.handleErrors(setErrors, err);
-            setSubmitting(false);
-            setIsHcpSubmitting(false);
-          });
+      payload = {
+        ...payload,
+        professional_details: {
+          ...payload?.professional_details,
+          experience: expInYears,
+          speciality: specialities,
+        },
+        contract_details: {
+          ...payload.contract_details,
+          signed_on,
+        },
       };
-      AddHcp();
-    },
-    [contractFile?.wrapper, expInYears, handleAttachmentsUpload, handleContractUpload, id, specialities]
-  );
+      ApiService.put(ENV.API_URL + "hcp/" + id, payload).then((resp: any) => {
+        console.log(resp);
+        if (resp && resp.success) {
+          if (contractFile?.wrapper[0]?.file) {
+            handleContractUpload(id, setSubmitting, setErrors);
+          }
+          handleAttachmentsUpload(id, resp);
+        } else {
+          setSubmitting(false);
+          setIsHcpSubmitting(false);
+        }
+      }).catch((err) => {
+        console.log(err);
+        CommonService.handleErrors(setErrors, err);
+        setSubmitting(false);
+        setIsHcpSubmitting(false);
+      });
+    };
+    AddHcp();
+  }, [contractFile?.wrapper, expInYears, handleAttachmentsUpload, handleContractUpload, id, specialities]);
 
   const handleExpiryDate = (event: any, index: any) => {
     // console.log(event.target.value, { index })
@@ -717,11 +644,11 @@ const EditHcpComponent = () => {
     });
   };
 
+  console.log(required_attachments)
   const deleteLocalAttachment = (index: any) => {
-    //let data = fileUpload?.wrapper.filter((elem: any, idx: any) => idx !== index);
-
-    if (required_attachments[index]) {
-      required_attachments[index].index = -1;
+    console.log(index)
+    if (required_attachments[index-1]) {
+      required_attachments[index-1].index = -1;
       setRequiredAttachments([...required_attachments]);
     }
     CommonService.showToast("Hcp attachment Removed", "info");
@@ -754,13 +681,10 @@ const EditHcpComponent = () => {
     setIsDeleteAttachmentOpen(true);
   }, []);
 
-  const confirmDeleteAttachment = useCallback(
-    (file: any) => {
+  const confirmDeleteAttachment = useCallback((file: any) => {
       setIsDeleted(true);
       deleteAttachment();
-    },
-    [deleteAttachment]
-  );
+  },[deleteAttachment]);
 
   const cancelDeleteAttachment = useCallback(() => {
     setIsDeleteAttachmentOpen(false);
@@ -804,7 +728,9 @@ const EditHcpComponent = () => {
           />
         </DialogComponent>
         <EditHcpBasicDetailsComponent
+          setRequiredAttachments={setRequiredAttachments}
           openDeleteContract={openDeleteContract}
+          setFileUpload={setFileUpload}
           isContractDeleted={isContractDeleted}
           openDeleteAttachment={openDeleteAttachment}
           contractFile={contractFile}
