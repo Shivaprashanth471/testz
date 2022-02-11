@@ -68,22 +68,35 @@ const FacilityManagementViewScreen = (props:any) => {
         })
     }, [id])
 
-    useEffect(() => {
-        let prevLocation:any="/facility/list";
-        if(props?.location.state){
-            prevLocation=props?.location.state?.prevPath;
-        }
-        init();
-        getFacilityMembers();
-        getShiftDetails();
-        Communications.pageTitleSubject.next('Facility Details');
-        Communications.pageBackButtonSubject.next(prevLocation);
-    }, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
-
+  const getFacilityMembers = useCallback(() => {
+    CommonService._api
+      .get(ENV.API_URL + "facility/" + id + "/member")
+      .then((resp) => {
+        // console.log(resp);
+        setFacilityMembers(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+  
 
     if (isLoading) {
         return <LoaderComponent />
     }
+
+  useEffect(() => {
+    let prevLocation:any="/facility/list";
+    if(props?.location.state){
+        prevLocation=props?.location.state?.prevPath;
+    }
+    init();
+    getFacilityMembers();
+    getShiftDetails();
+    Communications.pageTitleSubject.next('Facility Details');
+    Communications.pageBackButtonSubject.next(prevLocation);
+}, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
+
 
     return <div className="pdd-30 screen">
         {!isLoading && (<div className="facility_view_details">
