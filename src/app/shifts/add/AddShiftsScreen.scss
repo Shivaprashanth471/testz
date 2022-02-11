@@ -12,6 +12,12 @@
     font-weight: 500;
     cursor: pointer;
   }
+
+
+  .add-shift-requirment-text-light{
+    color: $text-light;
+    cursor: default;
+  }
   .shift-calender {
     flex: 1;
     display: flex;
