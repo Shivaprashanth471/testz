@@ -20,7 +20,7 @@ import { useLocalStorage } from '../../../../components/useLocalStorage';
 const RequirementsShiftsViewScreen = () => {
     const param = useParams<any>();
     const { id } = param;
-    const [tabValue, setTabValue] = useLocalStorage<string>("ShiftRequirmentTabValue","pending");
+    const [tabValue, setTabValue] = useLocalStorage<string>("ShiftRequirmentTabValue", "pending");
     const [basicDetails, setBasicDetails] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isAddOpen, setIsAddOpen] = useState<boolean>(false);

@@ -107,8 +107,11 @@
 		flex: 1px;
 	}
 
-	.fac-confirm{
-		justify-content:flex-end;
+	.flex-baseline {
+		align-items: baseline;
+	}
+
+	.flex-center{
 		align-items: center;
 		
 	}

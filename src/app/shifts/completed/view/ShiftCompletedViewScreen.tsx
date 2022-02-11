@@ -1,5 +1,6 @@
 import { Avatar, Button, Checkbox, Tooltip } from "@material-ui/core";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import { Rating } from "@material-ui/lab";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -27,6 +28,7 @@ const ShiftCompletedViewScreen = () => {
   const [fileUpload, setFileUpload] = useState<{ wrapper: any } | null>(null);
   const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
   const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
+  const [hcpRating, setHcpRating] = useState<number | null>(null)
   const [open, setOpen] = useState<boolean>(false);
   const history = useHistory();
 
@@ -140,7 +142,7 @@ const ShiftCompletedViewScreen = () => {
 
   const handleSubmit = async () => {
     await handleConfirmationFromFacility()
-    await handlegetUrlForUpload()
+    await handleGetUrlForUpload()
     history.push(`/completedShifts/list`)
   };
 
@@ -150,6 +152,7 @@ const ShiftCompletedViewScreen = () => {
       .then((resp) => {
         setBasicDetails(resp.data);
         setIsFacilityConfirm(resp.data?.is_facility_approved)
+        setHcpRating(resp.data?.hcp_rating)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -163,6 +166,7 @@ const ShiftCompletedViewScreen = () => {
     return new Promise((resolve, reject) => {
       ApiService.put(ENV.API_URL + "shift/" + id, {
         is_facility_approved: isFacilityConfirm,
+        hcp_rating: hcpRating,
       })
         .then((res: any) => {
           setIsDataSubmitting(false);
@@ -176,10 +180,10 @@ const ShiftCompletedViewScreen = () => {
           CommonService.showToast(err?.msg, "error");
         });
     })
-  }, [id, isFacilityConfirm])
+  }, [id, isFacilityConfirm, hcpRating])
 
 
-  const handlegetUrlForUpload = useCallback(() => {
+  const handleGetUrlForUpload = useCallback(() => {
     return new Promise((resolve, reject) => {
       if (fileUpload?.wrapper.length > 0) {
         fileUpload?.wrapper?.forEach(async (value: any, index: any) => {
@@ -348,6 +352,8 @@ const ShiftCompletedViewScreen = () => {
               <div className="flex-1"></div>
             </div>
           </div>
+
+
           <div className="mrg-top-10 custom-border pdd-top-10">
             <div className="shift-name-requested">
               <div className="d-flex">
@@ -357,18 +363,24 @@ const ShiftCompletedViewScreen = () => {
                 </h4>
               </div>
               <div className="d-flex shift-date-time">
-                <div className="d-flex flex-1">
+                <div className="d-flex flex-1 flex-baseline">
                   <h3>Attended On:</h3>
                   <p className="attended-date mrg-left-15">{moment(basicDetails?.actuals?.shift_start_time).format("MM-DD-YYYY")}</p>
                 </div>
 
-                {/* <div className="flex-1 d-flex shift-ot-time">
-                            <h3>OT Hours:</h3>
-                            <p className="attended-date mrg-left-15">--</p>
-                        </div> */}
-
-                <div className="flex-1 d-flex fac-confirm">
-                  <p className="attended-date mrg-left-15">Facility Confirmation</p>
+                <div className="d-flex flex-1 flex-center">
+                  <h3 className="hcp-rating mrg-left-15">HCP Rating &nbsp;</h3>
+                  <Rating
+                    color='primary'
+                    name="hcp-rating"
+                    value={hcpRating}
+                    onChange={(event, newValue) => {
+                      setHcpRating(newValue);
+                    }}
+                  />
+                </div>
+                <div className=" d-flex flex-1 flex-center">
+                  <h3 className="attended-date mrg-left-15">Facility Confirmation</h3>
                   <Checkbox checked={isFacilityConfirm} onChange={handleFacilityConfirmation} />
                 </div>
               </div>
@@ -468,18 +480,20 @@ const ShiftCompletedViewScreen = () => {
         <></>
       )}
 
-      <div className="shift-view-actions mrg-top-20">
-        <Tooltip title={"Cancel"}>
-          <Button size="large" onClick={() => history.push(`/completedShifts/list`)} variant={"outlined"} color="primary" id="btn_cancel">
-            {"Cancel"}
-          </Button>
-        </Tooltip>
-        <Tooltip title={"Save Changes"}>
-          <Button disabled={isDataSubmitting || isTimeSheetBeingUpdated} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting || isTimeSheetBeingUpdated ? "has-loading-spinner" : ""} onClick={handleSubmit}>
-            {isDataSubmitting || isTimeSheetBeingUpdated ? "Saving" : "Save"}
-          </Button>
-        </Tooltip>
-      </div>
+      {
+        basicDetails?.shift_status === 'complete' && <div className="shift-view-actions mrg-top-20">
+          <Tooltip title={"Cancel"}>
+            <Button size="large" onClick={() => history.push(`/completedShifts/list`)} variant={"outlined"} color="primary" id="btn_cancel">
+              {"Cancel"}
+            </Button>
+          </Tooltip>
+          <Tooltip title={"Save Changes"}>
+            <Button disabled={isDataSubmitting || isTimeSheetBeingUpdated} type="submit" id="btn_save" size="large" variant={"contained"} color={"primary"} className={isDataSubmitting || isTimeSheetBeingUpdated ? "has-loading-spinner" : ""} onClick={handleSubmit}>
+              {isDataSubmitting || isTimeSheetBeingUpdated ? "Saving" : "Save"}
+            </Button>
+          </Tooltip>
+        </div>
+      }
     </div>
   );
 };

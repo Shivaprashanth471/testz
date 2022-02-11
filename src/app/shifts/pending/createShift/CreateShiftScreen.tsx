@@ -158,7 +158,7 @@ const CreateShiftScreen = (props: PropsWithChildren<AddHcpToShiftComponentProps>
     <Paper>
       {!isLoading && (
         <div className="create-shift mrg-20 pdd-20">
-          <h2>Create Shift</h2>
+          <h2>Shift Details</h2>
           <Formik initialValues={createShiftState} validateOnChange={true} validationSchema={hcpFormValidation} onSubmit={onAdd}>
             {({ isSubmitting, isValid, resetForm }) => (
               <Form>
