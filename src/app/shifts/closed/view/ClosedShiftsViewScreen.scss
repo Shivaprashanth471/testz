@@ -63,6 +63,10 @@
     .flex-1{
         flex:1px;
     }
+
+    .flex-baseline {
+        align-items: baseline;
+    }
     .shift-details{
         p{
             font-size: 14px;

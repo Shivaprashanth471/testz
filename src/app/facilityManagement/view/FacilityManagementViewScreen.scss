@@ -1,6 +1,33 @@
 @import "src/assets/scss/common";
 
 .facility_view_details {
+	.fac-edit-btn {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 1rem;
+	}
+
+	.title-rating-container{
+		display: flex;
+		justify-content: center;
+	}
+
+	.rating-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		.rating-title {
+		color: $text-light;
+        font-size: 18px;
+		}
+
+		.rating-content {
+        color: $primary-color;
+        font-size: 28px;
+		}
+	}
+
 	padding: 20px;
 	.custom-border {
 		padding: 20px 40px !important;

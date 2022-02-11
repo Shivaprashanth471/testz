@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { ENV } from "../../../../constants";
-import { ApiService, CommonService, Communications } from "../../../../helpers";
-import { useHistory, useParams } from "react-router-dom";
+import { Button, Checkbox, Tooltip } from "@material-ui/core";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+// import { Rating } from "@material-ui/lab";
 import moment from "moment";
-import { Button, Checkbox, DialogActions, Tooltip } from "@material-ui/core";
-import ShiftTimeline from "../../timeline/ShiftTimeline";
-import DialogComponent from "../../../../components/DialogComponent";
-import CustomPreviewFile from "../../../../components/shared/CustomPreviewFile";
-import ShiftCheckInComponent from "../checkIn/ShiftCheckInComponent";
-import ShiftBreaksComponent from "../breaks/ShiftBreaksComponent";
-import ShiftCheckOutComponent from "../CheckOut/ShiftCheckOutComponent";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import { TsFileUploadConfig, TsFileUploadWrapperClass } from "../../../../classes/ts-file-upload-wrapper.class";
 import FileDropZoneComponent from "../../../../components/core/FileDropZoneComponent";
-import "./ShiftMasterViewScreen.scss";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import DialogComponent from "../../../../components/DialogComponent";
 import LoaderComponent from "../../../../components/LoaderComponent";
-import { Rating } from "@material-ui/lab";
+import CustomPreviewFile from "../../../../components/shared/CustomPreviewFile";
+import { ENV } from "../../../../constants";
+import { ApiService, CommonService, Communications } from "../../../../helpers";
+import ShiftTimeline from "../../timeline/ShiftTimeline";
+import ShiftBreaksComponent from "../breaks/ShiftBreaksComponent";
+import ShiftCheckInComponent from "../checkIn/ShiftCheckInComponent";
+import ShiftCheckOutComponent from "../CheckOut/ShiftCheckOutComponent";
+import "./ShiftMasterViewScreen.scss";
 
 const ShiftMasterViewScreen = () => {
   const param = useParams<any>();
@@ -32,7 +32,7 @@ const ShiftMasterViewScreen = () => {
   const [required_attachments, setRequiredAttachments] = useState<any>([{ name: "CDPH 530 A Form", index: -1 }]);
   const [downloadAttachmentsList, downloadSeAttachmentsList] = useState<any | null>(null);
   const [isTimeSheetBeingUpdated, setIsTimeSheetBeingUpdated] = useState<boolean>(false);
-  const [hcpRating, setHcpRating] = useState<number | null>(null)
+  // const [hcpRating, setHcpRating] = useState<number | null>(null)
   const [isDataSubmitting, setIsDataSubmitting] = useState<boolean>(false);
   const [isFacilityConfirm, setIsFacilityConfirm] = useState<boolean>(false);
   const history = useHistory();
@@ -140,7 +140,7 @@ const ShiftMasterViewScreen = () => {
       .then((resp) => {
         setBasicDetails(resp.data);
         setIsFacilityConfirm(resp.data?.is_facility_approved)
-        setHcpRating(resp.data?.hcp_rating)
+        // setHcpRating(resp.data?.hcp_rating)
         setIsLoading(false);
       })
       .catch((err) => {
@@ -245,7 +245,7 @@ const ShiftMasterViewScreen = () => {
     return new Promise((resolve, reject) => {
       ApiService.put(ENV.API_URL + "shift/" + id, {
         is_facility_approved: isFacilityConfirm,
-        hcp_rating: hcpRating,
+        // hcp_rating: hcpRating,
       })
         .then((res: any) => {
           setIsDataSubmitting(false);
@@ -259,7 +259,7 @@ const ShiftMasterViewScreen = () => {
           CommonService.showToast(err?.msg, "error");
         });
     })
-  }, [id, isFacilityConfirm, hcpRating])
+  }, [id, isFacilityConfirm])
 
   const handleSubmit = async () => {
     await handleConfirmationFromFacility()
@@ -415,9 +415,10 @@ const ShiftMasterViewScreen = () => {
                   </p>
                 </div>
 
-                {
-                  basicDetails?.shift_status === 'complete' && (<>
-                    <div className="flex-1 d-flex flex-center">
+                <div className="flex-container">
+                  {
+                    basicDetails?.shift_status === 'complete' || basicDetails?.shift_status === 'closed' ? (<>
+                      {/* <div className="flex-1 d-flex flex-center">
                       <h3 className="hcp-rating mrg-left-15">HCP Rating &nbsp;</h3>
                       <Rating
                         color='primary'
@@ -427,12 +428,13 @@ const ShiftMasterViewScreen = () => {
                           setHcpRating(newValue);
                         }}
                       />
-                    </div>
-                    <div className="flex-1 d-flex flex-center">
-                      <h3 className="attended-date mrg-left-15">Facility Confirmation</h3>
-                      <Checkbox checked={isFacilityConfirm} onChange={handleFacilityConfirmation} />
-                    </div></>)
-                }
+                    </div> */}
+                      <div className="flex-1 d-flex flex-center">
+                        <h3 className="attended-date mrg-left-15">Facility Confirmation</h3>
+                        <Checkbox checked={isFacilityConfirm} disabled={basicDetails?.shift_status === 'closed'} onChange={handleFacilityConfirmation} />
+                      </div></>) : <></>
+                  }
+                </div>
               </div>
               <div className="pdd-bottom-55">
                 <ShiftTimeline timeBreakup={basicDetails?.time_breakup} />
