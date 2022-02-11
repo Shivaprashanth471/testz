@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import LoaderComponent from '../../../components/LoaderComponent';
 import NoDataToShowCardComponent from '../../../components/NoDataToShowCardComponent';
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const FacilityManagementViewScreen = (props:any) => {
+const FacilityManagementViewScreen = (props: any) => {
     const classes = useStyles();
     let history = useHistory();
     const params = useParams<{ id: string }>();
@@ -39,7 +39,7 @@ const FacilityManagementViewScreen = (props:any) => {
     const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-    
+
     const init = useCallback(() => {
         // config
         CommonService._api.get(ENV.API_URL + 'facility/' + id).then((resp) => {
@@ -68,35 +68,22 @@ const FacilityManagementViewScreen = (props:any) => {
         })
     }, [id])
 
-  const getFacilityMembers = useCallback(() => {
-    CommonService._api
-      .get(ENV.API_URL + "facility/" + id + "/member")
-      .then((resp) => {
-        // console.log(resp);
-        setFacilityMembers(resp.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
-  
+    useEffect(() => {
+        let prevLocation: any = "/facility/list";
+        if (props?.location.state) {
+            prevLocation = props?.location.state?.prevPath;
+        }
+        init();
+        getFacilityMembers();
+        getShiftDetails();
+        Communications.pageTitleSubject.next('Facility Details');
+        Communications.pageBackButtonSubject.next(prevLocation);
+    }, [init, getFacilityMembers, getShiftDetails, id, history, props?.location.state])
+
 
     if (isLoading) {
         return <LoaderComponent />
     }
-
-  useEffect(() => {
-    let prevLocation:any="/facility/list";
-    if(props?.location.state){
-        prevLocation=props?.location.state?.prevPath;
-    }
-    init();
-    getFacilityMembers();
-    getShiftDetails();
-    Communications.pageTitleSubject.next('Facility Details');
-    Communications.pageBackButtonSubject.next(prevLocation);
-}, [init, getFacilityMembers, getShiftDetails, id,history,props?.location.state])
-
 
     return <div className="pdd-30 screen">
         {!isLoading && (<div className="facility_view_details">
