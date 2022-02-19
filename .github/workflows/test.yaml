@@ -17,7 +17,8 @@ jobs:
       - name: Run build task
         run: yarn build:staging
       - name: Deploy to Server 1
-        uses: easingthemes/ssh-deploy@main
+        uses: aws-actions/configure-aws-credentials@v1
+        #  easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${ { secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${ { secrets.HOST_DNS }}
