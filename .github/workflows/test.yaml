@@ -16,8 +16,11 @@ jobs:
         run: yarn install
       - name: Run build task
         run: yarn build:staging
-      - name: Deploy to Server 1
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Deploy to AWS
+        uses: ShauryaAg/AWS-Deploy-action@v1
+
+      # - name: Deploy to Server 1
+      #   uses: aws-actions/configure-aws-credentials@v1
         #  easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${ { secrets.EC2_SSH_KEY }}
