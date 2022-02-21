@@ -1,4 +1,4 @@
-name:  CI&CD setup
+name:  UAT setup
 on:
   push:  
 jobs:

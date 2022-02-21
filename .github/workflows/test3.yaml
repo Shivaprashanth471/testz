@@ -1,4 +1,4 @@
-name:  CI&CD setup
+name:  PROD setup
 on:
   push:  
 jobs:

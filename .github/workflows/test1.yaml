@@ -1,4 +1,4 @@
-name:  CI&CD setup
+name:  TEST setup
 on:
   push:  
 jobs:
