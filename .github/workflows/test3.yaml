@@ -14,6 +14,7 @@ jobs:
         run: yarn install
       - name: Run build task
         run: yarn build:prod
+        
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         env:
