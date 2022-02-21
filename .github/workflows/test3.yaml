@@ -14,7 +14,7 @@ jobs:
         run: yarn install
       - name: Run build task
         run: yarn build:prod
-        
+
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -23,8 +23,8 @@ jobs:
           SOURCE: "build/*"
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-          EXCLUDE: "/build/, /node_modules/"
+          TARGET: /var/www/test4
+                    # EXCLUDE: "/build/, /node_modules/"
       # - name: Deploy to my EC2 instance
       #   uses: easingthemes/ssh-deploy@v2.1.5
       #   env:
