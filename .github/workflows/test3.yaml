@@ -13,11 +13,12 @@ jobs:
       - name: Install yarn dependencies
         run: yarn install
       - name: Run build task
-        run: yarn build:test4
+        run: yarn build:prod
       - name: Deploy to my EC2 instance
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR_PROD }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+          # TARGET: ${{ secrets.TARGET_DIR_PROD }}
