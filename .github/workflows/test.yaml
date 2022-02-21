@@ -25,7 +25,7 @@ jobs:
       #   uses: aws-actions/configure-aws-credentials@v1
         #  easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${ { secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${ { secrets.HOST_DNS }}
-          REMOTE_USER: ${ { secrets.USERNAME }}
-          TARGET: ${ { secrets.TARGET_DIR }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
