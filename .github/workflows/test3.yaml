@@ -2,9 +2,8 @@ name:  PROD setup
 on:
   push:  
 jobs:
-  build:
+  build:  
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v1
       - name: Install Node.js
