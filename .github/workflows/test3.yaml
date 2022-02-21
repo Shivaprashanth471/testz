@@ -14,13 +14,23 @@ jobs:
         run: yarn install
       - name: Run build task
         run: yarn build:prod
-      - name: Deploy to my EC2 instance
-        uses: easingthemes/ssh-deploy@v2.1.5
+      - name: Deploy to Staging server
+        uses: easingthemes/ssh-deploy@main
         env:
-          SOURCE: "build/"
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-          # EXCLUDE: "/dist/, /node_modules/"
-          # TARGET: ${{ secrets.TARGET_DIR_PROD }}
+          EXCLUDE: "/dist/, /node_modules/"
+      # - name: Deploy to my EC2 instance
+      #   uses: easingthemes/ssh-deploy@v2.1.5
+      #   env:
+      #     SOURCE: "build/"
+      #     SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      #     REMOTE_HOST: ${{ secrets.HOST_DNS }}
+      #     REMOTE_USER: ${{ secrets.USERNAME }}
+      #     TARGET: ${{ secrets.TARGET_DIR }}
+      #     # EXCLUDE: "/dist/, /node_modules/"
+      #     # TARGET: ${{ secrets.TARGET_DIR_PROD }}
