@@ -15,7 +15,7 @@ jobs:
       - name: Install yarn dependencies
         run: yarn install
       - name: Run build task
-        run: yarn build:uat
+        run: yarn build:test3
       - name: Deploy to my EC2 instance
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
