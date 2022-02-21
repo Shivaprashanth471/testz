@@ -16,12 +16,22 @@ jobs:
         run: yarn install
       - name: Run build task
         run: yarn build:qa
-      - name: Deploy to my EC2 instance
-        uses: easingthemes/ssh-deploy@v2.1.5
+
+      - name: Deploy to Staging server
+        uses: easingthemes/ssh-deploy@main
         env:
-          SOURCE: "dist/"
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: "build/*"
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-          # TARGET: ${{ secrets.TARGET_DIR_TEST}}
+          TARGET: /var/www/vitawerks/test
+      # - name: Deploy to my EC2 instance
+      #   uses: easingthemes/ssh-deploy@v2.1.5
+      #   env:
+      #     SOURCE: "dist/"
+      #     SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      #     REMOTE_HOST: ${{ secrets.HOST_DNS }}
+      #     REMOTE_USER: ${{ secrets.USERNAME }}
+      #     TARGET: ${{ secrets.TARGET_DIR }}
+      #     # TARGET: ${{ secrets.TARGET_DIR_TEST}}
