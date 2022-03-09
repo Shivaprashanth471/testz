@@ -15,7 +15,7 @@ jobs:
       - name: Install yarn dependencies
         run: yarn install
       - name: Run build task
-        run: yarn build:staging
+        run: yarn build:staging  
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         env:
